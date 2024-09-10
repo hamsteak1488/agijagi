@@ -10,40 +10,35 @@ import { TyphographySize } from './Typhography.types';
 
 const sizeStyles: Record<TyphographySize, string> = {
   '6xs': `
-    size: 0.125rem;
+    font-size: 0.125rem;
   `,
   '5xs': `
-    size: 0.25rem;`,
+    font-size: 0.25rem;`,
   '4xs': `
-    size: 0.375rem;`,
+    font-size: 0.375rem;`,
   '3xs': `
-    size: 0.5rem;`,
+    font-size: 0.5rem;`,
   '2xs': `
-    size: 0.625rem;`,
+    font-size: 0.625rem;`,
   xs: `
-    size: 0.75rem`,
+    font-size: 0.75rem`,
   sm: `
-  size: 0.875rem`,
-  md: `1rem`,
-  lg: `1.125rem`,
-  xl: `1.250rem`,
-  '2xl': `1.375rem`,
-  '3xl': `1.5rem`,
-  '4xl': `1.625rem`,
-  '5xl': `1.75rem`,
-  '6xl': `1.875rem`,
-  '7xl': `2rem`,
+  font-size: 0.875rem`,
+  md: `font-size: 1rem`,
+  lg: `font-size: 1.125rem`,
+  xl: `font-size: 1.250rem`,
+  '2xl': `font-size: 1.375rem`,
+  '3xl': `font-size: 1.5rem`,
+  '4xl': `font-size: 1.625rem`,
+  '5xl': `font-size: 1.75rem`,
+  '6xl': `font-size: 1.875rem `,
+  '7xl': `font-size: 2rem`,
 };
 
 const weightStyles: Record<FontWeight, string> = {
-  regular: `
-    font-weight : 500 `,
-  bold: `
-    font-weight : 700
-    `,
-  extraBold: `
-    font-weight : 800
-  `,
+  regular: `500`,
+  bold: `700`,
+  extraBold: `800`,
 };
 
 export const Typhography = styled.div<{
@@ -53,8 +48,8 @@ export const Typhography = styled.div<{
   shade: ColorShade;
 }>(
   (props) => css`
-    ${sizeStyles[props.size]}
-    font-weight: ${props.weight};
+    ${sizeStyles[props.size]};
+    font-weight: ${weightStyles[props.weight]};
     color: ${theme.color[props.color][props.shade]};
   `
 );
