@@ -4,12 +4,19 @@ import * as s from './Button.style';
 
 import { ButtonStyles } from './Button.types';
 
-interface ButtonProps extends ButtonStyles {
+interface ButtonProps
+  extends ButtonStyles,
+    Omit<React.ComponentProps<'button'>, 'color'> {
   children: ReactNode;
+  fullWidth?: boolean;
 }
 
-const Button = ({ children, ...rest }: ButtonProps) => {
-  return <s.Button {...rest}>{children}</s.Button>;
+const Button = ({ children, fullWidth = false, ...rest }: ButtonProps) => {
+  return (
+    <s.Button fullWidth={fullWidth} {...rest}>
+      {children}
+    </s.Button>
+  );
 };
 
 export default Button;

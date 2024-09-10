@@ -30,6 +30,7 @@ const GlobalStyle = () => {
           * {
             font-family: 'NPSFont';
             font-size: 16px;
+            outline: none;
             -webkit-tap-highlight-color: transparent !important;
 
             ::-webkit-scrollbar {
