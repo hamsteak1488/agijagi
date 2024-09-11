@@ -2,9 +2,11 @@ package com.password926.agijagi.child.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @Entity
@@ -25,4 +27,7 @@ public class MemberChild {
 
     private String role;
 
+    public long getChildId() {
+        return child.getId();
+    }
 }
