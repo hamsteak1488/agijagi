@@ -7,6 +7,7 @@ export const AppBar = styled.div<{ color: string; height: string }>(
     align-items: center;
     justify-content: space-between;
     position: relative;
+    z-index: 10;
     height: ${props.height};
     padding: 0 0.75rem;
     background-color: ${props.color};
