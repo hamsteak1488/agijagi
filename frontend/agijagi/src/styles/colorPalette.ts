@@ -1,4 +1,6 @@
-const colorPalette = {
+import { ColorShade } from '../types/theme';
+
+const colorPalette: Record<string, Record<ColorShade, string>> = {
   red: {
     '50': '#ffebee',
     '100': '#ffcdd2',
