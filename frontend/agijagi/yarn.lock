@@ -2911,7 +2911,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-docs@npm:8.2.9":
+"@storybook/addon-docs@npm:8.2.9, @storybook/addon-docs@npm:^8.2.9":
   version: 8.2.9
   resolution: "@storybook/addon-docs@npm:8.2.9"
   dependencies:
@@ -5001,6 +5001,7 @@ __metadata:
     "@emotion/react": "npm:^11.13.3"
     "@emotion/styled": "npm:^11.13.0"
     "@eslint/js": "npm:^9.10.0"
+    "@storybook/addon-docs": "npm:^8.2.9"
     "@storybook/addon-essentials": "npm:^8.2.9"
     "@storybook/addon-interactions": "npm:^8.2.9"
     "@storybook/addon-links": "npm:^8.2.9"
