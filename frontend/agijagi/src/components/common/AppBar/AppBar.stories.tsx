@@ -10,6 +10,11 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
   },
+  argTypes: {
+    children: {
+      control: false,
+    },
+  },
   decorators: [
     (Story) => (
       <div style={{ padding: '1rem' }}>
@@ -17,8 +22,6 @@ const meta = {
       </div>
     ),
   ],
-  tags: ['autodocs'],
-  argTypes: {},
 } satisfies Meta<typeof AppBar>;
 
 export default meta;
@@ -29,7 +32,7 @@ export const Primary: Story = {
   args: {},
   render: (args) => (
     <div style={{ width: '360px', height: '500px', backgroundColor: '#ccc' }}>
-      <AppBar>
+      <AppBar color={args.color} height={args.height}>
         <Button color="danger" size="sm">
           왼쪽
         </Button>

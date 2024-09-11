@@ -6,8 +6,7 @@ export const AppBar = styled.div<{ color: string; height: string }>(
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: sticky;
-    top: 0;
+    position: relative;
     height: ${props.height};
     padding: 0 0.75rem;
     background-color: ${props.color};
@@ -25,5 +24,7 @@ export const Cloud = styled.div`
 `;
 
 export const Container = styled.div`
+  position: sticky;
+  top: 0;
   overflow-x: hidden;
 `;
