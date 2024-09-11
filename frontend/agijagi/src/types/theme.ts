@@ -12,6 +12,22 @@ export type Palette =
   | 'danger'
   | 'greyScale';
 
+export type ColorShade =
+  | '50'
+  | '100'
+  | '200'
+  | '300'
+  | '400'
+  | '500'
+  | '600'
+  | '700'
+  | '800'
+  | '900'
+  | 'A100'
+  | 'A200'
+  | 'A400'
+  | 'A700';
+
 export type PaletteColor = typeof colorPalette.red;
 
 export type Theme = {
