@@ -1,11 +1,16 @@
 package com.password926.agijagi.diary.service;
 
+import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
+import com.password926.agijagi.common.errors.exception.RestApiException;
 import com.password926.agijagi.diary.controller.dto.CreateDiaryRequest;
 import com.password926.agijagi.diary.controller.dto.ReadDiaryRequest;
 import com.password926.agijagi.diary.entity.Diary;
 import com.password926.agijagi.diary.repository.DiaryRepository;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class DiaryService {
 
@@ -26,11 +31,19 @@ public class DiaryService {
                 .build());
     }
 
-    public Diary getDiary(long childId, ReadDiaryRequest request) {
-        return diaryRepository.findAllByChildId(childId)
-                .stream()
-                .findFirst()
-                .orElse(null);
+    public List<Diary> getDiary(long memberId, long childId) {
+        // 검증
+
+        List<Diary> diaries = diaryRepository.findAllByChildId(childId);
+
+        Collections.sort(diaries, new Comparator<Diary>() {
+            @Override
+            public int compare(Diary o1, Diary o2) {
+                return Long.compare(o2.getId(), o1.getId());
+            }
+        });
+
+        return diaries;
     }
 
     private Diary updateDiary(Long id, Diary diary) {

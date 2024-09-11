@@ -5,11 +5,14 @@ import com.password926.agijagi.diary.controller.dto.LoginMember;
 import com.password926.agijagi.diary.controller.dto.ReadDiaryRequest;
 import com.password926.agijagi.diary.entity.Diary;
 import com.password926.agijagi.diary.service.*;
+import com.password926.agijagi.member.domain.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -22,28 +25,18 @@ public class DiaryController {
 
     @PostMapping
     public ResponseEntity<Void> createDiary(
-            LoginMember loginMember,
+            LoginMember member,
             @RequestBody CreateDiaryRequest createDiaryRequest
     ) {
-        diaryService.createDiary(loginMember.getId(),createDiaryRequest);
+        diaryService.createDiary(member.getId(),createDiaryRequest);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{childId}")
-    public ResponseEntity<Void> getDiary(
-            LoginMember loginMember,
-            @RequestBody ReadDiaryRequest readDiaryRequest
+    public ResponseEntity<List<Diary>> getDiary(
+            LoginMember member,
+            @RequestParam long childId
     ) {
-        Diary diary = diaryService.getDiary(loginMember.getId(), readDiaryRequest);
-        if (diary == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(diaryService.getDiary(member.getId(), childId));
     }
 }
-
-//    @GetMapping("/child/{childId}")
-//    public ResponseEntity<List<Diary>> getDiariesByChildId(@PathVariable Long childId) {
-//        List<Diary> diaries = diaryService.getDiariesByChildId(childId);
-//        return ResponseEntity.ok(diaries);
-//    }

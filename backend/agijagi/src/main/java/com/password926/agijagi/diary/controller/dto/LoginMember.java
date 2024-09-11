@@ -5,5 +5,5 @@ import lombok.Getter;
 @Getter
 public class LoginMember {
 
-     private long id;
+    private long id;
 }
