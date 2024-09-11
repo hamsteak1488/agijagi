@@ -10,7 +10,7 @@ interface TyphographyProps extends TyphographyStyles {
 
 const Typhography = ({
   children,
-  color = 'primary',
+  color = 'black',
   shade = '900',
   size = 'md',
   weight = 'regular',
