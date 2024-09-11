@@ -1,18 +1,19 @@
 package com.password926.agijagi.child.service;
 
-import com.password926.agijagi.child.domain.ChildFinder;
+import com.password926.agijagi.child.domain.ChildDetail;
+import com.password926.agijagi.child.domain.ChildDetailReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
 public class ChildService {
 
-    private final ChildFinder childFinder;
+    private final ChildDetailReader childDetailReader;
 
-    public void findChildren(long memberId) {
-        Member member = MemberFinder.find(memberId);
-        childFinder.find(member);
-
+    public List<ChildDetail> readChildDetail(long memberId) {
+        return childDetailReader.read(memberId);
     }
 }
