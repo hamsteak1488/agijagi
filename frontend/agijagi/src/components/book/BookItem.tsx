@@ -13,7 +13,7 @@ const BookWrapper = styled.div`
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 14px 14px 10px rgba(0, 0, 0, 0.2);
-  margin-right: 25px;
+  margin-right: 30px;
   cursor: pointer;
   display: flex;
   align-items: center;

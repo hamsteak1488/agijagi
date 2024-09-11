@@ -24,7 +24,7 @@ const CarouselWrapper = styled.div`
   overflow-x: auto;
   display: flex;
   padding-top: 20px;
-  padding-bottom: 80px;
+  padding-bottom: 60px;
   padding-left: 30px;
   scroll-behavior: smooth;
   overflow-y: hidden;
@@ -54,7 +54,7 @@ const TitleImg = styled.img`
 const ModalWrapper = styled.div`
   display: flex;
   width: 100%;
-  height: 55vh;
+  height: 50vh;
   box-sizing: border-box;
 `;
 

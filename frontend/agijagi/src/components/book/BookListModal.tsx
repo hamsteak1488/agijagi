@@ -12,12 +12,18 @@ const ModalBox = styled.div`
   background-color: #fff;
   width: 100%;
   height: 100%;
-  padding: 20px 0px;
+  padding: 15px 0px;
   border-radius: 20px;
   box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.2);
   text-align: center;
   display: flex;
   flex-direction: column;
+`;
+
+const FilterContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
 `;
 
 const FilterButton = styled.button<{ isActive: boolean }>`
@@ -34,8 +40,8 @@ const BookList = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding-bottom: 40px;
-  height: calc(100% - 60px); /* 필터 영역을 제외한 나머지 공간을 차지하게 설정 */
+  padding-bottom: 20px;
+  height: calc(100% - 40px); /* 필터 영역을 제외한 나머지 공간을 차지하게 설정 */
 `;
 
 const BookContainer = styled.div`
@@ -53,7 +59,7 @@ const BookImage = styled.img`
   box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.2);
 `;
 
-const ListContent = styled.div`
+const LabelContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 30px;
@@ -78,11 +84,12 @@ const PageLabel = styled.div`
 
 const DateLabel = styled.div`
   background-color: #ffecb3;
+  max-width: 155px;
+  display: flex;
   flex-direction: row;
   align-items: center;
   border-radius: 10px;
   padding: 5px 10px;
-  font-size: 10px;
   margin-top: 15px;
   white-space: nowrap;
   overflow: hidden;
@@ -93,6 +100,10 @@ const CalendarImg = styled(CalendarIcon)`
   width: 12px;
   margin-right: 5px;
 `;
+
+const DateText = styled.div`
+  font-size: 10px;
+`
 
 // 임의로 만든 책 목록 -> 추후 데이터로 받아야함
 const books = [
@@ -110,7 +121,7 @@ const Modal = () => {
 
   return (
     <ModalBox onClick={(e) => e.stopPropagation()}>
-      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+      <FilterContainer>
         {filters.map((filter) => (
           <FilterButton
             key={filter}
@@ -120,21 +131,21 @@ const Modal = () => {
             {filter}
           </FilterButton>
         ))}
-      </div>
+      </FilterContainer>
 
       <BookList>
         {books.map(book => (
           <BookContainer key={book.id}>
             <BookImage src={book.image} alt={book.title} />
 
-            <ListContent>
+            <LabelContainer>
               <TitleLabel>{book.title}</TitleLabel>
               <PageLabel>{book.page} pages</PageLabel>
               <DateLabel>
                 <CalendarImg />
-                {book.start} ~ {book.end}
+                <DateText>{book.start} ~ {book.end}</DateText>
               </DateLabel>
-            </ListContent>
+            </LabelContainer>
           </BookContainer>
         ))}
       </BookList>
