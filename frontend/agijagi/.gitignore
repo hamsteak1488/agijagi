@@ -3,7 +3,7 @@
 # dependencies
 /node_modules
 /.pnp
-.pnp.js
+.pnp.cjs
 /.yarn/unplugged
 /.yarn/install-state.gz
 
