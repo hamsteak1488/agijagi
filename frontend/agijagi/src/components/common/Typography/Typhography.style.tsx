@@ -4,9 +4,9 @@ import styled from '@emotion/styled';
 
 import theme from '../../../styles/theme';
 
-import { ColorShade, FontWeight, Palette } from '../../../types/theme';
+import { ColorShade, FontWeight } from '../../../types/theme';
 
-import { TyphographySize } from './Typhography.types';
+import { TyphographySize, TyphographyColor } from './Typhography.types';
 
 const sizeStyles: Record<TyphographySize, string> = {
   '6xs': `
@@ -42,7 +42,7 @@ const weightStyles: Record<FontWeight, string> = {
 };
 
 export const Typhography = styled.div<{
-  color: Palette;
+  color: TyphographyColor;
   size: TyphographySize;
   weight: FontWeight;
   shade: ColorShade;
@@ -50,6 +50,11 @@ export const Typhography = styled.div<{
   (props) => css`
     ${sizeStyles[props.size]};
     font-weight: ${weightStyles[props.weight]};
-    color: ${theme.color[props.color][props.shade]};
+
+    color: ${props.color === 'white'
+      ? '#fff'
+      : props.color === 'black'
+      ? '#000'
+      : theme.color[props.color][props.shade]};
   `
 );

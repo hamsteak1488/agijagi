@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import theme from '../../../styles/theme';
 
 import Typhography from './Typhography';
-import { Palette } from './../../../types/theme';
 
 import { TyphographySize } from './Typhography.types';
 
@@ -26,6 +26,7 @@ const meta = {
     },
     color: {
       description: '텍스트의 색상',
+      options: [...Object.keys(theme.color), 'white', 'black'],
       control: 'select',
     },
     shade: {
@@ -47,7 +48,7 @@ export const Md: Story = {
   args: {
     children: '아기자기',
     size: 'md',
-    color: 'primary',
+    color: 'black',
     weight: 'regular',
     shade: '900',
   },

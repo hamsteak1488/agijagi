@@ -1,7 +1,9 @@
 import { Palette, FontWeight, ColorShade } from '../../../types/theme';
 
+export type TyphographyColor = Palette | 'white' | 'black';
+
 export interface TyphographyStyles {
-  color?: Palette;
+  color?: TyphographyColor;
   weight?: FontWeight;
   size?: TyphographySize;
   shade?: ColorShade;
