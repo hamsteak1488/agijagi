@@ -33,6 +33,6 @@ export type Theme = {
     fontWeight: Record<FontWeight, number>;
   };
   color: {
-    [key in Palette]: ColorShade;
+    [key in Palette]: Record<ColorShade, string>;
   };
 };
