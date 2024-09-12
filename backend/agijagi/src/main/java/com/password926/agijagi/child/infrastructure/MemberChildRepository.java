@@ -4,8 +4,11 @@ import com.password926.agijagi.child.domain.MemberChild;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberChildRepository extends Repository<MemberChild, Long> {
+
+    Optional<MemberChild> findByMemberIdAndChildId(long memberId, long childId);
 
     List<MemberChild> findByMemberId(long memberId);
 

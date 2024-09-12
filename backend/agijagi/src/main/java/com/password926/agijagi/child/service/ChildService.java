@@ -13,7 +13,11 @@ public class ChildService {
 
     private final ChildDetailReader childDetailReader;
 
-    public List<ChildDetail> readChildDetail(long memberId) {
-        return childDetailReader.read(memberId);
+    public ChildDetail readChildDetail(long memberId, long childId) {
+        return childDetailReader.readByMemberAndChild(memberId, childId);
+    }
+
+    public List<ChildDetail> readChildDetailsByMember(long memberId) {
+        return childDetailReader.readByMember(memberId);
     }
 }
