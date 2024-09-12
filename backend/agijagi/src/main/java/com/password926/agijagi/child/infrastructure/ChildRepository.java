@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface ChildRepository extends Repository<Child, Long> {
 
-    Optional<Child> findById(Long id);
+    Optional<Child> findById(long id);
 }
