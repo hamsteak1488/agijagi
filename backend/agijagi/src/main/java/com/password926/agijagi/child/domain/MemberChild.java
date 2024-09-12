@@ -1,5 +1,6 @@
 package com.password926.agijagi.child.domain;
 
+import com.password926.agijagi.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
