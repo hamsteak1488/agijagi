@@ -1,0 +1,18 @@
+stages:
+  - webhook
+
+webhook_trigger:
+  stage: webhook
+  script:
+    - |
+      if [[ "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" =~ ^feature/be.* ]] && [[ "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" == "develop" ]]; then
+        echo "Triggering webhook for backend"
+        curl -X POST -H "Content-Type: application/json" -d '{"event": "backend_deploy"}' https://jenkins.password926.site/project/password926-be
+      elif [[ "$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME" =~ ^feature/fe.* ]] && [[ "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" == "develop" ]]; then
+        echo "Triggering webhook for frontend"
+        curl -X POST -H "Content-Type: application/json" -d '{"event": "frontend_deploy"}' https://jenkins.password926.site/project/password926-fe
+      else
+        echo "No matching branch pattern, no webhook triggered."
+      fi
+  only:
+    - merge_requests
