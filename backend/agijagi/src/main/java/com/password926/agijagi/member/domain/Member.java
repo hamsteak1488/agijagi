@@ -1,7 +1,9 @@
 package com.password926.agijagi.member.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 public class Member {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
