@@ -3,7 +3,7 @@ package com.password926.agijagi.diary.controller.dto;
 import lombok.Getter;
 
 @Getter
-public class CreateDiaryRequest {
+public class UpdateDiaryRequest {
 
     private Long childId;
 

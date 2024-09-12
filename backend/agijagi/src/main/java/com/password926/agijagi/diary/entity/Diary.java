@@ -30,4 +30,9 @@ public class Diary {
 
     @Column(name = "content", nullable = false)
     private String content;
+
+    public void updateDiary(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
