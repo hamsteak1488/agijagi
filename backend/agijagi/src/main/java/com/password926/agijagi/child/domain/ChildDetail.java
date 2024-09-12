@@ -2,6 +2,8 @@ package com.password926.agijagi.child.domain;
 
 import lombok.Builder;
 
+import java.time.LocalDate;
+
 @Builder
 public class ChildDetail {
 
@@ -10,6 +12,8 @@ public class ChildDetail {
     private String name;
 
     private String nickname;
+
+    private LocalDate birthday;
 
     private String imageUrl;
 
@@ -22,6 +26,7 @@ public class ChildDetail {
                 .childId(child.getId())
                 .name(child.getName())
                 .nickname(child.getNickname())
+                .birthday(child.getBirthday())
                 .imageUrl(child.getImageUrl())
                 .role(role)
                 .followerNum(followerNum)
