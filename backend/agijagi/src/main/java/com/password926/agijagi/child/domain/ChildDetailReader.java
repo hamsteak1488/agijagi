@@ -13,12 +13,11 @@ public class ChildDetailReader {
 
     private final MemberChildReader memberChildReader;
     private final ChildReader childReader;
-    private final MemberChildRepository memberChildRepository;
 
     public ChildDetail readByMemberAndChild(long memberId, long childId) {
         Child child = childReader.read(childId);
         MemberChild memberChild = memberChildReader.readByMemberAndChild(memberId, childId);
-        long followerNum = memberChildRepository.countByChildId(childId);
+        long followerNum = memberChildReader.readFollowerNum(childId);
 
         return ChildDetail.of(child, memberChild.getRole(), followerNum);
     }
