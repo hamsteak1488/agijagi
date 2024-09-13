@@ -1,5 +1,3 @@
-import colorPalette from '../styles/colorPalette';
-
 export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 export type FontWeight = 'regular' | 'bold' | 'extraBold';
@@ -28,8 +26,6 @@ export type ColorShade =
   | 'A400'
   | 'A700';
 
-export type PaletteColor = typeof colorPalette.red;
-
 export type Theme = {
   palette: Object;
   typography: {
@@ -37,6 +33,6 @@ export type Theme = {
     fontWeight: Record<FontWeight, number>;
   };
   color: {
-    [key in Palette]: PaletteColor;
+    [key in Palette]: Record<ColorShade, string>;
   };
 };
