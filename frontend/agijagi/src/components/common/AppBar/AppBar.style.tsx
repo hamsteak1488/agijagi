@@ -24,7 +24,7 @@ export const Cloud = styled.div`
   }
 `;
 
-export const Container = styled.div`
+export const Container = styled.header`
   position: sticky;
   top: 0;
   overflow-x: hidden;
