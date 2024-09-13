@@ -1,5 +1,11 @@
 export const getReadableTimeDiff = (date: Date): string => {
-  const timeDiff = new Date(new Date().getTime() - date.getTime()).getSeconds();
+  const timeDiff = Math.floor(
+    new Date(new Date().getTime() - date.getTime()).getTime() / 1000
+  );
+
+  if (timeDiff === 0) {
+    return '방금 전';
+  }
 
   if (timeDiff < 60) {
     return `${timeDiff}초 전`;
