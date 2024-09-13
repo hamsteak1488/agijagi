@@ -88,18 +88,26 @@ export const TextfieldContainer = styled.div<{
   size: TextfieldSize;
   fullWidth: boolean;
   fieldState: ValidationState;
+  disable: boolean;
 }>(
   (props) => css`
     position: relative;
     display: flex;
     ${textfieldStyles[props.size].containerSize};
     ${props.fullWidth ? 'width : 100%' : ''};
-    border: 2px solid ${theme.color[props.color][400]};
+    border: 2px solid
+      ${props.disable
+        ? theme.color.greyScale[300]
+        : theme.color[props.color][400]};
     border-radius: 15px 15px 3px 3px;
-    background-color: ${theme.color[props.color][200]};
+    background-color: ${props.disable
+      ? theme.color.greyScale[50]
+      : theme.color[props.color][200]};
     transition: all 0.3s;
     border-bottom: 3px solid
-      ${props.fieldState !== 'normal'
+      ${props.disable
+        ? theme.color.greyScale[400]
+        : props.fieldState !== 'normal'
         ? theme.color[props.fieldState][500]
         : theme.color[props.color][900]};
   `
@@ -111,6 +119,7 @@ export const Label = styled.div<{
   isColoredLabel: boolean;
   fieldState: ValidationState;
   isFloating: boolean;
+  disable: boolean;
 }>(
   (props) => css`
     position: absolute;
@@ -121,7 +130,9 @@ export const Label = styled.div<{
     transition: all 0.3s;
     transform: ${props.isFloating && textfieldStyles[props.size].translate};
     opacity: ${!props.isFloating && `60%`};
-    color: ${props.fieldState !== 'normal'
+    color: ${props.disable
+      ? theme.color.greyScale[400]
+      : props.fieldState !== 'normal'
       ? theme.color[props.fieldState][500]
       : props.isColoredLabel && theme.color[props.color][900]};
     ${textfieldStyles[props.size].labelPosition};
@@ -133,6 +144,7 @@ export const Textfield = styled.input<{
   color: TextfieldColor;
   isColoredLabel: boolean;
   fieldState: ValidationState;
+  disabled: boolean;
 }>(
   (props) => css`
     ${textfieldStyles[props.fieldSize].marginSize};
@@ -142,7 +154,9 @@ export const Textfield = styled.input<{
     transition: all 0.3s;
     border: none;
     font-size: ${textfieldStyles[props.fieldSize].inputFontSize};
-    color: ${props.fieldState !== 'normal'
+    color: ${props.disabled
+      ? theme.color.greyScale[400]
+      : props.fieldState !== 'normal'
       ? theme.color[props.fieldState][500]
       : props.isColoredLabel && theme.color[props.color][900]};
     :focus {

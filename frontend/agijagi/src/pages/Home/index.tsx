@@ -26,10 +26,11 @@ const Home = () => {
         label="이름"
         size="sm"
         color="secondary"
-        isColoredLabel={false}
+        isColoredLabel={true}
         inputValue={inputValue}
         setInputValue={setInputValue}
         validationFunction={validateInput}
+        disabled={false}
         helpText={'*이름은 필수항목이에요.'}
         checkText={'올바르게 입력했어요'}
         warningText={'이름은 2~8자의 형식을 만족해야해요'}

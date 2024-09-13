@@ -87,16 +87,12 @@ export const Default: Story = {
 
     return (
       <>
-        {colorList.map((color) => (
-          <Textfield
-            key={color} // Ensure each child has a unique key
-            {...args}
-            color={color as TextfieldColor}
-            inputValue={inputValue}
-            setInputValue={setInputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-        ))}
+        <Textfield
+          {...args}
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
       </>
     );
   },

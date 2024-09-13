@@ -1,4 +1,3 @@
-import { type } from 'os';
 import React, { useRef, useState } from 'react';
 import * as s from './Textfield.style';
 import {
@@ -19,20 +18,14 @@ interface TextfieldProps {
   checkText?: string;
   warningText?: string;
   type?: string;
+  disabled?: boolean;
   validationFunction?: (text: string) => ValidationState;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-//test Function
-function validateInput(input: string): ValidationState {
-  if (input.trim() === '') {
-    return 'normal';
-  }
-  if (input.length >= 2 && input.length <= 8) {
-    return 'success';
-  }
-  return 'danger';
-}
+const defaultValidationFunction = (text: string): ValidationState => {
+  return 'normal';
+};
 
 const Textfield = ({
   label,
@@ -40,13 +33,14 @@ const Textfield = ({
   color = 'primary',
   fullWidth = false,
   isColoredLabel = false,
-  helpText = '필수항목이에요',
-  checkText = '올바르게 입력되었어요',
-  warningText = '이름은 필수 항목이에요',
+  helpText = '',
+  checkText = '',
+  warningText = '',
   inputValue = '',
   type = '',
+  disabled = false,
   setInputValue,
-  validationFunction = validateInput,
+  validationFunction = defaultValidationFunction,
   onChange,
 }: TextfieldProps) => {
   const [focused, setFocused] = useState(false);
@@ -88,6 +82,7 @@ const Textfield = ({
         size={size}
         fieldState={fieldState}
         color={color}
+        disable={disabled}
         fullWidth={fullWidth}
       >
         <s.Label
@@ -95,6 +90,7 @@ const Textfield = ({
           size={size}
           color={color}
           fieldState={fieldState}
+          disable={disabled}
           isColoredLabel={isColoredLabel}
         >
           {label}
@@ -106,15 +102,18 @@ const Textfield = ({
           color={color}
           fieldSize={size}
           fieldState={fieldState}
+          disabled={disabled}
           ref={inputRef}
           onFocus={handleFocus}
           onBlur={hadleblur}
           onChange={handleChange}
         />
       </s.TextfieldContainer>
-      <s.StateText size={size} fieldState={fieldState}>
-        {bottomText()}
-      </s.StateText>
+      {!disabled && (
+        <s.StateText size={size} fieldState={fieldState}>
+          {bottomText()}
+        </s.StateText>
+      )}
     </>
   );
 };
