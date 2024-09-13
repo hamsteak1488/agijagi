@@ -3,6 +3,7 @@ import { Global, css } from '@emotion/react';
 import NPSFontRegular from '../assets/fonts/NPSfont_regular.woff2';
 import NPSFontBold from '../assets/fonts/NPSfont_bold.woff2';
 import NPSFontExtraBold from '../assets/fonts/NPSfont_extrabold.woff2';
+import OmyuPretty from '../assets/fonts/omyu_pretty.ttf';
 
 const GlobalStyle = () => {
   return (
@@ -25,6 +26,11 @@ const GlobalStyle = () => {
             font-family: 'NPSFont';
             font-weight: 800;
             src: url(${NPSFontExtraBold});
+          }
+
+          @font-face {
+            font-family: 'OmyuFont';
+            src: url(${OmyuPretty}) format('truetype');
           }
 
           * {

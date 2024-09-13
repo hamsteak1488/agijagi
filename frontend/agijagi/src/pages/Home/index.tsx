@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Textfield from '../../components/common/Textfield';
 import { ValidationState } from '../../components/common/Textfield/Textfield.types';
-import Typhography from '../../components/common/Typography';
+import Typhography from '../../components/common/Typhography';
 
 const Home = () => {
   const [inputValue, setInputValue] = useState('');

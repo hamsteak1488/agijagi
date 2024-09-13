@@ -1,3 +1,3 @@
-import DiaryTyphography from './DairyTyphography';
+import DiaryTyphography from './DiaryTyphography';
 
 export default DiaryTyphography;

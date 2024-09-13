@@ -4,9 +4,11 @@ import styled from '@emotion/styled';
 
 import theme from '../../../styles/theme';
 
-import { ColorShade, FontWeight } from '../../../types/theme';
-
-import { DiaryTyphographyColor } from './DiaryTyphography.types';
+import { ColorShade } from '../../../types/theme';
+import {
+  TyphographyColor,
+  TyphographySize,
+} from '../Typhography/Typhography.types';
 
 const sizeStyles: Record<TyphographySize, string> = {
   '6xs': `
@@ -35,13 +37,15 @@ const sizeStyles: Record<TyphographySize, string> = {
   '7xl': `font-size: 2rem`,
 };
 
-export const Typhography = styled.div<{
-  color: DiaryTyphographyColor;
-  size: DiaryTyphographySize;
+export const DiaryTyphography = styled.div<{
+  color: TyphographyColor;
+  size: TyphographySize;
   shade: ColorShade;
 }>(
   (props) => css`
     ${sizeStyles[props.size]};
+
+    font-family: 'OmyuFont';
 
     color: ${props.color === 'white'
       ? '#fff'
