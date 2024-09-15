@@ -1,5 +1,6 @@
-package com.password926.agijagi.child.controller.request;
+package com.password926.agijagi.child.controller.dto.request;
 
+import com.password926.agijagi.child.domain.ChildContent;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,4 +21,7 @@ public class AppendChildRequest {
 
     private MultipartFile image;
 
+    public ChildContent toContent() {
+        return ChildContent.of(name, nickname, birthday);
+    }
 }
