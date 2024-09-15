@@ -1,6 +1,6 @@
 package com.password926.agijagi.child.controller;
 
-import com.password926.agijagi.child.controller.request.AppendChildRequest;
+import com.password926.agijagi.child.controller.dto.request.AppendChildRequest;
 import com.password926.agijagi.child.domain.ChildDetail;
 import com.password926.agijagi.child.service.ChildService;
 import jakarta.validation.Valid;
@@ -33,9 +33,18 @@ public class ChildController {
     @PostMapping
     public ResponseEntity<Void> appendChild(
             long memberId,
-            @Valid AppendChildRequest appendChildRequest
+            @Valid AppendChildRequest request
     ) {
+        childService.appendChild(memberId, request.toContent(), request.getImage());
+        return ResponseEntity.ok().build();
+    }
 
+    @DeleteMapping("/{childId}")
+    public ResponseEntity<Void> removeChild(
+            long memberId,
+            @PathVariable long childId
+    ) {
+        childService.removeChild(memberId, childId);
         return ResponseEntity.ok().build();
     }
 }
