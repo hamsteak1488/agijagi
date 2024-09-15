@@ -1,8 +1,6 @@
 package com.password926.agijagi.child.service;
 
-import com.password926.agijagi.child.domain.ChildContent;
-import com.password926.agijagi.child.domain.ChildDetail;
-import com.password926.agijagi.child.domain.ChildDetailReader;
+import com.password926.agijagi.child.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +12,8 @@ import java.util.List;
 public class ChildService {
 
     private final ChildDetailReader childDetailReader;
+    private final ChildAppender childAppender;
+    private final ChildRemover childRemover;
 
     public ChildDetail readChildDetail(long memberId, long childId) {
         return childDetailReader.readByMemberAndChild(memberId, childId);
@@ -28,6 +28,10 @@ public class ChildService {
             ChildContent childContent,
             MultipartFile image
     ) {
+        childAppender.append(memberId, childContent, image);
+    }
 
+    public void removeChild(long memberId, long childId) {
+        childRemover.remove(memberId, childId);
     }
 }
