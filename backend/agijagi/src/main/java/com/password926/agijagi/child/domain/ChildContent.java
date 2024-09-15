@@ -1,9 +1,11 @@
 package com.password926.agijagi.child.domain;
 
 import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
+@Getter
 @Builder
 public class ChildContent {
 
