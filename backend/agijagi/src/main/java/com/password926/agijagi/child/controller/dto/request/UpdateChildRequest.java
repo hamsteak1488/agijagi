@@ -3,13 +3,10 @@ package com.password926.agijagi.child.controller.dto.request;
 import com.password926.agijagi.child.domain.ChildContent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
-@Getter
-public class AppendChildRequest {
+public class UpdateChildRequest {
 
     @NotBlank
     private String name;
@@ -19,8 +16,6 @@ public class AppendChildRequest {
 
     @NotNull
     private LocalDate birthday;
-
-    private MultipartFile image;
 
     public ChildContent toContent() {
         return ChildContent.of(name, nickname, birthday);

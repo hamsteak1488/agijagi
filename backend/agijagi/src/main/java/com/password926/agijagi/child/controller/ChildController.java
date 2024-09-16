@@ -1,6 +1,7 @@
 package com.password926.agijagi.child.controller;
 
 import com.password926.agijagi.child.controller.dto.request.AppendChildRequest;
+import com.password926.agijagi.child.controller.dto.request.UpdateChildRequest;
 import com.password926.agijagi.child.domain.ChildDetail;
 import com.password926.agijagi.child.service.ChildService;
 import jakarta.validation.Valid;
@@ -45,6 +46,16 @@ public class ChildController {
             @PathVariable long childId
     ) {
         childService.removeChild(memberId, childId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{childId}")
+    public ResponseEntity<Void> updateChild(
+            long memberId,
+            @PathVariable long childId,
+            @RequestBody @Valid UpdateChildRequest request
+    ) {
+        childService.updateChild(memberId, childId, request.toContent());
         return ResponseEntity.ok().build();
     }
 }
