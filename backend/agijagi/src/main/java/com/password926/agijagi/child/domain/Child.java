@@ -33,4 +33,10 @@ public class Child {
     public void remove() {
         isDeleted = true;
     }
+
+    public void update(ChildContent childContent) {
+        this.name = childContent.getName();
+        this.nickname = childContent.getNickname();
+        this.birthday = childContent.getBirthday();
+    }
 }
