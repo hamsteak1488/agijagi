@@ -2,6 +2,7 @@ package com.password926.agijagi.child.controller.dto.request;
 
 import com.password926.agijagi.child.domain.ChildContent;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +17,7 @@ public class AppendChildRequest {
     @NotBlank
     private String nickname;
 
-    @NotBlank
+    @NotNull
     private LocalDate birthday;
 
     private MultipartFile image;
