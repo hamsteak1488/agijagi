@@ -14,7 +14,6 @@ public class Child {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "child_id")
     private Long id;
 
     @Column(nullable = false)

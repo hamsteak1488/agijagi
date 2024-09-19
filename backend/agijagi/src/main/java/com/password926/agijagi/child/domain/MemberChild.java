@@ -15,7 +15,6 @@ public class MemberChild {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_child_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,7 +28,7 @@ public class MemberChild {
     @Column(nullable = false)
     private String role;
 
-    public long getChildId() {
+    public long readChildId() {
         return child.getId();
     }
 }

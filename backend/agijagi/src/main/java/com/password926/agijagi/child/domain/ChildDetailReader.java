@@ -26,9 +26,9 @@ public class ChildDetailReader {
 
         return memberChilds.stream()
                 .map(memberChild -> {
-                    Child child = childReader.read(memberChild.getChildId());
+                    Child child = childReader.read(memberChild.readChildId());
                     long followerNum = memberChildReader.readFollowerNum(child.getId());
-                    return ChildDetail.of(childReader.read(memberChild.getChildId()), memberChild.getRole(), followerNum);
+                    return ChildDetail.of(childReader.read(memberChild.readChildId()), memberChild.getRole(), followerNum);
                 })
                 .collect(Collectors.toList());
     }
