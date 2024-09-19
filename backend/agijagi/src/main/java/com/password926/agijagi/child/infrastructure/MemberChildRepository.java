@@ -13,4 +13,10 @@ public interface MemberChildRepository extends Repository<MemberChild, Long> {
     List<MemberChild> findByMemberId(long memberId);
 
     long countByChildId(long childId);
+
+    void save(MemberChild memberChild);
+
+    boolean existsByMemberIdAndChildId(long memberId, long childId);
+
+    void deleteAllByChildId(long childId);
 }

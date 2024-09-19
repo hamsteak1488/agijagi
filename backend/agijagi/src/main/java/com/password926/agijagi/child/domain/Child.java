@@ -1,20 +1,19 @@
 package com.password926.agijagi.child.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Child {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "child_id")
     private Long id;
 
     @Column(nullable = false)
@@ -28,4 +27,15 @@ public class Child {
 
     private String imageUrl;
 
+    private boolean isDeleted;
+
+    public void remove() {
+        isDeleted = true;
+    }
+
+    public void update(ChildContent childContent) {
+        this.name = childContent.getName();
+        this.nickname = childContent.getNickname();
+        this.birthday = childContent.getBirthday();
+    }
 }
