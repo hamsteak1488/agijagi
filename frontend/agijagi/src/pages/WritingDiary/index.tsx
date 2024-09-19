@@ -1,7 +1,7 @@
 import AppBar from '../../components/common/AppBar';
 import Button from '../../components/common/Button';
 import Typhography from '../../components/common/Typhography';
-import MediaInput from '../../components/Diary/MediaInput';
+import MediaInput from '../../components/Diary/MediaInput/MediaInput';
 import { Container } from './WritingDiary.styles';
 
 export const WritingDiary = () => {
