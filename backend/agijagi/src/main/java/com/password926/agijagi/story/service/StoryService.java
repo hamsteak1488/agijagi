@@ -1,8 +1,10 @@
 package com.password926.agijagi.story.service;
 
+import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
 import com.password926.agijagi.story.entity.Story;
 import com.password926.agijagi.story.repository.StoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -13,6 +15,16 @@ import java.util.List;
 public class StoryService {
 
     private final StoryRepository storyRepository;
+
+    public String createStory(long memberId, CreateStoryRequest request) {
+        Story story = storyRepository.save(Story.builder()
+                .childId(request.getChildId())
+                .startTime(request.getStartTime())
+                .endTime(request.getEndTime())
+                .build());
+
+        return story.getText();
+    }
 
     public List<Story> getAllStory(long memberId, long childId) {
         //검증
