@@ -11,9 +11,14 @@ interface ButtonProps
   fullWidth?: boolean;
 }
 
-const Button = ({ children, fullWidth = false, ...rest }: ButtonProps) => {
+const Button = ({
+  children,
+  fullWidth = false,
+  color,
+  ...rest
+}: ButtonProps) => {
   return (
-    <s.Button fullWidth={fullWidth} {...rest}>
+    <s.Button fullWidth={fullWidth} backgroundColor={color} {...rest}>
       {children}
     </s.Button>
   );
