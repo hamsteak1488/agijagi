@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 import Typhography from '../../../common/Typography';
 
 import * as s from './Item.style';
