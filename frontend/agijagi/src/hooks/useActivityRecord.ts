@@ -49,7 +49,11 @@ const useActivityRecord = () => {
     });
   };
 
-  return { getMenu };
+  const findMenuByName = (name: string): ActivityRecordMenuData | undefined => {
+    return menus.find((menu) => menu.name === name);
+  };
+
+  return { getMenu, findMenuByName };
 };
 
 export default useActivityRecord;

@@ -10,6 +10,9 @@ import * as s from '../ActivityRecord/style';
 
 const ActivityRecord = () => {
   const activityRecord = useActivityRecord();
+  const 대변 = activityRecord.findMenuByName('대변');
+  const 소변 = activityRecord.findMenuByName('소변');
+  const 약 = activityRecord.findMenuByName('약');
 
   return (
     <s.Container>
@@ -26,10 +29,24 @@ const ActivityRecord = () => {
           <ActivityRecordList>
             <ActivityRecordList.Group title="6월 29일 (수요일)">
               <ActivityRecordList.Item
-                icon={<></>}
-                color="#56a4ff"
-                title="기저귀"
-                description="대변"
+                icon={대변!.icon}
+                color={대변!.color}
+                title="대변"
+                description="많이"
+                date="14:00"
+              />
+              <ActivityRecordList.Item
+                icon={약!.icon}
+                color={약!.color}
+                title="약"
+                description="감기약"
+                date="14:00"
+              />
+              <ActivityRecordList.Item
+                icon={소변!.icon}
+                color={소변!.color}
+                title="소변"
+                description="많이"
                 date="14:00"
               />
             </ActivityRecordList.Group>

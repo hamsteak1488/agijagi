@@ -6,7 +6,7 @@ import * as s from './Item.style';
 
 interface ItemProps {
   color: string;
-  icon: ReactNode;
+  icon: string;
   title: string;
   description: string;
   date: string;
@@ -23,7 +23,9 @@ const Item = ({
 }: ItemProps) => {
   return (
     <s.Item onClick={onClick}>
-      <s.Icon bacgkroundColor={color}>{icon}</s.Icon>
+      <s.IconWrapper bacgkroundColor={color}>
+        <s.Icon src={icon} alt="Icon" />
+      </s.IconWrapper>
       <s.Text>
         <Typhography color="primary" weight="bold">
           {title}

@@ -16,14 +16,22 @@ export const Item = styled.div`
   }
 `;
 
-export const Icon = styled.div<{ bacgkroundColor: string }>(
+export const IconWrapper = styled.div<{ bacgkroundColor: string }>(
   (props) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 2.25rem;
     height: 2.25rem;
     border-radius: 50%;
     background-color: ${props.bacgkroundColor};
   `
 );
+
+export const Icon = styled.img`
+  width: 1.5rem;
+  height: 1.5rem;
+`;
 
 export const Text = styled.div`
   display: flex;
