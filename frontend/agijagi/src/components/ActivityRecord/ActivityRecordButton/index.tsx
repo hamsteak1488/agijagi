@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import useTimeDifference from '../../../hooks/useTimeDifference';
 
 import { ActivityRecordMenu } from '../../../types/activityRecord';
-
-import { getReadableTimeDiff } from '../../../utils/date';
 
 import Typhography from '../../common/Typography';
 
@@ -16,21 +14,7 @@ const ActivityRecordButton = ({
   name,
   updatedAt,
 }: ActivityRecordButtonProps) => {
-  const timerRef = useRef<NodeJS.Timer | undefined>(undefined);
-
-  const [timeDiff, setTimeDiff] = useState<string>(
-    getReadableTimeDiff(updatedAt)
-  );
-
-  useEffect(() => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-
-    timerRef.current = setInterval(() => {
-      setTimeDiff(getReadableTimeDiff(updatedAt));
-    }, 1000);
-  }, [updatedAt]);
+  const timeDifference = useTimeDifference(updatedAt);
 
   return (
     <s.ActivityRecordButton color={color}>
@@ -39,7 +23,7 @@ const ActivityRecordButton = ({
         {name}
       </Typhography>
       <Typhography color="white" size="md">
-        {timeDiff}
+        {timeDifference}
       </Typhography>
     </s.ActivityRecordButton>
   );

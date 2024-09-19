@@ -23,7 +23,17 @@ const ActivityRecord = () => {
           ))}
         </s.ActivityRecordMenu>
         <s.ActivityRecordList>
-          <ActivityRecordList>.</ActivityRecordList>
+          <ActivityRecordList>
+            <ActivityRecordList.Group title="6월 29일 (수요일)">
+              <ActivityRecordList.Item
+                icon={<></>}
+                color="#56a4ff"
+                title="기저귀"
+                description="대변"
+                date="14:00"
+              />
+            </ActivityRecordList.Group>
+          </ActivityRecordList>
         </s.ActivityRecordList>
       </s.Main>
     </s.Container>

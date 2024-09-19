@@ -5,23 +5,35 @@ import Typhography from '../../../common/Typography';
 import * as s from './Item.style';
 
 interface ItemProps {
-  children: ReactNode;
+  color: string;
+  icon: ReactNode;
+  title: string;
+  description: string;
+  date: string;
+  onClick?: () => void;
 }
 
-const Item = ({ children }: ItemProps) => {
+const Item = ({
+  color,
+  icon,
+  title,
+  description,
+  date,
+  onClick,
+}: ItemProps) => {
   return (
-    <s.Item>
-      <s.Icon></s.Icon>
+    <s.Item onClick={onClick}>
+      <s.Icon bacgkroundColor={color}>{icon}</s.Icon>
       <s.Text>
         <Typhography color="primary" weight="bold">
-          기저귀
+          {title}
         </Typhography>
         <Typhography color="greyScale" size="xs">
-          대변
+          {description}
         </Typhography>
       </s.Text>
       <Typhography color="greyScale" size="sm">
-        14:00
+        {date}
       </Typhography>
     </s.Item>
   );

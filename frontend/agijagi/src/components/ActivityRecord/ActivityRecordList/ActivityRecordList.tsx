@@ -1,26 +1,24 @@
 import { ReactNode } from 'react';
 
-import Typhography from '../../common/Typography';
+import CustomizedBorderContainer from '../../common/CustomizedBorderContainer';
 
-import Item from './Item';
+import theme from '../../../styles/theme';
 
-import * as s from './ActivityRecordList.style';
+import Waves from '../../../assets/images/activityRecord/waves.svg';
 
-interface ActivityRecordListProps extends React.ComponentProps<'div'> {
-  children: ReactNode;
+interface ActivityRecordListProps {
+  children?: ReactNode;
 }
 
-const ActivityRecordList = ({ children, ...rest }: ActivityRecordListProps) => {
+const ActivityRecordList = ({ children }: ActivityRecordListProps) => {
   return (
-    <s.Container {...rest}>
-      <s.Border></s.Border>
-      <s.Body>
-        <Typhography size="sm">6월 29일 (수요일)</Typhography>
-        <Item>기저귀</Item>
-        <Item>기저귀</Item>
-        <Item>기저귀</Item>
-      </s.Body>
-    </s.Container>
+    <CustomizedBorderContainer
+      backgroundColor={theme.color.primary[50]}
+      border={Waves}
+      borderHeight="24px"
+    >
+      {children}
+    </CustomizedBorderContainer>
   );
 };
 

@@ -10,6 +10,7 @@ export const Main = styled.main`
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
+  overflow-y: scroll;
 `;
 
 export const ActivityRecordMenu = styled.div`
@@ -22,4 +23,5 @@ export const ActivityRecordMenu = styled.div`
 
 export const ActivityRecordList = styled.div`
   flex: 1 1 auto;
+  overflow-y: scroll;
 `;
