@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 import Typhography from '../common/Typography';
@@ -119,6 +119,7 @@ type BookItemProps = {
   book: BookProps | null;
   image: string;
   onBookSelect: (book: BookProps | null) => void;
+  isSelected: boolean;
 };
 
 interface BookProps {
@@ -130,23 +131,25 @@ interface BookProps {
   page: number;
 }
 
-const BookItem = ({ image, book, onBookSelect }: BookItemProps) => {
+const BookItem = ({ image, book, onBookSelect, isSelected }: BookItemProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isLifted, setIsLifted] = useState(false);
 
-  const handleCardClick = (book: BookProps | null) => {
-    if (!isLifted) {
-      setIsLifted(true); // 먼저 카드를 위로 올림
-      setTimeout(() => {
-        setIsFlipped(true); // 그다음 카드가 뒤집힘
-      }, 300); // 위로 올라간 후 0.3초 뒤에 뒤집힘
-      onBookSelect(book);
+  useEffect(() => {
+    if (isSelected) {
+      setIsLifted(true);
+      setTimeout(() => setIsFlipped(true), 300); // 책을 위로 올린 후 0.3초 뒤에 뒤집힘
     } else {
-      setIsFlipped(false); // 다시 클릭하면 초기 상태로
-      setTimeout(() => {
-        setIsLifted(false); // 0.3초 후에 내려옴
-      }, 300);
-      onBookSelect(null);
+      setIsFlipped(false); // 선택 해제 시 초기화
+      setTimeout(() => setIsLifted(false), 300);
+    }
+  }, [isSelected]);
+
+  const handleCardClick = (book : BookProps | null) => {
+    if (!isSelected) {
+      onBookSelect(book); // 선택된 책으로 전달
+    } else {
+      onBookSelect(null); // 선택 해제
     }
   };
 

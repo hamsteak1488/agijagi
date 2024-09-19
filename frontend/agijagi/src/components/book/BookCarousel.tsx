@@ -16,7 +16,6 @@ import CoverImg6 from '../../assets/bookcover/cover7.png';
 import CoverImg7 from '../../assets/bookcover/cover12.png';
 import CoverImg8 from '../../assets/bookcover/cover11.png';
 
-
 const Wrapper = styled.div`
   background-color: #ffecb3;
   height: 100vh;
@@ -67,7 +66,7 @@ const ModalWrapper = styled.div`
 `;
 
 // 임의로 만든 책 목록 -> 추후 데이터로 받아야함
-const books : BookProps[] = [
+const books: BookProps[] = [
   {
     id: 1,
     image: CoverImg1,
@@ -141,7 +140,7 @@ interface BookProps {
   start: string;
   end: string;
   page: number;
-};
+}
 
 const today = new Date();
 const todayYear = today.getFullYear();
@@ -151,16 +150,34 @@ const BookCarousel = () => {
   const [year, setYear] = useState(todayYear);
   const [month, setMonth] = useState(todayMonth);
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
   // 책 클릭 시 호출되는 함수
-  const handleBookSelect = (book : BookProps | null) => {
-    setSelectedBook(book);
+  const handleBookSelect = (book: BookProps | null) => {
+    // 책 한권이 선택되면 나머지 책들은 안보이게 함
+    if (selectedBook && book && selectedBook.id === book.id) {
+      setSelectedBook(null);
+    } else {
+      setSelectedBook(book);
+    }
   };
 
   // 뒤로가기
   const goBack = () => {
     setSelectedBook(null);
+  };
+
+   // Carousel에서 스크롤될 때 동작하는 함수
+  const handleCarouselScroll = () => {
+    if (carouselRef.current) {
+      const scrollLeft = carouselRef.current.scrollLeft;
+      setScrollPosition(scrollLeft); // 현재 Carousel의 스크롤 위치 저장
+      if (listRef.current) {
+        listRef.current.scrollTop = scrollLeft / 1.7; // 스크롤 동기화 (비율 조정)
+      }
+    }
   };
 
   // 스크롤 위치를 업데이트하는 함수
@@ -214,12 +231,21 @@ const BookCarousel = () => {
 
       {filteredBooks.length === 0 ? (
         <ImageWrapper>
-          <BookItem image={Logo2} book={null} onBookSelect={handleBookSelect}/>
+          <BookItem image={Logo2} book={null} onBookSelect={handleBookSelect} isSelected={false}/>
         </ImageWrapper>
       ) : (
-        <CarouselWrapper ref={carouselRef}>
+        <CarouselWrapper ref={carouselRef} onScroll={handleCarouselScroll}>
           {filteredBooks.map((book) => (
-            <BookItem key={book.id} image={book.image} book={book} onBookSelect={handleBookSelect}/>
+             // 선택된 책이 없으면 모든 책을 보여주고, 선택된 책이 있으면 해당 책만 보여줌
+            (selectedBook === null || selectedBook.id === book.id) && (
+              <BookItem
+                key={book.id}
+                image={book.image}
+                book={book}
+                onBookSelect={handleBookSelect}
+                isSelected={selectedBook?.id === book.id}
+              />
+            )
           ))}
         </CarouselWrapper>
       )}

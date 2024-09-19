@@ -12,7 +12,7 @@ import PageImg5 from "../../assets/bookcontent/pageImg5.png";
 const BookWrapper = styled.div`
   display: flex;
   width: 100%;
-  height: 100%;
+  height: 45vh;
   position: relative;
   flex-direction: column;
   justify-content: center;
@@ -30,7 +30,7 @@ const BackButton = styled.div`
 const Page = styled.div`
   position: absolute;
   width: 160px;
-  height: 230px;
+  height: 240px;
   border-radius: 10px;
   box-shadow: 10px 15px 10px rgba(0, 0, 0, 0.2);
   background-color: ${theme.color.primary[100]};
@@ -43,7 +43,7 @@ const Page = styled.div`
 const PageImg = styled.img`
   position: absolute;
   width: 160px;
-  height: 230px;
+  height: 240px;
   border-radius: 10px;
 `;
 
@@ -151,7 +151,7 @@ const BookComponent = ({book, goBack} : StoryBookProps ) => {
   
   const onFlip = useCallback((e: FlipEvent) => {
     setCurrentPage(e.data)
-    setTotalPages(mybook.current.pageFlip().getPageCount())
+    setTotalPages(mybook.current.pageFlip().getPageCount() - 1)
      
   }, []);
 
@@ -165,7 +165,7 @@ const BookComponent = ({book, goBack} : StoryBookProps ) => {
       <HTMLFlipBook
         ref={mybook}
         width={160}
-        height={230}
+        height={240}
         drawShadow={false}
         usePortrait={false}
         showCover={true}
