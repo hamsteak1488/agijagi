@@ -15,7 +15,7 @@ const BookWrapper = styled.div<{ isFlipped: boolean; isLifted: boolean }>`
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 14px 14px 10px rgba(0, 0, 0, 0.2);
-  margin-right: 30px;
+  margin-right: 40px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -44,8 +44,8 @@ const BookBack = styled.div`
 `;
 
 const TitleLabel = styled.div`
-  font-size: 12px;
-  font-weight: bold;
+  font-size: ${theme.typography.fontSize.sm};
+  font-weight: ${theme.typography.fontWeight.bold};
   color: ${theme.color.greyScale[800]};
   margin-top: 10px;
   white-space: nowrap;
@@ -54,7 +54,7 @@ const TitleLabel = styled.div`
 `;
 
 const PageLabel = styled.div`
-  font-size: 12px;
+  font-size: ${theme.typography.fontSize.xs};
   color: ${theme.color.greyScale[700]};
   margin: 10px 5px;
 `;
@@ -62,6 +62,7 @@ const PageLabel = styled.div`
 const DateLabel = styled.div`
   background-color: #ffecb3;
   color: ${theme.color.greyScale[800]};
+  font-weight: ${theme.typography.fontWeight.bold};
   max-width: 155px;
   display: flex;
   flex-direction: row;
@@ -117,6 +118,7 @@ const BounceImage = styled.img`
 type BookItemProps = {
   book: BookProps | null;
   image: string;
+  onBookSelect: (book: BookProps | null) => void;
 };
 
 interface BookProps {
@@ -128,28 +130,30 @@ interface BookProps {
   page: number;
 }
 
-const BookItem = ({ image, book }: BookItemProps) => {
+const BookItem = ({ image, book, onBookSelect }: BookItemProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isLifted, setIsLifted] = useState(false);
 
-  const handleCardClick = () => {
+  const handleCardClick = (book: BookProps | null) => {
     if (!isLifted) {
       setIsLifted(true); // 먼저 카드를 위로 올림
       setTimeout(() => {
         setIsFlipped(true); // 그다음 카드가 뒤집힘
       }, 300); // 위로 올라간 후 0.3초 뒤에 뒤집힘
+      onBookSelect(book);
     } else {
       setIsFlipped(false); // 다시 클릭하면 초기 상태로
       setTimeout(() => {
         setIsLifted(false); // 0.3초 후에 내려옴
       }, 300);
+      onBookSelect(null);
     }
   };
 
   return (
     <>
       {book ? (
-        <CardContainer onClick={handleCardClick}>
+        <CardContainer onClick={() => handleCardClick(book)}>
           <BookWrapper isFlipped={isFlipped} isLifted={isLifted}>
             {isFlipped && isLifted ? (
               <BookBack>
@@ -157,7 +161,7 @@ const BookItem = ({ image, book }: BookItemProps) => {
                 <PageLabel>{book.page} pages</PageLabel>
                 <DateLabel>
                   <CalendarImg />
-                  <Typhography size="2xs" color="greyScale" shade="800">
+                  <Typhography size="2xs" color="greyScale" shade="800" weight='bold'>
                     {book.start} ~ <br />
                     {book.end}
                   </Typhography>

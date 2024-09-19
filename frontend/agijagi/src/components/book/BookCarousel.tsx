@@ -2,7 +2,11 @@ import React, { useState, useRef } from 'react';
 import styled from '@emotion/styled';
 import BookItem from './BookItem';
 import BookListModal from './BookListModal';
+import StoryBook from './StoryBook';
+import Typhography from '../common/Typography';
 import Logo7 from '../../assets/images/logo7.png';
+import Logo2 from '../../assets/images/logo2.png';
+// 임의로 책 표지 넣으려고 import
 import CoverImg1 from '../../assets/bookcover/cover1.png';
 import CoverImg2 from '../../assets/bookcover/cover2.png';
 import CoverImg3 from '../../assets/bookcover/cover3.png';
@@ -11,8 +15,7 @@ import CoverImg5 from '../../assets/bookcover/cover5.png';
 import CoverImg6 from '../../assets/bookcover/cover7.png';
 import CoverImg7 from '../../assets/bookcover/cover12.png';
 import CoverImg8 from '../../assets/bookcover/cover11.png';
-import Logo2 from '../../assets/images/logo2.png';
-import Typhography from '../common/Typography';
+
 
 const Wrapper = styled.div`
   background-color: #ffecb3;
@@ -26,7 +29,7 @@ const CarouselWrapper = styled.div`
   overflow-x: auto;
   display: flex;
   padding-top: 20px;
-  padding-bottom: 60px;
+  padding-bottom: 50px;
   padding-left: 30px;
   scroll-behavior: smooth;
   overflow-y: hidden;
@@ -39,7 +42,7 @@ const CarouselWrapper = styled.div`
 const ImageWrapper = styled.div`
   display: flex;
   padding-top: 20px;
-  padding-bottom: 60px;
+  padding-bottom: 50px;
 `;
 
 const Title = styled.div`
@@ -64,7 +67,7 @@ const ModalWrapper = styled.div`
 `;
 
 // 임의로 만든 책 목록 -> 추후 데이터로 받아야함
-const books = [
+const books : BookProps[] = [
   {
     id: 1,
     image: CoverImg1,
@@ -131,6 +134,15 @@ const books = [
   },
 ];
 
+interface BookProps {
+  id: number;
+  image: string;
+  title: string;
+  start: string;
+  end: string;
+  page: number;
+};
+
 const today = new Date();
 const todayYear = today.getFullYear();
 const todayMonth = today.getMonth() + 1;
@@ -138,12 +150,23 @@ const todayMonth = today.getMonth() + 1;
 const BookCarousel = () => {
   const [year, setYear] = useState(todayYear);
   const [month, setMonth] = useState(todayMonth);
+  const [selectedBook, setSelectedBook] = useState<BookProps | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+
+  // 책 클릭 시 호출되는 함수
+  const handleBookSelect = (book : BookProps | null) => {
+    setSelectedBook(book);
+  };
+
+  // 뒤로가기
+  const goBack = () => {
+    setSelectedBook(null);
+  };
 
   // 스크롤 위치를 업데이트하는 함수
   const handleListScroll = (scrollPos: number) => {
     if (carouselRef.current) {
-      const scrollRatio = 1.5; // 스크롤 비율 조정
+      const scrollRatio = 1.7; // 스크롤 비율 조정
       carouselRef.current.scrollLeft = scrollPos * scrollRatio;
     }
   };
@@ -184,30 +207,37 @@ const BookCarousel = () => {
     <Wrapper>
       <Title>
         <TitleImg src={Logo7} />
-        <Typhography size="lg" weight='bold' color='greyScale' shade='800'>Story Book</Typhography>
+        <Typhography size="lg" weight="bold" color="greyScale" shade="800">
+          Story Book
+        </Typhography>
       </Title>
 
       {filteredBooks.length === 0 ? (
         <ImageWrapper>
-          <BookItem image={Logo2} book={null} />
+          <BookItem image={Logo2} book={null} onBookSelect={handleBookSelect}/>
         </ImageWrapper>
       ) : (
         <CarouselWrapper ref={carouselRef}>
           {filteredBooks.map((book) => (
-            <BookItem key={book.id} image={book.image} book={book} />
+            <BookItem key={book.id} image={book.image} book={book} onBookSelect={handleBookSelect}/>
           ))}
         </CarouselWrapper>
       )}
 
       <ModalWrapper>
-        <BookListModal
-          year={year}
-          month={month}
-          handleNext={handleNext}
-          handlePrev={handlePrev}
-          filteredBooks={filteredBooks}
-          onScroll={handleListScroll}
-        />
+        {selectedBook ? (
+          <StoryBook book={selectedBook} goBack={goBack} />
+        ) : (
+          <BookListModal
+            year={year}
+            month={month}
+            handleNext={handleNext}
+            handlePrev={handlePrev}
+            filteredBooks={filteredBooks}
+            onScroll={handleListScroll}
+            onBookSelect={handleBookSelect}
+          />
+        )}
       </ModalWrapper>
     </Wrapper>
   );

@@ -34,9 +34,7 @@ const BookList = styled.div`
   overflow-y: auto;
   margin-top: 10px;
   padding-bottom: 80px;
-  height: calc(
-    100% - 50px
-  );
+  height: calc(100% - 50px);
 `;
 
 const BookContainer = styled.div`
@@ -65,8 +63,9 @@ const LabelContainer = styled.div`
 `;
 
 const TitleLabel = styled.div`
-  font-size: 14px;
-  color: ${theme.color.greyScale[900]};
+  font-size: ${theme.typography.fontSize.sm};
+  font-weight: ${theme.typography.fontWeight.bold};
+  color: ${theme.color.greyScale[800]};
   margin-top: 5px;
   white-space: nowrap;
   overflow: hidden;
@@ -74,16 +73,18 @@ const TitleLabel = styled.div`
 `;
 
 const PageLabel = styled.div`
-  font-size: 12px;
-  color: ${theme.color.greyScale[800]};
+  font-size: ${theme.typography.fontSize.xs};
+  color: ${theme.color.greyScale[700]};
   margin: 5px;
 `;
 
 const DateLabel = styled.div`
   background-color: #ffecb3;
-  color: ${theme.color.greyScale[900]};
-  max-width: 155px;
+  color: ${theme.color.greyScale[800]};
+  font-weight: ${theme.typography.fontWeight.bold};
+  width: 155px;
   display: flex;
+  justify-content: center;
   flex-direction: row;
   align-items: center;
   border-radius: 10px;
@@ -95,7 +96,7 @@ const DateLabel = styled.div`
 `;
 
 const CalendarImg = styled(CalendarIcon)`
-  width: 12px;
+  width: 14px;
   margin-right: 5px;
 `;
 
@@ -106,7 +107,7 @@ interface DateNavigationProps {
   handleNext: () => void;
 }
 
-interface FilterBookProps {
+interface BookProps {
   id: number;
   image: string;
   title: string;
@@ -116,7 +117,8 @@ interface FilterBookProps {
 }
 
 interface BookListModalProps {
-  filteredBooks: FilterBookProps[];
+  onBookSelect: (book: BookProps | null) => void;
+  filteredBooks: BookProps[];
   onScroll: (scrollPos: number) => void; // 스크롤 위치 전달하는 콜백 함수
 }
 
@@ -129,6 +131,7 @@ const BookListModal = ({
   handleNext,
   filteredBooks,
   onScroll,
+  onBookSelect,
 }: BookListProps) => {
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -176,7 +179,7 @@ const BookListModal = ({
           </div>
         ) : (
           filteredBooks.map((book) => (
-            <BookContainer key={book.id}>
+            <BookContainer key={book.id} onClick={() => onBookSelect(book)}>
               <BookImage src={book.image} alt={book.title} />
 
               <LabelContainer>
@@ -184,7 +187,12 @@ const BookListModal = ({
                 <PageLabel>{book.page} pages</PageLabel>
                 <DateLabel>
                   <CalendarImg />
-                  <Typhography size="2xs" color='greyScale' shade='900'>
+                  <Typhography
+                    size="2xs"
+                    color="greyScale"
+                    shade="800"
+                    weight="bold"
+                  >
                     {book.start} ~ {book.end}
                   </Typhography>
                 </DateLabel>

@@ -10,11 +10,11 @@ const Container = styled.div`
   align-items: center;
   width: 90%;
   margin-bottom: 10px;
-  color: ${theme.color.greyScale[600]};
+  color: ${theme.color.greyScale[700]};
 `;
 
 const ArrowButton = styled.div`
-  font-size: 22px;
+  width: 22px;
   cursor: pointer;
 `;
 
@@ -33,11 +33,15 @@ const BookFilter = ({
 }: DateNavigationProps) => {
   return (
     <Container>
-      <ArrowButton onClick={handlePrev}>{'<'}</ArrowButton>
+      <ArrowButton onClick={handlePrev}>
+        <ChevronLeftIcon />
+      </ArrowButton>
       <Typhography size="md" weight="bold" shade="700" color="greyScale">
         {`${year}년 ${month}월`}
       </Typhography>
-      <ArrowButton onClick={handleNext}>{'>'}</ArrowButton>
+      <ArrowButton onClick={handleNext}>
+        <ChevronRightIcon />
+      </ArrowButton>
     </Container>
   );
 };
