@@ -14,11 +14,17 @@ interface ButtonProps
 const Button = ({
   children,
   fullWidth = false,
-  color,
+  color = 'primary',
+  size = 'md',
   ...rest
 }: ButtonProps) => {
   return (
-    <s.Button fullWidth={fullWidth} backgroundColor={color} {...rest}>
+    <s.Button
+      fullWidth={fullWidth}
+      size={size}
+      backgroundColor={color}
+      {...rest}
+    >
       {children}
     </s.Button>
   );
