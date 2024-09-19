@@ -1,0 +1,22 @@
+spring:
+  config:
+    import: application-secret.yml
+  application:
+    name: "agijagi"
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
