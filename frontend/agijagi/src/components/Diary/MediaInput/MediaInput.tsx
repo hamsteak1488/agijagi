@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 import Typhography from '../../common/Typhography';
 import {
   CameraIcon,
@@ -43,6 +43,8 @@ export const MediaInput = ({ onChange, children }: MediaInputProps) => {
     y: 0,
   });
 
+  const scrollContainerRef = useRef(null);
+
   const handlePopup = (e: React.MouseEvent<HTMLLabelElement, MouseEvent>) => {
     setMousePosition({
       x: e.clientX + document.documentElement.scrollLeft,
@@ -50,6 +52,7 @@ export const MediaInput = ({ onChange, children }: MediaInputProps) => {
     });
     setIsClicked(true);
   };
+
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) onChange(e);
     setIsClicked(false);

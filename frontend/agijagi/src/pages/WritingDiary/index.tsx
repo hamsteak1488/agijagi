@@ -5,7 +5,7 @@ import Button from '../../components/common/Button';
 import Typhography from '../../components/common/Typhography';
 import MediaInput from '../../components/Diary/MediaInput/MediaInput';
 import MediaSlider from '../../components/Diary/MediaSlider/MediaSlider';
-import { Container } from './WritingDiary.styles';
+import { Container, DiaryTextArea } from './WritingDiary.styles';
 import boy from '../../assets/images/boy.png';
 import girl from '../../assets/images/girl.png';
 import adult from '../../assets/images/adult.png';
@@ -13,6 +13,12 @@ import video from '../../assets/Test.mp4';
 
 export const WritingDiary = () => {
   const [fileList, setFileList] = useState<File[]>([]);
+
+  const handleWheel = (e) => {
+    e.preventDefault(); // 기본 세로 스크롤 방지
+    const container = scrollContainerRef.current;
+    container.scrollLeft += e.deltaY; // 세로 스크롤(deltaY)을 가로 스크롤로 변환
+  };
 
   useEffect(() => {
     const convertToFile = async (imageUrl: string, fileName: string) => {
@@ -45,8 +51,8 @@ export const WritingDiary = () => {
             <Typhography>쓰기</Typhography>
           </Button>
         </AppBar>
-
-        <MediaSlider fileList={fileList} isWriteMode={false}></MediaSlider>
+        <MediaSlider fileList={fileList} isWriteMode={true}></MediaSlider>
+        <DiaryTextArea placeholder="오늘의 이야기를 써주세요!" />
       </Container>
     </>
   );

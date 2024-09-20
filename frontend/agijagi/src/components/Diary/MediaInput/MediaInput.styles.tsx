@@ -7,10 +7,9 @@ export const InputBox = styled.div<{}>(
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 80%;
-    height: 80%;
+    width: 100%;
+    height: 100%;
     background-color: ${theme.color.primary[200]};
-    border-radius: 1rem;
     max-width: 500px;
     max-height: 500px;
     aspect-ratio: 1;
@@ -49,7 +48,6 @@ export const Popup = styled.div<{ xPos: number; yPos: number }>(
     justify-content: space-evenly;
     min-width: 180px;
     min-height: 75px;
-
     transition: all 0.2s;
     background-color: ${theme.color.greyScale[50]};
     border-radius: 0.5rem;
