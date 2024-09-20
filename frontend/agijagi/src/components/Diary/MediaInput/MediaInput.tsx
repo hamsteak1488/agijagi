@@ -1,14 +1,13 @@
+import { ReactNode, useState } from 'react';
+import Typhography from '../../common/Typhography';
 import {
   CameraIcon,
-  Container,
   InputBox,
   InvisibleInput,
   Label,
   Popup,
   PopupItem,
 } from './MediaInput.styles';
-import Typhography from '../../common/Typhography';
-import { useState } from 'react';
 
 const MediaIcon = (
   <svg
@@ -34,9 +33,10 @@ const MediaIcon = (
 
 interface MediaInputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  children?: ReactNode;
 }
 
-export const MediaInput = ({ onChange }: MediaInputProps) => {
+export const MediaInput = ({ onChange, children }: MediaInputProps) => {
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
     x: 0,
@@ -56,33 +56,26 @@ export const MediaInput = ({ onChange }: MediaInputProps) => {
   };
 
   return (
-    <Container>
-      <InputBox>
-        <Label onClick={handlePopup}>
-          {isClicked && (
-            <Popup xPos={mousePosition.x} yPos={mousePosition.y}>
-              <PopupItem>카메라</PopupItem>
-              <PopupItem
-                htmlFor="file"
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                앨범
-              </PopupItem>
-            </Popup>
-          )}
-          <CameraIcon> {MediaIcon}</CameraIcon>
-          <Typhography size="sm">사진, 영상 등록하기</Typhography>
-        </Label>
-        <InvisibleInput
-          type="file"
-          multiple
-          id="file"
-          onChange={handleUpload}
-        />
-      </InputBox>
-    </Container>
+    <InputBox>
+      <Label onClick={handlePopup}>
+        {isClicked && (
+          <Popup xPos={mousePosition.x} yPos={mousePosition.y}>
+            <PopupItem>카메라</PopupItem>
+            <PopupItem
+              htmlFor="file"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              앨범
+            </PopupItem>
+          </Popup>
+        )}
+        <CameraIcon> {MediaIcon}</CameraIcon>
+        <Typhography size="sm">사진, 영상 등록하기</Typhography>
+      </Label>
+      <InvisibleInput type="file" multiple id="file" onChange={handleUpload} />
+    </InputBox>
   );
 };
 
