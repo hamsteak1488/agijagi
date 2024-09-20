@@ -70,7 +70,6 @@ export const Button = styled.button<{
       box-shadow: 0 0.1875rem 0.0625rem 0 ${theme.color.greyScale[400]};
       border-radius: inherit;
       transition: all 0.1s ease;
-      z-index: -10;
       content: '';
     }
   `
