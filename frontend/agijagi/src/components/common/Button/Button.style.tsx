@@ -27,7 +27,7 @@ const sizeStyle: Record<ButtonSize, SerializedStyles> = {
 
 export const Button = styled.button<{
   fullWidth: boolean;
-  color: Palette;
+  backgroundColor: Palette;
   size: ButtonSize;
 }>(
   (props) => css`
@@ -39,7 +39,7 @@ export const Button = styled.button<{
     `}
     margin-bottom: 0.1875rem;
     border: 0;
-    background-color: ${theme.color[props.color][500]};
+    background-color: ${theme.color[props.backgroundColor][500]};
     color: #fff;
     transition: all 0.1s ease;
     user-select: none;
@@ -58,7 +58,7 @@ export const Button = styled.button<{
     }
 
     :disabled {
-      background-color: ${theme.color[props.color][200]};
+      background-color: ${theme.color[props.backgroundColor][200]};
     }
 
     ::before {

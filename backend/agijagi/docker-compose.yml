@@ -1,0 +1,11 @@
+services:
+  my-spring-app-{COLOR}:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "{PORT}:8080"
+    environment:
+      - TZ=Asia/Seoul
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
