@@ -73,7 +73,7 @@ const books: BookProps[] = [
     title: '우리 아기 태어난지 2주차',
     start: '2024-07-02',
     end: '2024-07-16',
-    page: 7,
+    page: 10,
   },
   {
     id: 2,
@@ -81,7 +81,7 @@ const books: BookProps[] = [
     title: '우리 아기 한달 일기',
     start: '2024-07-02',
     end: '2024-07-31',
-    page: 15,
+    page: 10,
   },
   {
     id: 3,
@@ -97,7 +97,7 @@ const books: BookProps[] = [
     title: '우리 아기 태어난지 8주차',
     start: '2024-07-25',
     end: '2024-08-26',
-    page: 12,
+    page: 10,
   },
   {
     id: 5,
@@ -105,7 +105,7 @@ const books: BookProps[] = [
     title: '우리 아기 태어난지 9주차',
     start: '2024-07-02',
     end: '2024-09-07',
-    page: 20,
+    page: 10,
   },
   {
     id: 6,
@@ -113,7 +113,7 @@ const books: BookProps[] = [
     title: '우리 아기 태어난지 10주차',
     start: '2024-07-02',
     end: '2024-09-16',
-    page: 30,
+    page: 10,
   },
   {
     id: 7,
@@ -121,7 +121,7 @@ const books: BookProps[] = [
     title: '우리 아기 태어난지 11주차',
     start: '2024-07-02',
     end: '2024-09-23',
-    page: 40,
+    page: 10,
   },
   {
     id: 8,
@@ -129,7 +129,7 @@ const books: BookProps[] = [
     title: '우리 아기 태어난지 12주차',
     start: '2024-07-02',
     end: '2024-09-30',
-    page: 50,
+    page: 10,
   },
 ];
 
@@ -150,9 +150,7 @@ const BookCarousel = () => {
   const [year, setYear] = useState(todayYear);
   const [month, setMonth] = useState(todayMonth);
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
 
   // 책 클릭 시 호출되는 함수
   const handleBookSelect = (book: BookProps | null) => {
@@ -167,17 +165,6 @@ const BookCarousel = () => {
   // 뒤로가기
   const goBack = () => {
     setSelectedBook(null);
-  };
-
-   // Carousel에서 스크롤될 때 동작하는 함수
-  const handleCarouselScroll = () => {
-    if (carouselRef.current) {
-      const scrollLeft = carouselRef.current.scrollLeft;
-      setScrollPosition(scrollLeft); // 현재 Carousel의 스크롤 위치 저장
-      if (listRef.current) {
-        listRef.current.scrollTop = scrollLeft / 1.7; // 스크롤 동기화 (비율 조정)
-      }
-    }
   };
 
   // 스크롤 위치를 업데이트하는 함수
@@ -231,22 +218,28 @@ const BookCarousel = () => {
 
       {filteredBooks.length === 0 ? (
         <ImageWrapper>
-          <BookItem image={Logo2} book={null} onBookSelect={handleBookSelect} isSelected={false}/>
+          <BookItem
+            image={Logo2}
+            book={null}
+            onBookSelect={handleBookSelect}
+            isSelected={false}
+          />
         </ImageWrapper>
       ) : (
-        <CarouselWrapper ref={carouselRef} onScroll={handleCarouselScroll}>
-          {filteredBooks.map((book) => (
-             // 선택된 책이 없으면 모든 책을 보여주고, 선택된 책이 있으면 해당 책만 보여줌
-            (selectedBook === null || selectedBook.id === book.id) && (
-              <BookItem
-                key={book.id}
-                image={book.image}
-                book={book}
-                onBookSelect={handleBookSelect}
-                isSelected={selectedBook?.id === book.id}
-              />
-            )
-          ))}
+        <CarouselWrapper ref={carouselRef}>
+          {filteredBooks.map(
+            (book) =>
+              // 선택된 책이 없으면 모든 책을 보여주고, 선택된 책이 있으면 해당 책만 보여줌
+              (selectedBook === null || selectedBook.id === book.id) && (
+                <BookItem
+                  key={book.id}
+                  image={book.image}
+                  book={book}
+                  onBookSelect={handleBookSelect}
+                  isSelected={selectedBook?.id === book.id}
+                />
+              )
+          )}
         </CarouselWrapper>
       )}
 

@@ -43,6 +43,18 @@ const BookContainer = styled.div`
   padding-right: 30px;
   padding-top: 15px;
   padding-bottom: 15px;
+  animation: smoothAppear 0.6s ease-in-out;
+
+  @keyframes smoothAppear {
+    from {
+      opacity: 0;
+      transform: translateY(-5%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 `;
 
 const BookImage = styled.img`
@@ -65,7 +77,7 @@ const LabelContainer = styled.div`
 const TitleLabel = styled.div`
   font-size: ${theme.typography.fontSize.sm};
   font-weight: ${theme.typography.fontWeight.bold};
-  color: ${theme.color.greyScale[800]};
+  color: ${theme.color.greyScale[700]};
   margin-top: 5px;
   white-space: nowrap;
   overflow: hidden;
@@ -80,7 +92,7 @@ const PageLabel = styled.div`
 
 const DateLabel = styled.div`
   background-color: #ffecb3;
-  color: ${theme.color.greyScale[800]};
+  color: ${theme.color.greyScale[700]};
   font-weight: ${theme.typography.fontWeight.bold};
   width: 155px;
   display: flex;
@@ -190,7 +202,7 @@ const BookListModal = ({
                   <Typhography
                     size="2xs"
                     color="greyScale"
-                    shade="800"
+                    shade="700"
                     weight="bold"
                   >
                     {book.start} ~ {book.end}

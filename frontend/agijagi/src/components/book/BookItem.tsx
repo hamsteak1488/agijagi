@@ -6,6 +6,16 @@ import { CalendarIcon } from '@heroicons/react/24/outline';
 
 const CardContainer = styled.div`
   perspective: 1000px;
+  animation: slide 0.6s ease-in-out;
+
+  @keyframes slide {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0%);
+    }
+  }
 `;
 
 const BookWrapper = styled.div<{ isFlipped: boolean; isLifted: boolean }>`
@@ -61,7 +71,7 @@ const PageLabel = styled.div`
 
 const DateLabel = styled.div`
   background-color: #ffecb3;
-  color: ${theme.color.greyScale[800]};
+  color: ${theme.color.greyScale[700]};
   font-weight: ${theme.typography.fontWeight.bold};
   max-width: 155px;
   display: flex;
@@ -138,18 +148,18 @@ const BookItem = ({ image, book, onBookSelect, isSelected }: BookItemProps) => {
   useEffect(() => {
     if (isSelected) {
       setIsLifted(true);
-      setTimeout(() => setIsFlipped(true), 300); // 책을 위로 올린 후 0.3초 뒤에 뒤집힘
+      setTimeout(() => setIsFlipped(true), 400);
     } else {
-      setIsFlipped(false); // 선택 해제 시 초기화
-      setTimeout(() => setIsLifted(false), 300);
+      setIsFlipped(false);
+      setTimeout(() => setIsLifted(false), 400);
     }
   }, [isSelected]);
 
-  const handleCardClick = (book : BookProps | null) => {
+  const handleCardClick = (book: BookProps | null) => {
     if (!isSelected) {
-      onBookSelect(book); // 선택된 책으로 전달
+      onBookSelect(book);
     } else {
-      onBookSelect(null); // 선택 해제
+      onBookSelect(null);
     }
   };
 
@@ -164,7 +174,12 @@ const BookItem = ({ image, book, onBookSelect, isSelected }: BookItemProps) => {
                 <PageLabel>{book.page} pages</PageLabel>
                 <DateLabel>
                   <CalendarImg />
-                  <Typhography size="2xs" color="greyScale" shade="800" weight='bold'>
+                  <Typhography
+                    size="2xs"
+                    color="greyScale"
+                    shade="700"
+                    weight="bold"
+                  >
                     {book.start} ~ <br />
                     {book.end}
                   </Typhography>
