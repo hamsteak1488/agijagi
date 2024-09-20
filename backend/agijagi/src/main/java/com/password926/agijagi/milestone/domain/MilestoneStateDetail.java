@@ -1,6 +1,13 @@
 package com.password926.agijagi.milestone.domain;
 
-public class MilestoneDetail {
+import lombok.Getter;
+
+import java.time.LocalDate;
+
+@Getter
+public class MilestoneStateDetail {
+
+    private long id;
 
     private String title;
 
@@ -9,4 +16,6 @@ public class MilestoneDetail {
     private int requiredAmount;
 
     private int currentAmount;
+
+    private LocalDate date;
 }
