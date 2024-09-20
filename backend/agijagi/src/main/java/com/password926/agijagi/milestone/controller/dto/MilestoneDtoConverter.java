@@ -7,33 +7,27 @@ import com.password926.agijagi.milestone.controller.dto.response.ReadMilestoneRe
 import com.password926.agijagi.milestone.domain.MilestoneStateDetail;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MilestoneDtoConverter {
 
     public static List<ReadMilestoneResponse> convert(List<MilestoneStateDetail> milestones) {
-        List<ReadMilestoneResponse> response = new ArrayList<>();
-        if (milestones.isEmpty()) {
-            throw new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND);
-        }
-        String title = milestones.get(0).getTitle();
-        List<ReadMilestoneResponseContent> content = new ArrayList<>();
-        content.add(ReadMilestoneResponseContent.from(milestones.get(0)));
+        HashMap<String, List<ReadMilestoneResponseContent>> map = new HashMap<>();
 
-        for (int i = 1; i < milestones.size(); i++) {
-            MilestoneStateDetail milestone = milestones.get(i);
-            String currTitle = milestone.getTitle();
-
-            if (title.equals(currTitle)) {
-                content.add(ReadMilestoneResponseContent.from(milestone));
-            } else {
-                response.add(new ReadMilestoneResponse(title, content));
-                title = milestone.getTitle();
-                content = new ArrayList<>();
-                content.add(ReadMilestoneResponseContent.from(milestone));
+        for (MilestoneStateDetail ms : milestones) {
+            String title = ms.getTitle();
+            if (!map.containsKey(title)) {
+                map.put(title, new ArrayList<>());
             }
+            map.get(title).add(ReadMilestoneResponseContent.from(ms));
         }
-        response.add(new ReadMilestoneResponse(title, content));
+
+        List<ReadMilestoneResponse> response = new ArrayList<>();
+        for (String title : map.keySet()) {
+            List<ReadMilestoneResponseContent> value = map.get(title);
+            response.add(new ReadMilestoneResponse(title, value));
+        }
 
         return response;
     }
