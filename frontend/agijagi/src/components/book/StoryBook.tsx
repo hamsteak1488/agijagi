@@ -62,7 +62,8 @@ const BackButtonContainer = styled.div`
 `;
 
 const BookContainer = styled.div`
-  width: 90%;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   animation: smoothAppear 0.6s ease-in-out;
@@ -185,11 +186,29 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
 
   // @ts-ignore
   const mybook = useRef<HTMLFlipBook | null>(book);
+  const bookContainer = useRef<HTMLDivElement>(null);
 
   const onFlip = useCallback((e: FlipEvent) => {
     // const totalPageCount = mybook.current?.pageFlip().getPageCount() ?? 0;
     setCurrentPage(e.data);
   }, []);
+
+  const toggleFullscreen = () => {
+    if (!bookContainer.current) {
+      return;
+    }
+    bookContainer.current.requestFullscreen();
+    
+    // if (bookContainer.current.requestFullscreen) {
+    //   mybook.current.requestFullscreen();
+    // } else if (mybook.current.webkitRequestFullscreen) {
+    //   /* Safari */
+    //   mybook.current.webkitRequestFullscreen();
+    // } else if (mybook.current.msRequestFullscreen) {
+    //   /* IE11 */
+    //   mybook.current.msRequestFullscreen();
+    // }
+  };
 
   return (
     <BookWrapper>
@@ -197,17 +216,20 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
         <Button color="secondary" size="sm" onClick={goBack}>
           목록보기
         </Button>
+        <Button color="secondary" size="sm" onClick={toggleFullscreen}>
+          전체화면
+        </Button>
       </BackButtonContainer>
 
-      <BookContainer>
+      <BookContainer ref={bookContainer}>
         {/* @ts-ignore */}
         <HTMLFlipBook
           ref={mybook}
           size={'stretch'}
-          width={160}
-          height={240}
-          maxWidth={200}
-          maxHeight={300}
+          width={800}
+          height={375}
+          // maxWidth={1024}
+          // maxHeight={300}
           drawShadow={false}
           usePortrait={false}
           showCover={true}
