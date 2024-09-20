@@ -26,7 +26,7 @@ public class ChildAppender {
         childRepository.save(child);
 
         //TODO: appendChild, member 로직 수정
-        Member member = new Member();
+        Member member = Member.of(null);
         memberChildAppender.createRelation(member, child, "WRITE");
     }
 }
