@@ -1,7 +1,5 @@
 package com.password926.agijagi.milestone.controller.dto;
 
-import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
-import com.password926.agijagi.common.errors.exception.RestApiException;
 import com.password926.agijagi.milestone.controller.dto.response.ReadMilestoneResponse;
 import com.password926.agijagi.milestone.controller.dto.response.ReadMilestoneResponseContent;
 import com.password926.agijagi.milestone.domain.MilestoneStateDetail;
