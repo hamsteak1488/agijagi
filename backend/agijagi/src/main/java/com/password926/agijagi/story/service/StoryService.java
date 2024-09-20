@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -17,10 +18,16 @@ public class StoryService {
     private final StoryRepository storyRepository;
 
     public String createStory(long memberId, CreateStoryRequest request) {
+        // member가 권한이 있는지검증
+
+        // 아이 정보를 DB에서 가져오기
+        // 요청에서 받은 기간 동안의 일기를 DB에서 꺼내서 가져오기
+
         Story story = storyRepository.save(Story.builder()
                 .childId(request.getChildId())
-                .startTime(request.getStartTime())
-                .endTime(request.getEndTime())
+                .startTime(LocalDateTime.parse(request.getStartTime()))
+                .endTime(LocalDateTime.parse(request.getEndTime()))
+                .createAt(LocalDateTime.now())
                 .build());
 
         return story.getText();
