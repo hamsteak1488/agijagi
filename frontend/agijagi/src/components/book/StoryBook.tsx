@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import styled from '@emotion/styled';
 import Button from '../common/Button';
@@ -62,10 +62,8 @@ const BackButtonContainer = styled.div`
 `;
 
 const BookContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
+  width: 100vw;
+  max-width: 400px;
   animation: smoothAppear 0.6s ease-in-out;
 
   @keyframes smoothAppear {
@@ -182,6 +180,7 @@ interface StoryBookProps {
 
 const BookComponent = ({ book, goBack }: StoryBookProps) => {
   const [currentPage, setCurrentPage] = useState(0);
+  const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   const totalPages = book.page;
 
   // @ts-ignore
@@ -197,8 +196,15 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
     if (!bookContainer.current) {
       return;
     }
+
     bookContainer.current.requestFullscreen();
-    
+
+    if (window.screen.orientation) {
+      window.screen.orientation.lock('landscape').catch((error) => {
+        console.error(error);
+      });
+    }
+
     // if (bookContainer.current.requestFullscreen) {
     //   mybook.current.requestFullscreen();
     // } else if (mybook.current.webkitRequestFullscreen) {
@@ -209,6 +215,24 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
     //   mybook.current.msRequestFullscreen();
     // }
   };
+
+  useEffect(() => {
+    const handleFullScreenChange = () => {
+      console.log(document.fullscreenElement);
+      if (document.fullscreenElement) {
+        setIsFullScreen(true);
+        return;
+      }
+
+      setIsFullScreen(false);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+    };
+  }, [setIsFullScreen]);
 
   return (
     <BookWrapper>
@@ -226,14 +250,15 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
         <HTMLFlipBook
           ref={mybook}
           size={'stretch'}
-          width={800}
-          height={375}
+          width={isFullScreen ? 740 : 360}
+          height={isFullScreen ? 720 : 400}
           // maxWidth={1024}
           // maxHeight={300}
           drawShadow={false}
           usePortrait={false}
           showCover={true}
           onFlip={onFlip}
+          key={isFullScreen ? 'landscape' : 'portrait'}
         >
           <BookCover img={book.image}></BookCover>
           {storyBook.story.map((pageText, index) => (
