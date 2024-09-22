@@ -8,9 +8,12 @@ services:
     environment:
       - TZ=Asia/Seoul
     networks:
-      - default_bridge
+      - spring_network
 
 networks:
-  default_bridge:
-    external: true
-    name: bridge
+  spring_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.24.0.0/16
+          gateway: 172.24.0.1
