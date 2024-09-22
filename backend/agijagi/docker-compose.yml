@@ -7,5 +7,10 @@ services:
       - "{PORT}:8080"
     environment:
       - TZ=Asia/Seoul
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    networks:
+      - default_bridge
+
+networks:
+  default_bridge:
+    external: true
+    name: bridge
