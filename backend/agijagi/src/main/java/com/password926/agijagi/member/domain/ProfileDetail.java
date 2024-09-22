@@ -1,16 +1,14 @@
 package com.password926.agijagi.member.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProfileDetail {
-    private final String email;
-    private final String nickname;
+    private String email;
+    private String nickname;
 
     public static ProfileDetail of(String email, String nickname) {
         return ProfileDetail.builder()
