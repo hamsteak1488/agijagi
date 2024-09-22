@@ -22,9 +22,10 @@ public class Member {
     @Column
     private Long profileImageId;
 
-    public static Member of(ProfileDetail profileDetail) {
+    public static Member of(ProfileDetail profileDetail, String password) {
         return builder()
                 .profileDetail(profileDetail)
+                .password(password)
                 .build();
     }
 

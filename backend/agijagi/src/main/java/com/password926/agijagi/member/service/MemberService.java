@@ -13,8 +13,8 @@ public class MemberService {
     private final MemberModifier memberModifier;
     private final MemberRemover memberRemover;
 
-    public long registerMember(ProfileDetail profileDetail) {
-        return memberRegistry.register(profileDetail);
+    public long registerMember(ProfileDetail profileDetail, String password) {
+        return memberRegistry.register(profileDetail, password);
     }
 
     public ProfileDetail readMemberProfileDetail(long memberId) {

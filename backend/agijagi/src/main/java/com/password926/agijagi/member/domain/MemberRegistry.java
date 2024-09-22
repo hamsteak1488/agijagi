@@ -11,8 +11,8 @@ public class MemberRegistry {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public long register(ProfileDetail profileDetail) {
-        Member member = memberRepository.save(Member.of(profileDetail));
+    public long register(ProfileDetail profileDetail, String password) {
+        Member member = memberRepository.save(Member.of(profileDetail, password));
         return member.getId();
     }
 }

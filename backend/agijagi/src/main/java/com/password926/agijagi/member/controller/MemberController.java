@@ -19,8 +19,8 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<Long> registerMember(@Valid RegisterMemberRequest request) {
-        long memberId = memberService.registerMember(request.toMemberProfile());
+    public ResponseEntity<Long> registerMember(@Valid @RequestBody RegisterMemberRequest request) {
+        long memberId = memberService.registerMember(request.toMemberProfile(), request.getPassword());
 
         return ResponseEntity.created(URI.create("/members/" + memberId)).build();
     }
@@ -33,7 +33,7 @@ public class MemberController {
     }
 
     @PatchMapping
-    public ResponseEntity<Void> modifyMember(LoginMember member, @Valid ModifyMemberRequest request) {
+    public ResponseEntity<Void> modifyMember(LoginMember member, @Valid @RequestBody ModifyMemberRequest request) {
         memberService.modifyMemberProfileDetail(member.getId(), request.toMemberProfile());
 
         return ResponseEntity.ok().build();
