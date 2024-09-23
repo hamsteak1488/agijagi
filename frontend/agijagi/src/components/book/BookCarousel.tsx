@@ -21,7 +21,12 @@ const Wrapper = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  /* padding-top: 10px; */
+  /* overflow: hidden; */
+
+  @media (min-width: 700px) {
+    flex-direction: row; /* 가로 모드일 때 가로 정렬 */
+  }
 `;
 
 const CarouselWrapper = styled.div`
@@ -31,10 +36,17 @@ const CarouselWrapper = styled.div`
   padding-bottom: 50px;
   padding-left: 30px;
   scroll-behavior: smooth;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
 
   &::-webkit-scrollbar {
     display: none;
+  }
+
+  @media (min-width: 700px) {
+    padding-top: 40px;
+    margin-top: 80px;
+    /* padding-bottom: 20px; */
+    padding-left: 40px;
   }
 `;
 
@@ -46,23 +58,42 @@ const ImageWrapper = styled.div`
 
 const Title = styled.div`
   display: flex;
+  width: 100%;
   align-items: flex-end;
   margin-top: 30px;
   margin-bottom: 10px;
-  margin-left: 20px;
+  margin-left: 30px;
+
+  @media (min-width: 700px) {
+    position: fixed;
+    /* height: 80px; */
+  }
 `;
 
 const TitleImg = styled.img`
   width: 40px;
   height: 35px;
   margin-right: 10px;
+
+  @media (min-width: 700px) {
+    width: 50px;
+    height: 45px;
+  }
 `;
 
 const ModalWrapper = styled.div`
   display: flex;
   width: 100%;
-  height: 52vh;
+  height: 52%;
   box-sizing: border-box;
+
+  @media (min-width: 700px) {
+    width: 70%;
+    height: 100vh;
+    padding-top: 30px;
+    padding-left: 30px;
+    /* overflow-y: hidden; */
+  }
 `;
 
 // 임의로 만든 책 목록 -> 추후 데이터로 받아야함

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import styled from '@emotion/styled';
 import Button from '../common/Button';
@@ -17,6 +17,7 @@ import PageImg10 from '../../assets/bookcontent/pageImg10.png';
 
 // 동화 예시 - 추후 데이터로 받아올 예정
 const storyBook = {
+  cover: PageImg1,
   story: [
     '옛날 옛적에 다운이라는 아이가 있었어요.',
     '다운이는 2살 3개월로, 호기심 많은 아이였죠.',
@@ -51,19 +52,24 @@ const BookWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  @media (min-width: 700px) {
+    margin: 0 auto;
+    width: 100vh;
+    height: 100vh;
+  }
 `;
 
 const BackButtonContainer = styled.div`
-  width: 100%;
+  width: 90%;
   display: flex;
-  justify-content: flex-start;
-  margin-left: 40px;
+  justify-content: space-between;
   margin-bottom: 20px;
 `;
 
 const BookContainer = styled.div`
-  width: 100vw;
-  max-width: 400px;
+  width: 90%;
+  max-width: 450px;
   animation: smoothAppear 0.6s ease-in-out;
 
   @keyframes smoothAppear {
@@ -109,6 +115,18 @@ const PageText = styled.div`
   font-size: ${theme.typography.fontSize.sm};
 `;
 
+const PageNumber = styled.div`
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  color: ${theme.color.greyScale[900]};
+  font-size: ${theme.typography.fontSize.xs};
+
+  @media (min-width: 700px) {
+    top: 85%;
+  }
+`;
+
 const PageButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -123,6 +141,20 @@ const PageInfo = styled.div`
   font-size: ${theme.typography.fontSize.sm};
   color: #ffffff;
   padding: 7px 10px;
+`;
+
+const WarningMessage = styled.div`
+  position: fixed;
+  width: 180px;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: ${theme.color.danger[500]};
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  z-index: 1000;
+  font-size: ${theme.typography.fontSize.sm};
 `;
 
 interface BookPageProps {
@@ -142,10 +174,11 @@ interface FlipEvent {
 const BookPage = React.forwardRef<HTMLDivElement, BookPageProps>(
   (props, ref) => {
     return (
-      <Page className="demoPage" ref={ref}>
+      <Page ref={ref}>
         {/* ref required */}
         <PageImg src={props.img} style={{ opacity: '0.7' }}></PageImg>
         <PageText>{props.children}</PageText>
+        <PageNumber>{props.number}</PageNumber>
       </Page>
     );
   }
@@ -154,7 +187,7 @@ const BookPage = React.forwardRef<HTMLDivElement, BookPageProps>(
 const BookCover = React.forwardRef<HTMLDivElement, BookCoverProps>(
   (props, ref) => {
     return (
-      <Page className="demoPage" ref={ref}>
+      <Page ref={ref}>
         {/* ref required */}
         <PageImg src={props.img}></PageImg>
       </Page>
@@ -178,9 +211,15 @@ interface StoryBookProps {
   goBack: () => void;
 }
 
+interface HTMLDivElementWithVendorPrefix extends HTMLDivElement {
+  mozRequestFullscreen: () => void;
+  webkitRequestFullscreen: () => void;
+}
+
 const BookComponent = ({ book, goBack }: StoryBookProps) => {
-  const [currentPage, setCurrentPage] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [warning, setWarning] = useState<string>('');
   const totalPages = book.page;
 
   // @ts-ignore
@@ -197,23 +236,32 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
       return;
     }
 
-    bookContainer.current.requestFullscreen();
+    if (bookContainer.current.requestFullscreen) {
+      bookContainer.current.requestFullscreen();
+    } else if (
+      (bookContainer.current as HTMLDivElementWithVendorPrefix)
+        .mozRequestFullscreen
+    ) {
+      (
+        bookContainer.current as HTMLDivElementWithVendorPrefix
+      ).mozRequestFullscreen();
+    } else if (
+      (bookContainer.current as HTMLDivElementWithVendorPrefix)
+        .webkitRequestFullscreen
+    ) {
+      (
+        bookContainer.current as HTMLDivElementWithVendorPrefix
+      ).webkitRequestFullscreen();
+    }
 
-    if (window.screen.orientation) {
+    if (window.screen.orientation && window.screen.orientation.lock) {
       window.screen.orientation.lock('landscape').catch((error) => {
         console.error(error);
       });
+    } else {
+      setWarning('이 브라우저는 전체화면 보기를 지원하지 않습니다.');
+      setTimeout(() => setWarning(''), 3000); // 3초 후 경고 메시지 숨김
     }
-
-    // if (bookContainer.current.requestFullscreen) {
-    //   mybook.current.requestFullscreen();
-    // } else if (mybook.current.webkitRequestFullscreen) {
-    //   /* Safari */
-    //   mybook.current.webkitRequestFullscreen();
-    // } else if (mybook.current.msRequestFullscreen) {
-    //   /* IE11 */
-    //   mybook.current.msRequestFullscreen();
-    // }
   };
 
   useEffect(() => {
@@ -251,9 +299,7 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
           ref={mybook}
           size={'stretch'}
           width={isFullScreen ? 740 : 360}
-          height={isFullScreen ? 720 : 400}
-          // maxWidth={1024}
-          // maxHeight={300}
+          height={isFullScreen ? 720 : 500}
           drawShadow={false}
           usePortrait={false}
           showCover={true}
@@ -299,6 +345,8 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
           {'>'}
         </Button>
       </PageButtonWrapper>
+
+      {warning && <WarningMessage>{warning}</WarningMessage>}
     </BookWrapper>
   );
 };
