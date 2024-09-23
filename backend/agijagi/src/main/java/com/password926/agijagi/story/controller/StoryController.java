@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 public class StoryController {
 
-    private StoryService storyService;
+    private final StoryService storyService;
 
     @GetMapping
     public ResponseEntity<List<Story>> getAllStory(

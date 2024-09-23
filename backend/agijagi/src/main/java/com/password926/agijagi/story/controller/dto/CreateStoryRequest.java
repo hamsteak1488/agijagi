@@ -2,6 +2,7 @@ package com.password926.agijagi.story.controller.dto;
 
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -11,12 +12,9 @@ public class CreateStoryRequest {
     private Long childId;
 
     // 일기를 구간별로 가져오기 위한 기간
-    private String startTime;
+    private LocalDate startTime;
 
     // 일기를 구간별로 가져오기 위한 기간
-    private String endTime;
-
-    // 만든 시간
-    private LocalDateTime createdAt;
+    private LocalDate endTime;
 
 }

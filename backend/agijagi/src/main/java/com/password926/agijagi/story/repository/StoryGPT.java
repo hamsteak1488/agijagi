@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.password926.agijagi.child.domain.ChildContent;
-import com.password926.agijagi.child.domain.ChildReader;
 import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
 import com.password926.agijagi.common.errors.exception.RestApiException;
 import com.password926.agijagi.diary.entity.Diary;
@@ -16,6 +14,7 @@ import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +30,7 @@ public class StoryGPT {
                     .registerModule(new JavaTimeModule())
                     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-    public CreateStoryRequest getCreateStoryDtoFromQuery(List<Diary> diaries, String name, int age){
+    public CreateStoryRequest getCreateStoryDtoFromQuery(List<Diary> diaries, String name, Long age){
         String data = convertValuesToJson(new HashSet<>(diaries).containsAll(diaries));
 
         PromptTemplate promptTemplate = new PromptTemplate(
@@ -41,15 +40,16 @@ public class StoryGPT {
                 First, the following information is provided:
 
                 <child_name>
-                (Child_Name : {child_name})
+                (child_name : {child_name})
                 </child_name>
 
                 ‹parenting_diary>
-                ({data})
+                (7월 8일 : {child_name}이 걸음마를 함,
+                7월 10일 : {child_name}이 옹알이를 함)
                 </parenting_diary>
 
                 <child_age>
-                (Child_age: {child_age})
+                (child_age : {child_age})
                 </child_age>
 
                 Use this information to create a fairy tale that incorporates major events and milestones in your parenting diary.
@@ -64,12 +64,12 @@ public class StoryGPT {
                 7. Fairy tales should be written in Korean.
                 8. Paragraphs should be written in the json way.
                 """);
-        Prompt prompt = promptTemplate.create(Map.of("child_name", "down", "child_age", 2, "data", data));
+        Prompt prompt = promptTemplate.create(Map.of("child_name", name, "child_age", age, "data", data));
         String response = openAiChatModel.call(prompt).getResult().getOutput().getContent();
         System.out.println(response);
         return convertJsonToObject(formatToJson(response), CreateStoryRequest.class);
     }
-    // ChildReader.getName()
+
     private String convertValuesToJson(Object values) {
         try {
             return objectMapper.writeValueAsString(values);

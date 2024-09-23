@@ -1,13 +1,18 @@
 package com.password926.agijagi.story.service;
 
+import com.password926.agijagi.child.domain.Child;
+import com.password926.agijagi.child.infrastructure.ChildRepository;
+import com.password926.agijagi.diary.entity.Diary;
+import com.password926.agijagi.diary.repository.DiaryRepository;
 import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
 import com.password926.agijagi.story.entity.Story;
+import com.password926.agijagi.story.repository.StoryGPT;
 import com.password926.agijagi.story.repository.StoryRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 
@@ -16,21 +21,29 @@ import java.util.List;
 public class StoryService {
 
     private final StoryRepository storyRepository;
+    private final ChildRepository childRepository;
+    private final DiaryRepository diaryRepository;
+    private final StoryGPT storyGPT;
 
-    public String createStory(long memberId, CreateStoryRequest request) {
+    public CreateStoryRequest createStory(long memberId, CreateStoryRequest request) {
         // member가 권한이 있는지검증
 
-        // 아이 정보를 DB에서 가져오기
-        // 요청에서 받은 기간 동안의 일기를 DB에서 꺼내서 가져오기
+        Child child = childRepository.findById(request.getChildId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID를 가진 아이가 없습니다."));
 
-        Story story = storyRepository.save(Story.builder()
-                .childId(request.getChildId())
-                .startTime(LocalDateTime.parse(request.getStartTime()))
-                .endTime(LocalDateTime.parse(request.getEndTime()))
-                .createAt(LocalDateTime.now())
-                .build());
+        LocalDate startTime = request.getStartTime();
+        LocalDate endTime = request.getEndTime();
 
-        return story.getText();
+        List<Diary> diaries = diaryRepository.findAllByChildIdAndDateBetween(
+                request.getChildId(), startTime, endTime
+        );
+
+        String childName = child.getName();
+        LocalDate childBirthday = child.getBirthday();
+        LocalDate today = LocalDate.now();
+        Long age = ChronoUnit.DAYS.between(childBirthday, today);
+
+        return storyGPT.getCreateStoryDtoFromQuery(diaries, childName, age);
     }
 
     public List<Story> getAllStory(long memberId, long childId) {
