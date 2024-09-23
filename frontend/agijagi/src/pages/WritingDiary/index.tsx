@@ -1,23 +1,44 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useRef, useState } from 'react';
+import adult from '../../assets/images/adult.png';
+import boy from '../../assets/images/boy.png';
+import girl from '../../assets/images/girl.png';
+import video from '../../assets/Test.mp4';
 import AppBar from '../../components/common/AppBar';
 import Button from '../../components/common/Button';
 import Typhography from '../../components/common/Typhography';
-import MediaInput from '../../components/Diary/MediaInput/MediaInput';
 import MediaSlider from '../../components/Diary/MediaSlider/MediaSlider';
-import { Container, DiaryTextArea } from './WritingDiary.styles';
-import boy from '../../assets/images/boy.png';
-import girl from '../../assets/images/girl.png';
-import adult from '../../assets/images/adult.png';
-import video from '../../assets/Test.mp4';
+import {
+  BottomArrow,
+  Container,
+  ContentContainer,
+  DayContainer,
+  DiaryTextArea,
+  Icon,
+  SelectBoxDiv,
+} from './WritingDiary.styles';
 
 export const WritingDiary = () => {
   const [fileList, setFileList] = useState<File[]>([]);
+  const [isInitialRender, setIsInitialRender] = useState<boolean>(true);
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const handleWheel = (e) => {
-    e.preventDefault(); // 기본 세로 스크롤 방지
-    const container = scrollContainerRef.current;
-    container.scrollLeft += e.deltaY; // 세로 스크롤(deltaY)을 가로 스크롤로 변환
+  //todo
+  const handleSubmit = () => {
+    console.log(textAreaRef.current?.value);
+    console.log(fileList);
+  };
+
+  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsInitialRender(false);
+    if (e.target.files) {
+      const selectedFiles = Array.from(e.target.files);
+      setFileList((prevFiles) => [...prevFiles, ...selectedFiles]);
+    }
+  };
+
+  const handleDelete = (index: number) => {
+    const updatedFileList = fileList.filter((_, i) => i !== index);
+    setFileList(updatedFileList);
   };
 
   useEffect(() => {
@@ -35,8 +56,8 @@ export const WritingDiary = () => {
       const videoFile = await convertToFile(video, 'Test.mp4');
       setFileList([boyFile, girlFile, adultFile, videoFile]);
     };
-
     loadImages();
+    setIsInitialRender(true);
   }, []);
 
   return (
@@ -47,12 +68,36 @@ export const WritingDiary = () => {
             <Typhography>닫기</Typhography>
           </Button>
           <AppBar.Title>일기 쓰기</AppBar.Title>
-          <Button color="secondary" size="md">
+          <Button color="secondary" size="md" onClick={handleSubmit}>
             <Typhography>쓰기</Typhography>
           </Button>
         </AppBar>
-        <MediaSlider fileList={fileList} isWriteMode={true}></MediaSlider>
-        <DiaryTextArea placeholder="오늘의 이야기를 써주세요!" />
+        <div>
+          <DayContainer>
+            <Typhography size="3xl" weight="bold">
+              +24 days
+            </Typhography>
+            <SelectBoxDiv>
+              <Typhography size="md" color="black">
+                2024년 7월 1일
+              </Typhography>
+              <Icon>{BottomArrow}</Icon>
+            </SelectBoxDiv>
+          </DayContainer>
+          <ContentContainer>
+            <MediaSlider
+              fileList={fileList}
+              isWriteMode={true}
+              handleUpload={handleUpload}
+              handleDelete={handleDelete}
+              isInitialRender={isInitialRender}
+            ></MediaSlider>
+            <DiaryTextArea
+              ref={textAreaRef}
+              placeholder="오늘의 이야기를 써주세요!"
+            />
+          </ContentContainer>
+        </div>
       </Container>
     </>
   );

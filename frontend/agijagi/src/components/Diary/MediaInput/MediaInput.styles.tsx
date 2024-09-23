@@ -42,7 +42,7 @@ export const CameraIcon = styled.div<{}>(
 
 export const Popup = styled.div<{ xPos: number; yPos: number }>(
   (props) => css`
-    position: absolute;
+    position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -51,8 +51,8 @@ export const Popup = styled.div<{ xPos: number; yPos: number }>(
     transition: all 0.2s;
     background-color: ${theme.color.greyScale[50]};
     border-radius: 0.5rem;
-    left: ${props.xPos - 75}px;
-    top: ${props.yPos - 105}px;
+    left: ${props.xPos}px;
+    top: ${props.yPos}px;
   `
 );
 

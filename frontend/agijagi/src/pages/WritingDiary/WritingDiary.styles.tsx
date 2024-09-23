@@ -12,6 +12,22 @@ export const Container = styled.div<{}>(
   `
 );
 
+export const ContentContainer = styled.div(
+  () => css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  `
+);
+
+export const DayContainer = styled.div(
+  () => css`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  `
+);
+
 export const DiaryTextArea = styled.textarea(
   () => css`
     width: 80%;
@@ -25,5 +41,44 @@ export const DiaryTextArea = styled.textarea(
       rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     margin: 1rem;
     padding: 1rem;
+  `
+);
+
+export const BottomArrow = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    className="size-6"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="m19.5 8.25-7.5 7.5-7.5-7.5"
+    />
+  </svg>
+);
+
+export const SelectBoxDiv = styled.div(
+  () => css`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.25rem;
+    vertical-align: middle;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    border: 2px solid ${theme.color.greyScale[600]};
+    padding: 0.2rem;
+    cursor: pointer;
+  `
+);
+
+export const Icon = styled.div(
+  () => css`
+    width: 24px;
+    height: 24px;
   `
 );

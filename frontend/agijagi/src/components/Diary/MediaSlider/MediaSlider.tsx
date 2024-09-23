@@ -1,79 +1,63 @@
-import styled from '@emotion/styled';
-import { css } from '@emotion/react';
-import theme from '../../../styles/theme';
-import MediaInput from '../MediaInput/MediaInput';
+import { useEffect, useRef, useState } from 'react';
 import Typhography from '../../common/Typhography';
+import MediaInput from '../MediaInput/MediaInput';
+import {
+  Container,
+  DelIcon,
+  DelIconDiv,
+  IndexLabel,
+  InnerBox,
+  MediaBox,
+  SlideWrapper,
+} from './MediaSlider.styles';
 
 interface MediaSliderProps {
   fileList?: File[];
   isWriteMode: boolean;
+  handleUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleDelete: (index: number) => void;
+  isInitialRender: boolean;
 }
-
-const InnerBox = styled.div(
-  () => css`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    overflow-x: scroll;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox에서 스크롤바 숨김 */
-    &::-webkit-scrollbar {
-      display: none; /* Chrome, Safari에서 스크롤바 숨김 */
-    }
-  `
-);
-
-const SlideWrapper = styled.div(
-  () => css`
-    display: flex;
-    width: 100%;
-    max-width: 500px;
-    scroll-snap-align: center;
-    scroll-snap-stop: always;
-  `
-);
-
-const MediaBox = styled.div(
-  () => css`
-    flex-shrink: 0;
-    width: 100%;
-    max-width: 500px;
-    aspect-ratio: 1;
-    overflow: hidden;
-    background-color: #f0f0f0;
-    position: relative;
-    scroll-snap-align: center;
-  `
-);
-
-export const Container = styled.div(
-  () => css`
-    padding: 2rem;
-    max-width: 500px;
-    max-height: 500px;
-    border-radius: 1rem;
-  `
-);
-
-const IndexLabel = styled.div(
-  () => css`
-    position: absolute;
-    width: 40px;
-    height: 20px;
-    background-color: ${theme.color.primary[200]};
-    left: 4%;
-    top: 4%;
-    border-radius: 1rem;
-    text-align: center;
-  `
-);
 
 export const MediaSlider = ({
   fileList = [],
   isWriteMode,
+  handleUpload,
+  handleDelete,
+  isInitialRender = true,
 }: MediaSliderProps) => {
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const [uploadKey, setUploadKey] = useState<number>(0);
+
+  const handleWheel = (e: React.WheelEvent) => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft += e.deltaY;
+    }
+  };
+
+  const handleScroll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (handleUpload) handleUpload(e);
+    setUploadKey(uploadKey + 1);
+  };
+
+  useEffect(() => {
+    if (scrollContainerRef.current && fileList.length > 0 && isWriteMode) {
+      if (isInitialRender) {
+        scrollContainerRef.current.scrollTo({
+          left: 5000,
+          behavior: 'smooth',
+        });
+      } else {
+        scrollContainerRef.current.scrollTo({
+          left:
+            scrollContainerRef.current.scrollWidth -
+            (window.innerWidth < 500 ? window.innerWidth * 2 : 1000),
+          behavior: 'smooth',
+        });
+      }
+    }
+  }, [uploadKey, isWriteMode, isInitialRender]);
+
   const renderMedia = () => {
     return (
       <>
@@ -84,6 +68,11 @@ export const MediaSlider = ({
                 {index + 1}/{fileList.length}
               </Typhography>
             </IndexLabel>
+            {isWriteMode && (
+              <DelIconDiv onClick={() => handleDelete(index)}>
+                {DelIcon}
+              </DelIconDiv>
+            )}
             {file.type.startsWith('image/') ? (
               <img
                 src={URL.createObjectURL(file)}
@@ -101,7 +90,7 @@ export const MediaSlider = ({
         ))}
         {isWriteMode && (
           <MediaBox>
-            <MediaInput></MediaInput>
+            <MediaInput handleUpload={handleScroll}></MediaInput>
           </MediaBox>
         )}
       </>
@@ -110,7 +99,7 @@ export const MediaSlider = ({
 
   return (
     <Container>
-      <InnerBox>
+      <InnerBox ref={scrollContainerRef} onWheel={handleWheel}>
         <SlideWrapper>{renderMedia()}</SlideWrapper>
       </InnerBox>
     </Container>

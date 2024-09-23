@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import Typhography from '../../common/Typhography';
 import {
   CameraIcon,
@@ -32,18 +32,39 @@ const MediaIcon = (
 );
 
 interface MediaInputProps {
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   children?: ReactNode;
+  handleUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const MediaInput = ({ onChange, children }: MediaInputProps) => {
+export const MediaInput = ({ handleUpload, children }: MediaInputProps) => {
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
     x: 0,
     y: 0,
   });
 
-  const scrollContainerRef = useRef(null);
+  const popupRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        popupRef.current &&
+        !popupRef.current.contains(event.target as Node)
+      ) {
+        setIsClicked(false);
+      }
+    };
+
+    if (isClicked) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside); // 이벤트 리스너 해제
+    };
+  }, [isClicked]);
 
   const handlePopup = (e: React.MouseEvent<HTMLLabelElement, MouseEvent>) => {
     setMousePosition({
@@ -53,8 +74,8 @@ export const MediaInput = ({ onChange, children }: MediaInputProps) => {
     setIsClicked(true);
   };
 
-  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (onChange) onChange(e);
+  const handleUploaded = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (handleUpload) handleUpload(e);
     setIsClicked(false);
   };
 
@@ -62,7 +83,7 @@ export const MediaInput = ({ onChange, children }: MediaInputProps) => {
     <InputBox>
       <Label onClick={handlePopup}>
         {isClicked && (
-          <Popup xPos={mousePosition.x} yPos={mousePosition.y}>
+          <Popup ref={popupRef} xPos={mousePosition.x} yPos={mousePosition.y}>
             <PopupItem>카메라</PopupItem>
             <PopupItem
               htmlFor="file"
@@ -77,7 +98,12 @@ export const MediaInput = ({ onChange, children }: MediaInputProps) => {
         <CameraIcon> {MediaIcon}</CameraIcon>
         <Typhography size="sm">사진, 영상 등록하기</Typhography>
       </Label>
-      <InvisibleInput type="file" multiple id="file" onChange={handleUpload} />
+      <InvisibleInput
+        type="file"
+        multiple
+        id="file"
+        onChange={handleUploaded}
+      />
     </InputBox>
   );
 };
