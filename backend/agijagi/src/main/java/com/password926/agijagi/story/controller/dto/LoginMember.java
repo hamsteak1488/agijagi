@@ -1,4 +1,4 @@
-package com.password926.agijagi.diary.controller.dto;
+package com.password926.agijagi.story.controller.dto;
 
 import lombok.Getter;
 
