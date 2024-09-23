@@ -3,6 +3,7 @@ package com.password926.agijagi.story.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -27,13 +28,13 @@ public class Story {
     private String image;
 
     @Column(name = "start_time", nullable = false)
-    private LocalDateTime startTime;
+    private LocalDate startTime;
 
     @Column(name = "end_time", nullable = false)
-    private LocalDateTime endTime;
+    private LocalDate endTime;
 
     @Column(name = "create_at", nullable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;
