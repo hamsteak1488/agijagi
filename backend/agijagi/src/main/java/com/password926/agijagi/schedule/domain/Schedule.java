@@ -38,8 +38,6 @@ public class Schedule {
     @Column(nullable = false)
     private String description;
 
-    private boolean isDeleted;
-
     @Column(nullable = false)
     private LocalDateTime createdAt;
 }
