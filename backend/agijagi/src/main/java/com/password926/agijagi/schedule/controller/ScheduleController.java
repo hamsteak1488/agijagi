@@ -38,4 +38,13 @@ public class ScheduleController {
         scheduleService.appendSchedule(memberId, request.getChildId(), request.toContent());
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<Void> removeSchedule(
+            long memberId,
+            @RequestParam long scheduleId
+    ) {
+        scheduleService.removeSchedule(memberId, scheduleId);
+        return ResponseEntity.ok().build();
+    }
 }
