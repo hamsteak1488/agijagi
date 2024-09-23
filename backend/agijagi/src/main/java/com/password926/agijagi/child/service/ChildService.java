@@ -15,6 +15,8 @@ public class ChildService {
     private final ChildAppender childAppender;
     private final ChildRemover childRemover;
     private final ChildUpdater childUpdater;
+    private final ChildImageUpdater childImageUpdater;
+    private final ChildImageRemover childImageRemover;
 
     public ChildDetail readChildDetail(long memberId, long childId) {
         return childDetailReader.readByMemberAndChild(memberId, childId);
@@ -38,5 +40,13 @@ public class ChildService {
 
     public void updateChild(long memberId, long childId, ChildContent childContent) {
         childUpdater.update(memberId, childId, childContent);
+    }
+
+    public void updateChildImage(long memberId, long childId, MultipartFile image) {
+        childImageUpdater.update(memberId, childId, image);
+    }
+
+    public void removeChildImage(long memberId, long childId) {
+        childImageRemover.remove(memberId, childId);
     }
 }

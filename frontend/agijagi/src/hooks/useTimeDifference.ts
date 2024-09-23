@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { getReadableTimeDiff } from '../utils/date';
+import { getReadableTimeDiff } from '../utils/getReadableTimeDiff';
 
 /**
  * 현재 시간과 입력 받은 시간의 차이를 보기 좋은 형태(ex: 1분 전, 10일 전)로 실시간 반환하는 훅

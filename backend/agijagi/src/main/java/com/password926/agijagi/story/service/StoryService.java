@@ -1,10 +1,21 @@
 package com.password926.agijagi.story.service;
 
+import com.password926.agijagi.child.domain.Child;
+import com.password926.agijagi.child.domain.ChildValidator;
+import com.password926.agijagi.child.infrastructure.ChildRepository;
+import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
+import com.password926.agijagi.common.errors.exception.RestApiException;
+import com.password926.agijagi.diary.entity.Diary;
+import com.password926.agijagi.diary.repository.DiaryRepository;
+import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
 import com.password926.agijagi.story.entity.Story;
+import com.password926.agijagi.story.repository.StoryGPT;
 import com.password926.agijagi.story.repository.StoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 
@@ -13,9 +24,32 @@ import java.util.List;
 public class StoryService {
 
     private final StoryRepository storyRepository;
+    private final ChildRepository childRepository;
+    private final DiaryRepository diaryRepository;
+    private final StoryGPT storyGPT;
+    private final ChildValidator childValidator;
+
+    public CreateStoryRequest createStory(long memberId, CreateStoryRequest request) {
+        childValidator.validateWriterRole(memberId, request.getChildId());
+
+        Child child = childRepository.findById(request.getChildId())
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+        List<Diary> diaries = diaryRepository.findAllByChildIdAndDateBetween(
+                request.getChildId(),
+                request.getStartTime(),
+                request.getEndTime()
+        );
+
+        return storyGPT.getCreateStoryDtoFromQuery(
+                diaries,
+                child.getName(),
+                ChronoUnit.DAYS.between(child.getBirthday(), LocalDate.now())
+        );
+    }
 
     public List<Story> getAllStory(long memberId, long childId) {
-        //검증
+        childValidator.validateWriterRole(memberId, childId);
 
         List<Story> stories = storyRepository.findAllByChildId(childId);
 
@@ -28,13 +62,11 @@ public class StoryService {
     }
 
     public Story getStory(long memberId, long storyId) {
-        //검증
 
         return storyRepository.findById(storyId);
     }
 
     public void deleteStory(long storyId) {
-        //검증
 
         storyRepository.deleteById(storyId);
     }
