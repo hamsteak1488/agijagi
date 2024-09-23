@@ -23,6 +23,7 @@ const useSwipe = <T extends HTMLElement>(ref: React.RefObject<T>) => {
 
       down = true;
       startX = e.touches[0].clientX;
+      endX = 0;
       ref.current.style.transition = '';
     };
 
