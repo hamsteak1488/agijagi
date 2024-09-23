@@ -30,7 +30,6 @@ public class StoryService {
     private final ChildValidator childValidator;
 
     public CreateStoryRequest createStory(long memberId, CreateStoryRequest request) {
-        // member가 권한이 있는지검증
         childValidator.validateWriterRole(memberId, request.getChildId());
 
         Child child = childRepository.findById(request.getChildId())
