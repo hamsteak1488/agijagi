@@ -7,10 +7,21 @@ export const Container = styled.div`
   gap: 0.25rem;
   padding: 0.75rem;
   border-radius: 0.75rem;
-  background-color: ${theme.color.primary[700]};
   transition: all 0.2s ease;
   user-select: none;
   cursor: pointer;
+
+  :nth-child(3n + 1) {
+    background-color: ${theme.color.primary[700]};
+  }
+
+  :nth-child(3n + 2) {
+    background-color: ${theme.color.secondary[700]};
+  }
+
+  :nth-child(3n + 3) {
+    background-color: ${theme.color.tertiary[700]};
+  }
 
   :active {
     transform: translateY(0.25rem);
