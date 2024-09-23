@@ -34,7 +34,7 @@ public class Story {
     private LocalDate endTime;
 
     @Column(name = "create_at", nullable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;

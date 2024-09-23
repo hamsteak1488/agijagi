@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/story")
+@RequestMapping("/stories")
 @RestController
 public class StoryController {
 
@@ -47,7 +47,7 @@ public class StoryController {
             LoginMember member,
             @RequestBody CreateStoryRequest createStoryRequest
     ) {
-        storyService.createStory(member.getId(),createStoryRequest);
+        storyService.createStory(member.getId(), createStoryRequest);
         return ResponseEntity.ok().build();
     }
 

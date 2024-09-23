@@ -1,7 +1,10 @@
 package com.password926.agijagi.story.service;
 
 import com.password926.agijagi.child.domain.Child;
+import com.password926.agijagi.child.domain.ChildValidator;
 import com.password926.agijagi.child.infrastructure.ChildRepository;
+import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
+import com.password926.agijagi.common.errors.exception.RestApiException;
 import com.password926.agijagi.diary.entity.Diary;
 import com.password926.agijagi.diary.repository.DiaryRepository;
 import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
@@ -24,30 +27,30 @@ public class StoryService {
     private final ChildRepository childRepository;
     private final DiaryRepository diaryRepository;
     private final StoryGPT storyGPT;
+    private final ChildValidator childValidator;
 
     public CreateStoryRequest createStory(long memberId, CreateStoryRequest request) {
         // member가 권한이 있는지검증
+        childValidator.validateWriterRole(memberId, request.getChildId());
 
         Child child = childRepository.findById(request.getChildId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID를 가진 아이가 없습니다."));
-
-        LocalDate startTime = request.getStartTime();
-        LocalDate endTime = request.getEndTime();
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
         List<Diary> diaries = diaryRepository.findAllByChildIdAndDateBetween(
-                request.getChildId(), startTime, endTime
+                request.getChildId(),
+                request.getStartTime(),
+                request.getEndTime()
         );
 
-        String childName = child.getName();
-        LocalDate childBirthday = child.getBirthday();
-        LocalDate today = LocalDate.now();
-        Long age = ChronoUnit.DAYS.between(childBirthday, today);
-
-        return storyGPT.getCreateStoryDtoFromQuery(diaries, childName, age);
+        return storyGPT.getCreateStoryDtoFromQuery(
+                diaries,
+                child.getName(),
+                ChronoUnit.DAYS.between(child.getBirthday(), LocalDate.now())
+        );
     }
 
     public List<Story> getAllStory(long memberId, long childId) {
-        //검증
+        childValidator.validateWriterRole(memberId, childId);
 
         List<Story> stories = storyRepository.findAllByChildId(childId);
 
@@ -60,13 +63,11 @@ public class StoryService {
     }
 
     public Story getStory(long memberId, long storyId) {
-        //검증
 
         return storyRepository.findById(storyId);
     }
 
     public void deleteStory(long storyId) {
-        //검증
 
         storyRepository.deleteById(storyId);
     }
