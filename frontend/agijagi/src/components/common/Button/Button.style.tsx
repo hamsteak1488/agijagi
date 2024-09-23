@@ -25,6 +25,34 @@ const sizeStyle: Record<ButtonSize, SerializedStyles> = {
   `,
 };
 
+export const Container = styled.div<{ fullWidth: boolean }>(
+  (props) => css`
+    display: inline-block;
+    position: relative;
+    ${props.fullWidth &&
+    css`
+      width: 100%;
+    `}
+  `
+);
+
+export const Shadow = styled.div<{
+  size: ButtonSize;
+}>(
+  (props) => css`
+    ${sizeStyle[props.size]}
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0.1875rem 0.0625rem 0 ${theme.color.greyScale[400]};
+    transition: all 0.1s ease;
+    pointer-events: none;
+  `
+);
+
 export const Button = styled.button<{
   fullWidth: boolean;
   backgroundColor: Palette;
@@ -37,7 +65,6 @@ export const Button = styled.button<{
     css`
       width: 100%;
     `}
-    margin-bottom: 0.1875rem;
     border: 0;
     background-color: ${theme.color[props.backgroundColor][500]};
     color: #fff;
@@ -48,29 +75,12 @@ export const Button = styled.button<{
       cursor: pointer;
 
       :active {
-        margin-top: 0.1875rem;
-        margin-bottom: 0;
-
-        ::before {
-          top: -0.1875rem !important;
-        }
+        transform: translateY(0.1875rem);
       }
     }
 
     :disabled {
       background-color: ${theme.color[props.backgroundColor][200]};
-    }
-
-    ::before {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      box-shadow: 0 0.1875rem 0.0625rem 0 ${theme.color.greyScale[400]};
-      border-radius: inherit;
-      transition: all 0.1s ease;
-      content: '';
     }
   `
 );

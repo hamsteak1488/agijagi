@@ -19,14 +19,17 @@ const Button = ({
   ...rest
 }: ButtonProps) => {
   return (
-    <s.Button
-      fullWidth={fullWidth}
-      size={size}
-      backgroundColor={color}
-      {...rest}
-    >
-      {children}
-    </s.Button>
+    <s.Container fullWidth={fullWidth}>
+      <s.Shadow size={size}></s.Shadow>
+      <s.Button
+        fullWidth={fullWidth}
+        size={size}
+        backgroundColor={color}
+        {...rest}
+      >
+        {children}
+      </s.Button>
+    </s.Container>
   );
 };
 
