@@ -14,7 +14,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="baby/writing" element={<WritingDiary />} />
+            <Route path="/baby/writing" element={<WritingDiary />} />
             <Route path="/activity-record" element={<ActivityRecord />} />
             <Route path="/baby" element={<BabyMain />} />
           </Routes>
