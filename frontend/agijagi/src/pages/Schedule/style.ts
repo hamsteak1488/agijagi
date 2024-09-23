@@ -1,5 +1,11 @@
 import styled from '@emotion/styled';
 
+export const Calendar = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -18,8 +24,12 @@ export const ScheduleHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 1rem 0;
 `;
 
 export const ScheduleList = styled.div`
-  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: scroll;
 `;
