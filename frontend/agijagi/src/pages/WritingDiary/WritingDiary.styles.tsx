@@ -1,14 +1,21 @@
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import theme from '../../styles/theme';
-import Button from '../../components/common/Button';
 
-export const Container = styled.div<{}>(
-  (props) => css`
+export const Container = styled.div(
+  () => css`
     background-color: ${theme.color.primary[100]};
     width: 100%;
     height: 100%;
     overflow-y: auto;
+  `
+);
+
+export const DateContainer = styled.div(
+  () => css`
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
   `
 );
 

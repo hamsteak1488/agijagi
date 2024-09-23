@@ -5,12 +5,13 @@ import girl from '../../assets/images/girl.png';
 import video from '../../assets/Test.mp4';
 import AppBar from '../../components/common/AppBar';
 import Button from '../../components/common/Button';
-import Typhography from '../../components/common/Typhography';
-import MediaSlider from '../../components/Diary/MediaSlider/MediaSlider';
+import Typhography from '../../components/common/Typography';
+import MediaSlider from '../../components/Diary/MediaSlider';
 import {
   BottomArrow,
   Container,
   ContentContainer,
+  DateContainer,
   DayContainer,
   DiaryTextArea,
   Icon,
@@ -72,32 +73,35 @@ export const WritingDiary = () => {
             <Typhography>쓰기</Typhography>
           </Button>
         </AppBar>
-        <div>
-          <DayContainer>
+        <DayContainer>
+          <DateContainer>
             <Typhography size="3xl" weight="bold">
-              +24 days
+              Day +
             </Typhography>
-            <SelectBoxDiv>
-              <Typhography size="md" color="black">
-                2024년 7월 1일
-              </Typhography>
-              <Icon>{BottomArrow}</Icon>
-            </SelectBoxDiv>
-          </DayContainer>
-          <ContentContainer>
-            <MediaSlider
-              fileList={fileList}
-              isWriteMode={true}
-              handleUpload={handleUpload}
-              handleDelete={handleDelete}
-              isInitialRender={isInitialRender}
-            ></MediaSlider>
-            <DiaryTextArea
-              ref={textAreaRef}
-              placeholder="오늘의 이야기를 써주세요!"
-            />
-          </ContentContainer>
-        </div>
+            <Typhography size="3xl" weight="bold" color="primary">
+              397
+            </Typhography>
+          </DateContainer>
+          <SelectBoxDiv>
+            <Typhography size="md" color="black">
+              2024년 7월 1일
+            </Typhography>
+            <Icon>{BottomArrow}</Icon>
+          </SelectBoxDiv>
+        </DayContainer>
+        <ContentContainer>
+          <MediaSlider
+            fileList={fileList}
+            isWriteMode={true}
+            handleUpload={handleUpload}
+            handleDelete={handleDelete}
+            isInitialRender={isInitialRender}
+          ></MediaSlider>
+          <DiaryTextArea
+            ref={textAreaRef}
+            placeholder="오늘의 이야기를 써주세요!"
+          />
+        </ContentContainer>
       </Container>
     </>
   );

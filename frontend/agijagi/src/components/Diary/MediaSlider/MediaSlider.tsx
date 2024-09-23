@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import Typhography from '../../common/Typhography';
-import MediaInput from '../MediaInput/MediaInput';
+import Typhography from '../../common/Typography';
+import MediaInput from '../MediaInput';
 import {
   Container,
   DelIcon,
@@ -14,16 +14,16 @@ import {
 interface MediaSliderProps {
   fileList?: File[];
   isWriteMode: boolean;
-  handleUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleDelete: (index: number) => void;
+  handleUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleDelete?: (index: number) => void;
   isInitialRender: boolean;
 }
 
 export const MediaSlider = ({
   fileList = [],
   isWriteMode,
-  handleUpload,
-  handleDelete,
+  handleUpload = () => {},
+  handleDelete = () => {},
   isInitialRender = true,
 }: MediaSliderProps) => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);

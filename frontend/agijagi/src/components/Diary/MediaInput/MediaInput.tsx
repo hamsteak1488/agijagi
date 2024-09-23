@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
-import Typhography from '../../common/Typhography';
+import Typhography from '../../common/Typography';
 import {
   CameraIcon,
   InputBox,

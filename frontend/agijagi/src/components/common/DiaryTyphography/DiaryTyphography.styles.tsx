@@ -8,7 +8,7 @@ import { ColorShade } from '../../../types/theme';
 import {
   TyphographyColor,
   TyphographySize,
-} from '../Typhography/Typhography.types';
+} from '../Typography/Typhography.types';
 
 const sizeStyles: Record<TyphographySize, string> = {
   '6xs': `

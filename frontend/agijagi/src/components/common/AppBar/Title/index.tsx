@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import Typhography from '../../Typhography';
+import Typhography from '../../Typography';
 
 import * as s from './Title.css';
 

@@ -1,9 +1,9 @@
-import styled from '@emotion/styled';
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import theme from '../../../styles/theme';
 
-export const InputBox = styled.div<{}>(
-  (props) => css`
+export const InputBox = styled.div(
+  () => css`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,7 +17,7 @@ export const InputBox = styled.div<{}>(
 );
 
 export const Label = styled.label<{}>(
-  (props) => css`
+  () => css`
     position: relative;
     display: flex;
     flex-direction: column;
@@ -33,8 +33,8 @@ export const Label = styled.label<{}>(
   `
 );
 
-export const CameraIcon = styled.div<{}>(
-  (props) => css`
+export const CameraIcon = styled.div(
+  () => css`
     width: 48px;
     height: 48px;
   `
@@ -56,8 +56,8 @@ export const Popup = styled.div<{ xPos: number; yPos: number }>(
   `
 );
 
-export const PopupItem = styled.label<{}>(
-  (props) => css`
+export const PopupItem = styled.label(
+  () => css`
     margin-left: 0.5rem;
     margin-right: 0.5rem;
     padding: 0.2rem;
@@ -68,8 +68,8 @@ export const PopupItem = styled.label<{}>(
   `
 );
 
-export const InvisibleInput = styled.input<{}>(
-  (props) => css`
+export const InvisibleInput = styled.input(
+  () => css`
     display: none;
   `
 );

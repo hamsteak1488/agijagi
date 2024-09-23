@@ -25,7 +25,6 @@ export const SlideWrapper = styled.div(
     width: 100%;
     max-width: 500px;
     scroll-snap-align: center;
-    scroll-snap-stop: always;
   `
 );
 
@@ -39,12 +38,13 @@ export const MediaBox = styled.div(
     background-color: #f0f0f0;
     position: relative;
     scroll-snap-align: center;
+    scroll-snap-stop: always;
   `
 );
 
 export const Container = styled.div(
   () => css`
-    padding: 2rem;
+    padding: 1.25rem 2rem 1.25rem 2rem;
     max-width: 500px;
     max-height: 500px;
     border-radius: 1rem;

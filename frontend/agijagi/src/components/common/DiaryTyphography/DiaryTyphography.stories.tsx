@@ -3,7 +3,7 @@ import theme from '../../../styles/theme';
 
 import DiaryTyphography from './DiaryTyphography';
 
-import { TyphographySize } from './../Typhography/Typhography.types';
+import { TyphographySize } from '../Typography/Typhography.types';
 import GlobalStyle from '../../../styles/GlobalStyle';
 
 const meta = {
