@@ -3,9 +3,12 @@ package com.password926.agijagi.schedule.domain;
 import com.password926.agijagi.child.domain.Child;
 import com.password926.agijagi.member.domain.Member;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+@Getter
 @Entity
 public class Schedule {
 
@@ -22,10 +25,10 @@ public class Schedule {
     private Child child;
 
     @Column(nullable = false)
-    private LocalDate startDate;
+    private LocalDateTime startDateTime;
 
     @Column(nullable = false)
-    private LocalDate endDate;
+    private LocalDateTime endDateTime;
 
     @Column(nullable = false)
     private String title;
@@ -33,4 +36,8 @@ public class Schedule {
     @Column(nullable = false)
     private String description;
 
+    private boolean isDeleted;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
 }
