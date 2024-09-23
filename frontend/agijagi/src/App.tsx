@@ -6,6 +6,7 @@ import ActivityRecord from './pages/ActivityRecord';
 
 import GlobalStyle from './styles/GlobalStyle';
 import { ModalProvider } from './hooks/useModal';
+import MileStoneCheck from './components/milestone/MileStone';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/book" element={<BookCarousel />} />
             <Route path="/activity-record" element={<ActivityRecord />} />
+            <Route path="/milestone" element={<MileStoneCheck />} />
           </Routes>
         </BrowserRouter>
       </ModalProvider>
