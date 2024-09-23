@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import adult from '../../assets/images/adult.png';
 import boy from '../../assets/images/boy.png';
 import girl from '../../assets/images/girl.png';
@@ -22,6 +23,8 @@ export const WritingDiary = () => {
   const [fileList, setFileList] = useState<File[]>([]);
   const [isInitialRender, setIsInitialRender] = useState<boolean>(true);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const navigator = useNavigate();
 
   //todo
   const handleSubmit = () => {
@@ -65,7 +68,7 @@ export const WritingDiary = () => {
     <>
       <Container>
         <AppBar>
-          <Button color="tertiary" size="md">
+          <Button color="tertiary" size="md" onClick={() => navigator(-1)}>
             <Typhography>닫기</Typhography>
           </Button>
           <AppBar.Title>일기 쓰기</AppBar.Title>
