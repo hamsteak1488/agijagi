@@ -15,16 +15,17 @@ export const AppBar = styled.div<{ color: string; height: string }>(
 );
 
 export const Cloud = styled.div`
-  transform: translateY(-12px);
+  overflow: hidden;
+  margin-top: -12px;
 
   svg {
     width: 600px;
-    height: 50%;
     min-width: 100%;
   }
 `;
 
-export const Container = styled.div`
+export const Container = styled.header`
+  flex-shrink: 0;
   position: sticky;
   top: 0;
   overflow-x: hidden;

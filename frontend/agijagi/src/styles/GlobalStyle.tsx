@@ -5,6 +5,8 @@ import NPSFontBold from '../assets/fonts/NPSfont_bold.woff2';
 import NPSFontExtraBold from '../assets/fonts/NPSfont_extrabold.woff2';
 import OmyuPretty from '../assets/fonts/omyu_pretty.ttf';
 
+import theme from './theme';
+
 const GlobalStyle = () => {
   return (
     <Global
@@ -53,6 +55,7 @@ const GlobalStyle = () => {
             overflow-x: hidden;
             overflow-y: scroll;
             -ms-overflow-style: none;
+            background-color: ${theme.color.primary[100]};
             overscroll-behavior: none;
 
             input::-webkit-outer-spin-button,
