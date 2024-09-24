@@ -1,7 +1,7 @@
 package com.password926.agijagi.diary.controller;
 
+import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.diary.controller.dto.CreateDiaryRequest;
-import com.password926.agijagi.member.controller.dto.LoginMember;
 import com.password926.agijagi.diary.controller.dto.UpdateDiaryRequest;
 import com.password926.agijagi.diary.entity.Diary;
 import com.password926.agijagi.diary.service.*;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/diary")
+@RequestMapping("/diaries")
 @RestController
 public class DiaryController {
 
@@ -43,7 +43,7 @@ public class DiaryController {
         return ResponseEntity.ok().body(diaryService.getDiary(member.getId(), diaryId));
     }
 
-    @PutMapping("/{diaryId}")
+    @PatchMapping("/{diaryId}")
     public ResponseEntity<Void> updateDiary(
             LoginMember member,
             @PathVariable long diaryId,

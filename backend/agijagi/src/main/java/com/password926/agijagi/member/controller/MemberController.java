@@ -1,6 +1,6 @@
 package com.password926.agijagi.member.controller;
 
-import com.password926.agijagi.member.controller.dto.LoginMember;
+import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.member.controller.dto.request.ModifyMemberRequest;
 import com.password926.agijagi.member.controller.dto.request.RegisterMemberRequest;
 import com.password926.agijagi.member.domain.ProfileDetail;
