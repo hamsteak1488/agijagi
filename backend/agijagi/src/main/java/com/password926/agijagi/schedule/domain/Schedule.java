@@ -40,4 +40,11 @@ public class Schedule {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    public void update(ScheduleContent scheduleContent) {
+        this.startDateTime = scheduleContent.getStartDateTime();
+        this.endDateTime = scheduleContent.getEndDateTime();
+        this.title = scheduleContent.getTitle();
+        this.description = scheduleContent.getDescription();
+    }
 }
