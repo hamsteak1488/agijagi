@@ -6,6 +6,7 @@ import Button from '../common/Button';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import MileStoneFilter from './MileStoneFilter';
 import MileStoneCheck from './MileStoneCheck';
+import axios from 'axios';
 
 const Title = styled.div`
   display: flex;
@@ -72,8 +73,51 @@ if (month % 2) {
   month -= 1;
 }
 
+interface MilestoneDetail {
+  milestoneId: number;
+  content: string;
+  requiredAmount: number;
+  currentAmount: number;
+  date: null | string;
+}
+
 const MilestoneCheck = () => {
   const [months, setMonths] = useState<number>(month);
+  const [selectedMilestones, setSelectedMilestones] = useState<any[]>([]);
+  const childId = 1; // 예시로 지정한 childId
+
+  // 체크박스 선택 처리
+  const handleCheckboxChange = (item: MilestoneDetail, isChecked: boolean) => {
+    if (isChecked) {
+      setSelectedMilestones((prev) => [...prev, item]);
+    } else {
+      setSelectedMilestones((prev) =>
+        prev.filter((milestone) => milestone.milestoneId !== item.milestoneId)
+      );
+    }
+  };
+
+  const handleSave = async () => {
+    const milestones = selectedMilestones.map((item) => ({
+      id: item.milestoneId,
+      currentAmount: item.currentAmount + 1,
+    }));
+
+    const data = {
+      childId: childId,
+      milestones: milestones,
+    };
+
+    try {
+      const response = await axios.patch(
+        'https://api.password926.site/milestones',
+        data
+      );
+      console.log('데이터 저장:', response.data);
+    } catch (error) {
+      console.error('Error saving data:', error);
+    }
+  };
 
   const handlePrev = () => {
     setMonths((prevMonth) => {
@@ -102,7 +146,7 @@ const MilestoneCheck = () => {
         <Typhography size="lg" weight="bold" color="greyScale" shade="800">
           발달 체크
         </Typhography>
-        <Button size="sm" color="primary">
+        <Button size="sm" color="primary" onClick={handleSave}>
           저장
         </Button>
       </Title>
@@ -115,7 +159,11 @@ const MilestoneCheck = () => {
         />
       </FilterContainer>
       <MileStoneContainer>
-        <MileStoneCheck month={months} name={name} />
+        <MileStoneCheck
+          month={months}
+          name={name}
+          handleCheckboxChange={handleCheckboxChange}
+        />
       </MileStoneContainer>
     </>
   );

@@ -58,12 +58,15 @@ const TextFieldContainer = styled.div<{ expanded: boolean }>`
   margin: 5px auto;
   max-height: ${(props) => (props.expanded ? '500px' : '0')};
   overflow: hidden;
-  transition: max-height 0.3s ease;
+  transition: max-height 0.5s ease;
 `;
 
 const TextFieldWrapper = styled.div`
   display: flex;
   margin: 5px 0 10px;
+  flex-direction: column;
+  gap: 5px;
+  margin-right: 10px;
 
   @media (max-width: 360px) {
     flex-direction: column;
@@ -79,9 +82,18 @@ const CheckContainer = styled.div`
   padding: 10px 20px;
 `;
 
+interface MilestoneDetail {
+  milestoneId: number;
+  content: string;
+  requiredAmount: number;
+  currentAmount: number;
+  date: null | string;
+}
+
 interface MileStoneProps {
   month: number;
   name: string;
+  handleCheckboxChange: (item: MilestoneDetail, isChecked: boolean) => void;
 }
 
 interface DevelopmentStage {
@@ -92,7 +104,7 @@ interface DevelopmentStage {
   socialEmotional: string[];
 }
 
-const MileStoneCheck = ({ month, name }: MileStoneProps) => {
+const MileStoneCheck = ({ month, name, handleCheckboxChange }: MileStoneProps) => {
   const [textFieldOpen, setTextFieldOpen] = useState<boolean>(false);
   const [height, setHeight] = useState<string>('');
   const [weight, setWeight] = useState<string>('');
@@ -109,7 +121,7 @@ const MileStoneCheck = ({ month, name }: MileStoneProps) => {
           <ProfileIcon size="md" />
         </IntroImg>
         <IntroText>
-          생후 {`${month}`}개월 아기들 중 75% 정도가 할 수 있는 것들입니다.{' '}
+          생후 {`${month}`}개월 된 아기들 중 80% 정도가 할 수 있는 발달 목록입니다.{' '}
           {`${name}`}(이)가 달성한 마일스톤을 체크해보세요.
         </IntroText>
       </IntroBox>
@@ -126,16 +138,16 @@ const MileStoneCheck = ({ month, name }: MileStoneProps) => {
         {textFieldOpen && (
           <TextFieldWrapper>
             <Textfield
-              label="키"
-              size="sm"
+              label="키 cm"
+              size="md"
               color="tertiary"
               isColoredLabel={true}
               inputValue={height}
               setInputValue={setHeight}
             />
             <Textfield
-              label="몸무게"
-              size="sm"
+              label="몸무게 kg"
+              size="md"
               color="tertiary"
               isColoredLabel={true}
               inputValue={weight}
@@ -146,7 +158,7 @@ const MileStoneCheck = ({ month, name }: MileStoneProps) => {
       </TextFieldContainer>
 
       <CheckContainer>
-        <DevelopmentList month={month} />
+        <DevelopmentList month={month} handleCheckboxChange={handleCheckboxChange}/>
       </CheckContainer>
     </Wrapper>
   );

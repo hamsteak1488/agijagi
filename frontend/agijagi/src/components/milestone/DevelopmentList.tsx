@@ -4,7 +4,7 @@ import theme from '../../styles/theme';
 import Typhography from '../common/Typography';
 import { babyDevelopmentData } from './MileStoneMockData';
 import CheckImg from '../../assets/images/check.png';
-// import axios from "axios";
+import MileStoneAmount from './MileStoneAmount';
 
 const CheckContainer = styled.div`
   display: flex;
@@ -36,7 +36,7 @@ const StyledLabel = styled.div`
 `;
 
 const StyledP = styled.p`
-  margin: 12px 10px;
+  margin: 10px;
   font-size: ${theme.typography.fontSize.md};
   color: ${theme.color.greyScale[700]};
 `;
@@ -49,10 +49,6 @@ const Line = styled.hr`
   height: 1px;
 `;
 
-interface MileStoneProps {
-  month: number;
-}
-
 interface MilestoneDetail {
   milestoneId: number;
   content: string;
@@ -61,89 +57,52 @@ interface MilestoneDetail {
   date: null | string;
 }
 
-const DevelopmentList = ({ month }: MileStoneProps) => {
-  const [developmentData, setDevelopmentData] =
-    useState<any[]>([]);
+interface MileStoneProps {
+  month: number;
+  handleCheckboxChange: (item: MilestoneDetail, isChecked: boolean) => void;
+}
+
+const DevelopmentList = (({ month, handleCheckboxChange }: MileStoneProps) => {
+  const [developmentData, setDevelopmentData] = useState<any[]>([]);
 
   useEffect(() => {
-    setDevelopmentData(babyDevelopmentData)
-  })
+    setDevelopmentData(babyDevelopmentData);
+  }, []);
 
   return (
     <>
       {developmentData.map((stage) => (
-        <>
-          {stage.title === '움직임 / 신체발달' && (
+        <React.Fragment key={stage.title}>
+          {stage.MilestoneDetails && (
             <CheckContainer>
               <Typhography size="lg" weight="bold" color="tertiary" shade="900">
-                움직임 / 신체발달
+                {stage.title}
               </Typhography>
               {stage.MilestoneDetails.map((item: MilestoneDetail) => (
-                <>
+                <React.Fragment key={item.milestoneId}>
                   <StyledLabel>
-                    <StyledInput type="checkbox" id={item.content} />
+                    <StyledInput
+                      type="checkbox"
+                      id={item.content}
+                      onChange={(e) => handleCheckboxChange(item, e.target.checked)}
+                    />
                     <StyledP>{item.content}</StyledP>
                   </StyledLabel>
+                  {item.currentAmount !== 0 && (
+                    <MileStoneAmount
+                      currentAmount={item.currentAmount}
+                      requiredAmount={item.requiredAmount}
+                    />
+                  )}
                   <Line />
-                </>
+                </React.Fragment>
               ))}
             </CheckContainer>
           )}
-
-          {stage.title === '언어 / 의사소통' && (
-            <CheckContainer>
-              <Typhography size="lg" weight="bold" color="tertiary" shade="900">
-                언어 / 의사소통
-              </Typhography>
-              {stage.MilestoneDetails.map((item: MilestoneDetail) => (
-                <>
-                  <StyledLabel>
-                    <StyledInput type="checkbox" id={item.content} />
-                    <StyledP>{item.content}</StyledP>
-                  </StyledLabel>
-                  <Line />
-                </>
-              ))}
-            </CheckContainer>
-          )}
-
-          {stage.title === '인지' && (
-            <CheckContainer>
-              <Typhography size="lg" weight="bold" color="tertiary" shade="900">
-                인지 (학습, 사고, 문제해결)
-              </Typhography>
-              {stage.MilestoneDetails.map((item: MilestoneDetail) => (
-                <>
-                  <StyledLabel>
-                    <StyledInput type="checkbox" id={item.content} />
-                    <StyledP>{item.content}</StyledP>
-                  </StyledLabel>
-                  <Line />
-                </>
-              ))}
-            </CheckContainer>
-          )}
-
-          {stage.title === '사회성' && (
-            <CheckContainer>
-              <Typhography size="lg" weight="bold" color="tertiary" shade="900">
-                사회성 / 정서
-              </Typhography>
-              {stage.MilestoneDetails.map((item: MilestoneDetail) => (
-                <>
-                  <StyledLabel>
-                    <StyledInput type="checkbox" id={item.content} />
-                    <StyledP>{item.content}</StyledP>
-                  </StyledLabel>
-                  <Line />
-                </>
-              ))}
-            </CheckContainer>
-          )}
-        </>
+        </React.Fragment>
       ))}
     </>
   );
-};
+});
 
 export default DevelopmentList;

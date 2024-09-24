@@ -226,17 +226,20 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
   const mybook = useRef<HTMLFlipBook | null>(book);
   const bookContainer = useRef<HTMLDivElement>(null);
 
-  const onFlip = useCallback((e: FlipEvent) => {
-    // const totalPageCount = mybook.current?.pageFlip().getPageCount() ?? 0;
-    setCurrentPage(e.data);
+  const onFlip = useCallback(
+    (e: FlipEvent) => {
+      // const totalPageCount = mybook.current?.pageFlip().getPageCount() ?? 0;
+      setCurrentPage(e.data);
 
-    // 책이 마지막 페이지를 넘어가면 전체화면 해제
-    if (e.data === totalPages + 1) {
-      if (document.fullscreenElement) {
-        setTimeout(() => document.exitFullscreen(), 1000);
+      // 책이 마지막 페이지를 넘어가면 전체화면 해제
+      if (e.data === totalPages + 1) {
+        if (document.fullscreenElement) {
+          setTimeout(() => document.exitFullscreen(), 1000);
+        }
       }
-    }
-  }, [totalPages]);
+    },
+    [totalPages]
+  );
 
   const toggleFullscreen = () => {
     if (!bookContainer.current) {
