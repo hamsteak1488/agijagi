@@ -1,11 +1,17 @@
 package com.password926.agijagi.diary.service;
 
+import com.password926.agijagi.child.domain.Child;
+import com.password926.agijagi.child.domain.ChildValidator;
+import com.password926.agijagi.child.infrastructure.ChildRepository;
 import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
 import com.password926.agijagi.common.errors.exception.RestApiException;
 import com.password926.agijagi.diary.controller.dto.CreateDiaryRequest;
 import com.password926.agijagi.diary.controller.dto.UpdateDiaryRequest;
 import com.password926.agijagi.diary.entity.Diary;
 import com.password926.agijagi.diary.repository.DiaryRepository;
+import com.password926.agijagi.story.repository.StoryGPT;
+import com.password926.agijagi.story.repository.StoryRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,23 +23,31 @@ import java.util.List;
 @Service
 public class DiaryService {
 
+    private final StoryRepository storyRepository;
+    private final ChildRepository childRepository;
     private final DiaryRepository diaryRepository;
+    private final StoryGPT storyGPT;
+    private final ChildValidator childValidator;
 
     public void createDiary(long memberId, CreateDiaryRequest request) {
-        // 검증
+        childValidator.validateWriterRole(memberId, request.getChildId());
+
+        Child child = childRepository.findById(request.getChildId())
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
         diaryRepository.save(Diary.builder()
                 .childId(request.getChildId())
                 .memberId(memberId)
                 .title(request.getTitle())
                 .content(request.getContent())
-                .date(LocalDateTime.now())
+                .createAt(LocalDateTime.now())
                 .build());
     }
 
     public List<Diary> getAllDiary(long memberId, long childId) {
-        // 검증
+        childValidator.validateWriterRole(memberId, childId);
 
-        List<Diary> diaries = diaryRepository.findAllByChildId(childId);
+        List<Diary> diaries = diaryRepository.findAllByChildIdAndIsDeletedFalse(childId);
 
         diaries.sort(new Comparator<Diary>() {
             @Override
@@ -46,24 +60,31 @@ public class DiaryService {
     }
 
     public Diary getDiary(long memberId, long diaryId) {
-        // 검증 - 회원이 아이에 대한 읽기 or 권한이 있는지
-        // diary -> childId 가져와서 검증해야함
+        Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
+                        .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        return diaryRepository.findById(diaryId);
+        childValidator.validateWriterRole(memberId, diary.getChildId());
+
+        return diary;
     }
 
-    public void updateDiary(Long diaryId, UpdateDiaryRequest request) {
-        // 수정할 권한 있는지 확인
-
-        Diary diary = diaryRepository.findById(diaryId)
+    @Transactional
+    public void updateDiary(long memberId, long diaryId, UpdateDiaryRequest request) {
+        Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+        childValidator.validateWriterRole(memberId, diary.getChildId());
 
         diary.updateDiary(request.getTitle(), request.getContent());
     }
 
-    public void deleteDiary(Long diaryId) {
-        // 삭제 권한 있는지 확인
+    @Transactional
+    public void deleteDiary(long memberId, long diaryId) {
+        Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        diaryRepository.deleteById(diaryId);
+        childValidator.validateWriterRole(memberId, diary.getChildId());
+
+        diary.remove();
     }
 }

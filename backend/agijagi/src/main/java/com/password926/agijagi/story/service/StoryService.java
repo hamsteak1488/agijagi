@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
@@ -30,19 +31,19 @@ public class StoryService {
     private final StoryGPT storyGPT;
     private final ChildValidator childValidator;
 
-    public CreateStoryRequest createStory(long memberId, CreateStoryRequest request) {
+    public void createStory(long memberId, CreateStoryRequest request) {
         childValidator.validateWriterRole(memberId, request.getChildId());
 
         Child child = childRepository.findById(request.getChildId())
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        List<Diary> diaries = diaryRepository.findAllByChildIdAndDateBetween(
+        List<Diary> diaries = diaryRepository.findAllByChildIdAndCreateAtBetween(
                 request.getChildId(),
-                request.getStartTime(),
-                request.getEndTime()
+                request.getStartTime().atStartOfDay(),
+                request.getEndTime().atTime(LocalTime.MAX).withNano(0)
         );
 
-        return storyGPT.getCreateStoryDtoFromQuery(
+        storyGPT.getCreateStoryDtoFromQuery(
                 diaries,
                 child.getName(),
                 ChronoUnit.DAYS.between(child.getBirthday(), LocalDate.now())
