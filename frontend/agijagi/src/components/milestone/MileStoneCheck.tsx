@@ -5,14 +5,15 @@ import Typhography from '../common/Typography';
 import ProfileIcon from '../common/ProfileIcon/ProfileIcon';
 import Button from '../common/Button';
 import { babyDevelopmentData } from './MileStoneMockData';
-import { CheckIcon } from '@heroicons/react/24/outline';
 import DevelopmentList from './DevelopmentList';
+import Textfield from '../common/Textfield';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   margin: 0 auto;
+  padding-bottom: 50px;
 
   @media (min-width: 700px) {
     width: 80%;
@@ -41,13 +42,34 @@ const IntroText = styled.div`
 
 const ButtonWrapper = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   padding: 10px;
 
   @media (min-width: 700px) {
     width: 95%;
     margin: 0 auto;
+  }
+`;
+
+const TextFieldContainer = styled.div<{ expanded: boolean }>`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin: 5px auto;
+  max-height: ${(props) => (props.expanded ? '500px' : '0')};
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+`;
+
+const TextFieldWrapper = styled.div`
+  display: flex;
+  margin: 5px 0 10px;
+
+  @media (max-width: 360px) {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+    margin-right: 10px;
   }
 `;
 
@@ -71,12 +93,14 @@ interface DevelopmentStage {
 }
 
 const MileStoneCheck = ({ month, name }: MileStoneProps) => {
-  const [developmentData, setDevelopmentData] =
-    useState<DevelopmentStage[]>(babyDevelopmentData);
+  const [textFieldOpen, setTextFieldOpen] = useState<boolean>(false);
+  const [height, setHeight] = useState<string>('');
+  const [weight, setWeight] = useState<string>('');
+  const [headLength, setHeadLength] = useState<number>(0);
 
-  const MonthDevelopmentData = babyDevelopmentData.filter((data) => {
-    return data.month === month;
-  });
+  const handleTextFieldOpen = () => {
+    setTextFieldOpen(!textFieldOpen);
+  };
 
   return (
     <Wrapper>
@@ -93,13 +117,36 @@ const MileStoneCheck = ({ month, name }: MileStoneProps) => {
         <Button size="sm" color="secondary">
           성장 분석보고서 생성
         </Button>
-        <Button size="sm" color="primary">
+        <Button size="sm" color="primary" onClick={handleTextFieldOpen}>
           키/몸무게 입력
         </Button>
       </ButtonWrapper>
 
+      <TextFieldContainer expanded={textFieldOpen}>
+        {textFieldOpen && (
+          <TextFieldWrapper>
+            <Textfield
+              label="키"
+              size="sm"
+              color="tertiary"
+              isColoredLabel={true}
+              inputValue={height}
+              setInputValue={setHeight}
+            />
+            <Textfield
+              label="몸무게"
+              size="sm"
+              color="tertiary"
+              isColoredLabel={true}
+              inputValue={weight}
+              setInputValue={setWeight}
+            />
+          </TextFieldWrapper>
+        )}
+      </TextFieldContainer>
+
       <CheckContainer>
-        <DevelopmentList month={month}/>
+        <DevelopmentList month={month} />
       </CheckContainer>
     </Wrapper>
   );

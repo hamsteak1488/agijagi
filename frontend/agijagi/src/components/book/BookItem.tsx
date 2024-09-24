@@ -108,6 +108,11 @@ const BounceImage = styled.img`
   height: 220px;
   animation: bounce 2s infinite;
 
+  @media (min-width: 700px) {
+    margin-top: 100px;
+    margin-left: 30px;
+  }
+
   @keyframes bounce {
     0%,
     20%,

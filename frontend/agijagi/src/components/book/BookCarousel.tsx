@@ -66,7 +66,7 @@ const Title = styled.div`
 
   @media (min-width: 700px) {
     position: fixed;
-    /* height: 80px; */
+    width: 40%;
   }
 `;
 
@@ -82,6 +82,24 @@ const TitleImg = styled.img`
 `;
 
 const ModalWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  height: 52%;
+  box-sizing: border-box;
+
+  @media (min-width: 700px) {
+    width: 50%;
+    max-width: 380px;
+    min-width: 380px;
+    height: 100vh;
+    padding-top: 30px;
+    padding-left: 30px;
+    margin-left: auto;
+    /* overflow-y: hidden; */
+  }
+`;
+
+const StoryBookWrapper = styled.div`
   display: flex;
   width: 100%;
   height: 52%;
@@ -274,10 +292,12 @@ const BookCarousel = () => {
         </CarouselWrapper>
       )}
 
-      <ModalWrapper>
-        {selectedBook ? (
+      {selectedBook ? (
+        <StoryBookWrapper>
           <StoryBook book={selectedBook} goBack={goBack} />
-        ) : (
+        </StoryBookWrapper>
+      ) : (
+        <ModalWrapper>
           <BookListModal
             year={year}
             month={month}
@@ -287,8 +307,8 @@ const BookCarousel = () => {
             onScroll={handleListScroll}
             onBookSelect={handleBookSelect}
           />
-        )}
-      </ModalWrapper>
+        </ModalWrapper>
+      )}
     </Wrapper>
   );
 };

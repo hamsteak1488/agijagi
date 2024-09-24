@@ -260,13 +260,12 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
       });
     } else {
       setWarning('이 브라우저는 전체화면 보기를 지원하지 않습니다.');
-      setTimeout(() => setWarning(''), 3000); // 3초 후 경고 메시지 숨김
+      setTimeout(() => setWarning(''), 3000);
     }
   };
 
   useEffect(() => {
     const handleFullScreenChange = () => {
-      console.log(document.fullscreenElement);
       if (document.fullscreenElement) {
         setIsFullScreen(true);
         return;
@@ -329,13 +328,13 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
           {'<'}
         </Button>
 
-        {currentPage === 0 && <PageInfo>{totalPages} pages</PageInfo>}
+        {/* {currentPage === 0 && <PageInfo>{totalPages} pages</PageInfo>}
         {currentPage !== 0 && currentPage - 1 != totalPages && (
           <PageInfo>
             {currentPage} - {currentPage + 1}
           </PageInfo>
         )}
-        {currentPage - 1 == totalPages && <PageInfo>End</PageInfo>}
+        {currentPage - 1 == totalPages && <PageInfo>End</PageInfo>} */}
 
         <Button
           size="sm"
