@@ -6,6 +6,7 @@ import SchedulePage from './pages/Schedule';
 import GlobalStyle from './styles/GlobalStyle';
 import { ModalProvider } from './hooks/useModal';
 import BabyMain from './pages/BabyMain';
+import Login from './pages/Login';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/baby/writing" element={<WritingDiary />} />
             <Route path="/activity-record" element={<ActivityRecord />} />
             <Route path="/baby" element={<BabyMain />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/schedule" element={<SchedulePage />} />
           </Routes>
         </BrowserRouter>
