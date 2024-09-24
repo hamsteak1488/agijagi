@@ -1,11 +1,12 @@
 package com.password926.agijagi.auth.controller.dto.request;
 
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LoginRequest {
-    private final String email;
-    private final String password;
+    private String email;
+    private String password;
 }

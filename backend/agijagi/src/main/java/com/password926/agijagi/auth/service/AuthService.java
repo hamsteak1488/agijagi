@@ -1,6 +1,6 @@
 package com.password926.agijagi.auth.service;
 
-import com.password926.agijagi.auth.controller.domain.LoginValidator;
+import com.password926.agijagi.auth.domain.LoginValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
