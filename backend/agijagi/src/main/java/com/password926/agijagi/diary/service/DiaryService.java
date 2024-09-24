@@ -40,7 +40,7 @@ public class DiaryService {
                 .memberId(memberId)
                 .title(request.getTitle())
                 .content(request.getContent())
-                .createAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build());
     }
 

@@ -13,6 +13,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
     Optional<Diary> findByIdAndIsDeletedFalse(long diaryId);
 
-    List<Diary> findAllByChildIdAndCreateAtBetween(Long childId, LocalDateTime createAt, LocalDateTime createAt2);
+    List<Diary> findAllByChildIdAndCreatedAtBetween(Long childId, LocalDateTime createAt, LocalDateTime createAt2);
 
 }

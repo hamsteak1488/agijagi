@@ -37,7 +37,7 @@ public class StoryService {
         Child child = childRepository.findById(request.getChildId())
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        List<Diary> diaries = diaryRepository.findAllByChildIdAndCreateAtBetween(
+        List<Diary> diaries = diaryRepository.findAllByChildIdAndCreatedAtBetween(
                 request.getChildId(),
                 request.getStartTime().atStartOfDay(),
                 request.getEndTime().atTime(LocalTime.MAX).withNano(0)

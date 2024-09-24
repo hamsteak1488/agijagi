@@ -23,7 +23,7 @@ public class Diary {
     private Long memberId;
 
     @Column(nullable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private String title;
