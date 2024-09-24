@@ -12,6 +12,6 @@ public class ChildUpdater {
 
     public void update(long memberId, long childId, ChildContent childContent) {
         childValidator.validateWriterRole(memberId, childId);
-        childReader.read(childId) .update(childContent);
+        childReader.read(childId).update(childContent);
     }
 }

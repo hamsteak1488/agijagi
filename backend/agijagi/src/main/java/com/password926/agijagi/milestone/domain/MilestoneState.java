@@ -2,9 +2,16 @@ package com.password926.agijagi.milestone.domain;
 
 import com.password926.agijagi.child.domain.Child;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
 public class MilestoneState {
 

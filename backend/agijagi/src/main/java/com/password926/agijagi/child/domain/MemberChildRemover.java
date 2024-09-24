@@ -11,7 +11,6 @@ public class MemberChildRemover {
     private final MemberChildRepository memberChildRepository;
 
     public void removeAllRelation(long childId) {
-
         memberChildRepository.deleteAllByChildId(childId);
     }
 }

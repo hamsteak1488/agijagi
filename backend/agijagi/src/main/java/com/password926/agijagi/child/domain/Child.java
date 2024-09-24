@@ -38,4 +38,8 @@ public class Child {
         this.nickname = childContent.getNickname();
         this.birthday = childContent.getBirthday();
     }
+
+    public void updateImage(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

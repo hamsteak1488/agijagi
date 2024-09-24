@@ -8,10 +8,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@RequestMapping("/child")
+@RequestMapping("/children")
 @RequiredArgsConstructor
 @RestController
 public class ChildController {
@@ -56,6 +57,25 @@ public class ChildController {
             @RequestBody @Valid UpdateChildRequest request
     ) {
         childService.updateChild(memberId, childId, request.toContent());
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{childId}/image")
+    public ResponseEntity<Void> updateChildImage(
+            long memberId,
+            @PathVariable long childId,
+            @RequestPart MultipartFile image
+    ) {
+        childService.updateChildImage(memberId, childId, image);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{childId}/image")
+    public ResponseEntity<Void> deleteChildImage(
+            long memberId,
+            @PathVariable long childId
+    ) {
+        childService.removeChildImage(memberId, childId);
         return ResponseEntity.ok().build();
     }
 }
