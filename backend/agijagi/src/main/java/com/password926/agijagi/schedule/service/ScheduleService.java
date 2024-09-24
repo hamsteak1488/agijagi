@@ -14,6 +14,7 @@ public class ScheduleService {
     private final ScheduleReader scheduleReader;
     private final ScheduleAppender scheduleAppender;
     private final ScheduleRemover scheduleRemover;
+    private final ScheduleUpdater scheduleUpdater;
 
     public List<Schedule> readSchedule(
             long memberId,
@@ -34,5 +35,13 @@ public class ScheduleService {
 
     public void removeSchedule(long memberId, long scheduleId) {
         scheduleRemover.remove(memberId, scheduleId);
+    }
+
+    public void updateSchedule(
+            long memberId,
+            long scheduleId,
+            ScheduleContent scheduleContent
+    ) {
+        scheduleUpdater.update(memberId, scheduleId, scheduleContent);
     }
 }
