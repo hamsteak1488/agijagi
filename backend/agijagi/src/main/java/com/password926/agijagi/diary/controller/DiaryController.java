@@ -1,7 +1,7 @@
 package com.password926.agijagi.diary.controller;
 
+import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.diary.controller.dto.CreateDiaryRequest;
-import com.password926.agijagi.member.controller.dto.LoginMember;
 import com.password926.agijagi.diary.controller.dto.UpdateDiaryRequest;
 import com.password926.agijagi.diary.entity.Diary;
 import com.password926.agijagi.diary.service.*;
