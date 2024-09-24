@@ -56,7 +56,8 @@ const useSwipe = <T extends HTMLElement>(ref: React.RefObject<T>) => {
         ref.current.style.transform = `translateX(calc(-200% + ${endX}px))`;
       }
 
-      const reflow = ref.current.clientWidth;
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      ref.current.clientWidth;
 
       ref.current.style.transition = 'transform 0.2s ease';
       ref.current.style.transform = `translateX(-100%)`;

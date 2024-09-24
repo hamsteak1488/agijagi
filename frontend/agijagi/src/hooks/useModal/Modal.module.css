@@ -8,11 +8,9 @@
   z-index: 100;
   box-sizing: border-box;
   background-color: rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
   opacity: 0;
 
   > div {
-    transition: all 0.3s ease;
     opacity: 0;
     transform: translateY(4rem);
   }
@@ -20,18 +18,22 @@
 
 .enter {
   opacity: 1;
+  transition: all 0.3s ease;
 
   > div {
+    transition: all 0.3s ease;
     opacity: 1;
     transform: translateY(0);
   }
 }
 
 .exit {
+  transition: all 0.3s ease;
   opacity: 0;
   pointer-events: none;
 
   > div {
+    transition: all 0.3s ease;
     opacity: 0;
     transform: translateY(4rem);
   }
@@ -47,30 +49,32 @@
   z-index: 100;
   box-sizing: border-box;
   background-color: rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
   opacity: 0;
 
   > div {
-    transition: all 0.3s ease;
     opacity: 0;
     transform: translateY(50%);
   }
 }
 
 .bottom-enter {
+  transition: all 0.3s ease;
   opacity: 1;
 
   > div {
+    transition: all 0.3s ease;
     opacity: 1;
     transform: translateY(0);
   }
 }
 
 .bottom-exit {
+  transition: all 0.3s ease;
   opacity: 0;
   pointer-events: none;
 
   > div {
+    transition: all 0.3s ease;
     opacity: 0;
     transform: translateY(50%);
   }

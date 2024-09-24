@@ -1,30 +1,29 @@
 import { useState } from 'react';
 import AppBar from '../../components/common/AppBar';
 import Button from '../../components/common/Button';
-import CompactCalendar from '../../components/common/CompactCalendar';
 import Typhography from '../../components/common/Typography';
 import Schedule from '../../components/Schedule';
 
 import useModal from '../../hooks/useModal';
+import AddSchedulePage from './AddSchedulePage';
 
-import Edit from './Edit';
+import EditSchedulePage from './EditSchedulePage';
 
 import * as s from './style';
 
 const SchedulePage = () => {
-  const [calendar, setCalendar] = useState<Date>(new Date());
   const [date, setDate] = useState<Date>(new Date());
 
   const modal = useModal();
 
   const days = ['일', '월', '화', '수', '목', '금', '토', '일'];
 
-  const handleClick = () => {
-    modal.push({ children: <Edit /> });
+  const handleScheduleClick = () => {
+    modal.push({ children: <EditSchedulePage /> });
   };
 
-  const handleCalendarChange = (date: Date) => {
-    setCalendar(date);
+  const handleAddClick = () => {
+    modal.push({ children: <AddSchedulePage /> });
   };
 
   const handleDateClick = (date: Date) => {
@@ -37,59 +36,54 @@ const SchedulePage = () => {
         <AppBar.Title>일정 관리</AppBar.Title>
       </AppBar>
       <s.Main>
-        <s.Calendar>
-          <Typhography size="lg" color="secondary" weight="bold">
-            {calendar.getFullYear()}년 {calendar.getMonth() + 1}월
-          </Typhography>
-          <CompactCalendar
-            date={new Date()}
-            onChange={handleCalendarChange}
-            onClick={handleDateClick}
-          />
-        </s.Calendar>
+        <div>
+          <Schedule.Calendar onClick={handleDateClick} />
+        </div>
         <s.ScheduleHeader>
           <Typhography size="lg" color="secondary" weight="bold">
             {date.getMonth() + 1}월 {date.getDate()}일 ({days[date.getDay()]})
             일정
           </Typhography>
-          <Button size="sm">추가</Button>
+          <Button size="sm" onClick={handleAddClick}>
+            추가
+          </Button>
         </s.ScheduleHeader>
         <s.ScheduleList>
           <Schedule.Card
             title="병원 가기"
             description="용진의원"
             time="08:00 ~ 08:30"
-            onClick={handleClick}
+            onClick={handleScheduleClick}
           />
           <Schedule.Card
             title="병원 가기"
             description="용진의원"
             time="08:00 ~ 08:30"
-            onClick={handleClick}
+            onClick={handleScheduleClick}
           />
           <Schedule.Card
             title="병원 가기"
             description="용진의원"
             time="08:00 ~ 08:30"
-            onClick={handleClick}
+            onClick={handleScheduleClick}
           />
           <Schedule.Card
             title="병원 가기"
             description="용진의원"
             time="08:00 ~ 08:30"
-            onClick={handleClick}
+            onClick={handleScheduleClick}
           />
           <Schedule.Card
             title="병원 가기"
             description="용진의원"
             time="08:00 ~ 08:30"
-            onClick={handleClick}
+            onClick={handleScheduleClick}
           />
           <Schedule.Card
             title="병원 가기"
             description="용진의원"
             time="08:00 ~ 08:30"
-            onClick={handleClick}
+            onClick={handleScheduleClick}
           />
         </s.ScheduleList>
       </s.Main>

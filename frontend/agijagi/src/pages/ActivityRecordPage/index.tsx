@@ -6,9 +6,9 @@ import AppBar from '../../components/common/AppBar';
 
 import useActivityRecord from '../../hooks/useActivityRecord';
 
-import * as s from '../ActivityRecord/style';
+import * as s from './style';
 
-const ActivityRecord = () => {
+const ActivityRecordPage = () => {
   const activityRecord = useActivityRecord();
   const 대변 = activityRecord.findMenuByName('대변');
   const 소변 = activityRecord.findMenuByName('소변');
@@ -57,4 +57,4 @@ const ActivityRecord = () => {
   );
 };
 
-export default ActivityRecord;
+export default ActivityRecordPage;

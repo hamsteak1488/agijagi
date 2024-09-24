@@ -4,7 +4,7 @@ import { ValidationState } from '../../components/common/Textfield/Textfield.typ
 import Typhography from '../../components/common/Typography';
 import useModal from '../../hooks/useModal';
 
-const Home = () => {
+const HomePage = () => {
   const [inputValue, setInputValue] = useState('');
 
   const modal = useModal();
@@ -81,4 +81,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;
