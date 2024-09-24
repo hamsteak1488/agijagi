@@ -11,9 +11,12 @@ import org.springframework.stereotype.Component;
 public class MemberReader {
     private final MemberRepository memberRepository;
 
-    public ProfileDetail readProfileDetail(long memberId) {
+    public Member read(long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND))
-                .getProfileDetail();
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
+    }
+
+    public ProfileDetail readProfileDetail(long memberId) {
+        return read(memberId).getProfileDetail();
     }
 }

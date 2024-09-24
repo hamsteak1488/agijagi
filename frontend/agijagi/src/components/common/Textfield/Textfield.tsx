@@ -53,7 +53,7 @@ const Textfield = ({
     setIsFloating(true);
   };
 
-  const hadleblur = () => {
+  const handleBlur = () => {
     setFocused(false);
     if (inputRef.current?.value === '') setIsFloating(false);
   };
@@ -105,7 +105,7 @@ const Textfield = ({
           disabled={disabled}
           ref={inputRef}
           onFocus={handleFocus}
-          onBlur={hadleblur}
+          onBlur={handleBlur}
           onChange={handleChange}
         />
       </s.TextfieldContainer>

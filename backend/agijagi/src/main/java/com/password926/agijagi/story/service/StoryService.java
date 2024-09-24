@@ -11,6 +11,7 @@ import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
 import com.password926.agijagi.story.entity.Story;
 import com.password926.agijagi.story.repository.StoryGPT;
 import com.password926.agijagi.story.repository.StoryRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +52,7 @@ public class StoryService {
     public List<Story> getAllStory(long memberId, long childId) {
         childValidator.validateWriterRole(memberId, childId);
 
-        List<Story> stories = storyRepository.findAllByChildId(childId);
+        List<Story> stories = storyRepository.findAllByChildIdAndIsDeletedFalse(childId);
 
         stories.sort(new Comparator<Story>() {
             @Override
@@ -62,12 +63,21 @@ public class StoryService {
     }
 
     public Story getStory(long memberId, long storyId) {
+        Story story = storyRepository.findByIdAndIsDeletedFalse(storyId)
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        return storyRepository.findById(storyId);
+        childValidator.validateWriterRole(memberId, story.getChildId());
+
+        return story;
     }
 
-    public void deleteStory(long storyId) {
+    @Transactional
+    public void deleteStory(long memberId, long storyId) {
+        Story story = storyRepository.findByIdAndIsDeletedFalse(storyId)
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        storyRepository.deleteById(storyId);
+        childValidator.validateWriterRole(memberId, story.getChildId());
+
+        story.remove();
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MilestoneStateRepository extends Repository<MilestoneState, Long> {
 
@@ -15,6 +16,8 @@ public interface MilestoneStateRepository extends Repository<MilestoneState, Lon
             "JOIN MilestoneState ms ON m.id = ms.milestone.id " +
             "WHERE ms.child.id = :childId AND m.month = :month")
     List<MilestoneStateDetail> findMilestoneDetails(long childId, int month);
+
+    Optional<MilestoneState> findMilestoneById(long id);
 
     void save(MilestoneState milestoneState);
 

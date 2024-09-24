@@ -2,7 +2,6 @@ package com.password926.agijagi.member.service;
 
 import com.password926.agijagi.member.domain.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
