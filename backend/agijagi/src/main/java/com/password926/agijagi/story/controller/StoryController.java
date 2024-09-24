@@ -45,9 +45,9 @@ public class StoryController {
     @PostMapping
     public ResponseEntity<Void> createStory(
 //            LoginMember member,
-            @RequestBody CreateStoryRequest createStoryRequest
+            @ModelAttribute CreateStoryRequest createStoryRequest
     ) {
-        storyService.createStory(1, createStoryRequest);
+        storyService.createStory1(1, createStoryRequest);
         return ResponseEntity.ok().build();
     }
 

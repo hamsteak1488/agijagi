@@ -31,7 +31,7 @@ public class StoryService {
     private final StoryGPT storyGPT;
     private final ChildValidator childValidator;
 
-    public void createStory(long memberId, CreateStoryRequest request) {
+    public void createStory1(long memberId, CreateStoryRequest request) {
         childValidator.validateWriterRole(memberId, request.getChildId());
 
         Child child = childRepository.findById(request.getChildId())
@@ -39,8 +39,8 @@ public class StoryService {
 
         List<Diary> diaries = diaryRepository.findAllByChildIdAndCreatedAtBetween(
                 request.getChildId(),
-                request.getStartTime().atStartOfDay(),
-                request.getEndTime().atTime(LocalTime.MAX).withNano(0)
+                request.getStartDate().atStartOfDay(),
+                request.getEndDate().atTime(LocalTime.MAX).withNano(0)
         );
 
         storyGPT.getCreateStoryDtoFromQuery(
