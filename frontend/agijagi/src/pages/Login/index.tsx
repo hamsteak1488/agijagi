@@ -35,10 +35,10 @@ const Moon = styled.div<{
     left: ${props.width * -0.5}px;
     transition: all 0.5s;
     transform: translate(
-        ${props.width * -0.08 * props.level}px,
+        ${props.loginMode ? 0 : props.width * -0.08 * props.level}px,
         ${props.loginMode ? props.height * -0.15 : 0}px
       )
-      rotate(${props.level * 22}deg);
+      rotate(${props.loginMode ? 0 : props.level * 30}deg);
     z-index: 0;
   `
 );
@@ -164,12 +164,14 @@ export const Login = () => {
 
   const handleButtonClick = () => {
     setLevel(level === 2 ? 0 : level + 1);
-    console.log(level);
   };
 
   const handleActivateLogin = () => {
     setLoginMode(!loginMode);
-    setLevel(0);
+  };
+
+  const handleLevel = (level: number) => {
+    setLevel(level);
   };
 
   return (
@@ -190,11 +192,11 @@ export const Login = () => {
           <Pattern6 ratio={widthRatio} />
         </PatternContainer>
       </Moon>
-
-      <IntroductionSlider />
-      <Button color="primary" onClick={handleButtonClick}>
-        버튼
-      </Button>
+      <IntroductionSlider
+        level={level}
+        handleLevel={handleLevel}
+        loginMode={loginMode}
+      />
       <LoginContainer width={width} loginMode={loginMode}>
         <Button fullWidth={true} onClick={handleActivateLogin}>
           로그인
