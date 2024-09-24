@@ -32,7 +32,7 @@ public class ScheduleAppender {
                 .title(scheduleContent.getTitle())
                 .description(scheduleContent.getDescription())
                 .createdAt(LocalDateTime.now())
-                .build();
+                .build()
         );
     }
 }
