@@ -3,12 +3,14 @@ package com.password926.agijagi.schedule.domain;
 import com.password926.agijagi.child.domain.Child;
 import com.password926.agijagi.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Schedule {
 
@@ -35,8 +37,6 @@ public class Schedule {
 
     @Column(nullable = false)
     private String description;
-
-    private boolean isDeleted;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
