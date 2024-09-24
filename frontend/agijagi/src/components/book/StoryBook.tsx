@@ -229,7 +229,14 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
   const onFlip = useCallback((e: FlipEvent) => {
     // const totalPageCount = mybook.current?.pageFlip().getPageCount() ?? 0;
     setCurrentPage(e.data);
-  }, []);
+
+    // 책이 마지막 페이지를 넘어가면 전체화면 해제
+    if (e.data === totalPages + 1) {
+      if (document.fullscreenElement) {
+        setTimeout(() => document.exitFullscreen(), 1000);
+      }
+    }
+  }, [totalPages]);
 
   const toggleFullscreen = () => {
     if (!bookContainer.current) {
