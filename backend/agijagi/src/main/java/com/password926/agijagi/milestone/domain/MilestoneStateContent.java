@@ -1,13 +1,13 @@
 package com.password926.agijagi.milestone.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MilestoneStateContent {
 
-    private long id;
+    private final long id;
 
-    private int currentAmount;
+    private final int currentAmount;
 }
