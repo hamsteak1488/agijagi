@@ -13,7 +13,7 @@ import Modal from './Modal';
 
 type ModalState = 'ACTIVE' | 'FADEOUT';
 
-export type ModalAnimation = 'center' | 'bottom';
+export type ModalAnimation = 'center' | 'bottom' | 'alert';
 
 interface ModalPushProps {
   children: ReactElement;
