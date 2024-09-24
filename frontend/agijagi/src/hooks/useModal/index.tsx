@@ -56,31 +56,28 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const pop = useCallback(() => {
-    setModals((modals) => {
-      for (let i = modals.length - 1; i >= 0; i--) {
-        if (modals[i].state === 'FADEOUT') {
-          continue;
-        }
-
-        modals[i].state = 'FADEOUT';
-        modals[i].onFadeOutEnd = () => {
-          setModals((modals) =>
-            modals.filter((modal) => {
-              if (modal === modals[i] && modal.onClose) {
-                modal.onClose();
-              }
-
-              return modal !== modals[i];
-            })
-          );
-        };
-
-        return [...modals];
+    for (let i = modals.length - 1; i >= 0; i--) {
+      if (modals[i].state === 'FADEOUT') {
+        continue;
       }
 
-      return modals;
-    });
-  }, [setModals]);
+      modals[i].state = 'FADEOUT';
+      modals[i].onFadeOutEnd = () => {
+        setModals((modals) =>
+          modals.filter((modal) => {
+            if (modal === modals[i] && modal.onClose) {
+              modal.onClose();
+            }
+
+            return modal !== modals[i];
+          })
+        );
+      };
+
+      setModals([...modals]);
+      return;
+    }
+  }, [setModals, modals]);
 
   useEffect(() => {
     const handlePopState = () => {
