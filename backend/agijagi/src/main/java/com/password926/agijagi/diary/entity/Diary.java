@@ -3,6 +3,7 @@ package com.password926.agijagi.diary.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -13,26 +14,35 @@ import java.time.LocalDateTime;
 public class Diary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "diary_id", nullable = false)
     private Long id;
 
-    @Column(name = "child_id", nullable = false)
+    @Column(nullable = false)
     private Long childId;
 
-    @Column(name = "member_id", nullable = false)
+    @Column(nullable = false)
     private Long memberId;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime date;
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
 
-    @Column(name = "title", nullable = false)
+    @Column(nullable = false)
     private String title;
 
-    @Column(name = "content", nullable = false)
+    @Column(nullable = false)
     private String content;
 
+    private Boolean isDeleted;
+
+    public void remove() {
+        isDeleted = true;
+    };
+
     public void updateDiary(String title, String content) {
-        this.title = title;
-        this.content = content;
+        if (title != null) {
+            this.title = title;
+        }
+        if (content != null) {
+            this.content = content;
+        }
     }
 }
