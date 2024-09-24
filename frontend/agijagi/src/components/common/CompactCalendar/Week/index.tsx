@@ -6,10 +6,11 @@ import * as s from './Week.style';
 
 interface WeekProps {
   date: Date;
+  selected: Date;
   onClick: (date: Date) => void;
 }
 
-const Week = ({ date, onClick }: WeekProps) => {
+const Week = ({ date, selected, onClick }: WeekProps) => {
   const day = dayjs(date);
   const days = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -18,6 +19,10 @@ const Week = ({ date, onClick }: WeekProps) => {
   const daysOfWeek = new Array(7)
     .fill(0)
     .map((value, index) => dayjs(startOfWeek).add(index, 'day'));
+
+  const handleClick = (date: Date) => {
+    onClick(date);
+  };
 
   return (
     <s.Table>
@@ -40,8 +45,16 @@ const Week = ({ date, onClick }: WeekProps) => {
       <tbody>
         <tr>
           {daysOfWeek.map((day) => (
-            <td key={day.date()} onClick={() => onClick(day.toDate())}>
-              {day.date()}
+            <td key={day.date()} onClick={() => handleClick(day.toDate())}>
+              <s.Circle
+                shade={
+                  selected.toDateString() === day.toDate().toDateString()
+                    ? '500'
+                    : undefined
+                }
+              >
+                {day.date()}
+              </s.Circle>
             </td>
           ))}
         </tr>
