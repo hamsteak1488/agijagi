@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface StoryRepository extends JpaRepository<Story, Long> {
 
-    List<Story> findAllByChildId(long childId);
+    List<Story> findAllByChildIdAndIsDeletedFalse(long childId);
 
-    Story findById(long storyId);
+    Story findByIdAndIsDeletedFalse(long storyId);
 
 }

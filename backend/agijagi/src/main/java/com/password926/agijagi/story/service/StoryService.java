@@ -51,7 +51,7 @@ public class StoryService {
     public List<Story> getAllStory(long memberId, long childId) {
         childValidator.validateWriterRole(memberId, childId);
 
-        List<Story> stories = storyRepository.findAllByChildId(childId);
+        List<Story> stories = storyRepository.findAllByChildIdAndIsDeletedFalse(childId);
 
         stories.sort(new Comparator<Story>() {
             @Override
@@ -63,11 +63,15 @@ public class StoryService {
 
     public Story getStory(long memberId, long storyId) {
 
-        return storyRepository.findById(storyId);
+        return storyRepository.findByIdAndIsDeletedFalse(storyId);
     }
 
-    public void deleteStory(long storyId) {
+    public void deleteStory(long memberId, long storyId) {
+        Story story = storyRepository.findByIdAndIsDeletedFalse(storyId);
 
-        storyRepository.deleteById(storyId);
+        childValidator.validateWriterRole(memberId, story.getChildId());
+
+        story.remove();
+        storyRepository.save(story);
     }
 }

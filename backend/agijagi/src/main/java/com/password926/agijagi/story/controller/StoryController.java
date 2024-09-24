@@ -35,9 +35,10 @@ public class StoryController {
 
     @DeleteMapping("/{storyId}")
     public ResponseEntity<Void> deleteStory(
+            LoginMember member,
             @PathVariable long storyId
     ) {
-        storyService.deleteStory(storyId);
+        storyService.deleteStory(member.getId(), storyId);
         return ResponseEntity.ok().build();
     }
 
