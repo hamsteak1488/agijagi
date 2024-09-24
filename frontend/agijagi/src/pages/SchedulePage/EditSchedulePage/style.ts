@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+
 import theme from '../../../styles/theme';
 
 export const Container = styled.div`
@@ -7,4 +8,8 @@ export const Container = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: ${theme.color.primary[100]};
+`;
+
+export const Main = styled.main`
+  padding: 0 1rem;
 `;
