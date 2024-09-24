@@ -43,7 +43,7 @@ public class DiaryController {
         return ResponseEntity.ok().body(diaryService.getDiary(member.getId(), diaryId));
     }
 
-    @PutMapping("/{diaryId}")
+    @PatchMapping("/{diaryId}")
     public ResponseEntity<Void> updateDiary(
             LoginMember member,
             @PathVariable long diaryId,
