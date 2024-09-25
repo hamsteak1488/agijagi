@@ -23,6 +23,7 @@ public class ChildAppender {
         Child child = Child.builder()
                 .name(childContent.getName())
                 .nickname(childContent.getNickname())
+                .gender(childContent.getGender())
                 .birthday(childContent.getBirthday())
                 .build();
         childRepository.save(child);

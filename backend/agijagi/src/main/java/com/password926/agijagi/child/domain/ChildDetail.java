@@ -13,6 +13,8 @@ public class ChildDetail {
 
     private String nickname;
 
+    private Gender gender;
+
     private LocalDate birthday;
 
     private String imageUrl;
@@ -26,6 +28,7 @@ public class ChildDetail {
                 .childId(child.getId())
                 .name(child.getName())
                 .nickname(child.getNickname())
+                .gender(child.getGender())
                 .birthday(child.getBirthday())
                 .imageUrl(child.getImageUrl())
                 .role(role)
