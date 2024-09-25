@@ -8,7 +8,7 @@ import GlobalStyle from './styles/GlobalStyle';
 import { ModalProvider } from './hooks/useModal';
 import MileStoneCheck from './components/milestone/MileStone';
 import BabyMain from './pages/BabyMain';
-import MileStoneReport from './components/milestone/MileStoneReport';
+import MileStoneReport from './components/milestone/Report';
 
 function App() {
   return (

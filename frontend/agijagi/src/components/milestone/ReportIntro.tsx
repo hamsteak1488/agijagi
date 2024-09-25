@@ -37,11 +37,10 @@ const IntroText = styled.div`
 
 interface ReportIntroProps {
   weight: number;
+  currentWeight: number;
 }
 
-const ReportIntro = ({weight} : ReportIntroProps) => {
-  // 현재 몸무게 받아와야 함
-  const currentWeight = 7.2
+const ReportIntro = ({weight, currentWeight} : ReportIntroProps) => {
 
   return (
     <Wrapper>
@@ -51,7 +50,7 @@ const ReportIntro = ({weight} : ReportIntroProps) => {
         </IntroImg>
         <IntroText>
           <Typhography>출생 몸무게 : {weight} kg</Typhography>
-          <Typhography color='tertiary' shade='900'>현재 몸무게 : {currentWeight} kg</Typhography>
+          <Typhography color='primary' shade='800'>현재 몸무게 : {currentWeight} kg</Typhography>
         </IntroText>
       </IntroBox>
     </Wrapper>

@@ -60,13 +60,46 @@ const ChartContainer = styled.div`
   height: 280px;
 `;
 
+const ResultContainer = styled.div`
+  width: 90%;
+  max-width: 700px;
+  margin: 20px auto 60px;
+`;
+
+const Result = styled.div`
+  margin-top: 10px;
+`;
+
+function calculateDays(birthDateString: string) {
+  const birthDate = new Date(birthDateString);
+  const currentDate = new Date();
+
+  // 두 날짜 간의 차이를 밀리초로 계산
+  const timeDifference: number = currentDate.getTime() - birthDate.getTime();
+
+  // 밀리초를 일 단위로 변환 (1일 = 24시간 * 60분 * 60초 * 1000밀리초)
+  const daysDifference: number = Math.floor(
+    timeDifference / (1000 * 60 * 60 * 24)
+  );
+
+  return daysDifference;
+}
+
 // 임의로 만든 아기 데이터
+const name = '다운';
+const birth = '2024-07-02';
 const weight = 3.02;
+const currentWeight = 7.2;
 const gender = 'boy';
 const image = BoyImg;
 const growStatus = 'fast';
 
 const MileStoneReport = () => {
+  const increaseWeight = currentWeight - weight;
+  const days = calculateDays(birth);
+  const result =
+    '다운이와 비슷한 출생 몸무게 [3.0 - 3.1kg]를 가진 아기들의 성장 그래프와 비교했을 때 다운이는 성장이 빠른 편이라고 할 수 있습니다. 마일스톤 결과를 봐도 성장 발달에 문제가 없는 것으로 보입니다. 다운이는 잘 자라고 있습니다!';
+
   return (
     <>
       <Title>
@@ -86,11 +119,22 @@ const MileStoneReport = () => {
       </FilterContainer>
 
       <ReportContainer>
-        <ReportIntro weight={weight} />
+        <ReportIntro weight={weight} currentWeight={currentWeight} />
         <ReportSlide image={image} growthStatus={growStatus} />
         <ChartContainer>
           <ReportChart />
         </ChartContainer>
+        <ResultContainer>
+          <Typhography size="md" color="primary" shade="800">
+            {name}(이)의 몸무게가 출생 후 {days}일 동안 {increaseWeight} kg
+            증가했습니다.
+          </Typhography>
+          <Result>
+            <Typhography size="md" color="greyScale" shade="800">
+              {result}
+            </Typhography>
+          </Result>
+        </ResultContainer>
       </ReportContainer>
     </>
   );

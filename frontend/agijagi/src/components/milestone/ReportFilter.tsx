@@ -6,11 +6,11 @@ import Typhography from '../common/Typography';
 
 const WeightContainer = styled.div`
   display: flex;
-  width: 175px;
+  width: 180px;
   height: 30px;
   align-items: center;
   margin-right: 10px;
-  padding: 5px 10px;
+  padding: 3px 10px;
   background-color: ${theme.color.primary[50]};
   border-radius: 30px;
   overflow: hidden;
@@ -18,7 +18,7 @@ const WeightContainer = styled.div`
 `;
 
 const WeightIcon = styled(ScaleIcon)`
-  width: 20px;
+  width: 22px;
   margin-right: 8px;
   color: ${theme.color.primary[800]};
 `;
@@ -28,7 +28,7 @@ const GenderContainer = styled.div`
   width: 60px;
   height: 30px;
   align-items: center;
-  padding: 5px 10px;
+  padding: 3px 10px;
   background-color: ${theme.color.primary[50]};
   border-radius: 30px;
   overflow: hidden;

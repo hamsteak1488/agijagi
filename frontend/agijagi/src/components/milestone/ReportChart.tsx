@@ -14,32 +14,32 @@ const data = [
   {
     "name": 0,
     "avgWeight": 3.2,
-    "weight": 3.2,
+    "weight": 3.02,
   },
   {
     "name": 1,
-    "avgWeight": 4.5,
-    "weight": 4.2,
+    "avgWeight": 3.8,
+    "weight": 3.9,
   },
   {
     "name": 2,
-    "avgWeight": 5.1,
-    "weight": 4.9,
+    "avgWeight": 4.5,
+    "weight": 4.6,
   },
   {
     "name": 3,
-    "avgWeight": 5.8,
-    "weight": 5.5,
+    "avgWeight": 5.2,
+    "weight": 5.8,
   },
   {
     "name": 4,
-    "avgWeight": 6.4,
-    "weight": 6.2,
+    "avgWeight": 6.0,
+    "weight": 6.8,
   },
   {
     "name": 5,
     "avgWeight": 7.0,
-    "weight": 6.8,
+    "weight": 7.2,
   },
   // {
   //   "name": 6,
@@ -82,15 +82,16 @@ const data = [
 const WeightChart = () => {
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <LineChart width={350} height={280} data={data} margin={{ top: 20, right: 20, left: 0, bottom: 5 }}>
+      <LineChart width={350} height={280} data={data} margin={{ top: 20, right: 20, left: 0, bottom: 10 }}>
         <CartesianGrid stroke="#ccc" strokeDasharray="3 3" />
-        <YAxis dataKey="weight" label={{value: "kg", position: 'top'}}/>
+        <YAxis dataKey="weight" label={{value: "kg", angle: -90, position: 'insideLeft', offset: 25}}/>
         <XAxis dataKey="name" type="category" domain={[0, 'maxData']}>
-        <Label value="개월" offset={-4} position="insideBottom" />
+        <Label value="개월" offset={-8} position="insideBottom" />
         </XAxis>
         <Tooltip />
-        <Line type="linear" dataKey="weight" stroke="#ff6f00" />
-        <Line type="linear" dataKey="avgWeight" stroke="#c0ca33" />
+        <Legend verticalAlign="top" align="right" wrapperStyle={{ marginTop : -15}}/>
+        <Line type="linear" dataKey="weight" stroke="#ff6f00" name="우리 아이 몸무게"/>
+        <Line type="linear" dataKey="avgWeight" stroke="#c0ca33" name="또래 아이 몸무게"/>
       </LineChart>
     </ResponsiveContainer>
   );

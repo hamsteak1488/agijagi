@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
-import TurtleImg from '../../assets/images/turtle2.png';
-import RabbitImg from '../../assets/images/rabbit2.png';
+import TurtleImg from '../../assets/images/turtle.png';
+import RabbitImg from '../../assets/images/rabbit.png';
 
 const Wrapper = styled.div`
   display: flex;
@@ -11,7 +11,7 @@ const Wrapper = styled.div`
 
 const Header = styled.div`
   font-size: ${theme.typography.fontSize.md};
-  color: ${theme.color.secondary[600]};
+  color: ${theme.color.primary[900]};
   margin: 15px auto 20px;
 `;
 
@@ -69,6 +69,7 @@ const BabyImage = styled.img`
 
 const Turtle = styled.img`
   width: 35px;
+  height: 38px;
 `;
 
 const Rabbit = styled.img`
@@ -80,7 +81,7 @@ const Line = styled.hr`
   border: none;
   width: 90%;
   max-width: 700px;
-  background-color: ${theme.color.greyScale[300]};
+  background-color: ${theme.color.greyScale[400]};
   height: 1px;
   margin: 15px auto 5px;
 `;
