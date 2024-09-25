@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import * as s from './CustomizedBorderContainer.style';
 
-interface CustomizedBorderContainerProps {
+interface CustomizedBorderContainerProps extends React.ComponentProps<'div'> {
   children: ReactNode;
   height?: string;
   border: string;
@@ -16,9 +16,10 @@ const CustomizedBorderContainer = ({
   border,
   borderHeight,
   backgroundColor,
+  ...rest
 }: CustomizedBorderContainerProps) => {
   return (
-    <s.Container style={{ height }}>
+    <s.Container style={{ height }} {...rest}>
       <s.Border
         color={backgroundColor}
         image={border}
