@@ -11,5 +11,5 @@ public class ReadLatestRecordResponse {
 
     private String type;
 
-    private LocalDateTime dateTime;
+    private LocalDateTime latestDateTime;
 }

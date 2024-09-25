@@ -18,20 +18,15 @@ public class RecordDtoConverter {
     }
 
     public static List<ReadLatestRecordResponse> convertToLatest(List<Record> records) {
-        HashMap<String, Record> map = new HashMap<>();
-        for (Record record : records) {
-            map.put(record.getType().getDesc(), record);
-        }
+        Map<String, Record> map = records.stream()
+                .collect(Collectors.toMap(record -> record.getType().getDesc(), record -> record));
 
-        List<ReadLatestRecordResponse> result = new ArrayList<>();
-        for (RecordType recordType : RecordType.values()) {
-            result.add(new ReadLatestRecordResponse(recordType.getDesc(), getDateTime(map.get(recordType.getDesc()))));
-        }
-
-        return result;
+        return Arrays.stream(RecordType.values())
+                .map(recordType -> new ReadLatestRecordResponse(recordType.getDesc(), getLatestDateTime(map.get(recordType.getDesc()))))
+                .collect(Collectors.toList());
     }
 
-    private static LocalDateTime getDateTime(Record record) {
+    private static LocalDateTime getLatestDateTime(Record record) {
         if (record == null) {
             return null;
         }
