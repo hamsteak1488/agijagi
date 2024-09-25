@@ -14,13 +14,16 @@ public class ReadRecordResponse {
 
     private String type;
 
-    private LocalDateTime dateTime;
+    private LocalDateTime startDateTime;
+
+    private LocalDateTime endDateTime;
 
     public static ReadRecordResponse from(Record record) {
         return ReadRecordResponse.builder()
                 .id(record.getId())
                 .type(record.getType().getDesc())
-                .dateTime(record.getDateTime())
+                .startDateTime(record.getStartDateTime())
+                .endDateTime(record.getEndDateTime())
                 .build();
     }
 }

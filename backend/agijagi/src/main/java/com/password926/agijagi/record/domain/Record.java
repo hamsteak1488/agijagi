@@ -26,5 +26,10 @@ public class Record {
     private RecordType type;
 
     @Column(nullable = false)
-    private LocalDateTime dateTime;
+    private LocalDateTime startDateTime;
+
+    private LocalDateTime endDateTime;
+
+    @Column(nullable = false)
+    private LocalDateTime createAt;
 }
