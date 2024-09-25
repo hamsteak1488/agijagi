@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import GlobalStyle from './styles/GlobalStyle';
 
 import { ModalProvider } from './hooks/useModal';
+import BoardPage from './pages/BoardPage';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/baby/writing" element={<WritingDiary />} />
             <Route path="/login" element={<Login />} />
             <Route path="/schedule" element={<SchedulePage />} />
+            <Route path="/board" element={<BoardPage />} />
           </Routes>
         </ModalProvider>
       </BrowserRouter>
