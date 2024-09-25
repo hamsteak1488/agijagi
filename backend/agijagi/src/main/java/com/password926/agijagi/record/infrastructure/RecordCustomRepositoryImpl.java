@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public class RecordCustomRepositoryImpl implements RecordCustomRepository {
 
-    private final JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory query;
 
     @Override
     public List<Record> findRecords(
@@ -25,7 +25,8 @@ public class RecordCustomRepositoryImpl implements RecordCustomRepository {
             LocalDateTime startDateTime,
             LocalDateTime endDateTime
     ) {
-        return jpaQueryFactory.selectFrom(record)
+        return query
+                .selectFrom(record)
                 .where(record.child.id.eq(childId)
                         .and(record.startDateTime.between(startDateTime, endDateTime))
                         .and(typeEq(type)))
@@ -34,7 +35,8 @@ public class RecordCustomRepositoryImpl implements RecordCustomRepository {
 
     @Override
     public Record findLatestRecord(long childId, RecordType type) {
-        return jpaQueryFactory.selectFrom(record)
+        return query
+                .selectFrom(record)
                 .where(record.child.id.eq(childId)
                         .and(record.type.eq(type)))
                 .orderBy(record.id.desc())
