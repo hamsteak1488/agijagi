@@ -1,4 +1,4 @@
-package com.password926.agijagi.media.entity;
+package com.password926.agijagi.media.domain;
 
 import jakarta.persistence.Entity;
 import lombok.*;

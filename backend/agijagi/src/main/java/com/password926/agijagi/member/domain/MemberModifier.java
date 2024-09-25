@@ -3,7 +3,7 @@ package com.password926.agijagi.member.domain;
 import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
 import com.password926.agijagi.common.errors.exception.RestApiException;
 import com.password926.agijagi.media.domain.MediaStorage;
-import com.password926.agijagi.media.entity.Image;
+import com.password926.agijagi.media.domain.Image;
 import com.password926.agijagi.member.infrastructure.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;

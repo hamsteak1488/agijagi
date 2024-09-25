@@ -2,7 +2,6 @@ package com.password926.agijagi.media.domain;
 
 import com.password926.agijagi.common.errors.exception.RestApiException;
 import com.password926.agijagi.media.controller.MediaErrorCode;
-import com.password926.agijagi.media.entity.Image;
 import com.password926.agijagi.media.infrastructure.MediaRepository;
 import com.password926.agijagi.media.infrastructure.S3Manager;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MediaStorage {
     private final S3Manager s3Manager;
     private final MediaRepository mediaRepository;
-    private static final String S3_KEY_PREFIX = "abc/";
+    private static final String S3_KEY_PREFIX = "media/";
 
     @Transactional
     public Image storeImage(Resource resource, String contentType) {

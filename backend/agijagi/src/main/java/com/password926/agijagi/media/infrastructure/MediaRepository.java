@@ -1,6 +1,6 @@
 package com.password926.agijagi.media.infrastructure;
 
-import com.password926.agijagi.media.entity.Media;
+import com.password926.agijagi.media.domain.Media;
 import org.springframework.data.repository.Repository;
 
 import java.util.Optional;

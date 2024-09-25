@@ -1,6 +1,6 @@
 package com.password926.agijagi.member.domain;
 
-import com.password926.agijagi.media.entity.Image;
+import com.password926.agijagi.media.domain.Image;
 import jakarta.persistence.*;
 import lombok.*;
 
