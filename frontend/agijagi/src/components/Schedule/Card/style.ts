@@ -11,15 +11,15 @@ export const Container = styled.div`
   user-select: none;
   cursor: pointer;
 
-  :nth-child(3n + 1) {
+  :nth-of-type(3n + 1) {
     background-color: ${theme.color.primary[700]};
   }
 
-  :nth-child(3n + 2) {
+  :nth-of-type(3n + 2) {
     background-color: ${theme.color.secondary[700]};
   }
 
-  :nth-child(3n + 3) {
+  :nth-of-type(3n + 3) {
     background-color: ${theme.color.tertiary[700]};
   }
 

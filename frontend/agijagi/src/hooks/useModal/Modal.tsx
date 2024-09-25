@@ -1,26 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
-import { ModalAnimation, ModalData } from '.';
+import { ModalData } from '.';
 
 import styles from './Modal.module.css';
 
 type ModalProps = ModalData;
-
-const classNames: Record<
-  ModalAnimation,
-  { base: string; enter: string; exit: string }
-> = {
-  center: {
-    base: styles.base,
-    enter: styles.enter,
-    exit: styles.exit,
-  },
-  bottom: {
-    base: styles['bottom-base'],
-    enter: styles['bottom-enter'],
-    exit: styles['bottom-exit'],
-  },
-};
 
 const Modal = ({
   children,
@@ -30,20 +14,26 @@ const Modal = ({
 }: ModalProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
+  const classNames = {
+    base: styles[`${animation}-base`],
+    enter: styles[`${animation}-enter`],
+    exit: styles[`${animation}-exit`],
+  };
+
   useEffect(() => {
     if (!wrapperRef.current) {
       return;
     }
 
     if (state === 'ACTIVE') {
-      wrapperRef.current.className = classNames[animation].base;
+      wrapperRef.current.className = classNames.base;
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       wrapperRef.current.offsetTop;
-      wrapperRef.current.classList.add(classNames[animation].enter);
+      wrapperRef.current.classList.add(classNames.enter);
       return;
     }
 
-    wrapperRef.current.className = `${classNames[animation].base} ${classNames[animation].exit}`;
+    wrapperRef.current.className = `${classNames.base} ${classNames.exit}`;
   }, [state, animation, wrapperRef]);
 
   const handleTransitionEnd = (e: React.TransitionEvent) => {

@@ -25,6 +25,10 @@ public class MemberService {
         memberModifier.modifyProfileDetail(memberId, profileDetail);
     }
 
+    public void modifyMemberProfileImage(long memberId, Resource resource, String contentType) {
+        memberModifier.modifyProfileImage(memberId, resource, contentType);
+    }
+
     public void removeMember(long memberId) {
         memberRemover.remove(memberId);
     }

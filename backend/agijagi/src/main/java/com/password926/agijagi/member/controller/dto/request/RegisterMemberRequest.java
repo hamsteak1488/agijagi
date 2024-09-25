@@ -3,18 +3,19 @@ package com.password926.agijagi.member.controller.dto.request;
 import com.password926.agijagi.member.domain.ProfileDetail;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RegisterMemberRequest {
     @Email
-    private final String email;
+    private String email;
     @NotBlank
-    private final String password;
+    private String password;
     @NotBlank
-    private final String nickname;
+    private String nickname;
 
     public ProfileDetail toMemberProfile() {
         return ProfileDetail.of(email, nickname);

@@ -11,10 +11,12 @@ import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
 import com.password926.agijagi.story.entity.Story;
 import com.password926.agijagi.story.repository.StoryGPT;
 import com.password926.agijagi.story.repository.StoryRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
@@ -29,19 +31,19 @@ public class StoryService {
     private final StoryGPT storyGPT;
     private final ChildValidator childValidator;
 
-    public CreateStoryRequest createStory(long memberId, CreateStoryRequest request) {
+    public void createStory(long memberId, CreateStoryRequest request) {
         childValidator.validateWriterRole(memberId, request.getChildId());
 
         Child child = childRepository.findById(request.getChildId())
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        List<Diary> diaries = diaryRepository.findAllByChildIdAndDateBetween(
+        List<Diary> diaries = diaryRepository.findAllByChildIdAndCreatedAtBetween(
                 request.getChildId(),
-                request.getStartTime(),
-                request.getEndTime()
+                request.getStartTime().atStartOfDay(),
+                request.getEndTime().atTime(LocalTime.MAX).withNano(0)
         );
 
-        return storyGPT.getCreateStoryDtoFromQuery(
+        storyGPT.getCreateStoryDtoFromQuery(
                 diaries,
                 child.getName(),
                 ChronoUnit.DAYS.between(child.getBirthday(), LocalDate.now())
@@ -51,7 +53,7 @@ public class StoryService {
     public List<Story> getAllStory(long memberId, long childId) {
         childValidator.validateWriterRole(memberId, childId);
 
-        List<Story> stories = storyRepository.findAllByChildId(childId);
+        List<Story> stories = storyRepository.findAllByChildIdAndIsDeletedFalse(childId);
 
         stories.sort(new Comparator<Story>() {
             @Override
@@ -62,12 +64,21 @@ public class StoryService {
     }
 
     public Story getStory(long memberId, long storyId) {
+        Story story = storyRepository.findByIdAndIsDeletedFalse(storyId)
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        return storyRepository.findById(storyId);
+        childValidator.validateWriterRole(memberId, story.getChildId());
+
+        return story;
     }
 
-    public void deleteStory(long storyId) {
+    @Transactional
+    public void deleteStory(long memberId, long storyId) {
+        Story story = storyRepository.findByIdAndIsDeletedFalse(storyId)
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        storyRepository.deleteById(storyId);
+        childValidator.validateWriterRole(memberId, story.getChildId());
+
+        story.remove();
     }
 }

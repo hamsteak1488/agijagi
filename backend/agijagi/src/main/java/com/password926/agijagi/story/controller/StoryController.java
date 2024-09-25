@@ -1,7 +1,7 @@
 package com.password926.agijagi.story.controller;
 
+import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
-import com.password926.agijagi.story.controller.dto.LoginMember;
 import com.password926.agijagi.story.entity.Story;
 import com.password926.agijagi.story.service.StoryService;
 import lombok.RequiredArgsConstructor;
@@ -35,18 +35,19 @@ public class StoryController {
 
     @DeleteMapping("/{storyId}")
     public ResponseEntity<Void> deleteStory(
+            LoginMember member,
             @PathVariable long storyId
     ) {
-        storyService.deleteStory(storyId);
+        storyService.deleteStory(member.getId(), storyId);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping
-    public ResponseEntity<Story> createStory(
-            LoginMember member,
+    public ResponseEntity<Void> createStory(
+//            LoginMember member,
             @RequestBody CreateStoryRequest createStoryRequest
     ) {
-        storyService.createStory(member.getId(), createStoryRequest);
+        storyService.createStory(1, createStoryRequest);
         return ResponseEntity.ok().build();
     }
 

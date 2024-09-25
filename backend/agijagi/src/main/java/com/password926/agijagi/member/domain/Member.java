@@ -1,5 +1,6 @@
 package com.password926.agijagi.member.domain;
 
+import com.password926.agijagi.media.domain.Image;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,8 +20,9 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    @Column
-    private Long profileImageId;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "profile_image_id")
+    private Image profileImage;
 
     public static Member of(ProfileDetail profileDetail, String password) {
         return builder()
@@ -33,7 +35,7 @@ public class Member {
         this.profileDetail = profileDetail;
     }
 
-    public void updateProfileImage(long imageId) {
-        this.profileImageId = imageId;
+    public void updateProfileImage(Image image) {
+        this.profileImage = image;
     }
 }

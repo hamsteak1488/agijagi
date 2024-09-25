@@ -1,6 +1,6 @@
 package com.password926.agijagi.member.controller;
 
-import com.password926.agijagi.member.controller.dto.LoginMember;
+import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.member.controller.dto.request.ModifyMemberRequest;
 import com.password926.agijagi.member.controller.dto.request.RegisterMemberRequest;
 import com.password926.agijagi.member.domain.ProfileDetail;
@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 
@@ -33,8 +34,23 @@ public class MemberController {
     }
 
     @PatchMapping
-    public ResponseEntity<Void> modifyMember(LoginMember member, @Valid @RequestBody ModifyMemberRequest request) {
+    public ResponseEntity<Void> modifyMemberProfileDetail(
+            LoginMember member,
+            @Valid @RequestBody ModifyMemberRequest request
+    ) {
         memberService.modifyMemberProfileDetail(member.getId(), request.toMemberProfile());
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/profile-image")
+    public ResponseEntity<Void> modifyMemberProfileImage(
+            LoginMember member,
+            @RequestPart("profileImage") MultipartFile profileImage
+    ) {
+        memberService.modifyMemberProfileImage(
+                member.getId(), profileImage.getResource(), profileImage.getContentType()
+        );
 
         return ResponseEntity.ok().build();
     }

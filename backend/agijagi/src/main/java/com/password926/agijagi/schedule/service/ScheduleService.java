@@ -1,7 +1,6 @@
 package com.password926.agijagi.schedule.service;
 
-import com.password926.agijagi.schedule.domain.Schedule;
-import com.password926.agijagi.schedule.domain.ScheduleReader;
+import com.password926.agijagi.schedule.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +12,9 @@ import java.util.List;
 public class ScheduleService {
 
     private final ScheduleReader scheduleReader;
+    private final ScheduleAppender scheduleAppender;
+    private final ScheduleRemover scheduleRemover;
+    private final ScheduleUpdater scheduleUpdater;
 
     public List<Schedule> readSchedule(
             long memberId,
@@ -21,5 +23,25 @@ public class ScheduleService {
             LocalDate endDate
     ) {
         return scheduleReader.readByDates(memberId, childId, startDate, endDate);
+    }
+
+    public void appendSchedule(
+            long memberId,
+            long childId,
+            ScheduleContent scheduleContent
+    ) {
+        scheduleAppender.append(memberId, childId, scheduleContent);
+    }
+
+    public void removeSchedule(long memberId, long scheduleId) {
+        scheduleRemover.remove(memberId, scheduleId);
+    }
+
+    public void updateSchedule(
+            long memberId,
+            long scheduleId,
+            ScheduleContent scheduleContent
+    ) {
+        scheduleUpdater.update(memberId, scheduleId, scheduleContent);
     }
 }
