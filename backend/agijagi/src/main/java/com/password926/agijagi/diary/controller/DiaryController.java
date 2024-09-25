@@ -20,45 +20,45 @@ public class DiaryController {
 
     @PostMapping
     public ResponseEntity<Void> createDiary(
-//            LoginMember member,
+            LoginMember member,
             CreateDiaryRequest createDiaryRequest
     ) {
-        diaryService.createDiary(1, createDiaryRequest);
+        diaryService.createDiary(member.getId(), createDiaryRequest);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
     public ResponseEntity<List<Diary>> getAllDiary(
-//            LoginMember member,
+            LoginMember member,
             @RequestParam long childId
     ) {
-        return ResponseEntity.ok().body(diaryService.getAllDiary(1, childId));
+        return ResponseEntity.ok().body(diaryService.getAllDiary(member.getId(), childId));
     }
 
     @GetMapping("/{diaryId}")
     public ResponseEntity<Diary> getDiary(
-//            LoginMember member,
+            LoginMember member,
             @PathVariable long diaryId
     ) {
-        return ResponseEntity.ok().body(diaryService.getDiary(1, diaryId));
+        return ResponseEntity.ok().body(diaryService.getDiary(member.getId(), diaryId));
     }
 
     @PatchMapping("/{diaryId}")
     public ResponseEntity<Void> updateDiary(
-//            LoginMember member,
+            LoginMember member,
             @PathVariable long diaryId,
             @RequestBody UpdateDiaryRequest updateDiaryRequest
     ) {
-        diaryService.updateDiary(1, diaryId, updateDiaryRequest);
+        diaryService.updateDiary(member.getId(), diaryId, updateDiaryRequest);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{diaryId}")
     public ResponseEntity<Void> deleteDiary(
-//            LoginMember member,
+            LoginMember member,
             @PathVariable long diaryId
     ) {
-        diaryService.deleteDiary(1, diaryId);
+        diaryService.deleteDiary(member.getId(), diaryId);
         return ResponseEntity.ok().build();
     }
 
