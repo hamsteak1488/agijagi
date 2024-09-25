@@ -1,10 +1,7 @@
 package com.password926.agijagi.record.service;
 
+import com.password926.agijagi.record.domain.*;
 import com.password926.agijagi.record.domain.Record;
-import com.password926.agijagi.record.domain.RecordAppender;
-import com.password926.agijagi.record.domain.RecordContent;
-import com.password926.agijagi.record.domain.RecordReader;
-import com.password926.agijagi.record.domain.RecordRemover;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +16,18 @@ public class RecordService {
     private final RecordAppender recordAppender;
     private final RecordRemover recordRemover;
 
-    public List<Record> readRecordByDates(
+    public List<Record> readRecord(
             long memberId,
             long childId,
+            String type,
             LocalDate startDate,
             LocalDate endDate
     ) {
-        return recordReader.readByDates(memberId, childId, startDate, endDate);
+        return recordReader.read(memberId, childId, type, startDate, endDate);
+    }
+
+    public List<Record> readLatestRecord(long memberId, long childId) {
+        return recordReader.readLatest(memberId, childId);
     }
 
     public void appendRecord(
