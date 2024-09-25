@@ -21,6 +21,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/activity-record" element={<ActivityRecordPage />} />
             <Route path="/baby" element={<BabyMain />} />
+            <Route path="/baby/writing" element={<WritingDiary />} />
             <Route path="/login" element={<Login />} />
             <Route path="/schedule" element={<SchedulePage />} />
           </Routes>
