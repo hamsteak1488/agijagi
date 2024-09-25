@@ -36,7 +36,7 @@ const ArticlePage = ({ articleId }: ArticlePageProps) => {
       <Comment.Write />
       <s.CommentList>
         <CustomizedBorderContainer
-          backgroundColor={theme.color.primary[50]}
+          backgroundColor={theme.color.primary[100]}
           border={Waves}
           borderHeight="24px"
         >

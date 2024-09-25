@@ -42,7 +42,7 @@ const BoardPage = () => {
             {new Array(20).fill(0).map((value, index) => (
               <s.ArticleListItem key={index}>
                 <CustomizedBorderContainer
-                  backgroundColor={theme.color.primary[index % 2 ? 50 : 200]}
+                  backgroundColor={theme.color.primary[index % 2 ? 100 : 300]}
                   border={Waves}
                   borderHeight="24px"
                 >

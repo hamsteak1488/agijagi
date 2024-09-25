@@ -7,7 +7,7 @@ export const Container = styled.div`
   flex-direction: column;
   width: 100vw;
   height: 100vh;
-  background-color: ${theme.color.primary[100]};
+  background-color: ${theme.color.primary[300]};
 `;
 
 export const CommentList = styled.div`
