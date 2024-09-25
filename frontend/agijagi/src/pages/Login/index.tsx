@@ -125,6 +125,7 @@ export const Login = () => {
           inputValue={password}
           setInputValue={setPassword}
           validationFunction={validatePassword}
+          type="password"
         ></Textfield>
         <Button
           size="md"
