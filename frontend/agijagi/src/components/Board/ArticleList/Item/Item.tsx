@@ -11,19 +11,12 @@ interface ItemProps {
   description: string;
   writer: string;
   createdAt: Date;
-  transparent?: boolean;
   onClick?: () => void;
 }
 
-const Item = ({
-  description,
-  writer,
-  createdAt,
-  transparent = false,
-  onClick,
-}: ItemProps) => {
+const Item = ({ description, writer, createdAt, onClick }: ItemProps) => {
   return (
-    <s.Container transparent={transparent} onClick={onClick}>
+    <s.Container onClick={onClick}>
       <s.ImageList>
         <ArticleList.Item.Image
           src="https://image.wanted.co.kr/optimize?src=https%3A%2F%2Fstatic.wanted.co.kr%2Fimages%2Fcompany%2F14893%2Ftbwebq9cfafci2mr__400_400.jpg&w=400&q=75"
