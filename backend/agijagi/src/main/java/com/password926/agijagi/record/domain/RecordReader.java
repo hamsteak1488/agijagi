@@ -44,7 +44,7 @@ public class RecordReader {
         return Arrays.stream(RecordType.values())
                 .map(type -> recordCustomRepository.findLatestRecord(childId, type))
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public Record read(long recordId) {
