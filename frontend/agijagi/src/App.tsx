@@ -9,6 +9,7 @@ import BabyMain from './pages/BabyMain';
 import GlobalStyle from './styles/GlobalStyle';
 
 import { ModalProvider } from './hooks/useModal';
+import BoardPage from './pages/BoardPage';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/activity-record" element={<ActivityRecordPage />} />
             <Route path="/baby" element={<BabyMain />} />
             <Route path="/schedule" element={<SchedulePage />} />
+            <Route path="/board" element={<BoardPage />} />
           </Routes>
         </ModalProvider>
       </BrowserRouter>

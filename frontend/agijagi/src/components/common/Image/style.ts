@@ -7,8 +7,6 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
-  border-radius: 0.25rem;
   background-color: ${theme.color.greyScale[900]};
 `;
 
