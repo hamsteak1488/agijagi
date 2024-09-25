@@ -31,7 +31,7 @@ public class Diary {
     @Column(nullable = false)
     private String content;
 
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
     public void remove() {
         isDeleted = true;

@@ -14,7 +14,6 @@ import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +29,7 @@ public class StoryGPT {
                     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     public CreateStoryRequest getCreateStoryDtoFromQuery(List<Diary> diaries, String name, Long age){
-        String data = convertValuesToJson(new HashSet<>(diaries).containsAll(diaries));
+        String data = convertValuesToJson(diaries);
 
         PromptTemplate promptTemplate = new PromptTemplate(
                 """
@@ -61,9 +60,10 @@ public class StoryGPT {
                 5. It should be generated up to 10 sentences. Before that, I need to finish the story.
                 6. No more than 50 characters per sentence.
                 7. Fairy tales should be written in Korean.
-                8. Paragraphs should be written in the json way.
+                8. Paragraphs should be written as examples below.
+                [{z}"index": 1, "content": "content1"{a}, {z}"index": 2,"content": "content2"{a}]
                 """);
-        Prompt prompt = promptTemplate.create(Map.of("child_name", name, "child_age", age, "data", data));
+        Prompt prompt = promptTemplate.create(Map.of("child_name", name, "child_age", age, "data", data, "a", "}", "z", "{"));
         String response = openAiChatModel.call(prompt).getResult().getOutput().getContent();
         System.out.println(response);
         return convertJsonToObject(formatToJson(response), CreateStoryRequest.class);
