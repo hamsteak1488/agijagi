@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -30,6 +29,6 @@ public class ChildDetailReader {
                     long followerNum = memberChildReader.readFollowerNum(child.getId());
                     return ChildDetail.of(childReader.read(memberChild.readChildId()), memberChild.getRole(), followerNum);
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 }
