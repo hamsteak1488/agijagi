@@ -31,5 +31,5 @@ public class Record {
     private LocalDateTime endDateTime;
 
     @Column(nullable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 }

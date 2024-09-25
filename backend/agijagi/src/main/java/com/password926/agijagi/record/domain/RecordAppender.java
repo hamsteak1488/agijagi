@@ -27,7 +27,7 @@ public class RecordAppender {
                 .type(recordContent.getType())
                 .startDateTime(recordContent.getStartDateTime())
                 .endDateTime(recordContent.getEndDateTime())
-                .createAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build()
         );
     }
