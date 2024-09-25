@@ -11,9 +11,9 @@ import com.password926.agijagi.diary.entity.Diary;
 import com.password926.agijagi.diary.repository.DiaryRepository;
 import com.password926.agijagi.media.domain.Image;
 import com.password926.agijagi.media.domain.MediaStorage;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -29,6 +29,7 @@ public class DiaryService {
     private final ChildValidator childValidator;
     private final MediaStorage mediaStorage;
 
+    @Transactional
     public void createDiary(long memberId, CreateDiaryRequest request) {
         childValidator.validateWriterRole(memberId, request.getChildId());
 

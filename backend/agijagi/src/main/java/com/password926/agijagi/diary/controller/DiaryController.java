@@ -21,9 +21,9 @@ public class DiaryController {
     @PostMapping
     public ResponseEntity<Void> createDiary(
 //            LoginMember member,
-            @RequestBody CreateDiaryRequest createDiaryRequest
+            CreateDiaryRequest createDiaryRequest
     ) {
-        diaryService.createDiary(1,createDiaryRequest);
+        diaryService.createDiary(1, createDiaryRequest);
         return ResponseEntity.ok().build();
     }
 

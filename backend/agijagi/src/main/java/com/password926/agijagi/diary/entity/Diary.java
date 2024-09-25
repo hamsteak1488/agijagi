@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Entity
 public class Diary {
     @Id
@@ -37,6 +35,15 @@ public class Diary {
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DiaryMedia> diaryMediaList = new ArrayList<>();
+
+    @Builder
+    public Diary(Long childId, Long memberId, LocalDateTime createdAt, String title, String content) {
+        this.childId = childId;
+        this.memberId = memberId;
+        this.createdAt = createdAt;
+        this.title = title;
+        this.content = content;
+    }
 
     public void remove() {
         isDeleted = true;
