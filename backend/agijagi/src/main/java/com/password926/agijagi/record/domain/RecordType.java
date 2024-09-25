@@ -11,12 +11,12 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum RecordType {
 
-    MILk("모유"),
-    DIAPER("기저귀"),
-    FORMULA("분유"),
+    FECES("대변"),
+    PISS("소변"),
     SLEEP("수면"),
-    BABY_FOOD("이유식"),
-    PUMP("유축")
+    FOOD("식사"),
+    PUMP("유축"),
+    MEDICINE("약"),
     ;
 
     private final String desc;

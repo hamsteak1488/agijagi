@@ -17,9 +17,11 @@ public class AppendRecordRequest {
     private String type;
 
     @NotNull
-    private LocalDateTime dateTime;
+    private LocalDateTime startDateTime;
+
+    private LocalDateTime endDateTime;
 
     public RecordContent toContent() {
-        return new RecordContent(RecordType.of(type), dateTime);
+        return new RecordContent(RecordType.of(type), startDateTime, endDateTime);
     }
 }

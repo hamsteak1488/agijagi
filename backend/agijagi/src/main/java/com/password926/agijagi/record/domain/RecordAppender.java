@@ -6,6 +6,8 @@ import com.password926.agijagi.record.infrastructure.RecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @RequiredArgsConstructor
 @Component
 public class RecordAppender {
@@ -23,7 +25,9 @@ public class RecordAppender {
         recordRepository.save(Record.builder()
                 .child(childReader.read(childId))
                 .type(recordContent.getType())
-                .dateTime(recordContent.getDateTime())
+                .startDateTime(recordContent.getStartDateTime())
+                .endDateTime(recordContent.getEndDateTime())
+                .createdAt(LocalDateTime.now())
                 .build()
         );
     }
