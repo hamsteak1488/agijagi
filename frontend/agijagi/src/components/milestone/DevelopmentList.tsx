@@ -12,12 +12,18 @@ const CheckContainer = styled.div`
   margin-bottom: 30px;
 `;
 
+const StyledLabel = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+`;
+
 const StyledInput = styled.input`
   appearance: none;
   width: 25px;
   height: 25px;
   border: 1.5px solid ${theme.color.tertiary[800]};
-  border-radius: 50px;
+  border-radius: 50%;
 
   &:checked {
     border-color: transparent;
@@ -29,14 +35,8 @@ const StyledInput = styled.input`
   }
 `;
 
-const StyledLabel = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-`;
-
 const StyledP = styled.p`
-  margin: 10px;
+  margin: 10px 10px 12px;
   font-size: ${theme.typography.fontSize.md};
   color: ${theme.color.greyScale[700]};
 `;

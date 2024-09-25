@@ -61,9 +61,9 @@ const calculateAgeInMonths = (birthDate: Date): number => {
   return yearsDiff * 12 + monthsDiff;
 };
 
-// 임의 아이 이름 -> 추후 데이터로 받아야함
+// 임시 아이 이름 -> 추후 데이터로 받아야함
 const name = '다운';
-// 임의 출생 날짜 -> 추후 데이터로 받아야함
+// 임시 출생 날짜 -> 추후 데이터로 받아야함
 const birth = '2024-06-23';
 
 const birthDate = new Date(birth);

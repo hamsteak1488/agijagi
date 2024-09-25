@@ -8,6 +8,7 @@ import GlobalStyle from './styles/GlobalStyle';
 import { ModalProvider } from './hooks/useModal';
 import MileStoneCheck from './components/milestone/MileStone';
 import BabyMain from './pages/BabyMain';
+import MileStoneReport from './components/milestone/MileStoneReport';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/milestone" element={<MileStoneCheck />} />
             <Route path="/baby" element={<BabyMain />} />
             <Route path="/schedule" element={<SchedulePage />} />
+            <Route path="/milestone/report" element={<MileStoneReport />} />
           </Routes>
         </BrowserRouter>
       </ModalProvider>
