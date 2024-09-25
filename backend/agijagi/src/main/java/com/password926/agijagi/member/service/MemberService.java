@@ -2,6 +2,7 @@ package com.password926.agijagi.member.service;
 
 import com.password926.agijagi.member.domain.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +23,10 @@ public class MemberService {
 
     public void modifyMemberProfileDetail(long memberId, ProfileDetail profileDetail) {
         memberModifier.modifyProfileDetail(memberId, profileDetail);
+    }
+
+    public void modifyMemberProfileImage(long memberId, Resource resource, String contentType) {
+        memberModifier.modifyProfileImage(memberId, resource, contentType);
     }
 
     public void removeMember(long memberId) {
