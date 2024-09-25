@@ -9,11 +9,12 @@ import com.password926.agijagi.diary.controller.dto.CreateDiaryRequest;
 import com.password926.agijagi.diary.controller.dto.UpdateDiaryRequest;
 import com.password926.agijagi.diary.entity.Diary;
 import com.password926.agijagi.diary.repository.DiaryRepository;
-import com.password926.agijagi.story.repository.StoryGPT;
-import com.password926.agijagi.story.repository.StoryRepository;
-import jakarta.transaction.Transactional;
+import com.password926.agijagi.media.domain.Image;
+import com.password926.agijagi.media.domain.MediaStorage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -23,25 +24,33 @@ import java.util.List;
 @Service
 public class DiaryService {
 
-    private final StoryRepository storyRepository;
     private final ChildRepository childRepository;
     private final DiaryRepository diaryRepository;
-    private final StoryGPT storyGPT;
     private final ChildValidator childValidator;
+    private final MediaStorage mediaStorage;
 
+    @Transactional
     public void createDiary(long memberId, CreateDiaryRequest request) {
         childValidator.validateWriterRole(memberId, request.getChildId());
 
         Child child = childRepository.findById(request.getChildId())
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        diaryRepository.save(Diary.builder()
+        Diary diary = Diary.builder()
                 .childId(request.getChildId())
                 .memberId(memberId)
                 .title(request.getTitle())
                 .content(request.getContent())
                 .createdAt(LocalDateTime.now())
-                .build());
+                .build();
+
+        for (MultipartFile multipartFile : request.getMediaList() ) {
+            Image image = mediaStorage.storeImage(multipartFile.getResource(), multipartFile.getContentType());
+            diary.addMedia(image);
+        }
+
+        diaryRepository.save(diary);
+
     }
 
     public List<Diary> getAllDiary(long memberId, long childId) {

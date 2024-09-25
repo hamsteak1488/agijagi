@@ -1,15 +1,15 @@
 package com.password926.agijagi.diary.entity;
 
+import com.password926.agijagi.media.domain.Media;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Entity
 public class Diary {
     @Id
@@ -33,6 +33,18 @@ public class Diary {
 
     private boolean isDeleted;
 
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DiaryMedia> diaryMediaList = new ArrayList<>();
+
+    @Builder
+    public Diary(Long childId, Long memberId, LocalDateTime createdAt, String title, String content) {
+        this.childId = childId;
+        this.memberId = memberId;
+        this.createdAt = createdAt;
+        this.title = title;
+        this.content = content;
+    }
+
     public void remove() {
         isDeleted = true;
     };
@@ -44,5 +56,14 @@ public class Diary {
         if (content != null) {
             this.content = content;
         }
+    }
+
+    public void addMedia(Media media) {
+        DiaryMedia diaryMedia = DiaryMedia.builder()
+                .diary(this)
+                .media(media)
+                .build();
+        this.diaryMediaList.add(diaryMedia);
+
     }
 }
