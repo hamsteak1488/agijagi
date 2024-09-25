@@ -117,6 +117,7 @@ export const Login = () => {
           inputValue={email}
           setInputValue={setEmail}
           validationFunction={validateEmail}
+          disabled={!loginMode}
         ></Textfield>
         <Textfield
           size="lg"
@@ -125,16 +126,19 @@ export const Login = () => {
           inputValue={password}
           setInputValue={setPassword}
           validationFunction={validatePassword}
+          disabled={!loginMode}
           type="password"
         ></Textfield>
         <Button
           size="md"
-          color="primary"
+          color={isValidated[0] && isValidated[1] ? 'primary' : 'greyScale'}
           fullWidth={true}
           disabled={!(isValidated[0] && isValidated[1])}
           onClick={() => {}}
         >
-          로그인
+          <Typhography color="greyScale" shade="500">
+            로그인
+          </Typhography>
         </Button>
       </s.FormContainer>
     </s.Container>

@@ -1,15 +1,13 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
 import HomePage from './pages/HomePage';
 import WritingDiary from './pages/WritingDiary';
 import ActivityRecordPage from './pages/ActivityRecordPage';
 import SchedulePage from './pages/SchedulePage';
 import BabyMain from './pages/BabyMain';
 import Login from './pages/Login';
-
 import GlobalStyle from './styles/GlobalStyle';
-
 import { ModalProvider } from './hooks/useModal';
+import Signup from './pages/Signup';
 
 function App() {
   return (
@@ -23,6 +21,7 @@ function App() {
             <Route path="/baby" element={<BabyMain />} />
             <Route path="/baby/writing" element={<WritingDiary />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/schedule" element={<SchedulePage />} />
           </Routes>
         </ModalProvider>

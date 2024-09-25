@@ -26,6 +26,9 @@ export const Moon = styled.div<{
     height: ${props.width * 2}px;
     border-radius: 56% 44% 53% 47% / 50% 48% 52% 50%;
     background-color: ${theme.color.primary[300]};
+    ${props.loginMode
+      ? ''
+      : 'box-shadow: rgba(255, 255, 255, 0.75) 0px 12px 42px 0px'};
     top: ${props.width * -2 + props.height * 0.52}px;
     left: ${props.width * -0.5}px;
     transition: all 0.5s;
@@ -62,7 +65,7 @@ export const FormContainer = styled.div<{ width: number; loginMode: boolean }>(
     max-width: 500px;
     width: 85%;
     margin: 0% 0% 15vh 0%;
-    gap: 18px;
+    gap: 32px;
     z-index: 10;
     transition: all 0.75s;
     transform: translate(${props.loginMode ? 0 : props.width}px, 0);
