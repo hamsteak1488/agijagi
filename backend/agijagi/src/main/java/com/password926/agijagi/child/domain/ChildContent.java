@@ -13,12 +13,15 @@ public class ChildContent {
 
     private String nickname;
 
+    private Gender gender;
+
     private LocalDate birthday;
 
-    public static ChildContent of(String name, String nickname, LocalDate birthday) {
+    public static ChildContent of(String name, String nickname, Gender gender, LocalDate birthday) {
         return ChildContent.builder()
                 .name(name)
                 .nickname(nickname)
+                .gender(gender)
                 .birthday(birthday)
                 .build();
     }

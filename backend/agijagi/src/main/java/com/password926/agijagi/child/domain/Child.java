@@ -22,6 +22,10 @@ public class Child {
     @Column(nullable = false)
     private String nickname;
 
+    @Convert(converter = GenderConverter.class)
+    @Column(nullable = false)
+    private Gender gender;
+
     @Column(nullable = false)
     private LocalDate birthday;
 
@@ -35,6 +39,7 @@ public class Child {
 
     public void update(ChildContent childContent) {
         this.name = childContent.getName();
+        this.gender = childContent.getGender();
         this.nickname = childContent.getNickname();
         this.birthday = childContent.getBirthday();
     }
