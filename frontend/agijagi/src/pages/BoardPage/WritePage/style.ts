@@ -1,0 +1,34 @@
+import styled from '@emotion/styled';
+
+import theme from '../../../styles/theme';
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+`;
+
+export const Main = styled.main`
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  overflow-y: scroll;
+  padding: 0 1rem 1rem 1rem;
+`;
+
+export const Title = styled.input`
+  margin: 0.75rem 0;
+  padding: 0.75rem;
+  border: 0;
+  border-radius: 1rem;
+  background-color: ${theme.color.primary[300]};
+`;
+
+export const Body = styled.textarea`
+  flex: 1 1 auto;
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  border: 0;
+  border-radius: 1rem;
+  background-color: ${theme.color.primary[300]};
+`;
