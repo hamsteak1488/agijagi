@@ -9,12 +9,11 @@ import java.util.List;
 @AllArgsConstructor
 public class UpdateArticleRequest {
 
-    private Long memberId;
-
     private String title;
 
     private String content;
 
-    private List<MultipartFile> mediaList;
+    private List<MultipartFile> newMediaList;
 
+    private List<Long> removeMediaIdList;
 }
