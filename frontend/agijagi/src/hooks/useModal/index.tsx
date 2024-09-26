@@ -5,17 +5,17 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
-  useState,
 } from 'react';
 
-import Modal from './Modal';
+import ModalList, { ModalListRef } from './ModalList';
 
 type ModalState = 'ACTIVE' | 'FADEOUT';
 
 export type ModalAnimation = 'center' | 'bottom' | 'alert';
 
-interface ModalPushProps {
+export interface ModalPushProps {
   children: ReactElement;
   animation?: ModalAnimation;
   onClose?: () => void;
@@ -28,7 +28,6 @@ export interface ModalData extends ModalPushProps {
 }
 
 interface ModalContextType {
-  modals: ModalData[];
   push: (data: ModalPushProps) => void;
   pop: () => void;
 }
@@ -38,46 +37,30 @@ export const ModalContext = createContext<ModalContextType | undefined>(
 );
 
 export const ModalProvider = ({ children }: { children: ReactNode }) => {
-  const [modals, setModals] = useState<ModalData[]>([]);
-  const countRef = useRef<number>(0);
+  const modalListRef = useRef<ModalListRef>(null);
 
-  const push = ({ children, animation, onClose }: ModalPushProps) => {
-    setModals((modals) => [
-      ...modals,
-      {
-        state: 'ACTIVE',
-        id: ++countRef.current,
-        children,
-        animation,
-        onClose,
-      },
-    ]);
-    window.history.pushState({}, '', '');
-  };
-
-  const pop = useCallback(() => {
-    for (let i = modals.length - 1; i >= 0; i--) {
-      if (modals[i].state === 'FADEOUT') {
-        continue;
+  const push = useCallback(
+    (data: ModalPushProps) => {
+      if (!modalListRef.current) {
+        return;
       }
 
-      modals[i].state = 'FADEOUT';
-      modals[i].onFadeOutEnd = () => {
-        setModals((modals) =>
-          modals.filter((modal) => {
-            if (modal === modals[i] && modal.onClose) {
-              modal.onClose();
-            }
+      modalListRef.current.push(data);
+    },
+    [modalListRef]
+  );
 
-            return modal !== modals[i];
-          })
-        );
-      };
-
-      setModals([...modals]);
+  const pop = useCallback(() => {
+    if (!modalListRef.current) {
       return;
     }
-  }, [setModals, modals]);
+
+    modalListRef.current.pop();
+  }, [modalListRef]);
+
+  const contextValue = useMemo(() => {
+    return { push, pop };
+  }, [push, pop]);
 
   useEffect(() => {
     const handlePopState = () => {
@@ -92,11 +75,9 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
   }, [pop]);
 
   return (
-    <ModalContext.Provider value={{ modals, push, pop }}>
+    <ModalContext.Provider value={contextValue}>
       {children}
-      {modals.map((modal) => (
-        <Modal key={modal.id} {...modal} />
-      ))}
+      <ModalList ref={modalListRef} />
     </ModalContext.Provider>
   );
 };
