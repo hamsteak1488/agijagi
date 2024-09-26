@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import theme from '../../styles/theme';
 import Typhography from '../common/Typography';
 import ProfileIcon from '../common/ProfileIcon/ProfileIcon';
 
@@ -11,7 +9,7 @@ const Wrapper = styled.div`
   margin: 0 auto;
 
   @media (min-width: 700px) {
-    width: 85%;
+    max-width: 800px;
   }
 `;
 

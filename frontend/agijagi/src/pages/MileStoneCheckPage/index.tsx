@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import Typhography from '../common/Typography';
+import Typhography from '../../components/common/Typography';
 import theme from '../../styles/theme';
-import Button from '../common/Button';
+import Button from '../../components/common/Button';
 import { useNavigate } from 'react-router-dom';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import MileStoneFilter from './MileStoneFilter';
-import MileStoneCheck from './MileStoneCheck';
+import MileStoneFilter from '../../components/milestone/MileStoneFilter';
+import MileStoneCheck from '../../components/milestone/MileStoneCheck';
 import axios from 'axios';
 
 const Title = styled.div`
@@ -64,15 +64,13 @@ const calculateAgeInMonths = (birthDate: Date): number => {
 };
 
 // 임시 아이 -> 추후 데이터로 받아야함
+const childId = 1;
 const name = '다운';
 const birth = '2024-06-23';
+const weight = null;
 
 const birthDate = new Date(birth);
-let month = calculateAgeInMonths(birthDate);
-
-if (month % 2) {
-  month -= 1;
-}
+const month = calculateAgeInMonths(birthDate);
 
 interface MilestoneDetail {
   milestoneId: number;
@@ -84,10 +82,9 @@ interface MilestoneDetail {
 
 const MilestoneCheck = () => {
   const [months, setMonths] = useState<number>(month);
-  const [selectedMilestones, setSelectedMilestones] = useState<any[]>([]);
+  const [selectedMilestones, setSelectedMilestones] = useState<MilestoneDetail[]>([]);
   const navigate = useNavigate();
-  const childId = 1; // 예시로 지정한 childId
-
+ 
   const handleBack = () => {
     navigate(-1);
   };
@@ -127,20 +124,22 @@ const MilestoneCheck = () => {
 
   const handlePrev = () => {
     setMonths((prevMonth) => {
-      if (prevMonth <= 2) {
+      if (prevMonth <= 1) {
         return prevMonth;
       }
-      return prevMonth - 2;
+      return prevMonth - 1;
     });
+    // 개월수 마다 마일스톤 데이터 API 호출
   };
 
   const handleNext = () => {
     setMonths((prevMonth) => {
-      if (prevMonth >= 36) {
+      if (prevMonth >= 24) {
         return prevMonth;
       }
-      return prevMonth + 2;
+      return prevMonth + 1;
     });
+    // 개월수 마다 마일스톤 데이터 API 호출
   };
 
   return (
@@ -166,6 +165,9 @@ const MilestoneCheck = () => {
         <MileStoneCheck
           month={months}
           name={name}
+          birth={birthDate}
+          weight={weight}
+          selectedMilestones={selectedMilestones}
           handleCheckboxChange={handleCheckboxChange}
         />
       </MileStoneContainer>

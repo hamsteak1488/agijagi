@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import Typhography from '../common/Typography';
+import Typhography from '../../components/common/Typography';
 import theme from '../../styles/theme';
 import { useNavigate } from 'react-router-dom';
-import Button from '../common/Button';
+import Button from '../../components/common/Button';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
-import ReportFilter from './ReportFilter';
-import ReportIntro from './ReportIntro';
-import ReportChart from './ReportChart';
-import ReportSlide from './ReportSlide';
+import ReportFilter from '../../components/milestone/ReportFilter';
+import ReportIntro from '../../components/milestone/ReportIntro';
+import ReportChart from '../../components/milestone/ReportChart';
+import ReportSlide from '../../components/milestone/ReportSlide';
 import BoyImg from '../../assets/images/boy.png';
 
 const Title = styled.div`
@@ -106,12 +106,12 @@ const MileStoneReport = () => {
 
   const handleBack = () => {
     navigate(-1);
-  }
+  };
 
   return (
     <>
       <Title>
-        <CloseButton onClick={handleBack}/>
+        <CloseButton onClick={handleBack} />
         <TitleText>
           <Typhography size="lg" weight="bold" color="greyScale" shade="800">
             성장 분석 보고서
@@ -126,10 +126,13 @@ const MileStoneReport = () => {
 
       <ReportContainer>
         <ReportIntro weight={weight} currentWeight={currentWeight} />
-        <ReportSlide image={image} growthStatus={growStatus} />
+
         <ChartContainer>
           <ReportChart />
         </ChartContainer>
+        
+        <ReportSlide image={image} growthStatus={growStatus} />
+
         <ResultContainer>
           <Typhography size="md" color="primary" shade="800">
             {name}(이)의 몸무게가 출생 후 {days}일 동안 {increaseWeight} kg

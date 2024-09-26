@@ -1,8 +1,7 @@
-import React from 'react';
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
-import TurtleImg from '../../assets/images/turtle.png';
-import RabbitImg from '../../assets/images/rabbit.png';
+import TurtleImg from '../../assets/images/milestone/turtle.png';
+import RabbitImg from '../../assets/images/milestone/rabbit.png';
 
 const Wrapper = styled.div`
   display: flex;
@@ -83,7 +82,7 @@ const Line = styled.hr`
   max-width: 700px;
   background-color: ${theme.color.greyScale[400]};
   height: 1px;
-  margin: 15px auto 5px;
+  margin: 10px auto 5px;
 `;
 
 // 성장 상태에 따른 슬라이드 thumb 위치 타입
@@ -126,6 +125,7 @@ const ReportSlide = ({ image, growthStatus }: BabyData) => {
 
   return (
     <Wrapper>
+      <Line></Line>
       <Header>{status}</Header>
       <SlideWrapper>
         <Turtle src={TurtleImg} />

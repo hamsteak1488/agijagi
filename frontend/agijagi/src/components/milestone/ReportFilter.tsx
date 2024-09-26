@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 import { FaceSmileIcon, ScaleIcon } from '@heroicons/react/24/outline';

@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 import Typhography from '../common/Typography';
 import { babyDevelopmentData } from './MileStoneMockData';
-import CheckImg from '../../assets/images/check.png';
+import CheckImg from '../../assets/images/milestone/check.png';
 import MileStoneAmount from './MileStoneAmount';
 
 const CheckContainer = styled.div`
