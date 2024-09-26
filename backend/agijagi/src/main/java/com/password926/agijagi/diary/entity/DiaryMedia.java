@@ -22,5 +22,4 @@ public class DiaryMedia {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "media_id", nullable = false)
     private Media media;
-
 }

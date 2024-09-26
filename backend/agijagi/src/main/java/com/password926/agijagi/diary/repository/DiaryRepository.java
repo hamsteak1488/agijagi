@@ -4,8 +4,7 @@ import com.password926.agijagi.diary.entity.Diary;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
@@ -14,5 +13,4 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     Optional<Diary> findByIdAndIsDeletedFalse(long diaryId);
 
     List<Diary> findAllByChildIdAndCreatedAtBetween(Long childId, LocalDateTime createAt, LocalDateTime createAt2);
-
 }
