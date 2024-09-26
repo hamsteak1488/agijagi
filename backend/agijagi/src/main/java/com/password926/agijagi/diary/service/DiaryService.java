@@ -79,8 +79,6 @@ public class DiaryService {
             Image image = mediaStorage.storeImage(multipartFile.getResource(), multipartFile.getContentType());
             diary.addMedia(image);
         }
-
-        diaryRepository.save(diary);
     }
 
     public List<Diary> getAllDiary(long memberId, long childId) {
