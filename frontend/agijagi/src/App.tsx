@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import GlobalStyle from './styles/GlobalStyle';
 import { ModalProvider } from './hooks/useModal';
 import Signup from './pages/Signup';
+import { Welcome } from './pages/Signup/Welcome';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/baby/writing" element={<WritingDiary />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/welcome" element={<Welcome />} />
             <Route path="/schedule" element={<SchedulePage />} />
           </Routes>
         </ModalProvider>

@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
-import Int1 from '../../assets/images/login/introduction1.png';
-import Int2 from '../../assets/images/login/introduction2.png';
-import Int3 from '../../assets/images/login/introduction3.png';
-import Typhography from '../common/Typography';
+import Int1 from '../../../assets/images/login/introduction1.png';
+import Int2 from '../../../assets/images/login/introduction2.png';
+import Int3 from '../../../assets/images/login/introduction3.png';
+import Typhography from '../../common/Typography';
 import * as s from './IntroductionSlider.style';
 
 interface IntroductionSliderProps {
@@ -47,7 +47,7 @@ export const IntroductionSlider = ({
   }, []);
 
   return (
-    <>
+    <s.Container>
       <s.InnerBox ref={sliderRef} loginMode={loginMode} height={height}>
         <s.SlideWrapper>
           {slides.map((slide, index) => (
@@ -74,6 +74,6 @@ export const IntroductionSlider = ({
           <s.LevelCircle key={index} isActive={index === level} />
         ))}
       </s.LevelIndicatorWrapper>
-    </>
+    </s.Container>
   );
 };

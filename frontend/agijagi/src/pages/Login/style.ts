@@ -32,10 +32,7 @@ export const Moon = styled.div<{
     top: ${props.width * -2 + props.height * 0.52}px;
     left: ${props.width * -0.5}px;
     transition: all 0.5s;
-    transform: translate(
-        ${props.loginMode ? 0 : props.width * -0.08 * props.level}px,
-        ${props.loginMode ? props.height * -0.15 : 0}px
-      )
+    transform: translate(0, ${props.loginMode ? props.height * -0.15 : 0}px)
       rotate(${props.loginMode ? 0 : props.level * 30}deg);
     z-index: 0;
   `
@@ -64,7 +61,7 @@ export const FormContainer = styled.div<{ width: number; loginMode: boolean }>(
     align-items: center;
     max-width: 500px;
     width: 85%;
-    margin: 0% 0% 15vh 0%;
+    margin: 0% 0% 13vh 0%;
     gap: 32px;
     z-index: 10;
     transition: all 0.75s;

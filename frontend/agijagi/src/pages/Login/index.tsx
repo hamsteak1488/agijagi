@@ -3,8 +3,9 @@ import * as s from './style';
 import Button from '../../components/common/Button';
 import Textfield from '../../components/common/Textfield';
 import Typhography from '../../components/common/Typography';
-import { IntroductionSlider } from '../../components/Login/IntroductionSlider';
+import { IntroductionSlider } from '../../components/Login/IntroductionSlider/IntroductionSlider';
 import { ValidationState } from '../../components/common/Textfield/Textfield.types';
+import { useNavigate } from 'react-router-dom';
 
 const BackIcon = (
   <svg
@@ -41,6 +42,8 @@ export const Login = () => {
   const handleLevel = (level: number) => {
     setLevel(level);
   };
+
+  const navigator = useNavigate();
 
   function validatePassword(input: string): ValidationState {
     if (input.trim() === '') {
@@ -99,7 +102,13 @@ export const Login = () => {
         <Button fullWidth={true} onClick={handleActivateLogin}>
           로그인
         </Button>
-        <Button color="secondary" fullWidth={true}>
+        <Button
+          color="secondary"
+          fullWidth={true}
+          onClick={() => {
+            navigator('/signup');
+          }}
+        >
           회원가입
         </Button>
       </s.LoginContainer>
@@ -136,9 +145,7 @@ export const Login = () => {
           disabled={!(isValidated[0] && isValidated[1])}
           onClick={() => {}}
         >
-          <Typhography color="greyScale" shade="500">
-            로그인
-          </Typhography>
+          <Typhography color="white">로그인</Typhography>
         </Button>
       </s.FormContainer>
     </s.Container>
