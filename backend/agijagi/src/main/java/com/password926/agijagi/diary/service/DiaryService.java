@@ -33,7 +33,7 @@ public class DiaryService {
     public void createDiary(long memberId, CreateDiaryRequest request) {
         childValidator.validateWriterRole(memberId, request.getChildId());
 
-        Child child = childRepository.findById(request.getChildId())
+        Child child = childRepository.findByIdAndIsDeletedFalse(request.getChildId())
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
         Diary diary = Diary.builder()

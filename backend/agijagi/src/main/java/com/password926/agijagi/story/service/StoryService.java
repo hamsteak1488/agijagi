@@ -34,7 +34,7 @@ public class StoryService {
     public void createStory(long memberId, CreateStoryRequest request) {
         childValidator.validateWriterRole(memberId, request.getChildId());
 
-        Child child = childRepository.findById(request.getChildId())
+        Child child = childRepository.findByIdAndIsDeletedFalse(request.getChildId())
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
         List<Diary> diaries = diaryRepository.findAllByChildIdAndCreatedAtBetween(
