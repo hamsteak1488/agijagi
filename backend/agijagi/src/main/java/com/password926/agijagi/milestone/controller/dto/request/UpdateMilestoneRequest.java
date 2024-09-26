@@ -1,7 +1,6 @@
 package com.password926.agijagi.milestone.controller.dto.request;
 
 import com.password926.agijagi.milestone.domain.MilestoneStateContent;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
@@ -10,9 +9,6 @@ import java.util.stream.Collectors;
 
 @Getter
 public class UpdateMilestoneRequest {
-
-    @NotNull
-    private long childId;
 
     @Size(min = 1)
     private List<RequestContent> milestones;
