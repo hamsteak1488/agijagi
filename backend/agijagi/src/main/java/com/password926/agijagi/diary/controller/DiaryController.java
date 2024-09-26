@@ -47,7 +47,7 @@ public class DiaryController {
     public ResponseEntity<Void> updateDiary(
             LoginMember member,
             @PathVariable long diaryId,
-            @RequestBody UpdateDiaryRequest updateDiaryRequest
+            UpdateDiaryRequest updateDiaryRequest
     ) {
         diaryService.updateDiary(member.getId(), diaryId, updateDiaryRequest);
         return ResponseEntity.ok().build();

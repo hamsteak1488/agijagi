@@ -53,6 +53,24 @@ public class DiaryService {
 
     }
 
+    @Transactional
+    public void updateDiary(long memberId, long diaryId, UpdateDiaryRequest request) {
+        Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+        childValidator.validateWriterRole(memberId, diary.getChildId());
+
+        diary.updateDiary(request.getTitle(), request.getContent());
+
+        for (MultipartFile multipartFile : request.getMediaList() ) {
+            Image image = mediaStorage.storeImage(multipartFile.getResource(), multipartFile.getContentType());
+            diary.addMedia(image);
+        }
+
+        diaryRepository.save(diary);
+
+    }
+
     public List<Diary> getAllDiary(long memberId, long childId) {
         childValidator.validateWriterRole(memberId, childId);
 
@@ -75,16 +93,6 @@ public class DiaryService {
         childValidator.validateWriterRole(memberId, diary.getChildId());
 
         return diary;
-    }
-
-    @Transactional
-    public void updateDiary(long memberId, long diaryId, UpdateDiaryRequest request) {
-        Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
-                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
-
-        childValidator.validateWriterRole(memberId, diary.getChildId());
-
-        diary.updateDiary(request.getTitle(), request.getContent());
     }
 
     @Transactional
