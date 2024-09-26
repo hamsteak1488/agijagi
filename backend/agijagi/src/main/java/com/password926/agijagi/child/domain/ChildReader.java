@@ -13,7 +13,7 @@ public class ChildReader {
     private final ChildRepository childRepository;
 
     public Child read(long childId) {
-        return childRepository.findById(childId)
+        return childRepository.findByIdAndIsDeletedFalse(childId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
     }
 }

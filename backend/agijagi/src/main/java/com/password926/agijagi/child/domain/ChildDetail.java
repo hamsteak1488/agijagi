@@ -26,13 +26,14 @@ public class ChildDetail {
     private long followerNum;
 
     public static ChildDetail of(Child child, String role, long followerNum) {
+        String imageUrl = child.getImage() == null ? null : child.getImage().getUrl();
         return ChildDetail.builder()
                 .childId(child.getId())
                 .name(child.getName())
                 .nickname(child.getNickname())
                 .gender(child.getGender())
                 .birthday(child.getBirthday())
-                .imageUrl(child.getImageUrl())
+                .imageUrl(imageUrl)
                 .role(role)
                 .followerNum(followerNum)
                 .build();
