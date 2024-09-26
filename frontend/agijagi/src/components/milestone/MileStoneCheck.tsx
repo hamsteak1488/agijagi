@@ -112,6 +112,7 @@ const MileStoneCheck = ({ month, name, handleCheckboxChange }: MileStoneProps) =
 
   const handleTextFieldOpen = () => {
     setTextFieldOpen(!textFieldOpen);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -160,6 +161,7 @@ const MileStoneCheck = ({ month, name, handleCheckboxChange }: MileStoneProps) =
       <CheckContainer>
         <DevelopmentList month={month} handleCheckboxChange={handleCheckboxChange}/>
       </CheckContainer>
+      
     </Wrapper>
   );
 };

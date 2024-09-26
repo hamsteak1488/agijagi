@@ -7,7 +7,7 @@ const GaugeContainer = styled.div`
   margin-bottom: 10px;
   width: 100px;
   height: 20px;
-  background-color: #ffffff;
+  background-color: ${theme.color.tertiary[50]};
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid ${theme.color.primary[500]};

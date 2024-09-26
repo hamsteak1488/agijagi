@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import Typhography from '../common/Typography';
 import theme from '../../styles/theme';
+import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
@@ -13,7 +14,7 @@ import BoyImg from '../../assets/images/boy.png';
 
 const Title = styled.div`
   display: flex;
-  margin: 20px 35px 5px 15px;
+  margin: 5px 35px 5px 15px;
   height: 50px;
   align-items: center;
 `;
@@ -23,12 +24,13 @@ const TitleText = styled.div`
   margin: 0 auto;
 `;
 
-const CloseButton = styled.div`
+const CloseButton = styled(XMarkIcon)`
   display: flex;
   justify-content: flex-start;
   align-items: center;
   width: 25px;
   height: 25px;
+  cursor: pointer;
   color: ${theme.color.greyScale[800]};
 `;
 
@@ -41,6 +43,7 @@ const Line = styled.hr`
 
 const FilterContainer = styled.div`
   display: flex;
+  justify-content: center;
   align-items: center;
   margin: 10px 15px;
   height: 35px;
@@ -63,7 +66,7 @@ const ChartContainer = styled.div`
 const ResultContainer = styled.div`
   width: 90%;
   max-width: 700px;
-  margin: 20px auto 60px;
+  margin: 20px auto 80px;
 `;
 
 const Result = styled.div`
@@ -95,17 +98,20 @@ const image = BoyImg;
 const growStatus = 'fast';
 
 const MileStoneReport = () => {
+  const navigate = useNavigate();
   const increaseWeight = currentWeight - weight;
   const days = calculateDays(birth);
   const result =
-    '다운이와 비슷한 출생 몸무게 [3.0 - 3.1kg]를 가진 아기들의 성장 그래프와 비교했을 때 다운이는 성장이 빠른 편이라고 할 수 있습니다. 마일스톤 결과를 봐도 성장 발달에 문제가 없는 것으로 보입니다. 다운이는 잘 자라고 있습니다!';
+    '다운이와 비슷한 출생 몸무게를 가진 아이들의 성장 그래프와 비교했을 때 다운이는 성장이 빠른 편이라고 할 수 있습니다. 마일스톤 결과를 봐도 성장 발달에 문제가 없는 것으로 보입니다. 다운이는 잘 자라고 있습니다!';
+
+  const handleBack = () => {
+    navigate(-1);
+  }
 
   return (
     <>
       <Title>
-        <CloseButton>
-          <XMarkIcon />
-        </CloseButton>
+        <CloseButton onClick={handleBack}/>
         <TitleText>
           <Typhography size="lg" weight="bold" color="greyScale" shade="800">
             성장 분석 보고서

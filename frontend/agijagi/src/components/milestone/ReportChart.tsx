@@ -18,27 +18,27 @@ const data = [
   },
   {
     "name": 1,
-    "avgWeight": 3.8,
+    "avgWeight": 3.7,
     "weight": 3.9,
   },
   {
     "name": 2,
     "avgWeight": 4.5,
-    "weight": 4.6,
+    "weight": 4.7,
   },
   {
     "name": 3,
     "avgWeight": 5.2,
-    "weight": 5.8,
+    "weight": 5.6,
   },
   {
     "name": 4,
     "avgWeight": 6.0,
-    "weight": 6.8,
+    "weight": 6.5,
   },
   {
     "name": 5,
-    "avgWeight": 7.0,
+    "avgWeight": 6.8,
     "weight": 7.2,
   },
   // {

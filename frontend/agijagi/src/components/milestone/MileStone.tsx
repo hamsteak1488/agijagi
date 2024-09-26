@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import Typhography from '../common/Typography';
 import theme from '../../styles/theme';
 import Button from '../common/Button';
+import { useNavigate } from 'react-router-dom';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import MileStoneFilter from './MileStoneFilter';
 import MileStoneCheck from './MileStoneCheck';
@@ -12,17 +13,18 @@ const Title = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 20px 10px 5px 20px;
+  margin: 5px 10px 5px 20px;
   height: 50px;
   align-items: center;
 `;
 
-const CloseButton = styled.div`
+const CloseButton = styled(XMarkIcon)`
   display: flex;
   align-items: center;
   margin-right: 20px;
   width: 25px;
   height: 25px;
+  cursor: pointer;
   color: ${theme.color.greyScale[800]};
 `;
 
@@ -61,9 +63,8 @@ const calculateAgeInMonths = (birthDate: Date): number => {
   return yearsDiff * 12 + monthsDiff;
 };
 
-// 임시 아이 이름 -> 추후 데이터로 받아야함
+// 임시 아이 -> 추후 데이터로 받아야함
 const name = '다운';
-// 임시 출생 날짜 -> 추후 데이터로 받아야함
 const birth = '2024-06-23';
 
 const birthDate = new Date(birth);
@@ -84,7 +85,12 @@ interface MilestoneDetail {
 const MilestoneCheck = () => {
   const [months, setMonths] = useState<number>(month);
   const [selectedMilestones, setSelectedMilestones] = useState<any[]>([]);
+  const navigate = useNavigate();
   const childId = 1; // 예시로 지정한 childId
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   // 체크박스 선택 처리
   const handleCheckboxChange = (item: MilestoneDetail, isChecked: boolean) => {
@@ -140,9 +146,7 @@ const MilestoneCheck = () => {
   return (
     <>
       <Title>
-        <CloseButton>
-          <XMarkIcon />
-        </CloseButton>
+        <CloseButton onClick={handleBack} />
         <Typhography size="lg" weight="bold" color="greyScale" shade="800">
           발달 체크
         </Typhography>
