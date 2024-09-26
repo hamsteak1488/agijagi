@@ -27,6 +27,16 @@ public class DiaryController {
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("/{diaryId}")
+    public ResponseEntity<Void> updateDiary(
+            LoginMember member,
+            @PathVariable long diaryId,
+            UpdateDiaryRequest updateDiaryRequest
+    ) {
+        diaryService.updateDiary(member.getId(), diaryId, updateDiaryRequest);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping
     public ResponseEntity<List<Diary>> getAllDiary(
             LoginMember member,
@@ -43,16 +53,6 @@ public class DiaryController {
         return ResponseEntity.ok().body(diaryService.getDiary(member.getId(), diaryId));
     }
 
-    @PatchMapping("/{diaryId}")
-    public ResponseEntity<Void> updateDiary(
-            LoginMember member,
-            @PathVariable long diaryId,
-            UpdateDiaryRequest updateDiaryRequest
-    ) {
-        diaryService.updateDiary(member.getId(), diaryId, updateDiaryRequest);
-        return ResponseEntity.ok().build();
-    }
-
     @DeleteMapping("/{diaryId}")
     public ResponseEntity<Void> deleteDiary(
             LoginMember member,
@@ -61,5 +61,4 @@ public class DiaryController {
         diaryService.deleteDiary(member.getId(), diaryId);
         return ResponseEntity.ok().build();
     }
-
 }

@@ -8,22 +8,25 @@ import com.password926.agijagi.common.errors.exception.RestApiException;
 import com.password926.agijagi.diary.controller.dto.CreateDiaryRequest;
 import com.password926.agijagi.diary.controller.dto.UpdateDiaryRequest;
 import com.password926.agijagi.diary.entity.Diary;
+import com.password926.agijagi.diary.entity.DiaryMedia;
 import com.password926.agijagi.diary.repository.DiaryRepository;
 import com.password926.agijagi.media.domain.Image;
 import com.password926.agijagi.media.domain.MediaStorage;
+import com.password926.agijagi.member.domain.Member;
+import com.password926.agijagi.member.infrastructure.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
 public class DiaryService {
 
+    private final MemberRepository memberRepository;
     private final ChildRepository childRepository;
     private final DiaryRepository diaryRepository;
     private final ChildValidator childValidator;
@@ -36,9 +39,12 @@ public class DiaryService {
         Child child = childRepository.findById(request.getChildId())
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
         Diary diary = Diary.builder()
-                .childId(request.getChildId())
-                .memberId(memberId)
+                .child(child)
+                .member(member)
                 .title(request.getTitle())
                 .content(request.getContent())
                 .createdAt(LocalDateTime.now())
@@ -50,7 +56,6 @@ public class DiaryService {
         }
 
         diaryRepository.save(diary);
-
     }
 
     @Transactional
@@ -58,17 +63,24 @@ public class DiaryService {
         Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        childValidator.validateWriterRole(memberId, diary.getChildId());
+        childValidator.validateWriterRole(memberId, diary.getChild().getId());
 
-        diary.updateDiary(request.getTitle(), request.getContent());
+        diary.updateTitleAndContent(request.getTitle(), request.getContent());
 
-        for (MultipartFile multipartFile : request.getMediaList() ) {
+        for (Long removeMediaId : request.getRemoveMediaIdList()) {
+            for (DiaryMedia diaryMedia : diary.getDiaryMediaList()) {
+                if (diaryMedia.getMedia().getId().equals(removeMediaId)) {
+                    diary.removeMedia(diaryMedia);
+                }
+            }
+        }
+
+        for (MultipartFile multipartFile : request.getNewMediaList()) {
             Image image = mediaStorage.storeImage(multipartFile.getResource(), multipartFile.getContentType());
             diary.addMedia(image);
         }
 
         diaryRepository.save(diary);
-
     }
 
     public List<Diary> getAllDiary(long memberId, long childId) {
@@ -81,6 +93,7 @@ public class DiaryService {
             public int compare(Diary o1, Diary o2) {
                 return Long.compare(o2.getId(), o1.getId());
             }
+
         });
 
         return diaries;
@@ -90,7 +103,7 @@ public class DiaryService {
         Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
                         .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        childValidator.validateWriterRole(memberId, diary.getChildId());
+        childValidator.validateWriterRole(memberId, diary.getChild().getId());
 
         return diary;
     }
@@ -100,7 +113,7 @@ public class DiaryService {
         Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        childValidator.validateWriterRole(memberId, diary.getChildId());
+        childValidator.validateWriterRole(memberId, diary.getChild().getId());
 
         diary.remove();
     }
