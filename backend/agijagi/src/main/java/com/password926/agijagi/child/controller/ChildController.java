@@ -19,26 +19,23 @@ import java.util.List;
 public class ChildController {
 
     private final ChildService childService;
-    private int memberId = 1;
 
     @GetMapping("/{childId}")
     public ResponseEntity<ReadChildDetailResponse> readChildDetail(
-//            long memberId,
+            long memberId,
             @PathVariable long childId
     ) {
         return ResponseEntity.ok().body(ReadChildDetailResponse.from(childService.readChildDetail(memberId, childId)));
     }
 
     @GetMapping
-    public ResponseEntity<List<ReadChildDetailResponse>> readChildDetails(
-//            long memberId
-    ) {
+    public ResponseEntity<List<ReadChildDetailResponse>> readChildDetails(long memberId) {
         return ResponseEntity.ok().body(ChildDtoConverter.convert(childService.readChildDetailsByMember(memberId)));
     }
 
     @PostMapping
     public ResponseEntity<Void> appendChild(
-//            long memberId,
+            long memberId,
             @Valid AppendChildRequest request
     ) {
         childService.appendChild(memberId, request.toContent(), request.getImage());
@@ -47,7 +44,7 @@ public class ChildController {
 
     @DeleteMapping("/{childId}")
     public ResponseEntity<Void> removeChild(
-//            long memberId,
+            long memberId,
             @PathVariable long childId
     ) {
         childService.removeChild(memberId, childId);
@@ -56,7 +53,7 @@ public class ChildController {
 
     @PatchMapping("/{childId}")
     public ResponseEntity<Void> updateChild(
-//            long memberId,
+            long memberId,
             @PathVariable long childId,
             @RequestBody @Valid UpdateChildRequest request
     ) {
@@ -66,7 +63,7 @@ public class ChildController {
 
     @PatchMapping("/{childId}/image")
     public ResponseEntity<Void> updateChildImage(
-//            long memberId,
+            long memberId,
             @PathVariable long childId,
             @RequestPart MultipartFile image
     ) {
@@ -76,7 +73,7 @@ public class ChildController {
 
     @DeleteMapping("/{childId}/image")
     public ResponseEntity<Void> deleteChildImage(
-//            long memberId,
+            long memberId,
             @PathVariable long childId
     ) {
         childService.removeChildImage(memberId, childId);
