@@ -13,7 +13,6 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -30,7 +29,7 @@ public class RecordReader {
             LocalDate startDate,
             LocalDate endDate
     ) {
-        childValidator.validateWriterRole(memberId, childId);
+        childValidator.validateWriteAuthority(memberId, childId);
         return recordCustomRepository.findRecords(
                 childId,
                 type == null ? null : RecordType.of(type),
@@ -40,7 +39,7 @@ public class RecordReader {
     }
 
     public List<Record> readLatest(long memberId, long childId) {
-        childValidator.validateWriterRole(memberId, childId);
+        childValidator.validateWriteAuthority(memberId, childId);
         return Arrays.stream(RecordType.values())
                 .map(type -> recordCustomRepository.findLatestRecord(childId, type))
                 .filter(Objects::nonNull)

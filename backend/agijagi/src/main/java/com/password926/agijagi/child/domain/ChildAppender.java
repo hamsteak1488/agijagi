@@ -34,7 +34,7 @@ public class ChildAppender {
                 .build()
         );
         Member member = memberReader.read(memberId);
-        memberChildAppender.createRelation(member, child, "WRITE");
+        memberChildAppender.createRelation(member, child, Authority.WRITE);
         milestoneStateAppender.append(child);
     }
 

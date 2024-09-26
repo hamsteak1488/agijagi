@@ -21,7 +21,7 @@ public class RecordAppender {
             long childId,
             RecordContent recordContent
     ) {
-        childValidator.validateWriterRole(memberId, childId);
+        childValidator.validateWriteAuthority(memberId, childId);
         recordRepository.save(Record.builder()
                 .child(childReader.read(childId))
                 .type(recordContent.getType())

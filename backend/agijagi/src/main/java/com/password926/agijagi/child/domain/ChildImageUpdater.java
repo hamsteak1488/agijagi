@@ -17,7 +17,7 @@ public class ChildImageUpdater {
 
     @Transactional
     public void update(long memberId, long childId, MultipartFile image) {
-        childValidator.validateWriterRole(memberId, childId);
+        childValidator.validateWriteAuthority(memberId, childId);
         Image storeImage = mediaStorage.storeImage(image.getResource(), image.getContentType());
         childReader.read(childId).updateImage(storeImage);
     }

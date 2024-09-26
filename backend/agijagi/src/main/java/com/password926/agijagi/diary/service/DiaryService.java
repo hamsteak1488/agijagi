@@ -34,7 +34,7 @@ public class DiaryService {
 
     @Transactional
     public void createDiary(long memberId, CreateDiaryRequest request) {
-        childValidator.validateWriterRole(memberId, request.getChildId());
+        childValidator.validateWriteAuthority(memberId, request.getChildId());
 
         Child child = childRepository.findByIdAndIsDeletedFalse(request.getChildId())
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
@@ -63,7 +63,7 @@ public class DiaryService {
         Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        childValidator.validateWriterRole(memberId, diary.getChild().getId());
+        childValidator.validateWriteAuthority(memberId, diary.getChild().getId());
 
         diary.updateTitleAndContent(request.getTitle(), request.getContent());
 
@@ -82,7 +82,7 @@ public class DiaryService {
     }
 
     public List<Diary> getAllDiary(long memberId, long childId) {
-        childValidator.validateWriterRole(memberId, childId);
+        childValidator.validateWriteAuthority(memberId, childId);
 
         List<Diary> diaries = diaryRepository.findAllByChildIdAndIsDeletedFalse(childId);
 
@@ -101,7 +101,7 @@ public class DiaryService {
         Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
                         .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        childValidator.validateWriterRole(memberId, diary.getChild().getId());
+        childValidator.validateWriteAuthority(memberId, diary.getChild().getId());
 
         return diary;
     }
@@ -111,7 +111,7 @@ public class DiaryService {
         Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        childValidator.validateWriterRole(memberId, diary.getChild().getId());
+        childValidator.validateWriteAuthority(memberId, diary.getChild().getId());
 
         diary.remove();
     }

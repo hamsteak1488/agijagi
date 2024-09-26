@@ -22,7 +22,7 @@ public class ReadChildDetailResponse {
 
     private String imageUrl;
 
-    private String role;
+    private String authority;
 
     private long followerNum;
 
@@ -34,7 +34,7 @@ public class ReadChildDetailResponse {
                 .gender(childDetail.getGender().getDesc())
                 .birthday(childDetail.getBirthday())
                 .imageUrl(childDetail.getImageUrl())
-                .role(childDetail.getRole())
+                .authority(childDetail.getAuthority().name())
                 .followerNum(childDetail.getFollowerNum())
                 .build();
     }
