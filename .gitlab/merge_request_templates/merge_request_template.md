@@ -1,4 +1,4 @@
-## 🥥 Contetns
+## 🥥 Contents
 
 내용
 

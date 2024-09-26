@@ -43,11 +43,11 @@ public class StoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Story> createStory(
-            LoginMember member,
+    public ResponseEntity<Void> createStory(
+//            LoginMember member,
             @RequestBody CreateStoryRequest createStoryRequest
     ) {
-        storyService.createStory(member.getId(), createStoryRequest);
+        storyService.createStory(1, createStoryRequest);
         return ResponseEntity.ok().build();
     }
 

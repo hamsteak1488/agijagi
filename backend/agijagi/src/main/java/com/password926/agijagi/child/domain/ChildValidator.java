@@ -1,6 +1,5 @@
 package com.password926.agijagi.child.domain;
 
-import com.password926.agijagi.child.controller.ChildErrorCode;
 import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
 import com.password926.agijagi.common.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;

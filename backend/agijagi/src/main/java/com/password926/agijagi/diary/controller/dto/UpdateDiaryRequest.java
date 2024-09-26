@@ -5,8 +5,6 @@ import lombok.Getter;
 @Getter
 public class UpdateDiaryRequest {
 
-    private Long childId;
-
     private String title;
 
     private String content;

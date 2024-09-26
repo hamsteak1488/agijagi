@@ -16,14 +16,14 @@ import java.util.List;
 @RestController
 public class DiaryController {
 
-    private DiaryService diaryService;
+    private final DiaryService diaryService;
 
     @PostMapping
     public ResponseEntity<Void> createDiary(
             LoginMember member,
-            @RequestBody CreateDiaryRequest createDiaryRequest
+            CreateDiaryRequest createDiaryRequest
     ) {
-        diaryService.createDiary(member.getId(),createDiaryRequest);
+        diaryService.createDiary(member.getId(), createDiaryRequest);
         return ResponseEntity.ok().build();
     }
 
@@ -43,13 +43,13 @@ public class DiaryController {
         return ResponseEntity.ok().body(diaryService.getDiary(member.getId(), diaryId));
     }
 
-    @PutMapping("/{diaryId}")
+    @PatchMapping("/{diaryId}")
     public ResponseEntity<Void> updateDiary(
             LoginMember member,
             @PathVariable long diaryId,
             @RequestBody UpdateDiaryRequest updateDiaryRequest
     ) {
-        diaryService.updateDiary(diaryId, updateDiaryRequest);
+        diaryService.updateDiary(member.getId(), diaryId, updateDiaryRequest);
         return ResponseEntity.ok().build();
     }
 
@@ -58,7 +58,7 @@ public class DiaryController {
             LoginMember member,
             @PathVariable long diaryId
     ) {
-        diaryService.deleteDiary(diaryId);
+        diaryService.deleteDiary(member.getId(), diaryId);
         return ResponseEntity.ok().build();
     }
 

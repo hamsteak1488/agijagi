@@ -97,16 +97,14 @@ export const TextfieldContainer = styled.div<{
     ${props.fullWidth ? 'width : 100%' : ''};
     border: 2px solid
       ${props.disable
-        ? theme.color.greyScale[300]
+        ? theme.color[props.color][200]
         : theme.color[props.color][400]};
     border-radius: 15px 15px 3px 3px;
-    background-color: ${props.disable
-      ? theme.color.greyScale[50]
-      : theme.color[props.color][200]};
+    background-color: ${theme.color[props.color][200]};
     transition: all 0.3s;
     border-bottom: 3px solid
       ${props.disable
-        ? theme.color.greyScale[400]
+        ? theme.color[props.color][200]
         : props.fieldState !== 'normal'
         ? theme.color[props.fieldState][500]
         : theme.color[props.color][900]};
@@ -155,7 +153,7 @@ export const Textfield = styled.input<{
     border: none;
     font-size: ${textfieldStyles[props.fieldSize].inputFontSize};
     color: ${props.disabled
-      ? theme.color.greyScale[400]
+      ? theme.color.greyScale[500]
       : props.fieldState !== 'normal'
       ? theme.color[props.fieldState][500]
       : props.isColoredLabel && theme.color[props.color][900]};

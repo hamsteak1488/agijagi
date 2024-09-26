@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import useSwipe from '../../../hooks/useSwpie';
 
@@ -15,6 +15,8 @@ interface CompactCalendarProps {
 }
 
 const CompactCalendar = ({ date, onChange, onClick }: CompactCalendarProps) => {
+  const [selected, setSelected] = useState<Date>(new Date());
+
   const swipeRef = useRef<HTMLDivElement>(null);
 
   const swipe = useSwipe<HTMLDivElement>(swipeRef);
@@ -23,6 +25,11 @@ const CompactCalendar = ({ date, onChange, onClick }: CompactCalendarProps) => {
   const lastWeek = dayjs(week).add(-1, 'week');
   const nextWeek = dayjs(week).add(1, 'week');
 
+  const handleClick = (date: Date) => {
+    setSelected(date);
+    onClick(date);
+  };
+
   useEffect(() => {
     onChange(dayjs(date).add(swipe.index, 'week').startOf('week').toDate());
   }, [swipe.index]);
@@ -30,9 +37,17 @@ const CompactCalendar = ({ date, onChange, onClick }: CompactCalendarProps) => {
   return (
     <s.Container>
       <s.Swipe ref={swipeRef}>
-        <Week date={lastWeek.toDate()} onClick={onClick} />
-        <Week date={week.toDate()} onClick={onClick} />
-        <Week date={nextWeek.toDate()} onClick={onClick} />
+        <Week
+          date={lastWeek.toDate()}
+          selected={selected}
+          onClick={handleClick}
+        />
+        <Week date={week.toDate()} selected={selected} onClick={handleClick} />
+        <Week
+          date={nextWeek.toDate()}
+          selected={selected}
+          onClick={handleClick}
+        />
       </s.Swipe>
     </s.Container>
   );

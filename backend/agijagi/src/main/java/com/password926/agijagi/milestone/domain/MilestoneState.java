@@ -2,13 +2,11 @@ package com.password926.agijagi.milestone.domain;
 
 import com.password926.agijagi.child.domain.Child;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -19,11 +17,11 @@ public class MilestoneState {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "child_id", nullable = false)
     private Child child;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "milestone_id", nullable = false)
     private Milestone milestone;
 
@@ -33,4 +31,14 @@ public class MilestoneState {
     private LocalDate date;
 
     private boolean isAchieved;
+
+    public void update(int currentAmount) {
+        if (currentAmount > milestone.getRequiredAmount()) {
+            currentAmount = milestone.getRequiredAmount();
+        }
+        if (currentAmount < 0) {
+            currentAmount = 0;
+        }
+        this.currentAmount = currentAmount;
+    }
 }

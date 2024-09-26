@@ -1,7 +1,9 @@
 package com.password926.agijagi.milestone.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 public class Milestone {
 
