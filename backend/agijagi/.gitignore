@@ -41,3 +41,5 @@ out/
 
 ### QueryDsl ###
 src/main/generated
+
+src/main/resources/*.sql
