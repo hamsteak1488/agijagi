@@ -32,7 +32,7 @@ public class StoryService {
     private final ChildValidator childValidator;
 
     public void createStory(long memberId, CreateStoryRequest request) {
-        childValidator.validateWriterRole(memberId, request.getChildId());
+        childValidator.validateWriteAuthority(memberId, request.getChildId());
 
         Child child = childRepository.findByIdAndIsDeletedFalse(request.getChildId())
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
@@ -51,7 +51,7 @@ public class StoryService {
     }
 
     public List<Story> getAllStory(long memberId, long childId) {
-        childValidator.validateWriterRole(memberId, childId);
+        childValidator.validateWriteAuthority(memberId, childId);
 
         List<Story> stories = storyRepository.findAllByChildIdAndIsDeletedFalse(childId);
 
@@ -67,7 +67,7 @@ public class StoryService {
         Story story = storyRepository.findByIdAndIsDeletedFalse(storyId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        childValidator.validateWriterRole(memberId, story.getChildId());
+        childValidator.validateWriteAuthority(memberId, story.getChildId());
 
         return story;
     }
@@ -77,7 +77,7 @@ public class StoryService {
         Story story = storyRepository.findByIdAndIsDeletedFalse(storyId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        childValidator.validateWriterRole(memberId, story.getChildId());
+        childValidator.validateWriteAuthority(memberId, story.getChildId());
 
         story.remove();
     }

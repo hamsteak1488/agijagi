@@ -17,7 +17,7 @@ public class ScheduleRemover {
     @Transactional
     public void remove(long memberId, long scheduleId) {
         Schedule schedule = scheduleReader.read(scheduleId);
-        childValidator.validateWriterRole(memberId, schedule.getChild().getId());
+        childValidator.validateWriteAuthority(memberId, schedule.getChild().getId());
         scheduleRepository.delete(schedule);
     }
 }

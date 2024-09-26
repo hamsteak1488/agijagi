@@ -17,7 +17,7 @@ public class RecordRemover {
     @Transactional
     public void remove(long memberId, long recordId) {
         Record record = recordReader.read(recordId);
-        childValidator.validateWriterRole(memberId, record.getChild().getId());
+        childValidator.validateWriteAuthority(memberId, record.getChild().getId());
         recordRepository.delete(record);
     }
 }
