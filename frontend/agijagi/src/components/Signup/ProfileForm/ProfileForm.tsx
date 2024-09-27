@@ -6,6 +6,8 @@ import Textfield from '../../common/Textfield';
 import Typhography from '../../common/Typography';
 import defaultImg from '../../../assets/images/adult.png';
 import { ValidationState } from '../../common/Textfield/Textfield.types';
+import PlusCircle from '@heroicons/react/24/outline/PlusCircleIcon';
+import { useNavigate } from 'react-router-dom';
 
 export const Container = styled.div<{ width: number; isNext: boolean }>(
   (props) => css`
@@ -59,23 +61,6 @@ export const AddIconWrapper = styled.div`
   top: 7%;
 `;
 
-const AddIcon = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="#fff"
-    viewBox="0 0 24 24"
-    strokeWidth={1.5}
-    stroke="currentColor"
-    className="size-6"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-    />
-  </svg>
-);
-
 export const InvisibleInput = styled.input`
   display: none;
 `;
@@ -100,6 +85,7 @@ export const ProfileForm = ({
   validationNickname,
 }: ProfileForm) => {
   const width = window.innerWidth;
+  const navigator = useNavigate();
 
   return (
     <Container width={width} isNext={!isNext}>
@@ -109,7 +95,9 @@ export const ProfileForm = ({
         </Typhography>
         <div></div>
         <ProfileCircleWrapper htmlFor="file">
-          <AddIconWrapper>{AddIcon}</AddIconWrapper>
+          <AddIconWrapper>
+            <PlusCircle fill="#fff" />
+          </AddIconWrapper>
           <ImgWrapper>
             <ProfileImg src={uploadImg ? uploadImg : defaultImg} />
           </ImgWrapper>
@@ -141,7 +129,9 @@ export const ProfileForm = ({
         style={{ marginTop: '2rem' }}
         fullWidth={true}
         disabled={!isValidated['nickname']}
-        onClick={() => {}}
+        onClick={() => {
+          navigator('/welcome');
+        }}
       >
         등록
       </Button>

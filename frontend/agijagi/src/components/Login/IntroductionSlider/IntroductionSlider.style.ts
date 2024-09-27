@@ -91,6 +91,7 @@ export const LevelCircle = styled.div<{ isActive: boolean }>(
       ? theme.color.primary[500]
       : theme.color.greyScale[500]};
     transition: background-color 0.3s ease;
+    cursor: pointer;
   `
 );
 

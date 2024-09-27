@@ -17,6 +17,9 @@ export const IntroductionSlider = ({
   loginMode,
 }: IntroductionSliderProps) => {
   const sliderRef = useRef<HTMLDivElement | null>(null);
+
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   const slides = [Int1, Int2, Int3];
 
   const descriptions = [
@@ -46,6 +49,17 @@ export const IntroductionSlider = ({
     };
   }, []);
 
+  function handleScrollToRef(i: number) {
+    const slide = slideRefs.current[i];
+    if (slide) {
+      slide.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+    }
+  }
+
   return (
     <s.Container>
       <s.InnerBox ref={sliderRef} loginMode={loginMode} height={height}>
@@ -55,6 +69,7 @@ export const IntroductionSlider = ({
               key={index}
               isActive={index === level}
               loginMode={loginMode}
+              ref={(el) => (slideRefs.current[index] = el)}
             >
               <s.Gradient />
               <s.Img src={slide} alt={`Slide ${index + 1}`} />
@@ -71,7 +86,11 @@ export const IntroductionSlider = ({
 
       <s.LevelIndicatorWrapper loginMode={loginMode} width={width}>
         {slides.map((_, index) => (
-          <s.LevelCircle key={index} isActive={index === level} />
+          <s.LevelCircle
+            key={index}
+            isActive={index === level}
+            onClick={() => handleScrollToRef(index)}
+          />
         ))}
       </s.LevelIndicatorWrapper>
     </s.Container>

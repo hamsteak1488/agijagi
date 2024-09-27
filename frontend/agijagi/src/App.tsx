@@ -9,6 +9,7 @@ import GlobalStyle from './styles/GlobalStyle';
 import { ModalProvider } from './hooks/useModal';
 import Signup from './pages/Signup';
 import { Welcome } from './pages/Signup/Welcome';
+import { BabyInfoForm } from './components/Signup/BabyInfo/BabyInfoForm';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/schedule" element={<SchedulePage />} />
+            <Route path="/babyform" element={<BabyInfoForm />} />
           </Routes>
         </ModalProvider>
       </BrowserRouter>

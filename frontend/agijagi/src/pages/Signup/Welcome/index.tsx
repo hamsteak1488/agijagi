@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import useModal from '../../../hooks/useModal';
 import Textfield from '../../../components/common/Textfield';
 import { InviteCodeModal } from '../../../components/Signup/InviteCodeModal/InviteCodeModal';
+import { useNavigate } from 'react-router-dom';
 
 export const Container = styled.div`
   width: 100%;
@@ -61,6 +62,7 @@ export const Welcome = () => {
   const [initialRender, setInitialRender] = useState<boolean>(false);
 
   const modal = useModal();
+  const navigator = useNavigate();
 
   useEffect(() => {
     setInitialRender(true);
@@ -93,7 +95,12 @@ export const Welcome = () => {
         <Button size="md" fullWidth={true} onClick={handleModal}>
           <Typhography color="white">네 (초대코드 등록)</Typhography>
         </Button>
-        <Button size="md" color="secondary" fullWidth={true}>
+        <Button
+          size="md"
+          color="secondary"
+          fullWidth={true}
+          onClick={() => navigator('/babyform')}
+        >
           <Typhography color="white">아니오 (아기 등록)</Typhography>
         </Button>
         <SkipButton>

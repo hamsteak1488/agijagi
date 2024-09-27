@@ -6,23 +6,7 @@ import Typhography from '../../components/common/Typography';
 import { IntroductionSlider } from '../../components/Login/IntroductionSlider/IntroductionSlider';
 import { ValidationState } from '../../components/common/Textfield/Textfield.types';
 import { useNavigate } from 'react-router-dom';
-
-const BackIcon = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    strokeWidth={1.5}
-    stroke="currentColor"
-    className="size-6"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
-    />
-  </svg>
-);
+import BackIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
 
 export const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -114,7 +98,9 @@ export const Login = () => {
       </s.LoginContainer>
 
       <s.FormContainer width={width} loginMode={loginMode}>
-        <s.BackButton onClick={handleActivateLogin}>{BackIcon}</s.BackButton>
+        <s.BackButton onClick={handleActivateLogin}>
+          <BackIcon />
+        </s.BackButton>
         <Typhography size="7xl" weight="bold">
           로그인
         </Typhography>
