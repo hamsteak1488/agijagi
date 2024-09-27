@@ -6,7 +6,7 @@ import Button from '../common/Button';
 import MileStoneCheckList from './MileStoneCheckList';
 import Textfield from '../common/Textfield';
 import useModal from '../../hooks/useModal';
-import ReportModal from './ReportModal';
+import ReportModal from './ReportCreateModal';
 import { ValidationState } from '../common/Textfield/Textfield.types';
 
 const Wrapper = styled.div`

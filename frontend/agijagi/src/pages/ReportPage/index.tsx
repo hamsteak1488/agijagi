@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 import Typhography from '../../components/common/Typography';
 import theme from '../../styles/theme';
 import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 import Button from '../../components/common/Button';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
@@ -11,11 +10,13 @@ import ReportFilter from '../../components/milestone/ReportFilter';
 import ReportIntro from '../../components/milestone/ReportIntro';
 import ReportChart from '../../components/milestone/ReportChart';
 import ReportSlide from '../../components/milestone/ReportSlide';
+import ReportListModal from '../../components/milestone/ReportListModal';
+import useModal from '../../hooks/useModal';
 import BoyImg from '../../assets/images/boy.png';
 
 const Title = styled.div`
   display: flex;
-  margin: 5px 15px 5px 35px;
+  margin: 5px 15px;
   height: 50px;
   align-items: center;
 `;
@@ -97,32 +98,47 @@ const image = BoyImg;
 const increaseWeight = currentWeight - weight;
 const days = calculateDays(birth);
 
-const MileStoneReport = () => {
-  const location = useLocation();
-  const reportData = location.state;
+const Report = () => {
   const createDate = '2024-09-27';
   const growthStatus = 6;
   const result =
     '다운이와 비슷한 출생 몸무게를 가진 아이들의 성장 그래프와 비교했을 때 다운이는 성장이 빠른 편이라고 할 수 있습니다. 마일스톤 결과를 봐도 성장 발달에 문제가 없는 것으로 보입니다. 다운이는 잘 자라고 있습니다!';
+
   const navigate = useNavigate();
+
   const handleBack = () => {
     navigate(-1);
   };
 
+  const handleDelete = () => {
+
+  };
+
+  const modal = useModal();
+  const handleReportListModal = () => {
+    modal.push({
+      children: (
+        <ReportListModal
+        />
+      ),
+    });
+  }
+
   return (
     <>
       <Title>
+        <Button size='sm' color='secondary' onClick={handleBack}>목록</Button>
         <TitleText>
           <Typhography size="lg" weight="bold" color="greyScale" shade="800">
             성장 분석 보고서
           </Typhography>
         </TitleText>
-        <CloseButton onClick={handleBack} />
+        <Button size='sm' color='danger' onClick={handleDelete}>삭제</Button>
       </Title>
       <Line></Line>
 
       <FilterContainer>
-        <ReportFilter gender={gender} createDate={createDate}/>
+        <ReportFilter gender={gender} createDate={createDate} />
       </FilterContainer>
 
       <ReportContainer>
@@ -150,4 +166,4 @@ const MileStoneReport = () => {
   );
 };
 
-export default MileStoneReport;
+export default Report;

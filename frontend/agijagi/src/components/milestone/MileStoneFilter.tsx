@@ -7,6 +7,7 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-width: 650px;
   width: 100%;
   color: ${theme.color.greyScale[700]};
 `;

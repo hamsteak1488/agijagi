@@ -1,15 +1,26 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
-import { FaceSmileIcon, ScaleIcon } from '@heroicons/react/24/outline';
+import {
+  FaceSmileIcon,
+  CalendarIcon
+} from '@heroicons/react/24/outline';
 import Typhography from '../common/Typography';
+
+const Container = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 650px;
+  width: 100%;
+`;
 
 const WeightContainer = styled.div`
   display: flex;
-  width: 180px;
+  justify-content: center;
+  width: 170px;
   height: 30px;
   align-items: center;
-  margin-right: 10px;
   padding: 3px 10px;
   background-color: ${theme.color.primary[50]};
   border-radius: 30px;
@@ -17,14 +28,15 @@ const WeightContainer = styled.div`
   border: 1px solid ${theme.color.primary[700]};
 `;
 
-const WeightIcon = styled(ScaleIcon)`
-  width: 22px;
-  margin-right: 8px;
+const WeightIcon = styled(CalendarIcon)`
+  width: 21px;
+  margin-right: 5px;
   color: ${theme.color.primary[800]};
 `;
 
 const GenderContainer = styled.div`
   display: flex;
+  justify-content: center;
   width: 60px;
   height: 30px;
   align-items: center;
@@ -41,26 +53,13 @@ const FaceIcon = styled(FaceSmileIcon)`
   color: ${theme.color.primary[800]};
 `;
 
-// 몸무게 범위 구하는 함수
-function findWeightRange(weight: number) {
-  // 소수점 둘째 자리에서 반올림
-  const roundedWeight = Math.round(weight * 10) / 10;
-
-  // 소수점 첫째 자리 계산 (ex: 7.0 or 7.1)
-  const lowerBound = Math.floor(roundedWeight * 10) / 10;
-  const upperBound = lowerBound + 0.1;
-
-  return `${lowerBound.toFixed(1)} ~ ${upperBound.toFixed(1)} kg`;
-}
-
 interface FilterProps {
   gender: string;
-  weight: number;
+  createDate: string;
 }
 
-const ReportFilter = ({ gender, weight }: FilterProps) => {
+const ReportFilter = ({ gender, createDate }: FilterProps) => {
   const [babayGender, setBabyGender] = useState<string>(gender);
-  const WeightRange = findWeightRange(weight);
 
   useEffect(() => {
     if (gender === 'boy') {
@@ -71,11 +70,11 @@ const ReportFilter = ({ gender, weight }: FilterProps) => {
   });
 
   return (
-    <>
+    <Container>
       <WeightContainer>
         <WeightIcon />
         <Typhography size="sm" color="greyScale" shade="800">
-          출생 몸무게 {WeightRange}
+          생성일 : {createDate}
         </Typhography>
       </WeightContainer>
 
@@ -85,7 +84,7 @@ const ReportFilter = ({ gender, weight }: FilterProps) => {
           {babayGender}
         </Typhography>
       </GenderContainer>
-    </>
+    </Container>
   );
 };
 

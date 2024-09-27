@@ -13,7 +13,7 @@ const Title = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 5px 10px 5px 20px;
+  margin: 5px 15px 5px 20px;
   height: 50px;
   align-items: center;
 `;
@@ -37,6 +37,7 @@ const Line = styled.hr`
 
 const FilterContainer = styled.div`
   display: flex;
+  justify-content: center;
   margin: 10px 20px;
   height: 30px;
 `;
