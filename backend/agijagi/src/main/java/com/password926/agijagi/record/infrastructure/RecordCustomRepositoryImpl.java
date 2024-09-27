@@ -40,7 +40,7 @@ public class RecordCustomRepositoryImpl implements RecordCustomRepository {
                 .where(record.child.id.eq(childId)
                         .and(record.type.eq(type)))
                 .orderBy(record.id.desc())
-                .fetchOne();
+                .fetchFirst();
     }
 
     private BooleanExpression typeEq(RecordType type) {
