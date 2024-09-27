@@ -14,6 +14,7 @@ import com.password926.agijagi.diary.entity.DiaryMedia;
 import com.password926.agijagi.diary.repository.DiaryRepository;
 import com.password926.agijagi.media.domain.Image;
 import com.password926.agijagi.media.domain.MediaStorage;
+import com.password926.agijagi.media.infrastructure.MediaRepository;
 import com.password926.agijagi.member.domain.Member;
 import com.password926.agijagi.member.infrastructure.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class DiaryService {
     private final DiaryRepository diaryRepository;
     private final ChildValidator childValidator;
     private final MediaStorage mediaStorage;
+    private final MediaRepository mediaRepository;
 
     @Transactional
     public void createDiary(long memberId, CreateDiaryRequest request) {
@@ -109,6 +111,7 @@ public class DiaryService {
         diary.remove();
     }
 
+    @Transactional(readOnly = true)
     public List<DiaryDetail> getAllDiary(long memberId, long childId) {
         childValidator.validateWriteAuthority(memberId, childId);
 
@@ -125,18 +128,32 @@ public class DiaryService {
 
         for (Diary diary : diaries) {
             DiaryDetail diaryDetail = DiaryDetail.of(diary);
+            if (diary.getDiaryMediaList() != null) {
+                for (DiaryMedia diaryMedia : diary.getDiaryMediaList()) {
+                    diaryDetail.getMediaUrls().add(diaryMedia.getMedia().getUrl());
+                }
+            }
             diaryDetails.add(diaryDetail);
         }
 
         return diaryDetails;
     }
 
+    @Transactional(readOnly = true)
     public DiaryDetail getDiary(long memberId, long diaryId) {
         Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
                         .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
         childValidator.validateWriteAuthority(memberId, diary.getChild().getId());
 
-        return DiaryDetail.of(diary);
+        DiaryDetail diaryDetail = DiaryDetail.of(diary);
+
+        if (diary.getDiaryMediaList() != null) {
+            for (DiaryMedia diaryMedia : diary.getDiaryMediaList()) {
+                diaryDetail.getMediaUrls().add(diaryMedia.getMedia().getUrl());
+            }
+        }
+
+        return diaryDetail;
     }
 }
