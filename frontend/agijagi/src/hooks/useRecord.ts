@@ -1,4 +1,4 @@
-import type { RecordMenu } from '../types/record';
+import type { Record, RecordMenu } from '../types/record';
 
 import ShitIcon from '../assets/images/record/shit.png';
 import DropIcon from '../assets/images/record/drop.png';
@@ -43,9 +43,14 @@ const menus: RecordMenuData[] = [
 ];
 
 const useRecord = () => {
-  const getMenu = (): RecordMenu[] => {
+  const getMenu = (records: Record[]): RecordMenu[] => {
     return menus.map((menu: RecordMenuData): RecordMenu => {
-      return { ...menu, latestDateTime: new Date().toJSON() };
+      return {
+        ...menu,
+        latestDateTime:
+          records.find((record) => record.type === menu.type)?.latestDateTime ||
+          null,
+      };
     });
   };
 

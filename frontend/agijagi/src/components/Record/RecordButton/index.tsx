@@ -14,7 +14,7 @@ const RecordButton = ({
   type,
   latestDateTime,
 }: RecordButtonProps) => {
-  const timeDifference = useTimeDifference(new Date(latestDateTime));
+  const timeDifference = useTimeDifference(new Date(latestDateTime || ''));
 
   return (
     <s.RecordButton color={color}>
@@ -23,7 +23,7 @@ const RecordButton = ({
         {type}
       </Typhography>
       <Typhography color="white" size="md">
-        {timeDifference}
+        {latestDateTime === null ? '기록 없음' : timeDifference}
       </Typhography>
     </s.RecordButton>
   );

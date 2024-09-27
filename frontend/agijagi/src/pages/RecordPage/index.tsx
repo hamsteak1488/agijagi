@@ -1,20 +1,27 @@
-import RecordButton from '../../components/Record/RecordButton';
+import { Suspense } from 'react';
+
 import RecordList from '../../components/Record/RecordList';
 import AppBar from '../../components/common/AppBar';
 
-import useRecord from '../../hooks/useRecord';
 import useDialog from '../../hooks/useDialog';
+import useRecord from '../../hooks/useRecord';
 
 import * as s from './style';
+
+import RecordMenu from './RecordMenu';
+
+import { ErrorBoundary } from 'react-error-boundary';
+import ErrorBoundaryFallback from '../../components/common/ErrorBoundaryFallback';
+import SuspenseFallback from '../../components/common/SuspenseFallback';
 
 const RecordPage = () => {
   const { confirm } = useDialog();
 
-  const Record = useRecord();
+  const record = useRecord();
 
-  const 대변 = Record.findMenuByName('대변');
-  const 소변 = Record.findMenuByName('소변');
-  const 약 = Record.findMenuByName('약');
+  const 대변 = record.findMenuByName('대변');
+  const 소변 = record.findMenuByName('소변');
+  const 약 = record.findMenuByName('약');
 
   const handleListClick = async () => {
     if (!confirm('선택한 기록을 삭제할까요?')) {
@@ -29,9 +36,17 @@ const RecordPage = () => {
       </AppBar>
       <s.Main>
         <s.RecordMenu>
-          {Record.getMenu().map((menu) => (
-            <RecordButton key={menu.type} {...menu} />
-          ))}
+          <ErrorBoundary
+            fallbackRender={(props) => (
+              <ErrorBoundaryFallback height="13rem" {...props}>
+                기록 메뉴를 불러오지 못했어요.
+              </ErrorBoundaryFallback>
+            )}
+          >
+            <Suspense fallback={<SuspenseFallback height="13rem" />}>
+              <RecordMenu />
+            </Suspense>
+          </ErrorBoundary>
         </s.RecordMenu>
         <s.RecordList>
           <RecordList>

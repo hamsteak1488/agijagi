@@ -1,6 +1,6 @@
 export interface Record {
   type: string;
-  latestDateTime: string;
+  latestDateTime: string | null;
 }
 
 export interface RecordMenu extends Record {
