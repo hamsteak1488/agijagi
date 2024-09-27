@@ -8,7 +8,7 @@ import java.io.File;
 public class FileRemover {
 
     public static void remove(File file) {
-        if (file.exists()) {
+        if (!file.exists()) {
             return;
         }
         if (!file.delete()) {
