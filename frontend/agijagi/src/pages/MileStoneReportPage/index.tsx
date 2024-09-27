@@ -95,7 +95,7 @@ const weight = 3.02;
 const currentWeight = 7.2;
 const gender = 'boy';
 const image = BoyImg;
-const growStatus = 'fast';
+const growthStatus = 6;
 
 const MileStoneReport = () => {
   const navigate = useNavigate();
@@ -130,8 +130,8 @@ const MileStoneReport = () => {
         <ChartContainer>
           <ReportChart />
         </ChartContainer>
-        
-        <ReportSlide image={image} growthStatus={growStatus} />
+
+        <ReportSlide image={image} growthStatus={growthStatus} />
 
         <ResultContainer>
           <Typhography size="md" color="primary" shade="800">

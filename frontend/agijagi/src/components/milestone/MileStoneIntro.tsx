@@ -7,6 +7,7 @@ import MileStoneCheckList from './MileStoneCheckList';
 import Textfield from '../common/Textfield';
 import useModal from '../../hooks/useModal';
 import ReportModal from './ReportModal';
+import { ValidationState } from '../common/Textfield/Textfield.types';
 
 const Wrapper = styled.div`
   display: flex;
@@ -14,7 +15,6 @@ const Wrapper = styled.div`
   justify-content: center;
   max-width: 760px;
   margin: 0 auto;
-  padding-bottom: 50px;
 `;
 
 const IntroBox = styled.div`
@@ -85,26 +85,27 @@ const CheckContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px 20px;
+  margin-bottom: 50px;
 `;
 
 const WarningMessage = styled.div`
   position: fixed;
   text-align: center;
-  width: 220px;
+  width: 230px;
   bottom: 250px;
   left: 50%;
   transform: translateX(-50%);
   background-color: ${theme.color.danger[500]};
   color: white;
-  padding: 15px 20px;
-  border-radius: 5px;
+  padding: 15px;
+  border-radius: 10px;
   z-index: 1000;
   font-size: ${theme.typography.fontSize.md};
 `;
 
+// 현재 우리아이가 몇개월인지 계산하는 함수
 const calculateAgeInMonths = (birthDate: Date): number => {
   const today = new Date();
-
   let yearsDiff = today.getFullYear() - birthDate.getFullYear();
   let monthsDiff = today.getMonth() - birthDate.getMonth();
 
@@ -127,25 +128,29 @@ interface MilestoneDetail {
 interface MileStoneProps {
   month: number;
   name: string;
+  childId: number;
   birth: Date;
   weight: number | null;
   selectedMilestones: MilestoneDetail[];
+  handleSave: () => void;
   handleCheckboxChange: (item: MilestoneDetail, isChecked: boolean) => void;
 }
 
 const MileStoneCheck = ({
   month,
   name,
+  childId,
   birth,
   weight,
   selectedMilestones,
+  handleSave,
   handleCheckboxChange,
 }: MileStoneProps) => {
   const [textFieldOpen, setTextFieldOpen] = useState<boolean>(false);
-  const [height, setHeight] = useState<string>('');
+  const [currentHeight, setCurrentHeight] = useState<string>('');
   const [currentWeight, setCurrentWeigh] = useState<string>('');
-  const babyMonth = calculateAgeInMonths(birth);
   const [warning, setWarning] = useState<string>('');
+  const babyMonth = calculateAgeInMonths(birth);
   const modal = useModal();
 
   const handleTextFieldOpen = () => {
@@ -159,10 +164,38 @@ const MileStoneCheck = ({
       setTimeout(() => setWarning(''), 3000);
     } else {
       modal.push({
-        children: <ReportModal selectedMilestones={selectedMilestones} />,
+        children: (
+          <ReportModal
+            selectedMilestones={selectedMilestones}
+            currentHeight={currentHeight}
+            currentWeight={currentWeight}
+            handleWeightHeighSave={handleWeightHeighSave}
+            handleSave={handleSave}
+            childId={childId}
+          />
+        ),
       });
     }
   };
+
+  const handleWeightHeighSave = () => {
+    // 입력이 없으면 경고 메세지
+    if (!currentHeight || !currentWeight) {
+      setWarning('키와 몸무게를 모두 입력해주세요');
+      setTimeout(() => setWarning(''), 3000);
+    }
+    // 키 / 몸무게 저장 API 호출 (post)
+  };
+
+  function validateInput(input: string): ValidationState {
+    if (input.trim() === '') {
+      return 'normal';
+    }
+    if (!isNaN(Number(input))) {
+      return 'success';
+    }
+    return 'danger';
+  }
 
   return (
     <Wrapper>
@@ -198,8 +231,12 @@ const MileStoneCheck = ({
               size="md"
               color="tertiary"
               isColoredLabel={true}
-              inputValue={height}
-              setInputValue={setHeight}
+              inputValue={currentHeight}
+              setInputValue={setCurrentHeight}
+              validationFunction={validateInput}
+              helpText={'*숫자만 입력해주세요'}
+              checkText={'올바르게 입력했습니다. 저장해주세요'}
+              warningText={'숫자만 입력해주세요'}
             />
             <Textfield
               label="몸무게 kg"
@@ -208,9 +245,13 @@ const MileStoneCheck = ({
               isColoredLabel={true}
               inputValue={currentWeight}
               setInputValue={setCurrentWeigh}
+              validationFunction={validateInput}
+              helpText={'*숫자만 입력하세요'}
+              checkText={'올바르게 입력했습니다. 저장해주세요'}
+              warningText={'숫자만 입력해주세요'}
             />
             <SaveButton visible={babyMonth === month}>
-              <Button size="sm" color="primary">
+              <Button size="sm" color="primary" onClick={handleWeightHeighSave}>
                 키/몸무게 저장
               </Button>
             </SaveButton>
@@ -223,6 +264,7 @@ const MileStoneCheck = ({
       <CheckContainer>
         <MileStoneCheckList
           month={month}
+          childId={childId}
           handleCheckboxChange={handleCheckboxChange}
         />
       </CheckContainer>

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback} from 'react';
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 import Typhography from '../common/Typography';
 import { babyDevelopmentData } from './MileStoneMockData';
 import CheckImg from '../../assets/images/milestone/check.png';
 import MileStoneAmount from './MileStoneAmount';
+import axios from 'axios';
 
 const CheckContainer = styled.div`
   display: flex;
@@ -59,11 +60,29 @@ interface MilestoneDetail {
 
 interface MileStoneProps {
   month: number;
+  childId: number;
   handleCheckboxChange: (item: MilestoneDetail, isChecked: boolean) => void;
 }
 
-const DevelopmentList = (({ month, handleCheckboxChange }: MileStoneProps) => {
+const DevelopmentList = (({ month, childId, handleCheckboxChange }: MileStoneProps) => {
   const [developmentData, setDevelopmentData] = useState<any[]>([]);
+
+  // 각 개월 수 마다 다른 마일스톤 데이터 호출
+  const getMileStone = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `https://api.password926.site/children/${childId}/milestone`, {params : {month: month}}
+      );
+      console.log('마일스톤 데이터 :', response.data);
+      setDevelopmentData(response.data);
+    } catch (error) {
+      console.error('마일스톤 데이터 받기 실패:', error);
+    }
+  }, [month]);
+
+  // useEffect(() => {
+  //   getMileStone();
+  // }, [developmentData]);
 
   useEffect(() => {
     setDevelopmentData(babyDevelopmentData);

@@ -47,7 +47,7 @@ const ProgressBar = styled.div<{ percentage: number }>`
 const Thumb = styled.div<{ percentage: number }>`
   position: absolute;
   top: -18px;
-  left: ${({ percentage }) => `calc(${percentage}% - 25px)`}; /* 가운데 정렬 */
+  left: ${({ percentage }) => `calc(${percentage}% - 25px)`};
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -85,35 +85,24 @@ const Line = styled.hr`
   margin: 10px auto 5px;
 `;
 
-// 성장 상태에 따른 슬라이드 thumb 위치 타입
-type GrowthStatus = 'slow' | 'average' | 'fast';
-
 interface BabyData {
   image: string;
-  growthStatus: GrowthStatus;
+  growthStatus: number;
 }
 
 // 성장 상태에 따른 위치 비율 계산 함수
-const calculatePercentage = (growthStatus: GrowthStatus): number => {
-  switch (growthStatus) {
-    case 'slow':
-      return 30;
-    case 'average':
-      return 50;
-    case 'fast':
-      return 80;
-    default:
-      return 50;
-  }
+const calculatePercentage = (growthStatus: number) => {
+  const clampedValue = Math.max(0, Math.min(10, growthStatus));
+  return (clampedValue / 10) * 100;
 };
 
 // 성장 상태에 따른 멘트
-const growthStatusText = (growthStatus: GrowthStatus) => {
-  if (growthStatus === 'slow') {
+const growthStatusText = (growthStatus: number) => {
+  if (growthStatus <= 3) {
     return '또래 아이들 보다 성장이 느린 편입니다 !';
-  } else if (growthStatus === 'average') {
+  } else if (growthStatus <= 7) {
     return '또래 아이들과 성장이 비슷합니다 !';
-  } else if (growthStatus === 'fast') {
+  } else {
     return '또래 아이들 보다 성장이 빠른 편입니다 !';
   }
 };
