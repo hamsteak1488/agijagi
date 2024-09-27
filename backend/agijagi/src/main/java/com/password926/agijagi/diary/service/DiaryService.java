@@ -6,8 +6,10 @@ import com.password926.agijagi.child.infrastructure.ChildRepository;
 import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
 import com.password926.agijagi.common.errors.exception.RestApiException;
 import com.password926.agijagi.diary.controller.dto.CreateDiaryRequest;
+import com.password926.agijagi.diary.controller.dto.DeleteDiaryRequest;
 import com.password926.agijagi.diary.controller.dto.UpdateDiaryRequest;
 import com.password926.agijagi.diary.entity.Diary;
+import com.password926.agijagi.diary.entity.DiaryDetail;
 import com.password926.agijagi.diary.entity.DiaryMedia;
 import com.password926.agijagi.diary.repository.DiaryRepository;
 import com.password926.agijagi.media.domain.Image;
@@ -50,9 +52,11 @@ public class DiaryService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        for (MultipartFile multipartFile : request.getMediaList() ) {
-            Image image = mediaStorage.storeImage(multipartFile.getResource(), multipartFile.getContentType());
-            diary.addMedia(image);
+        if (request.getMediaList() != null) {
+            for (MultipartFile multipartFile : request.getMediaList() ) {
+                Image image = mediaStorage.storeImage(multipartFile.getResource(), multipartFile.getContentType());
+                diary.addMedia(image);
+            }
         }
 
         diaryRepository.save(diary);
@@ -67,21 +71,45 @@ public class DiaryService {
 
         diary.updateTitleAndContent(request.getTitle(), request.getContent());
 
-        for (Long removeMediaId : request.getRemoveMediaIdList()) {
-            for (DiaryMedia diaryMedia : diary.getDiaryMediaList()) {
-                if (diaryMedia.getMedia().getId().equals(removeMediaId)) {
-                    diary.removeMedia(diaryMedia);
+        if (request.getRemoveMediaIdList() != null) {
+            for (Long removeMediaId : request.getRemoveMediaIdList()) {
+                for (DiaryMedia diaryMedia : diary.getDiaryMediaList()) {
+                    if (diaryMedia.getMedia().getId().equals(removeMediaId)) {
+                        diary.removeMedia(diaryMedia);
+                    }
                 }
             }
         }
 
-        for (MultipartFile multipartFile : request.getNewMediaList()) {
-            Image image = mediaStorage.storeImage(multipartFile.getResource(), multipartFile.getContentType());
-            diary.addMedia(image);
+        if (request.getNewMediaList() != null) {
+            for (MultipartFile multipartFile : request.getNewMediaList() ) {
+                Image image = mediaStorage.storeImage(multipartFile.getResource(), multipartFile.getContentType());
+                diary.addMedia(image);
+            }
         }
     }
 
-    public List<Diary> getAllDiary(long memberId, long childId) {
+    @Transactional
+    public void deleteDiary(long memberId, long diaryId, DeleteDiaryRequest request) {
+        Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+        childValidator.validateWriteAuthority(memberId, diary.getChild().getId());
+
+        if (request.getRemoveMediaIdList() != null) {
+            for (Long removeMediaId : request.getRemoveMediaIdList()) {
+                for (DiaryMedia diaryMedia : diary.getDiaryMediaList()) {
+                    if (diaryMedia.getMedia().getId().equals(removeMediaId)) {
+                        diary.removeMedia(diaryMedia);
+                    }
+                }
+            }
+        }
+
+        diary.remove();
+    }
+
+    public List<DiaryDetail> getAllDiary(long memberId, long childId) {
         childValidator.validateWriteAuthority(memberId, childId);
 
         List<Diary> diaries = diaryRepository.findAllByChildIdAndIsDeletedFalse(childId);
@@ -91,28 +119,24 @@ public class DiaryService {
             public int compare(Diary o1, Diary o2) {
                 return Long.compare(o2.getId(), o1.getId());
             }
-
         });
 
-        return diaries;
+        List<DiaryDetail> diaryDetails = new ArrayList<>();
+
+        for (Diary diary : diaries) {
+            DiaryDetail diaryDetail = DiaryDetail.of(diary);
+            diaryDetails.add(diaryDetail);
+        }
+
+        return diaryDetails;
     }
 
-    public Diary getDiary(long memberId, long diaryId) {
+    public DiaryDetail getDiary(long memberId, long diaryId) {
         Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
                         .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
         childValidator.validateWriteAuthority(memberId, diary.getChild().getId());
 
-        return diary;
-    }
-
-    @Transactional
-    public void deleteDiary(long memberId, long diaryId) {
-        Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
-                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
-
-        childValidator.validateWriteAuthority(memberId, diary.getChild().getId());
-
-        diary.remove();
+        return DiaryDetail.of(diary);
     }
 }

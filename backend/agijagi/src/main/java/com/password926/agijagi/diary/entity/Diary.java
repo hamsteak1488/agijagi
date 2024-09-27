@@ -54,8 +54,12 @@ public class Diary {
     }
 
     public void updateTitleAndContent(String title, String content) {
-        this.title = title;
-        this.content = content;
+        if (title != null) {
+            this.title = title;
+        }
+        if (content != null) {
+            this.content = content;
+        }
     }
 
     public void addMedia(Media media) {
