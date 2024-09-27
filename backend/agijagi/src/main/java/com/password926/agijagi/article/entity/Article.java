@@ -1,6 +1,7 @@
 package com.password926.agijagi.article.entity;
 
 import com.password926.agijagi.media.domain.Media;
+import com.password926.agijagi.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,8 +17,9 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @Column(nullable = false)
     private String title;
@@ -34,8 +36,8 @@ public class Article {
     private List<ArticleMedia> articleMediaList = new ArrayList<>();
 
     @Builder
-    public Article(Long memberId, String title, String content, LocalDateTime createdAt) {
-        this.memberId = memberId;
+    public Article(Member member, String title, String content, LocalDateTime createdAt) {
+        this.member = member;
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
@@ -45,13 +47,9 @@ public class Article {
         isDeleted = true;
     }
 
-    public void updateArticle(String title, String content) {
-        if (title != null) {
-            this.title = title;
-        }
-        if (content != null) {
-            this.content = content;
-        }
+    public void updateTitleAndContent(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 
     public void addMedia(Media media) {
@@ -60,6 +58,9 @@ public class Article {
                 .media(media)
                 .build();
         this.articleMediaList.add(articleMedia);
+    }
 
+    public void removeMedia(ArticleMedia articleMedia) {
+        this.articleMediaList.remove(articleMedia);
     }
 }

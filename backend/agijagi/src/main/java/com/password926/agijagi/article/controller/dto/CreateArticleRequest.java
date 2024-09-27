@@ -16,5 +16,4 @@ public class CreateArticleRequest {
     private String content;
 
     private List<MultipartFile> mediaList;
-
 }
