@@ -17,18 +17,22 @@ import java.net.URI;
 @RequiredArgsConstructor
 @RequestMapping("/members")
 public class MemberController {
+
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<Long> registerMember(@Valid @RequestBody RegisterMemberRequest request) {
-        long memberId = memberService.registerMember(request.toMemberProfile(), request.getPassword());
+    public ResponseEntity<Void> registerMember(@Valid @RequestBody RegisterMemberRequest request) {
+        long memberId = memberService.registerMember(
+                ProfileDetail.of(request.getEmail(), request.getPassword()),
+                request.getPassword()
+        );
 
         return ResponseEntity.created(URI.create("/members/" + memberId)).build();
     }
 
     @GetMapping("/{memberId}")
-    public ResponseEntity<ProfileDetail> readProfileDetail(@PathVariable Long memberId) {
-        ProfileDetail profileDetail = memberService.readMemberProfileDetail(memberId);
+    public ResponseEntity<ProfileDetail> getProfileDetail(@PathVariable Long memberId) {
+        ProfileDetail profileDetail = memberService.getMemberProfileDetail(memberId);
 
         return ResponseEntity.ok(profileDetail);
     }
@@ -38,7 +42,7 @@ public class MemberController {
             LoginMember member,
             @Valid @RequestBody ModifyMemberRequest request
     ) {
-        memberService.modifyMemberProfileDetail(member.getId(), request.toMemberProfile());
+        memberService.modifyMemberProfileDetail(member.getId(), ProfileDetail.of(request.getEmail(), request.getNickname()));
 
         return ResponseEntity.ok().build();
     }

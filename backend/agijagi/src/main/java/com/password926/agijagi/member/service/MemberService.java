@@ -17,7 +17,7 @@ public class MemberService {
         return memberRegistry.register(profileDetail, password);
     }
 
-    public ProfileDetail readMemberProfileDetail(long memberId) {
+    public ProfileDetail getMemberProfileDetail(long memberId) {
         return memberReader.readProfileDetail(memberId);
     }
 
