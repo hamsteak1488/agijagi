@@ -1,5 +1,6 @@
 package com.password926.agijagi.child.controller;
 
+import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.child.controller.dto.ChildDtoConverter;
 import com.password926.agijagi.child.controller.dto.request.AppendChildRequest;
 import com.password926.agijagi.child.controller.dto.request.UpdateChildRequest;
@@ -22,61 +23,61 @@ public class ChildController {
 
     @GetMapping("/{childId}")
     public ResponseEntity<ReadChildDetailResponse> readChildDetail(
-            long memberId,
+            LoginMember member,
             @PathVariable long childId
     ) {
-        return ResponseEntity.ok().body(ReadChildDetailResponse.from(childService.readChildDetail(memberId, childId)));
+        return ResponseEntity.ok().body(ReadChildDetailResponse.from(childService.readChildDetail(member.getId(), childId)));
     }
 
     @GetMapping
-    public ResponseEntity<List<ReadChildDetailResponse>> readChildDetails(long memberId) {
-        return ResponseEntity.ok().body(ChildDtoConverter.convert(childService.readChildDetailsByMember(memberId)));
+    public ResponseEntity<List<ReadChildDetailResponse>> readChildDetails(LoginMember member) {
+        return ResponseEntity.ok().body(ChildDtoConverter.convert(childService.readChildDetailsByMember(member.getId())));
     }
 
     @PostMapping
     public ResponseEntity<Void> appendChild(
-            long memberId,
+            LoginMember member,
             @Valid AppendChildRequest request
     ) {
-        childService.appendChild(memberId, request.toContent(), request.getImage());
+        childService.appendChild(member.getId(), request.toContent(), request.getImage());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{childId}")
     public ResponseEntity<Void> removeChild(
-            long memberId,
+            LoginMember member,
             @PathVariable long childId
     ) {
-        childService.removeChild(memberId, childId);
+        childService.removeChild(member.getId(), childId);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{childId}")
     public ResponseEntity<Void> updateChild(
-            long memberId,
+            LoginMember member,
             @PathVariable long childId,
             @RequestBody @Valid UpdateChildRequest request
     ) {
-        childService.updateChild(memberId, childId, request.toContent());
+        childService.updateChild(member.getId(), childId, request.toContent());
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{childId}/image")
     public ResponseEntity<Void> updateChildImage(
-            long memberId,
+            LoginMember member,
             @PathVariable long childId,
             @RequestPart MultipartFile image
     ) {
-        childService.updateChildImage(memberId, childId, image);
+        childService.updateChildImage(member.getId(), childId, image);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{childId}/image")
     public ResponseEntity<Void> deleteChildImage(
-            long memberId,
+            LoginMember member,
             @PathVariable long childId
     ) {
-        childService.removeChildImage(memberId, childId);
+        childService.removeChildImage(member.getId(), childId);
         return ResponseEntity.ok().build();
     }
 }
