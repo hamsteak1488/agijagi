@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-export const ActivityRecordButton = styled.button<{ color: string }>(
+export const RecordButton = styled.button<{ color: string }>(
   (props) => css`
     width: 6.5rem;
     height: 6.5rem;

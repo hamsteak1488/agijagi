@@ -4,13 +4,13 @@ import CustomizedBorderContainer from '../../common/CustomizedBorderContainer';
 
 import theme from '../../../styles/theme';
 
-import Waves from '../../../assets/images/activityRecord/waves.svg';
+import Waves from '../../../assets/images/record/waves.svg';
 
-interface ActivityRecordListProps {
+interface RecordListProps {
   children?: ReactNode;
 }
 
-const ActivityRecordList = ({ children }: ActivityRecordListProps) => {
+const RecordList = ({ children }: RecordListProps) => {
   return (
     <CustomizedBorderContainer
       backgroundColor={theme.color.primary[50]}
@@ -22,4 +22,4 @@ const ActivityRecordList = ({ children }: ActivityRecordListProps) => {
   );
 };
 
-export default ActivityRecordList;
+export default RecordList;
