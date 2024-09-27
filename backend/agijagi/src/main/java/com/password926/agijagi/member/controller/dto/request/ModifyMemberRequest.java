@@ -1,20 +1,19 @@
 package com.password926.agijagi.member.controller.dto.request;
 
-import com.password926.agijagi.member.domain.ProfileDetail;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class ModifyMemberRequest {
-    @NotBlank
-    private String password;
-    @NotBlank
-    private String nickname;
+    @Email
+    private String email;
 
-    public ProfileDetail toMemberProfile() {
-        return ProfileDetail.of(null, nickname);
-    }
+    @Size(min = 2, max = 20)
+    private String nickname;
 }
