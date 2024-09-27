@@ -1,13 +1,11 @@
 import useRecord from '../../hooks/useRecord';
 
 import RecordButton from '../../components/Record/RecordButton';
-import useFetchLatestRecords from '../../hooks/apis/useFetchLatestRecords';
+import useFetchLatestRecords from '../../hooks/api/useFetchLatestRecords';
 
 const RecordMenu = () => {
   const { data } = useFetchLatestRecords();
   const record = useRecord();
-
-  console.log(data);
 
   return (
     <>
