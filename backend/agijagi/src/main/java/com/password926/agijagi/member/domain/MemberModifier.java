@@ -2,6 +2,7 @@ package com.password926.agijagi.member.domain;
 
 import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
 import com.password926.agijagi.common.errors.exception.RestApiException;
+import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.media.domain.MediaStorage;
 import com.password926.agijagi.media.domain.Image;
 import com.password926.agijagi.member.infrastructure.MemberRepository;
@@ -25,9 +26,9 @@ public class MemberModifier {
     }
 
     @Transactional
-    public void modifyProfileImage(long memberId, Resource resource, String contentType) {
+    public void modifyProfileImage(long memberId, MediaResource mediaResource) {
         Member member = memberReader.read(memberId);
-        Image storedImage = mediaStorage.storeImage(resource, contentType);
+        Image storedImage = mediaStorage.storeImage(mediaResource);
         member.updateProfileImage(storedImage);
     }
 }

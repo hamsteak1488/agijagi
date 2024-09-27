@@ -11,6 +11,8 @@ import com.password926.agijagi.diary.entity.Diary;
 import com.password926.agijagi.diary.entity.DiaryMedia;
 import com.password926.agijagi.diary.repository.DiaryRepository;
 import com.password926.agijagi.media.domain.Image;
+import com.password926.agijagi.media.domain.Media;
+import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.media.domain.MediaStorage;
 import com.password926.agijagi.member.domain.Member;
 import com.password926.agijagi.member.infrastructure.MemberRepository;
@@ -51,7 +53,7 @@ public class DiaryService {
                 .build();
 
         for (MultipartFile multipartFile : request.getMediaList() ) {
-            Image image = mediaStorage.storeImage(multipartFile.getResource(), multipartFile.getContentType());
+            Image image = mediaStorage.storeImage(MediaResource.from(multipartFile));
             diary.addMedia(image);
         }
 
@@ -76,8 +78,8 @@ public class DiaryService {
         }
 
         for (MultipartFile multipartFile : request.getNewMediaList()) {
-            Image image = mediaStorage.storeImage(multipartFile.getResource(), multipartFile.getContentType());
-            diary.addMedia(image);
+            Media media = mediaStorage.storeAny(MediaResource.from(multipartFile));
+            diary.addMedia(media);
         }
     }
 
