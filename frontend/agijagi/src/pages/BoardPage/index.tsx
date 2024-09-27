@@ -6,6 +6,7 @@ import AppBar from '../../components/common/AppBar';
 import Tab from '../../components/common/Tab';
 import ArticleList from '../../components/Board/ArticleList';
 import CustomizedBorderContainer from '../../components/common/CustomizedBorderContainer';
+import Button from '../../components/common/Button';
 
 import useModal from '../../hooks/useModal';
 
@@ -14,16 +15,25 @@ import ArticlePage from './ArticlePage';
 import theme from '../../styles/theme';
 
 import Waves from '../../assets/images/activityRecord/waves.svg';
+import WritePage from './WritePage';
 
 const BoardPage = () => {
   const [board, setBoard] = useState<string>('');
 
   const modal = useModal();
 
+  const handleWriteClick = () => {
+    modal.push({ children: <WritePage /> });
+  };
+
   return (
     <s.Container>
       <AppBar>
+        <div></div>
         <AppBar.Title>게시판</AppBar.Title>
+        <Button color="success" size="sm" onClick={handleWriteClick}>
+          글쓰기
+        </Button>
       </AppBar>
       <s.Main>
         <Tab

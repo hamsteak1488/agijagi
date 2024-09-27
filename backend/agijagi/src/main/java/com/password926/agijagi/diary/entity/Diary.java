@@ -1,26 +1,30 @@
 package com.password926.agijagi.diary.entity;
 
+import com.password926.agijagi.child.domain.Child;
 import com.password926.agijagi.media.domain.Media;
+import com.password926.agijagi.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Diary {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long childId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "child_id", nullable = false)
+    private Child child;
 
-    @Column(nullable = false)
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -37,9 +41,9 @@ public class Diary {
     private List<DiaryMedia> diaryMediaList = new ArrayList<>();
 
     @Builder
-    public Diary(Long childId, Long memberId, LocalDateTime createdAt, String title, String content) {
-        this.childId = childId;
-        this.memberId = memberId;
+    public Diary(Child child, Member member, LocalDateTime createdAt, String title, String content) {
+        this.child = child;
+        this.member = member;
         this.createdAt = createdAt;
         this.title = title;
         this.content = content;
@@ -47,15 +51,11 @@ public class Diary {
 
     public void remove() {
         isDeleted = true;
-    };
+    }
 
-    public void updateDiary(String title, String content) {
-        if (title != null) {
-            this.title = title;
-        }
-        if (content != null) {
-            this.content = content;
-        }
+    public void updateTitleAndContent(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 
     public void addMedia(Media media) {
@@ -64,6 +64,9 @@ public class Diary {
                 .media(media)
                 .build();
         this.diaryMediaList.add(diaryMedia);
+    }
 
+    public void removeMedia(DiaryMedia diaryMedia) {
+        this.diaryMediaList.remove(diaryMedia);
     }
 }

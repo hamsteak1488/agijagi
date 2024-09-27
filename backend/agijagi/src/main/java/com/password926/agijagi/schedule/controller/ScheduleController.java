@@ -1,5 +1,6 @@
 package com.password926.agijagi.schedule.controller;
 
+import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.schedule.controller.dto.ScheduleDtoConverter;
 import com.password926.agijagi.schedule.controller.dto.request.AppendScheduleRequest;
 import com.password926.agijagi.schedule.controller.dto.request.UpdateScheduleRequest;
@@ -22,40 +23,40 @@ public class ScheduleController {
 
     @GetMapping
     public ResponseEntity<List<ReadScheduleResponse>> readSchedule(
-            long memberId,
+            LoginMember member,
             @RequestParam long childId,
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate
     ) {
         return ResponseEntity.ok()
-                .body(ScheduleDtoConverter.convert(scheduleService.readSchedule(memberId, childId, startDate, endDate)));
+                .body(ScheduleDtoConverter.convert(scheduleService.readSchedule(member.getId(), childId, startDate, endDate)));
     }
 
     @PostMapping
     public ResponseEntity<Void> appendSchedule(
-            long memberId,
+            LoginMember member,
             @RequestBody @Valid AppendScheduleRequest request
     ) {
-        scheduleService.appendSchedule(memberId, request.getChildId(), request.toContent());
+        scheduleService.appendSchedule(member.getId(), request.getChildId(), request.toContent());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity<Void> removeSchedule(
-            long memberId,
+            LoginMember member,
             @PathVariable long scheduleId
     ) {
-        scheduleService.removeSchedule(memberId, scheduleId);
+        scheduleService.removeSchedule(member.getId(), scheduleId);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{scheduleId}")
     public ResponseEntity<Void> updateSchedule(
-            long memberId,
+            LoginMember member,
             @PathVariable long scheduleId,
             @RequestBody @Valid UpdateScheduleRequest request
     ) {
-        scheduleService.updateSchedule(memberId, scheduleId, request.toContent());
+        scheduleService.updateSchedule(member.getId(), scheduleId, request.toContent());
         return ResponseEntity.ok().build();
     }
 }

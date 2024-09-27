@@ -20,7 +20,7 @@ public class MilestoneStateUpdater {
             long childId,
             List<MilestoneStateContent> milestoneStateContents
     ) {
-        childValidator.validateWriterRole(memberId, childId);
+        childValidator.validateWriteAuthority(memberId, childId);
         milestoneStateContents.forEach(msc ->
                 milestoneStateReader.read(msc.getId()).update(msc.getCurrentAmount())
         );

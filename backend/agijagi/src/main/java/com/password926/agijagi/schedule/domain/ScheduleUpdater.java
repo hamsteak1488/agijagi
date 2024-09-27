@@ -19,7 +19,7 @@ public class ScheduleUpdater {
             ScheduleContent scheduleContent
     ) {
         Schedule schedule = scheduleReader.read(scheduleId);
-        childValidator.validateWriterRole(memberId, schedule.getChild().getId());
+        childValidator.validateWriteAuthority(memberId, schedule.getChild().getId());
         schedule.update(scheduleContent);
     }
 }

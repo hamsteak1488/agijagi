@@ -39,5 +39,10 @@ out/
 ### Secret Files ###
 *-secret.yml
 
+### Docs Files ###
+#src/main/resources/static/docs
+
 ### QueryDsl ###
 src/main/generated
+
+src/main/resources/data-*.sql

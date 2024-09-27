@@ -21,19 +21,20 @@ public class ChildDetail {
 
     private String imageUrl;
 
-    private String role;
+    private Authority authority;
 
     private long followerNum;
 
-    public static ChildDetail of(Child child, String role, long followerNum) {
+    public static ChildDetail of(Child child, Authority authority, long followerNum) {
+        String imageUrl = child.getImage() == null ? null : child.getImage().getUrl();
         return ChildDetail.builder()
                 .childId(child.getId())
                 .name(child.getName())
                 .nickname(child.getNickname())
                 .gender(child.getGender())
                 .birthday(child.getBirthday())
-                .imageUrl(child.getImageUrl())
-                .role(role)
+                .imageUrl(imageUrl)
+                .authority(authority)
                 .followerNum(followerNum)
                 .build();
     }

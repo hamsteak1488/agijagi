@@ -1,0 +1,8 @@
+= 아기자기 REST API Docs
+:source-highlighter: highlightjs
+:doctype: book
+:icons: font
+:toc: left
+:toclevels: 1
+
+include::{docdir}/member.adoc[]

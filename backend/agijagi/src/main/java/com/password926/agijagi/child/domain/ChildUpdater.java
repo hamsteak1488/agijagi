@@ -13,7 +13,7 @@ public class ChildUpdater {
 
     @Transactional
     public void update(long memberId, long childId, ChildContent childContent) {
-        childValidator.validateWriterRole(memberId, childId);
+        childValidator.validateWriteAuthority(memberId, childId);
         childReader.read(childId).update(childContent);
     }
 }

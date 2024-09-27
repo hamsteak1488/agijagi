@@ -16,7 +16,7 @@ public class ChildRemover {
 
     @Transactional
     public void remove(long memberId, long childId) {
-        childValidator.validateWriterRole(memberId, childId);
+        childValidator.validateWriteAuthority(memberId, childId);
         Child child = childReader.read(childId);
 
         memberChildRemover.removeAllRelation(childId);
