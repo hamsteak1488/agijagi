@@ -9,12 +9,16 @@ import useInvalidateErrorCache from '../../../hooks/useInvalidateErrorCache';
 
 interface ErrorBoundaryFallbackProps extends FallbackProps {
   children: string;
-  height?: string;
+  width?: string;
+  height: string;
+  padding?: string;
 }
 
 const ErrorBoundaryFallback = ({
   children,
-  height = '100%',
+  width = '100%',
+  height,
+  padding = '0',
   resetErrorBoundary,
 }: ErrorBoundaryFallbackProps) => {
   const { invalidate } = useInvalidateErrorCache();
@@ -25,12 +29,14 @@ const ErrorBoundaryFallback = ({
   };
 
   return (
-    <s.Container style={{ height }}>
-      <Typhography>{children}</Typhography>
-      <Button color="danger" size="sm" onClick={handleResetClick}>
-        재시도
-      </Button>
-    </s.Container>
+    <s.Wrapper style={{ width, height, padding }}>
+      <s.Container>
+        <Typhography>{children}</Typhography>
+        <Button color="danger" size="sm" onClick={handleResetClick}>
+          재시도
+        </Button>
+      </s.Container>
+    </s.Wrapper>
   );
 };
 
