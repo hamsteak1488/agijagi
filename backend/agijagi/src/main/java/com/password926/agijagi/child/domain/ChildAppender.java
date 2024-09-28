@@ -1,7 +1,11 @@
 package com.password926.agijagi.child.domain;
 
 import com.password926.agijagi.child.infrastructure.ChildRepository;
+import com.password926.agijagi.media.domain.Image;
+import com.password926.agijagi.media.domain.MediaResource;
+import com.password926.agijagi.media.domain.MediaStorage;
 import com.password926.agijagi.member.domain.Member;
+import com.password926.agijagi.member.domain.MemberReader;
 import com.password926.agijagi.milestone.domain.MilestoneStateAppender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,24 +16,33 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class ChildAppender {
 
+    private final MediaStorage mediaStorage;
     private final ChildRepository childRepository;
     private final MemberChildAppender memberChildAppender;
     private final MilestoneStateAppender milestoneStateAppender;
+    private final MemberReader memberReader;
 
     @Transactional
     public void append(long memberId, ChildContent childContent, MultipartFile image) {
-        //TODO: s3 구현시 로직 추가
-        String imageUrl = null;
-        Child child = Child.builder()
+        Image storedImage = storeImageIfPresent(image);
+        Child child = childRepository.save(
+                Child.builder()
                 .name(childContent.getName())
                 .nickname(childContent.getNickname())
+                .gender(childContent.getGender())
                 .birthday(childContent.getBirthday())
-                .build();
-        childRepository.save(child);
-
-        //TODO: appendChild, member 로직 수정
-        Member member = Member.of(null, null);
-        memberChildAppender.createRelation(member, child, "WRITE");
+                .image(storedImage)
+                .build()
+        );
+        Member member = memberReader.read(memberId);
+        memberChildAppender.createRelation(member, child, Authority.WRITE);
         milestoneStateAppender.append(child);
+    }
+
+    private Image storeImageIfPresent(MultipartFile image) {
+        if (image.isEmpty()) {
+            return null;
+        }
+        return mediaStorage.storeImage(MediaResource.from(image));
     }
 }

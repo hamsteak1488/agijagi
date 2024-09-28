@@ -5,6 +5,8 @@ import ActivityRecordPage from './pages/ActivityRecordPage';
 import SchedulePage from './pages/SchedulePage';
 import BabyMain from './pages/BabyMain';
 import Login from './pages/Login';
+import BoardPage from './pages/BoardPage';
+import WriteArticlePage from './pages/BoardPage/WritePage';
 import GlobalStyle from './styles/GlobalStyle';
 import { ModalProvider } from './hooks/useModal';
 import Signup from './pages/Signup';
@@ -27,6 +29,8 @@ function App() {
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/schedule" element={<SchedulePage />} />
             <Route path="/babyform" element={<BabyInfoForm />} />
+            <Route path="/board" element={<BoardPage />} />
+            <Route path="/board/write" element={<WriteArticlePage />} />
           </Routes>
         </ModalProvider>
       </BrowserRouter>

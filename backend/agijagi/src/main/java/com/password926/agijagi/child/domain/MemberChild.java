@@ -25,8 +25,8 @@ public class MemberChild {
     @JoinColumn(name = "child_id", nullable = false)
     private Child child;
 
-    @Column(nullable = false)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
 
     public long readChildId() {
         return child.getId();

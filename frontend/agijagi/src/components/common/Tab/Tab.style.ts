@@ -5,6 +5,7 @@ import { TabSize, TabStyles } from './Tab.types';
 
 const sizeStyle: Record<TabSize, SerializedStyles> = {
   sm: css`
+    min-height: 1.5rem;
     height: 1.5rem;
     font-size: 0.875rem;
 
@@ -13,6 +14,7 @@ const sizeStyle: Record<TabSize, SerializedStyles> = {
     }
   `,
   md: css`
+    min-height: 2rem;
     height: 2rem;
     font-size: 1rem;
 
@@ -21,6 +23,7 @@ const sizeStyle: Record<TabSize, SerializedStyles> = {
     }
   `,
   lg: css`
+    min-height: 2.5rem;
     height: 2.5rem;
     font-size: 1.25rem;
 

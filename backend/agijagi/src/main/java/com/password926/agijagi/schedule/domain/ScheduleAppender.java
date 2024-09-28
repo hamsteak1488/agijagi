@@ -23,7 +23,7 @@ public class ScheduleAppender {
             long childId,
             ScheduleContent scheduleContent
     ) {
-        childValidator.validateWriterRole(memberId, childId);
+        childValidator.validateWriteAuthority(memberId, childId);
         scheduleRepository.save(Schedule.builder()
                 .member(memberReader.read(memberId))
                 .child(childReader.read(childId))

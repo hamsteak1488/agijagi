@@ -1,6 +1,5 @@
 package com.password926.agijagi.child.domain;
 
-import com.password926.agijagi.child.controller.ChildErrorCode;
 import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
 import com.password926.agijagi.common.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +11,11 @@ public class ChildValidator {
 
     private final MemberChildReader memberChildReader;
 
-    public void validateWriterRole(long memberId, long childId) {
-        MemberChild memberChild = memberChildReader.readByMemberAndChild(memberId, childId);
-        if (!"WRITE".equals(memberChild.getRole())) {
+    public void validateWriteAuthority(long memberId, long childId) {
+        Authority authority = memberChildReader.readByMemberAndChild(memberId, childId)
+                .getAuthority();
+
+        if (authority == null || !authority.isWriteAuthority()) {
             throw new RestApiException(CommonErrorCode.FORBIDDEN);
         }
     }
