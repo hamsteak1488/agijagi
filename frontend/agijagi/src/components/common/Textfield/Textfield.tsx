@@ -77,7 +77,7 @@ const Textfield = ({
   };
 
   return (
-    <>
+    <s.Conatainer>
       <s.TextfieldContainer
         size={size}
         fieldState={fieldState}
@@ -114,7 +114,7 @@ const Textfield = ({
           {bottomText()}
         </s.StateText>
       )}
-    </>
+    </s.Conatainer>
   );
 };
 

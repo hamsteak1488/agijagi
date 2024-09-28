@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
-import Int1 from '../../assets/images/login/introduction1.png';
-import Int2 from '../../assets/images/login/introduction2.png';
-import Int3 from '../../assets/images/login/introduction3.png';
-import Typhography from '../common/Typography';
+import Int1 from '../../../assets/images/login/introduction1.png';
+import Int2 from '../../../assets/images/login/introduction2.png';
+import Int3 from '../../../assets/images/login/introduction3.png';
+import Typhography from '../../common/Typography';
 import * as s from './IntroductionSlider.style';
 
 interface IntroductionSliderProps {
@@ -17,6 +17,9 @@ export const IntroductionSlider = ({
   loginMode,
 }: IntroductionSliderProps) => {
   const sliderRef = useRef<HTMLDivElement | null>(null);
+
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   const slides = [Int1, Int2, Int3];
 
   const descriptions = [
@@ -46,8 +49,19 @@ export const IntroductionSlider = ({
     };
   }, []);
 
+  function handleScrollToRef(i: number) {
+    const slide = slideRefs.current[i];
+    if (slide) {
+      slide.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+    }
+  }
+
   return (
-    <>
+    <s.Container>
       <s.InnerBox ref={sliderRef} loginMode={loginMode} height={height}>
         <s.SlideWrapper>
           {slides.map((slide, index) => (
@@ -55,6 +69,7 @@ export const IntroductionSlider = ({
               key={index}
               isActive={index === level}
               loginMode={loginMode}
+              ref={(el) => (slideRefs.current[index] = el)}
             >
               <s.Gradient />
               <s.Img src={slide} alt={`Slide ${index + 1}`} />
@@ -71,9 +86,13 @@ export const IntroductionSlider = ({
 
       <s.LevelIndicatorWrapper loginMode={loginMode} width={width}>
         {slides.map((_, index) => (
-          <s.LevelCircle key={index} isActive={index === level} />
+          <s.LevelCircle
+            key={index}
+            isActive={index === level}
+            onClick={() => handleScrollToRef(index)}
+          />
         ))}
       </s.LevelIndicatorWrapper>
-    </>
+    </s.Container>
   );
 };
