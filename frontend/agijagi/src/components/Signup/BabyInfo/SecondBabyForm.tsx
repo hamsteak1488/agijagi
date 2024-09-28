@@ -134,6 +134,7 @@ export const SecondBabyForm = ({ isNext }: SecondBabyFormProps) => {
           inputValue={weight}
           setInputValue={setWeight}
           helpText="*선택사항"
+          type="number"
         />
       </InputContainer>
       <InputContainer>
