@@ -6,6 +6,8 @@ import com.password926.agijagi.article.repository.ArticleRepository;
 import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
 import com.password926.agijagi.common.errors.exception.RestApiException;
 import com.password926.agijagi.media.domain.Image;
+import com.password926.agijagi.media.domain.Media;
+import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.media.domain.MediaStorage;
 import com.password926.agijagi.member.domain.Member;
 import com.password926.agijagi.member.infrastructure.MemberRepository;
@@ -37,7 +39,7 @@ public class ArticleService {
                 .build();
 
         for (MultipartFile multipartFile : request.getMediaList()) {
-            Image image = mediaStorage.storeImage(multipartFile.getResource(), multipartFile.getContentType());
+            Media image = mediaStorage.storeAny(MediaResource.from(multipartFile));
             article.addMedia(image);
         }
 

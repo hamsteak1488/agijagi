@@ -1,6 +1,7 @@
 package com.password926.agijagi.member.controller;
 
 import com.password926.agijagi.auth.controller.dto.LoginMember;
+import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.member.controller.dto.request.ModifyMemberRequest;
 import com.password926.agijagi.member.controller.dto.request.RegisterMemberRequest;
 import com.password926.agijagi.member.domain.ProfileDetail;
@@ -53,7 +54,7 @@ public class MemberController {
             @RequestPart("profileImage") MultipartFile profileImage
     ) {
         memberService.modifyMemberProfileImage(
-                member.getId(), profileImage.getResource(), profileImage.getContentType()
+                member.getId(), MediaResource.from(profileImage)
         );
 
         return ResponseEntity.ok().build();
