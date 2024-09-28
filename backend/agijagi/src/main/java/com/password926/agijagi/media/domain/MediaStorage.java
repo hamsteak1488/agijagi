@@ -19,45 +19,47 @@ public class MediaStorage {
     private final MediaValidator mediaValidator;
 
     @Transactional
-    public Media storeAny(MediaResource mediaResource) {
-        if (mediaValidator.validateImage(mediaResource)) {
-            return storeImage(mediaResource);
-        }
-        if (mediaValidator.validateVideo(mediaResource)) {
-            return storeVideo(mediaResource);
-        }
-
-        throw new RestApiException(MediaErrorCode.UNSUPPORTED_MEDIA_TYPE);
-    }
-
-    @Transactional
     public Image storeImage(MediaResource mediaResource) {
-        if (!mediaValidator.validateImage(mediaResource)) {
-            throw new RestApiException(MediaErrorCode.INVALID_IMAGE_TYPE);
-        }
+        mediaValidator.validateImage(mediaResource);
 
         UUID generatedUUID = UUID.randomUUID();
         String uploadUrl = store(generatedUUID, mediaResource);
 
-        return Image.builder()
+        Image newImage = Image.builder()
                 .id(generatedUUID)
                 .url(uploadUrl)
                 .build();
+        mediaRepository.save(newImage);
+
+        return newImage;
     }
 
     @Transactional
     public Video storeVideo(MediaResource mediaResource) {
-        if (!mediaValidator.validateImage(mediaResource)) {
-            throw new RestApiException(MediaErrorCode.INVALID_IMAGE_TYPE);
-        }
+        mediaValidator.validateVideo(mediaResource);
 
         UUID generatedUUID = UUID.randomUUID();
         String uploadUrl = store(generatedUUID, mediaResource);
 
-        return Video.builder()
+        Video newVideo = Video.builder()
                 .id(generatedUUID)
                 .url(uploadUrl)
                 .build();
+        mediaRepository.save(newVideo);
+
+        return newVideo;
+    }
+
+    @Transactional
+    public Media storeAny(MediaResource mediaResource) {
+        if (mediaValidator.isImage(mediaResource)) {
+            return storeImage(mediaResource);
+        }
+        if (mediaValidator.isVideo(mediaResource)) {
+            return storeVideo(mediaResource);
+        }
+
+        throw new RestApiException(MediaErrorCode.UNSUPPORTED_MEDIA_TYPE);
     }
 
     private String store(UUID key, MediaResource mediaResource) {
