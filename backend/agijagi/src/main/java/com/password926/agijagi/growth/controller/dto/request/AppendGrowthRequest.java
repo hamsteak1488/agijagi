@@ -3,9 +3,7 @@ package com.password926.agijagi.growth.controller.dto.request;
 import com.password926.agijagi.growth.domain.GrowthContent;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Getter
 public class AppendGrowthRequest {
 
