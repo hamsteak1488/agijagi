@@ -18,11 +18,11 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginRequest request, HttpSession session) {
+    public ResponseEntity<Long> login(@RequestBody LoginRequest request, HttpSession session) {
         long loginMemberId = authService.login(request.getEmail(), request.getPassword());
         session.setAttribute(AuthConstants.SESSION_LOGIN_MEMBER_KEY, loginMemberId);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(loginMemberId);
     }
 
     @Authenticate
