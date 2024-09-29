@@ -19,15 +19,9 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-//        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-//
-//        Long loginMemberId = (Long) request.getSession().getAttribute(LoginMember.SESSION_ATTRIBUTE_KEY);
-//        if (loginMemberId == null) {
-//             return null;
-//        }
-//        else {
-//            return new LoginMember(loginMemberId);
-//        }
-        return new LoginMember(1);
+        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+        long loginMemberId = (long) request.getAttribute(AuthConstants.ATTRIBUTE_LOGIN_MEMBER_KEY);
+
+        return new LoginMember(loginMemberId);
     }
 }
