@@ -13,10 +13,8 @@ public class StandardGrowth {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
     private double standardWeight;
 
-    @Column(nullable = false)
     private int month;
 
     @Convert(converter = GenderConverter.class)

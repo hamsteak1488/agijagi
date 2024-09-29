@@ -2,7 +2,6 @@ package com.password926.agijagi.milestone.controller;
 
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.milestone.controller.dto.MilestoneDtoConverter;
-import com.password926.agijagi.milestone.controller.dto.request.CreateMilestoneAnalysisRequest;
 import com.password926.agijagi.milestone.controller.dto.request.UpdateMilestoneRequest;
 import com.password926.agijagi.milestone.controller.dto.response.ReadMilestoneResponse;
 import com.password926.agijagi.milestone.service.MilestoneService;
@@ -36,15 +35,6 @@ public class MilestoneController {
             @RequestBody @Valid UpdateMilestoneRequest request
     ) {
         milestoneService.updateMilestone(member.getId(), childId, request.toContents());
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/{childId}/milestone-analysis")
-    public ResponseEntity<Void> createMilestoneAnalysis(
-            LoginMember member,
-            @PathVariable long childId,
-            @RequestBody @Valid CreateMilestoneAnalysisRequest request
-    ) {
         return ResponseEntity.ok().build();
     }
 }

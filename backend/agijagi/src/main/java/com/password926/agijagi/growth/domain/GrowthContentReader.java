@@ -8,11 +8,13 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class GrowthReader {
+public class GrowthContentReader {
 
     private final GrowthRepository growthRepository;
 
-    public List<Growth> readAllByMonth(long childId, int month) {
-        return growthRepository.findAllByChildIdAndMonthLessThan(childId, month);
+    public List<GrowthContent> readAllByMonth(long childId, int month) {
+        return growthRepository.findAllByChildIdAndMonthLessThan(childId, month).stream()
+                .map(GrowthContent::from)
+                .toList();
     }
 }

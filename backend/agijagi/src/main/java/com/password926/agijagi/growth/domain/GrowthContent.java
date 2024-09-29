@@ -12,4 +12,12 @@ public class GrowthContent {
     private final double height;
 
     private final int month;
+
+    public static GrowthContent from(Growth growth) {
+        return new GrowthContent(
+                growth.getWeight(),
+                growth.getHeight(),
+                growth.getMonth()
+        );
+    }
 }
