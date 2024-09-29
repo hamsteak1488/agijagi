@@ -13,6 +13,6 @@ public class StandardGrowthReader {
     private final StandardGrowthRepository standardGrowthRepository;
 
     public List<StandardGrowth> read(int month) {
-        return standardGrowthRepository.findAllByMonth(month);
+        return standardGrowthRepository.findAllByMonthLessThan(month);
     }
 }

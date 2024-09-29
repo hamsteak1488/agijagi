@@ -37,13 +37,4 @@ public class MilestoneController {
         milestoneService.updateMilestone(member.getId(), childId, request.toContents());
         return ResponseEntity.ok().build();
     }
-
-    @PostMapping("/{childId}/milestone-analysis")
-    public ResponseEntity<Void> createMilestoneAnalysis(
-            LoginMember member,
-            @PathVariable long childId,
-            @RequestBody @Valid CreateMilestoneAnalysisRequest request
-    ) {
-        return ResponseEntity.ok().build();
-    }
 }
