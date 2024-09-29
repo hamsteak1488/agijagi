@@ -71,7 +71,7 @@ public class DiaryService {
 
         childValidator.validateWriteAuthority(memberId, diary.getChild().getId());
 
-        diary.updateTitleAndContent(request.getTitle(), request.getContent());
+        diary.updateTitleOrContent(request.getTitle(), request.getContent());
 
         if (request.getRemoveMediaIdList() != null) {
             for (Long removeMediaId : request.getRemoveMediaIdList()) {

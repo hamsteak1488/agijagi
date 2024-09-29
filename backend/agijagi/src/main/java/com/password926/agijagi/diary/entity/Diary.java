@@ -53,7 +53,7 @@ public class Diary {
         isDeleted = true;
     }
 
-    public void updateTitleAndContent(String title, String content) {
+    public void updateTitleOrContent(String title, String content) {
         if (title != null) {
             this.title = title;
         }
