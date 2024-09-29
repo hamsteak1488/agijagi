@@ -147,6 +147,7 @@ export const SecondBabyForm = ({ isNext }: SecondBabyFormProps) => {
           inputValue={height}
           setInputValue={setHeight}
           helpText="*선택사항"
+          type="number"
         />
       </InputContainer>
       <Button fullWidth={true}>등록</Button>

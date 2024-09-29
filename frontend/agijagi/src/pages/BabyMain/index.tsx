@@ -6,6 +6,7 @@ import girl from '../../assets/images/girl.png';
 import video from '../../assets/Test.mp4';
 import { TimelineDiary } from '../../components/Diary/TimelineDiary/TimelineDiary';
 import Button from '../../components/common/Button';
+import FullCalendar from '../../components/common/FullCalendar';
 import Tab from '../../components/common/Tab';
 import useModal from '../../hooks/useModal';
 import * as s from './style';
@@ -18,9 +19,14 @@ const DiaryText =
 export const BabyMain = () => {
   const [fileList, setFileList] = useState<File[]>([]);
   const [isInitialRender, setIsInitialRender] = useState<boolean>(true);
+  const [tabMenu, setTabMenu] = useState<string>('1');
 
   const modal = useModal();
   const navigator = useNavigate();
+
+  const handleTab = (menu: string) => {
+    setTabMenu(menu);
+  };
 
   const handleModalDiary = () => {
     modal.push({
@@ -61,18 +67,32 @@ export const BabyMain = () => {
       <s.WriteIconBox onClick={() => navigator('/baby/writing')}>
         {s.WriteIcon}
       </s.WriteIconBox>
-      <Tab selected="1" size="md" color="primary">
+      <Tab
+        selected="1"
+        size="md"
+        color="primary"
+        onChange={(value) => {
+          handleTab(value);
+        }}
+      >
         <Tab.Item value="1">타임라인</Tab.Item>
         <Tab.Item value="2">캘린더</Tab.Item>
       </Tab>
-      <Button onClick={handleModalDiary}>모달형 일기</Button>
-      <s.TimelineContainer>
-        <s.Circle />
-        <s.PostContainer>
-          <TimelineDiary fileList={fileList} DiaryText={DiaryText} />
-          <TimelineDiary fileList={fileList} DiaryText={DiaryText} />
-        </s.PostContainer>
-      </s.TimelineContainer>
+
+      {tabMenu === '1' ? (
+        <s.TimelineContainer>
+          <s.Circle />
+          <Button onClick={handleModalDiary}>모달형 일기</Button>
+          <s.PostContainer>
+            <TimelineDiary fileList={fileList} DiaryText={DiaryText} />
+            <TimelineDiary fileList={fileList} DiaryText={DiaryText} />
+          </s.PostContainer>
+        </s.TimelineContainer>
+      ) : (
+        <s.CalendarContainer>
+          <FullCalendar />
+        </s.CalendarContainer>
+      )}
     </>
   );
 };
