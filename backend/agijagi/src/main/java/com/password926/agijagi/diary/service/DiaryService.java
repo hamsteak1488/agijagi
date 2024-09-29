@@ -58,7 +58,7 @@ public class DiaryService {
 
         if (request.getMediaList() != null) {
             for (MultipartFile multipartFile : request.getMediaList() ) {
-                Image image = mediaStorage.storeImage(multipartFile.getResource(), multipartFile.getContentType());
+                Image image = mediaStorage.storeImage(MediaResource.from(multipartFile));
                 diary.addMedia(image);
             }
         }
@@ -87,7 +87,7 @@ public class DiaryService {
 
         if (request.getNewMediaList() != null) {
             for (MultipartFile multipartFile : request.getNewMediaList() ) {
-                Image image = mediaStorage.storeImage(multipartFile.getResource(), multipartFile.getContentType());
+                Image image = mediaStorage.storeImage(MediaResource.from(multipartFile));
                 diary.addMedia(image);
             }
         }
