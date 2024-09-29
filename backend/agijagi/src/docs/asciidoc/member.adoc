@@ -1,0 +1,13 @@
+:source-highlighter: highlightjs
+
+[[Member-API]]
+= *회원 API*
+
+== 회원 가입
+operation::member/register-member[snippets='request-fields,http-request,http-response']
+
+== 회원 조회
+operation::member/get-member[snippets='path-parameters,http-request,response-fields,http-response']
+
+== 회원 수정
+operation::member/modify-member[snippets='request-cookies,request-fields,http-request,http-response']

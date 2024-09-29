@@ -13,6 +13,8 @@ import com.password926.agijagi.diary.entity.DiaryDetail;
 import com.password926.agijagi.diary.entity.DiaryMedia;
 import com.password926.agijagi.diary.repository.DiaryRepository;
 import com.password926.agijagi.media.domain.Image;
+import com.password926.agijagi.media.domain.Media;
+import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.media.domain.MediaStorage;
 import com.password926.agijagi.media.infrastructure.MediaRepository;
 import com.password926.agijagi.member.domain.Member;

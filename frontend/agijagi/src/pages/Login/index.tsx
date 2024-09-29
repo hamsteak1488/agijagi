@@ -3,25 +3,10 @@ import * as s from './style';
 import Button from '../../components/common/Button';
 import Textfield from '../../components/common/Textfield';
 import Typhography from '../../components/common/Typography';
-import { IntroductionSlider } from '../../components/Login/IntroductionSlider';
+import { IntroductionSlider } from '../../components/Login/IntroductionSlider/IntroductionSlider';
 import { ValidationState } from '../../components/common/Textfield/Textfield.types';
-
-const BackIcon = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    strokeWidth={1.5}
-    stroke="currentColor"
-    className="size-6"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
-    />
-  </svg>
-);
+import { useNavigate } from 'react-router-dom';
+import BackIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
 
 export const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -41,6 +26,8 @@ export const Login = () => {
   const handleLevel = (level: number) => {
     setLevel(level);
   };
+
+  const navigator = useNavigate();
 
   function validatePassword(input: string): ValidationState {
     if (input.trim() === '') {
@@ -99,13 +86,21 @@ export const Login = () => {
         <Button fullWidth={true} onClick={handleActivateLogin}>
           로그인
         </Button>
-        <Button color="secondary" fullWidth={true}>
+        <Button
+          color="secondary"
+          fullWidth={true}
+          onClick={() => {
+            navigator('/signup');
+          }}
+        >
           회원가입
         </Button>
       </s.LoginContainer>
 
       <s.FormContainer width={width} loginMode={loginMode}>
-        <s.BackButton onClick={handleActivateLogin}>{BackIcon}</s.BackButton>
+        <s.BackButton onClick={handleActivateLogin}>
+          <BackIcon />
+        </s.BackButton>
         <Typhography size="7xl" weight="bold">
           로그인
         </Typhography>
@@ -117,6 +112,7 @@ export const Login = () => {
           inputValue={email}
           setInputValue={setEmail}
           validationFunction={validateEmail}
+          disabled={!loginMode}
         ></Textfield>
         <Textfield
           size="lg"
@@ -125,16 +121,17 @@ export const Login = () => {
           inputValue={password}
           setInputValue={setPassword}
           validationFunction={validatePassword}
+          disabled={!loginMode}
           type="password"
         ></Textfield>
         <Button
           size="md"
-          color="primary"
+          color={isValidated[0] && isValidated[1] ? 'primary' : 'greyScale'}
           fullWidth={true}
           disabled={!(isValidated[0] && isValidated[1])}
           onClick={() => {}}
         >
-          로그인
+          <Typhography color="white">로그인</Typhography>
         </Button>
       </s.FormContainer>
     </s.Container>
