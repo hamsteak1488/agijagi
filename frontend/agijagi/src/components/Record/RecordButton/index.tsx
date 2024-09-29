@@ -1,4 +1,4 @@
-import useMutateLatestRecords from '../../../hooks/api/useMutateLatestRecords';
+import useAddLatestRecords from '../../../hooks/api/useAddLatestRecords';
 import useTimeDifference from '../../../hooks/useTimeDifference';
 
 import { RecordMenu } from '../../../types/record';
@@ -17,7 +17,7 @@ const RecordButton = ({
 }: RecordButtonProps) => {
   const timeDifference = useTimeDifference(new Date(latestDateTime || ''));
 
-  const { mutate, isPending } = useMutateLatestRecords();
+  const { mutate } = useAddLatestRecords();
 
   const handleClick = () => {
     mutate({

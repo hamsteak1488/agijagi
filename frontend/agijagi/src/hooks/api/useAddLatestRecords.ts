@@ -4,7 +4,7 @@ import { addRecord } from '../../apis/record';
 import useDialog from '../useDialog';
 import useFetchLatestRecords from './useFetchLatestRecords';
 
-const useMutateLatestRecords = () => {
+const useAddLatestRecords = () => {
   const queryClient = useQueryClient();
   const { alert } = useDialog();
 
@@ -24,4 +24,4 @@ const useMutateLatestRecords = () => {
   return { mutate, isPending };
 };
 
-export default useMutateLatestRecords;
+export default useAddLatestRecords;

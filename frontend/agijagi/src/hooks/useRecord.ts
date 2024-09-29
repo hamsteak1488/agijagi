@@ -1,4 +1,4 @@
-import type { Record, RecordMenu } from '../types/record';
+import type { Record, RecordMenu, RecordType } from '../types/record';
 
 import ShitIcon from '../assets/images/record/shit.png';
 import DropIcon from '../assets/images/record/drop.png';
@@ -54,11 +54,11 @@ const useRecord = () => {
     });
   };
 
-  const findMenuByName = (type: string): RecordMenuData | undefined => {
+  const findMenuByType = (type: RecordType): RecordMenuData | undefined => {
     return menus.find((menu) => menu.type === type);
   };
 
-  return { getMenu, findMenuByName };
+  return { getMenu, findMenuByType };
 };
 
 export default useRecord;
