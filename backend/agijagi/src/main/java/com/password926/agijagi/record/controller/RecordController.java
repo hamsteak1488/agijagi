@@ -1,5 +1,6 @@
 package com.password926.agijagi.record.controller;
 
+import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.record.controller.dto.RecordDtoConverter;
 import com.password926.agijagi.record.controller.dto.request.AppendRecordRequest;
@@ -21,6 +22,7 @@ public class RecordController {
 
     private final RecordService recordService;
 
+    @Authenticate
     @GetMapping
     public ResponseEntity<List<ReadRecordResponse>> readRecord(
             LoginMember member,
@@ -33,6 +35,7 @@ public class RecordController {
                 .body(RecordDtoConverter.convert(recordService.readRecord(member.getId(), childId, type, startDate, endDate)));
     }
 
+    @Authenticate
     @GetMapping("/latest")
     public ResponseEntity<List<ReadLatestRecordResponse>> readLatestRecord(
             LoginMember member,
@@ -42,6 +45,7 @@ public class RecordController {
                 .body(RecordDtoConverter.convertToLatest(recordService.readLatestRecord(member.getId(), childId)));
     }
 
+    @Authenticate
     @PostMapping
     public ResponseEntity<Void> appendRecord(
             LoginMember member,
@@ -51,6 +55,7 @@ public class RecordController {
         return ResponseEntity.ok().build();
     }
 
+    @Authenticate
     @DeleteMapping("/{recordId}")
     public ResponseEntity<Void> removeRecord(
             LoginMember member,
