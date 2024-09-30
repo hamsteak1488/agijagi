@@ -46,6 +46,7 @@ const StyledCalendar = styled(Calendar)`
     position: relative;
     width: 100%;
     height: 100%;
+    background-color: white;
     aspect-ratio: 1;
   }
   .react-calendar__month-view__days__day abbr {
@@ -124,7 +125,7 @@ const StyledCalendar = styled(Calendar)`
   }
 
   .react-calendar__month-view__days__day--neighboringMonth {
-    color: #d3d3d3;
+    color: #929292;
     font-weight: 300;
     opacity: 0.5;
   }

@@ -57,14 +57,12 @@ export type BabyGender = '남아' | '여아' | '알수없음';
 export type Relationship = '엄마' | '아빠' | '기타';
 
 export const SecondBabyForm = ({ isNext }: SecondBabyFormProps) => {
-  // 성별과 관계 선택 상태 관리
   const [selectedGender, setSelectedGender] = useState<BabyGender>('남아');
   const [selectedRelation, setSelectedRelation] =
     useState<Relationship>('엄마');
   const [weight, setWeight] = useState<string>('');
   const [height, setHeight] = useState<string>('');
 
-  // 버튼 클릭 핸들러
   const handleGenderClick = (gender: BabyGender) => {
     setSelectedGender(gender);
   };

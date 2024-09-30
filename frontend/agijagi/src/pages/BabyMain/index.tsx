@@ -29,7 +29,7 @@ export const BabyMain = () => {
 
   const data = [
     {
-      date: '2024-09-29',
+      date: '2024-09-30',
       fileList: fileList,
       DiaryText:
         '우리 아이가 요즘 혼자서 앉아 놀기 시작했어요. ' +
@@ -37,7 +37,7 @@ export const BabyMain = () => {
         '천천히 경험하며 커가는 모습이 뿌듯해요 ㅎㅎ',
     },
     {
-      date: '2024-10-01',
+      date: '2024-10-02',
       fileList: fileList,
       DiaryText:
         '우리 아이가 요즘 혼자서 앉아 놀기 시작했어요. ' +
@@ -49,9 +49,8 @@ export const BabyMain = () => {
   const renderTileContent = ({ date, view }: { date: Date; view: string }) => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
 
-    // 배열을 순회하며 날짜가 일치하는 항목을 찾고, 일치하면 해당 이미지 렌더링
     const matchedDate = data.find((item) => item.date === formattedDate);
-    if (view === 'month' && matchedDate) {
+    if (view === 'month' && matchedDate && matchedDate.fileList) {
       return (
         <img
           src={URL.createObjectURL(matchedDate.fileList[0])}
@@ -60,7 +59,7 @@ export const BabyMain = () => {
         />
       );
     }
-    return null; // 해당 날짜가 없으면 아무것도 표시하지 않음
+    return null;
   };
 
   const handleModalDiary = (selectedDate: string) => {
