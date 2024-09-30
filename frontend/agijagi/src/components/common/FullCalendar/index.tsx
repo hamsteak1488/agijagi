@@ -2,6 +2,7 @@ import Calendar from 'react-calendar';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import theme from '../../../styles/theme';
+import moment from 'moment';
 
 const StyledCalendar = styled(Calendar)`
   .react-calendar {
@@ -49,7 +50,10 @@ const StyledCalendar = styled(Calendar)`
   }
   .react-calendar__month-view__days__day abbr {
     position: absolute;
-    font-size: 0.5rem;
+    background-color: white;
+    padding: 1px;
+    border-radius: 50%;
+    font-size: 0.75rem;
     bottom: 60%;
     left: 5%;
   }
@@ -122,6 +126,7 @@ const StyledCalendar = styled(Calendar)`
   .react-calendar__month-view__days__day--neighboringMonth {
     color: #d3d3d3;
     font-weight: 300;
+    opacity: 0.5;
   }
   .react-calendar__month-view__days__day--neighboringMonth:disabled {
     background: #fff;
@@ -135,7 +140,7 @@ const StyledCalendar = styled(Calendar)`
 
   .react-calendar__tile {
     max-width: 100%;
-    padding: 10px 6.6667px;
+    padding: 0;
     border: 0;
     box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 1px 0px;
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -159,8 +164,7 @@ const StyledCalendar = styled(Calendar)`
   .react-calendar__tile--now {
     font-weight: bold;
     border: 1px solid ${theme.color.primary[600]};
-    background-color: ${theme.color.primary[50]};
-    color: ${theme.color.primary[900]};
+    background-color: ${theme.color.primary[100]};
   }
 
   .react-calendar__tile--now:enabled:hover,
@@ -187,8 +191,16 @@ const StyledCalendar = styled(Calendar)`
   }
 `;
 
-export const FullCalendar = () => {
-  return <StyledCalendar></StyledCalendar>;
+export const FullCalendar = ({ ...rest }) => {
+  return (
+    <StyledCalendar
+      {...rest}
+      formatDay={(locale: string | undefined, date: Date) =>
+        moment(date).format('D')
+      }
+      showNeighboringMonth={true}
+    />
+  );
 };
 
 export default FullCalendar;

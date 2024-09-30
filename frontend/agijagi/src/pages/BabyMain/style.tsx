@@ -11,8 +11,16 @@ export const TimelineContainer = styled.div`
   border-left: 4px dashed ${theme.color.tertiary[700]};
 `;
 
-export const CalendarContainer = styled.div`
-  width: 90%;
+export const CalendarOutterContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+`;
+export const CalendarInnerContainer = styled.div`
+  width: 85%;
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: white;
 `;
 
 export const Circle = styled.div`
