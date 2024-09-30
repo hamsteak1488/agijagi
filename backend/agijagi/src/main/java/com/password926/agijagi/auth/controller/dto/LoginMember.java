@@ -8,6 +8,4 @@ import lombok.ToString;
 @ToString
 public class LoginMember {
     private final long id;
-
-    public static final String SESSION_ATTRIBUTE_KEY = "loginMemberId";
 }
