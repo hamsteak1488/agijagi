@@ -19,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     private final LoginMemberArgumentResolver loginMemberArgumentResolver;
     private final HeaderAuthenticateInterceptor headerAuthenticateInterceptor;
 
-    @Value("${enable-header-auth}")
+    @Value("${enable-header-auth:false}")
     private boolean enableHeaderAuth;
 
     @Override
