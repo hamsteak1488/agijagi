@@ -6,7 +6,7 @@ import Button from '../../components/common/Button';
 import { useNavigate } from 'react-router-dom';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import MileStoneFilter from '../../components/milestone/MileStoneFilter';
-import MileStoneIntro from '../../components/milestone/MileStoneIntro';
+import MileStoneIntro from '../../components/milestone/MileStoneCheck';
 import axios from 'axios';
 
 const Title = styled.div`
@@ -44,7 +44,6 @@ const FilterContainer = styled.div`
 
 const MileStoneContainer = styled.div`
   background-color: ${theme.color.tertiary[50]};
-  height: 84vh;
   overflow-y: auto;
   padding: 10px;
 `;

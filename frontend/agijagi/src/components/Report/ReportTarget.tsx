@@ -15,7 +15,7 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const WeightContainer = styled.div`
+const DateContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 170px;
@@ -28,7 +28,7 @@ const WeightContainer = styled.div`
   border: 1px solid ${theme.color.primary[700]};
 `;
 
-const WeightIcon = styled(CalendarIcon)`
+const DateIcon = styled(CalendarIcon)`
   width: 21px;
   margin-right: 5px;
   color: ${theme.color.primary[800]};
@@ -71,12 +71,12 @@ const ReportFilter = ({ gender, createDate }: FilterProps) => {
 
   return (
     <Container>
-      <WeightContainer>
-        <WeightIcon />
+      <DateContainer>
+        <DateIcon />
         <Typhography size="sm" color="greyScale" shade="800">
           생성일 : {createDate}
         </Typhography>
-      </WeightContainer>
+      </DateContainer>
 
       <GenderContainer>
         <FaceIcon />

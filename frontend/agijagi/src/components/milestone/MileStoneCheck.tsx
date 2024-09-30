@@ -6,7 +6,7 @@ import Button from '../common/Button';
 import MileStoneCheckList from './MileStoneCheckList';
 import Textfield from '../common/Textfield';
 import useModal from '../../hooks/useModal';
-import ReportModal from './ReportCreateModal';
+import ReportModal from '../Report/ReportCreateModal';
 import { ValidationState } from '../common/Textfield/Textfield.types';
 
 const Wrapper = styled.div`
@@ -246,7 +246,7 @@ const MileStoneCheck = ({
               inputValue={currentWeight}
               setInputValue={setCurrentWeigh}
               validationFunction={validateInput}
-              helpText={'*숫자만 입력하세요'}
+              helpText={'*숫자만 입력해주세요'}
               checkText={'올바르게 입력했습니다. 저장해주세요'}
               warningText={'숫자만 입력해주세요'}
             />

@@ -92,7 +92,7 @@ const ReportModal = ({
         `https://api.password926.site/children/${childId}/milestone-analysis`
       );
       console.log('보고서 데이터 :', response.data);
-      navigate('/milestone-report', { state: { reportData: response.data } });
+      navigate('/milestone-report', { state: { reportId: response.data } });
     } catch (error) {
       console.error('보고서 데이터 받기 실패:', error);
     } finally {
