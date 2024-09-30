@@ -19,41 +19,41 @@ public class StoryController {
     private final StoryService storyService;
 
     @Authenticate
-    @GetMapping
-    public ResponseEntity<List<Story>> getAllStory(
-            LoginMember member,
-            @RequestParam long childId
-    ) {
-        return ResponseEntity.ok().body(storyService.getAllStory(member.getId(), childId));
-    }
-
-    @Authenticate
-    @GetMapping("/{storyId}")
-    public ResponseEntity<Story> getStory(
-            LoginMember member,
-            @PathVariable long storyId
-    ) {
-        return ResponseEntity.ok().body(storyService.getStory(member.getId(), storyId));
-    }
-
-    @Authenticate
-    @DeleteMapping("/{storyId}")
-    public ResponseEntity<Void> deleteStory(
-            LoginMember member,
-            @PathVariable long storyId
-    ) {
-        storyService.deleteStory(member.getId(), storyId);
-        return ResponseEntity.ok().build();
-    }
-
-    @Authenticate
     @PostMapping
     public ResponseEntity<Void> createStory(
             LoginMember member,
-            @RequestBody CreateStoryRequest createStoryRequest
+            CreateStoryRequest createStoryRequest
     ) {
-        storyService.createStory(1, createStoryRequest);
+        storyService.createStory(member.getId(), createStoryRequest);
         return ResponseEntity.ok().build();
     }
+
+//    @Authenticate
+//    @GetMapping
+//    public ResponseEntity<List<Story>> getAllStory(
+//            LoginMember member,
+//            @RequestParam long childId
+//    ) {
+//        return ResponseEntity.ok().body(storyService.getAllStory(member.getId(), childId));
+//    }
+//
+//    @Authenticate
+//    @GetMapping("/{storyId}")
+//    public ResponseEntity<Story> getStory(
+//            LoginMember member,
+//            @PathVariable long storyId
+//    ) {
+//        return ResponseEntity.ok().body(storyService.getStory(member.getId(), storyId));
+//    }
+//
+//    @Authenticate
+//    @DeleteMapping("/{storyId}")
+//    public ResponseEntity<Void> deleteStory(
+//            LoginMember member,
+//            @PathVariable long storyId
+//    ) {
+//        storyService.deleteStory(member.getId(), storyId);
+//        return ResponseEntity.ok().build();
+//    }
 
 }

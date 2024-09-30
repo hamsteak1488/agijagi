@@ -1,5 +1,7 @@
 package com.password926.agijagi.story.entity;
 
+import com.password926.agijagi.child.domain.Child;
+import com.password926.agijagi.media.domain.Media;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -7,9 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Entity
 public class Story {
 
@@ -17,27 +17,40 @@ public class Story {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long childId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "child_id", nullable = false)
+    private Child child;
 
     @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
-    private LocalDate startTime;
+    private LocalDate startDate;
 
     @Column(nullable = false)
-    private LocalDate endTime;
+    private LocalDate endDate;
 
-    private String coverImage;
+    private String coverImageUrl;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    private Boolean isDeleted;
+    private boolean isDeleted;
+
+    @Builder
+    public Story(Child child, String title, LocalDate startDate, LocalDate endDate, LocalDateTime createdAt) {
+        this.child = child;
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.createdAt = createdAt;
+    }
 
     public void remove() {
         isDeleted = true;
     }
 
+    public void addMedia(String mediaUrl) {
+        this.coverImageUrl = mediaUrl;
+    }
 }

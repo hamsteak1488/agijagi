@@ -22,7 +22,7 @@ public class StoryPage {
     private String content;
 
     @Column(nullable = false)
-    private int index;
+    private int pageNumber;
 
-    private String image;
+//    private String image;
 }
