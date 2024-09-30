@@ -64,11 +64,17 @@ public class ReportAppender {
     public long append(long memberId, long childId) {
         childValidator.validateWriteAuthority(memberId, childId);
         Child child = childReader.read(childId);
-        int monthsOld = childReader.readMonthsOld(childId);
 
+        // 아이 출생 몸무게 없을 시, 보고서 생성 못함.
+        if (child.getBirthWeight() == null) {
+            return 0;
+        }
+
+        int monthsOld = childReader.readMonthsOld(childId);
         double birthWeight = child.getBirthWeight();
         String growthData = jsonObjectMapper.toJson(growthContentReader.readAllByMonth(child.getId(), monthsOld));
         List<MilestoneStateDetail> milestone = milestoneStateDetailReader.read(memberId, childId, monthsOld);
+
         Prompt prompt = promptTemplate.create(Map.of(
                 "birthWeight", birthWeight,
                 "growth", growthData,

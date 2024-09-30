@@ -38,9 +38,10 @@ public class ReadReportDetailResponse {
                         standardGrowths.get(month)
                 ))
                 .toList();
+        double currWeight = growths.isEmpty() ? 0 : growths.get(growths.size() - 1).getWeight();
 
         return ReadReportDetailResponse.builder()
-                .currWeight(growths.get(growths.size() - 1).getWeight())
+                .currWeight(currWeight)
                 .content(reportDetail.getContent())
                 .growthDegree(reportDetail.getGrowthDegree())
                 .maxDegree(reportDetail.getMaxDegree())
