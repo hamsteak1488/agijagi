@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.password926.agijagi.auth.controller.dto.request.LoginRequest;
 import com.password926.agijagi.auth.service.AuthService;
 import com.password926.agijagi.member.controller.MemberController;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -73,11 +78,19 @@ class AuthControllerTest {
         mockMvc.perform(
                 RestDocumentationRequestBuilders
                         .post("/auth/logout")
+                        .cookie(new Cookie("SESSION", "SESSION_VALUE"))
+                        .header(AuthConstants.HEADER_LOGIN_MEMBER_KEY, 1)
                         .contentType(MediaType.ALL)
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(document(
-                        "auth/logout"
+                        "auth/logout",
+                        requestCookies(
+                                cookieWithName("SESSION").description("세션 쿠키")
+                        ),
+                        requestHeaders(
+                                headerWithName(AuthConstants.HEADER_LOGIN_MEMBER_KEY).description("인증 헤더").optional()
+                        )
                 ));
     }
 
