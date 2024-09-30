@@ -23,7 +23,6 @@ public class MilestoneStateAppender {
                     .child(child)
                     .milestone(milestone)
                     .currentAmount(0)
-                    .date(LocalDate.now())
                     .isAchieved(false)
                     .build());
         }

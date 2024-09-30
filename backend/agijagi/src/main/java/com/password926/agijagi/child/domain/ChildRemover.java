@@ -18,7 +18,6 @@ public class ChildRemover {
     public void remove(long memberId, long childId) {
         childValidator.validateWriteAuthority(memberId, childId);
         Child child = childReader.read(childId);
-
         memberChildRemover.removeAllRelation(childId);
         milestoneStateRemover.remove(child);
         child.remove();

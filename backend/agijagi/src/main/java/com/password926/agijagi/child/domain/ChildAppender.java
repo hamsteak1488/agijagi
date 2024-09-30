@@ -25,15 +25,7 @@ public class ChildAppender {
     @Transactional
     public void append(long memberId, ChildContent childContent, MultipartFile image) {
         Image storedImage = storeImageIfPresent(image);
-        Child child = childRepository.save(
-                Child.builder()
-                .name(childContent.getName())
-                .nickname(childContent.getNickname())
-                .gender(childContent.getGender())
-                .birthday(childContent.getBirthday())
-                .image(storedImage)
-                .build()
-        );
+        Child child = childRepository.save(Child.of(childContent, storedImage));
         Member member = memberReader.read(memberId);
         memberChildAppender.createRelation(member, child, Authority.WRITE);
         milestoneStateAppender.append(child);
