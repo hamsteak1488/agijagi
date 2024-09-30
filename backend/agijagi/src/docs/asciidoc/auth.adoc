@@ -7,4 +7,4 @@
 operation::auth/login[snippets='request-fields,http-request,response-fields,response-body,http-response']
 
 == 로그아웃
-operation::auth/logout[snippets='http-request,http-response']
+operation::auth/logout[snippets='request-cookies,request-headers,http-request,http-response']
