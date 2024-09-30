@@ -1,6 +1,8 @@
 package com.password926.agijagi.member.controller;
 
+import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
+import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.member.controller.dto.request.ModifyMemberRequest;
 import com.password926.agijagi.member.controller.dto.request.RegisterMemberRequest;
 import com.password926.agijagi.member.domain.ProfileDetail;
@@ -37,6 +39,7 @@ public class MemberController {
         return ResponseEntity.ok(profileDetail);
     }
 
+    @Authenticate
     @PatchMapping
     public ResponseEntity<Void> modifyMemberProfileDetail(
             LoginMember member,
@@ -47,18 +50,20 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+    @Authenticate
     @PatchMapping("/profile-image")
     public ResponseEntity<Void> modifyMemberProfileImage(
             LoginMember member,
             @RequestPart("profileImage") MultipartFile profileImage
     ) {
         memberService.modifyMemberProfileImage(
-                member.getId(), profileImage.getResource(), profileImage.getContentType()
+                member.getId(), MediaResource.from(profileImage)
         );
 
         return ResponseEntity.ok().build();
     }
 
+    @Authenticate
     @DeleteMapping
     public ResponseEntity<Void> deleteMember(LoginMember member) {
         memberService.removeMember(member.getId());

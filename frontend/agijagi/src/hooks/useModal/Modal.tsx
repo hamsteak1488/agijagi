@@ -34,7 +34,14 @@ const Modal = ({
     }
 
     wrapperRef.current.className = `${classNames.base} ${classNames.exit}`;
-  }, [state, animation, wrapperRef]);
+  }, [
+    state,
+    animation,
+    wrapperRef,
+    classNames.base,
+    classNames.enter,
+    classNames.exit,
+  ]);
 
   const handleTransitionEnd = (e: React.TransitionEvent) => {
     if (e.target !== wrapperRef.current) {

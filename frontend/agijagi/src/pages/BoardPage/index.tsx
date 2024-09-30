@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import * as s from './style';
+import theme from '../../styles/theme';
 
 import AppBar from '../../components/common/AppBar';
 import Tab from '../../components/common/Tab';
@@ -12,9 +13,8 @@ import useModal from '../../hooks/useModal';
 
 import ArticlePage from './ArticlePage';
 
-import theme from '../../styles/theme';
+import Waves from '../../assets/images/record/waves.svg';
 
-import Waves from '../../assets/images/activityRecord/waves.svg';
 import WritePage from './WritePage';
 
 const BoardPage = () => {

@@ -12,28 +12,29 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/milestones")
+@RequestMapping("/children")
 @RequiredArgsConstructor
 @RestController
 public class MilestoneController {
 
     private final MilestoneService milestoneService;
 
-    @GetMapping
+    @GetMapping("/{childId}/milestones")
     public ResponseEntity<List<ReadMilestoneResponse>> readMilestone(
             LoginMember member,
-            @RequestParam long childId,
+            @PathVariable long childId,
             @RequestParam int month
     ) {
         return ResponseEntity.ok().body(MilestoneDtoConverter.convert(milestoneService.readMilestone(member.getId(), childId, month)));
     }
 
-    @PatchMapping
+    @PatchMapping("/{childId}/milestones")
     public ResponseEntity<Void> updateMilestone(
             LoginMember member,
+            @PathVariable long childId,
             @RequestBody @Valid UpdateMilestoneRequest request
     ) {
-        milestoneService.updateMilestone(member.getId(), request.getChildId(), request.toContents());
+        milestoneService.updateMilestone(member.getId(), childId, request.toContents());
         return ResponseEntity.ok().build();
     }
 }

@@ -1,5 +1,6 @@
 package com.password926.agijagi.member.service;
 
+import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.member.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -25,8 +26,8 @@ public class MemberService {
         memberModifier.modifyProfileDetail(memberId, profileDetail);
     }
 
-    public void modifyMemberProfileImage(long memberId, Resource resource, String contentType) {
-        memberModifier.modifyProfileImage(memberId, resource, contentType);
+    public void modifyMemberProfileImage(long memberId, MediaResource mediaResource) {
+        memberModifier.modifyProfileImage(memberId, mediaResource);
     }
 
     public void removeMember(long memberId) {

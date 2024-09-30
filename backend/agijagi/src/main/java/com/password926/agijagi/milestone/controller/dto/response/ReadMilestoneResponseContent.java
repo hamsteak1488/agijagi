@@ -2,9 +2,11 @@ package com.password926.agijagi.milestone.controller.dto.response;
 
 import com.password926.agijagi.milestone.domain.MilestoneStateDetail;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
+@Getter
 @Builder
 public class ReadMilestoneResponseContent {
 

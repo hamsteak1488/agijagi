@@ -1,7 +1,7 @@
 package com.password926.agijagi.milestone.domain;
 
 import com.password926.agijagi.child.domain.ChildValidator;
-import com.password926.agijagi.milestone.infrastructure.MilestoneStateRepository;
+import com.password926.agijagi.milestone.infrastructure.MilestoneCustomImplRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,10 +12,10 @@ import java.util.List;
 public class MilestoneStateDetailReader {
 
     private final ChildValidator childValidator;
-    private final MilestoneStateRepository milestoneStateRepository;
+    private final MilestoneCustomImplRepository milestoneCustomImplRepository;
 
     public List<MilestoneStateDetail> read(long memberId, long childId, int month) {
         childValidator.validateWriteAuthority(memberId, childId);
-        return milestoneStateRepository.findMilestoneDetails(childId, month);
+        return milestoneCustomImplRepository.findMilestoneDetails(childId, month);
     }
 }
