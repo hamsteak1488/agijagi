@@ -18,14 +18,14 @@ interface TabProps
 
 type TabChangeHandler = (itemRef: HTMLDivElement, selected: string) => void;
 
-interface TabContext {
+interface TabContextProps {
   selected: string;
   setSelected: TabChangeHandler;
   color: Palette;
   init: boolean;
 }
 
-export const TabContext = createContext<TabContext | undefined>(undefined);
+export const TabContext = createContext<TabContextProps | undefined>(undefined);
 
 const Tab = ({
   children,

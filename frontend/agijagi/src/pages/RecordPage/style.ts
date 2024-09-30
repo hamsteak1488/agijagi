@@ -13,7 +13,7 @@ export const Main = styled.main`
   overflow-y: scroll;
 `;
 
-export const ActivityRecordMenu = styled.div`
+export const RecordMenu = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -21,7 +21,7 @@ export const ActivityRecordMenu = styled.div`
   padding: 0 0.5rem;
 `;
 
-export const ActivityRecordList = styled.div`
+export const RecordList = styled.div`
   flex: 1 1 auto;
   overflow-y: scroll;
 `;
