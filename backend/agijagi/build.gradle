@@ -82,6 +82,9 @@ tasks.register('copyDocument', Copy) {
 
 bootJar {
 	dependsOn copyDocument
+	from('src/main/resources/static/docs') {
+		into('static/docs')
+	}
 }
 
 clean {
