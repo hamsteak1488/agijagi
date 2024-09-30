@@ -1,9 +1,13 @@
-import type { Record, RecordRequest, RecordResponse } from '../types/record';
+import type {
+  RecordData,
+  RecordRequest,
+  RecordResponse,
+} from '../types/record';
 
 import { axiosInstance } from './axiosInstance';
 
 export const getLatestRecords = () => {
-  return axiosInstance.get<Record[]>('/children/records/latest?childId=1');
+  return axiosInstance.get<RecordData[]>('/children/records/latest?childId=1');
 };
 
 export const addRecord = (data: RecordRequest) => {

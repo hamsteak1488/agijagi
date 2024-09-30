@@ -1,4 +1,9 @@
-import type { Record, RecordMenu, RecordType } from '../types/record';
+import type {
+  RecordData,
+  RecordMenu,
+  RecordResponse,
+  RecordType,
+} from '../types/record';
 
 import ShitIcon from '../assets/images/record/shit.png';
 import DropIcon from '../assets/images/record/drop.png';
@@ -6,6 +11,9 @@ import MoonIcon from '../assets/images/record/moon.png';
 import CutleryIcon from '../assets/images/record/cutlery.png';
 import DrainageIcon from '../assets/images/record/drainage.png';
 import MedicineIcon from '../assets/images/record/medicine.png';
+
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko'; // 한국어 로케일 데이터 임포트
 
 type RecordMenuData = Omit<RecordMenu, 'latestDateTime'>;
 
@@ -43,7 +51,7 @@ const menus: RecordMenuData[] = [
 ];
 
 const useRecord = () => {
-  const getMenu = (records: Record[]): RecordMenu[] => {
+  const getMenu = (records: RecordData[]): RecordMenu[] => {
     return menus.map((menu: RecordMenuData): RecordMenu => {
       return {
         ...menu,
@@ -58,7 +66,27 @@ const useRecord = () => {
     return menus.find((menu) => menu.type === type);
   };
 
-  return { getMenu, findMenuByType };
+  const groupRecord = (data: RecordResponse[]) => {
+    const result: Record<string, RecordResponse[]>[] = [];
+    let lastGroup = '',
+      last: RecordResponse[] = [];
+
+    dayjs.locale('ko');
+
+    data.forEach((data) => {
+      const current = dayjs(data.startDateTime).format('M월 D일 (dddd)');
+      if (lastGroup !== current) {
+        lastGroup = current;
+        last = [];
+        result.push({ [current]: last });
+      }
+      last.push(data);
+    });
+
+    return result;
+  };
+
+  return { getMenu, findMenuByType, groupRecord };
 };
 
 export default useRecord;

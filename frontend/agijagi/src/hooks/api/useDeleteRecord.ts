@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { deleteRecord } from '../../apis/record';
+
 import useDialog from '../useDialog';
-import useFetchRecords from './useFetchRecords';
 
 const useDeleteRecord = () => {
   const queryClient = useQueryClient();
@@ -13,7 +13,7 @@ const useDeleteRecord = () => {
     mutationKey: [],
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: useFetchRecords.queryKey,
+        queryKey: ['record'],
       });
     },
     onError: () => {

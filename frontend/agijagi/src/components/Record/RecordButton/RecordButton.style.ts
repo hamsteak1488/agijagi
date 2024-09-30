@@ -1,7 +1,19 @@
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 
-export const RecordButton = styled.button<{ color: string }>(
+import theme from '../../../styles/theme';
+
+const twinkle = keyframes`
+  from {
+    filter: brightness(95%);
+  }
+
+  to {
+    filter: brightness(110%);
+  }
+`;
+
+export const RecordButton = styled.button<{ color: string; active: boolean }>(
   (props) => css`
     width: 6.5rem;
     height: 6.5rem;
@@ -9,6 +21,11 @@ export const RecordButton = styled.button<{ color: string }>(
     border-radius: 2.5rem;
     background-color: ${props.color};
     cursor: pointer;
+
+    ${props.active &&
+    css`
+      animation: ${twinkle} 1.5s alternate infinite;
+    `}
   `
 );
 

@@ -1,6 +1,6 @@
 export type RecordType = '대변' | '소변' | '수면' | '식사' | '유축' | '약';
 
-export interface Record {
+export interface RecordData {
   type: RecordType;
   latestDateTime: string | null;
 }
@@ -12,7 +12,7 @@ export interface RecordRequest {
   endDateTime: string | null;
 }
 
-export interface RecordMenu extends Record {
+export interface RecordMenu extends RecordData {
   icon: string;
   color: string;
 }

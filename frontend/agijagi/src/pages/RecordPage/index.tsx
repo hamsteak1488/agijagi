@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import AppBar from '../../components/common/AppBar';
 import ErrorBoundaryFallback from '../../components/common/ErrorBoundaryFallback';
 import SuspenseFallback from '../../components/common/SuspenseFallback';
+import RecordList from '../../components/Record/RecordList';
 
 import * as s from './style';
 
@@ -11,7 +12,6 @@ import RecordMenu from './RecordMenu';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import RecentRecordList from './RecentRecordList';
-import RecordList from '../../components/Record/RecordList';
 
 const RecordPage = () => {
   return (

@@ -1,7 +1,16 @@
-interface State {}
+import { create } from 'zustand';
 
-interface Action {}
+interface State {
+  childId: number;
+}
 
-const useChildStore = () => {};
+interface Action {
+  updateChildId: (childId: State['childId']) => void;
+}
+
+const useChildStore = create<State & Action>((set) => ({
+  childId: 1,
+  updateChildId: (childId) => set(() => ({ childId })),
+}));
 
 export default useChildStore;

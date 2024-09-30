@@ -10,7 +10,7 @@ const RecordMenu = () => {
   return (
     <>
       {record.getMenu(data).map((menu) => (
-        <RecordButton key={menu.type} {...menu} />
+        <RecordButton key={menu.type} {...menu} toggle={menu.type === '수면'} />
       ))}
     </>
   );

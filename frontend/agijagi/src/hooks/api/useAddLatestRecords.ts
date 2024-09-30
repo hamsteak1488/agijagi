@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { addRecord } from '../../apis/record';
+
 import useDialog from '../useDialog';
-import useFetchLatestRecords from './useFetchLatestRecords';
 
 const useAddLatestRecords = () => {
   const queryClient = useQueryClient();
@@ -13,7 +13,7 @@ const useAddLatestRecords = () => {
     mutationKey: [],
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: useFetchLatestRecords.queryKey,
+        queryKey: ['record'],
       });
     },
     onError: () => {
