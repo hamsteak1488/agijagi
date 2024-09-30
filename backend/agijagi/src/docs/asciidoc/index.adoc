@@ -6,3 +6,4 @@
 :toclevels: 1
 
 include::{docdir}/member.adoc[]
+include::{docdir}/auth.adoc[]
