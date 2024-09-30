@@ -27,8 +27,8 @@ public class ReportService {
         return reportReader.readAll(memberId, childId);
     }
 
-    public void appendReport(long memberId, long childId) {
-        reportAppender.append(memberId, childId);
+    public long appendReport(long memberId, long childId) {
+        return reportAppender.append(memberId, childId);
     }
 
     public void removeReport(

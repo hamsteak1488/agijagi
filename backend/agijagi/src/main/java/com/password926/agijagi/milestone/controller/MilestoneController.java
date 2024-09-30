@@ -19,7 +19,7 @@ public class MilestoneController {
 
     private final MilestoneService milestoneService;
 
-    @GetMapping("/{childId}/milestone")
+    @GetMapping("/{childId}/milestones")
     public ResponseEntity<List<ReadMilestoneResponse>> readMilestone(
             LoginMember member,
             @PathVariable long childId,
@@ -28,7 +28,7 @@ public class MilestoneController {
         return ResponseEntity.ok().body(MilestoneDtoConverter.convert(milestoneService.readMilestone(member.getId(), childId, month)));
     }
 
-    @PatchMapping("/{childId}/milestone")
+    @PatchMapping("/{childId}/milestones")
     public ResponseEntity<Void> updateMilestone(
             LoginMember member,
             @PathVariable long childId,

@@ -5,13 +5,13 @@ import com.password926.agijagi.milestone.controller.dto.response.ReadMilestoneRe
 import com.password926.agijagi.milestone.domain.MilestoneStateDetail;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class MilestoneDtoConverter {
 
     public static List<ReadMilestoneResponse> convert(List<MilestoneStateDetail> milestones) {
-        HashMap<String, List<ReadMilestoneResponseContent>> map = new HashMap<>();
+        LinkedHashMap<String, List<ReadMilestoneResponseContent>> map = new LinkedHashMap<>();
 
         for (MilestoneStateDetail ms : milestones) {
             String title = ms.getTitle();

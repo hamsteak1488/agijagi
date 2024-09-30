@@ -1,6 +1,7 @@
 package com.password926.agijagi.report.controller;
 
 import com.password926.agijagi.auth.controller.dto.LoginMember;
+import com.password926.agijagi.milestone.controller.dto.response.AppendReportResponse;
 import com.password926.agijagi.report.controller.dto.ReportDtoConverter;
 import com.password926.agijagi.report.controller.dto.response.ReadReportDetailResponse;
 import com.password926.agijagi.report.controller.dto.response.ReadReportsResponse;
@@ -36,11 +37,11 @@ public class ReportController {
     }
 
     @PostMapping("/{childId}/reports")
-    public ResponseEntity<Void> appendReport(
+    public ResponseEntity<AppendReportResponse> appendReport(
             LoginMember member,
             @PathVariable long childId
     ) {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(AppendReportResponse.from(reportService.appendReport(member.getId(), childId)));
     }
 
     @DeleteMapping("/{childId}/reports/{reportId}")
