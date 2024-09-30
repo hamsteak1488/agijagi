@@ -7,6 +7,7 @@ import { IntroductionSlider } from '../../components/Login/IntroductionSlider/In
 import { ValidationState } from '../../components/common/Textfield/Textfield.types';
 import { useNavigate } from 'react-router-dom';
 import BackIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
+import { axiosInstance } from '../../apis/axiosInstance';
 
 export const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -25,6 +26,23 @@ export const Login = () => {
 
   const handleLevel = (level: number) => {
     setLevel(level);
+  };
+
+  const handleLogin = () => {
+    axiosInstance
+      .post('/auth/login', {
+        headers: {
+          email: email,
+          nickname: '1',
+        },
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const navigator = useNavigate();
@@ -129,7 +147,7 @@ export const Login = () => {
           color={isValidated[0] && isValidated[1] ? 'primary' : 'greyScale'}
           fullWidth={true}
           disabled={!(isValidated[0] && isValidated[1])}
-          onClick={() => {}}
+          onClick={handleLogin}
         >
           <Typhography color="white">로그인</Typhography>
         </Button>
