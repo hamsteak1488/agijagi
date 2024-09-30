@@ -17,7 +17,7 @@ public class GrowthController {
     private final GrowthService growthService;
 
     @Authenticate
-    @PutMapping("{childId}/growth")
+    @PutMapping("/{childId}/growth")
     public ResponseEntity<Void> putGrowth(
             LoginMember member,
             @PathVariable long childId,
