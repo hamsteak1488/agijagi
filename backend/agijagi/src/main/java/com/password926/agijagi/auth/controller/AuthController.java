@@ -2,6 +2,7 @@ package com.password926.agijagi.auth.controller;
 
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.auth.controller.dto.request.LoginRequest;
+import com.password926.agijagi.auth.controller.dto.response.LoginResponse;
 import com.password926.agijagi.auth.service.AuthService;
 import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
 import com.password926.agijagi.common.errors.exception.RestApiException;
@@ -18,11 +19,11 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<Long> login(@RequestBody LoginRequest request, HttpSession session) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request, HttpSession session) {
         long loginMemberId = authService.login(request.getEmail(), request.getPassword());
         session.setAttribute(AuthConstants.SESSION_LOGIN_MEMBER_KEY, loginMemberId);
 
-        return ResponseEntity.ok(loginMemberId);
+        return ResponseEntity.ok(new LoginResponse(loginMemberId));
     }
 
     @Authenticate
