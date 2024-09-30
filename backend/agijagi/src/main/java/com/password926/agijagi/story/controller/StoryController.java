@@ -1,5 +1,6 @@
 package com.password926.agijagi.story.controller;
 
+import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
 import com.password926.agijagi.story.entity.Story;
@@ -17,6 +18,7 @@ public class StoryController {
 
     private final StoryService storyService;
 
+    @Authenticate
     @GetMapping
     public ResponseEntity<List<Story>> getAllStory(
             LoginMember member,
@@ -25,6 +27,7 @@ public class StoryController {
         return ResponseEntity.ok().body(storyService.getAllStory(member.getId(), childId));
     }
 
+    @Authenticate
     @GetMapping("/{storyId}")
     public ResponseEntity<Story> getStory(
             LoginMember member,
@@ -33,6 +36,7 @@ public class StoryController {
         return ResponseEntity.ok().body(storyService.getStory(member.getId(), storyId));
     }
 
+    @Authenticate
     @DeleteMapping("/{storyId}")
     public ResponseEntity<Void> deleteStory(
             LoginMember member,
@@ -42,9 +46,10 @@ public class StoryController {
         return ResponseEntity.ok().build();
     }
 
+    @Authenticate
     @PostMapping
     public ResponseEntity<Void> createStory(
-//            LoginMember member,
+            LoginMember member,
             @RequestBody CreateStoryRequest createStoryRequest
     ) {
         storyService.createStory(1, createStoryRequest);

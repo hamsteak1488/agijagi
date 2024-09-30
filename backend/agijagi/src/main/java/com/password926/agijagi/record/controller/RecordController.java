@@ -1,5 +1,7 @@
 package com.password926.agijagi.record.controller;
 
+import com.password926.agijagi.auth.controller.Authenticate;
+import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.record.controller.dto.RecordDtoConverter;
 import com.password926.agijagi.record.controller.dto.request.AppendRecordRequest;
 import com.password926.agijagi.record.controller.dto.response.ReadLatestRecordResponse;
@@ -20,42 +22,46 @@ public class RecordController {
 
     private final RecordService recordService;
 
+    @Authenticate
     @GetMapping
     public ResponseEntity<List<ReadRecordResponse>> readRecord(
-            long memberId,
+            LoginMember member,
             @RequestParam long childId,
             @RequestParam(required = false) String type,
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate
     ) {
         return ResponseEntity.ok()
-                .body(RecordDtoConverter.convert(recordService.readRecord(memberId, childId, type, startDate, endDate)));
+                .body(RecordDtoConverter.convert(recordService.readRecord(member.getId(), childId, type, startDate, endDate)));
     }
 
+    @Authenticate
     @GetMapping("/latest")
     public ResponseEntity<List<ReadLatestRecordResponse>> readLatestRecord(
-            long memberId,
+            LoginMember member,
             @RequestParam long childId
     ) {
         return ResponseEntity.ok()
-                .body(RecordDtoConverter.convertToLatest(recordService.readLatestRecord(memberId, childId)));
+                .body(RecordDtoConverter.convertToLatest(recordService.readLatestRecord(member.getId(), childId)));
     }
 
+    @Authenticate
     @PostMapping
     public ResponseEntity<Void> appendRecord(
-            long memberId,
+            LoginMember member,
             @RequestBody @Valid AppendRecordRequest request
     ) {
-        recordService.appendRecord(memberId, request.getChildId(), request.toContent());
+        recordService.appendRecord(member.getId(), request.getChildId(), request.toContent());
         return ResponseEntity.ok().build();
     }
 
+    @Authenticate
     @DeleteMapping("/{recordId}")
     public ResponseEntity<Void> removeRecord(
-            long memberId,
+            LoginMember member,
             @PathVariable long recordId
     ) {
-        recordService.removeRecord(memberId, recordId);
+        recordService.removeRecord(member.getId(), recordId);
         return ResponseEntity.ok().build();
     }
 }

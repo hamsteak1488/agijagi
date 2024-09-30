@@ -21,11 +21,11 @@ public class ChildDetail {
 
     private String imageUrl;
 
-    private String role;
+    private Authority authority;
 
     private long followerNum;
 
-    public static ChildDetail of(Child child, String role, long followerNum) {
+    public static ChildDetail of(Child child, Authority authority, long followerNum) {
         String imageUrl = child.getImage() == null ? null : child.getImage().getUrl();
         return ChildDetail.builder()
                 .childId(child.getId())
@@ -34,7 +34,7 @@ public class ChildDetail {
                 .gender(child.getGender())
                 .birthday(child.getBirthday())
                 .imageUrl(imageUrl)
-                .role(role)
+                .authority(authority)
                 .followerNum(followerNum)
                 .build();
     }

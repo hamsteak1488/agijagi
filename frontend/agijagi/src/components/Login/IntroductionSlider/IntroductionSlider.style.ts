@@ -1,16 +1,22 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import theme from '../../styles/theme';
+import theme from '../../../styles/theme';
+
+export const Container = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;
 
 export const InnerBox = styled.div<{ loginMode: boolean; height: number }>(
   (props) => css`
+    position: absolute;
     display: flex;
     justify-content: center;
-    height: 40%;
-    max-height: 320px;
-    aspect-ratio: 1;
     align-items: center;
-    position: absolute;
+    width: 100%;
     overflow-x: scroll;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
@@ -20,7 +26,7 @@ export const InnerBox = styled.div<{ loginMode: boolean; height: number }>(
     &::-webkit-scrollbar {
       display: none; /* Chrome, Safari에서 스크롤바 숨김 */
     }
-    top: calc(7%);
+    top: ${props.height < 800 ? 30 + props.height * -0.03 : 25}%;
     transition: all 0.75s;
     transform: translate(0, ${!props.loginMode ? 0 : props.height * -0.5}px);
   `
@@ -29,17 +35,17 @@ export const InnerBox = styled.div<{ loginMode: boolean; height: number }>(
 export const SlideWrapper = styled.div(
   () => css`
     display: flex;
-    width: auto;
-    max-width: 320px;
+    width: 100%;
     scroll-snap-align: center;
   `
 );
 
 export const MediaBox = styled.div<{ isActive: boolean; loginMode: boolean }>(
   (props) => css`
+    display: flex;
+    justify-content: center;
     flex-shrink: 0;
     width: 100%;
-    max-width: 500px;
     position: relative;
     scroll-snap-align: center;
     scroll-snap-stop: always;
@@ -51,7 +57,7 @@ export const MediaBox = styled.div<{ isActive: boolean; loginMode: boolean }>(
 export const Img = styled.img(
   () => css`
     width: 100%;
-    height: 100%;
+    max-width: 280px;
     position: relative;
     z-index: 2;
   `
@@ -61,14 +67,15 @@ export const Gradient = styled.div(
   () => css`
     position: absolute;
     width: 100%;
+    max-width: 320px;
     height: 100%;
     border-radius: 100%;
     aspect-ratio: 1;
     background: rgb(255, 255, 255);
     background: radial-gradient(
       circle,
-      rgba(255, 255, 255, 1) 0%,
-      rgba(255, 255, 255, 0) 75%
+      rgba(255, 255, 255, 0.8) 0%,
+      rgba(255, 255, 255, 0) 0%
     );
     z-index: 1;
   `
@@ -84,6 +91,7 @@ export const LevelCircle = styled.div<{ isActive: boolean }>(
       ? theme.color.primary[500]
       : theme.color.greyScale[500]};
     transition: background-color 0.3s ease;
+    cursor: pointer;
   `
 );
 
@@ -95,23 +103,24 @@ export const LevelIndicatorWrapper = styled.div<{
     position: absolute;
     display: flex;
     justify-content: center;
+    width: 100%;
     z-index: 1;
     transition: all 0.75s;
     transform: translate(${!props.loginMode ? 0 : props.width * -2}px, 0);
-    top: calc(85% - 10rem);
+    top: 62vh;
   `
 );
 
 export const TypographyContainer = styled.div<{ loginMode: boolean }>(
   (props) => css`
-    position: fixed;
+    position: absolute;
     width: 100%;
     text-align: center;
     z-index: 3;
-    top: 54%;
     padding-top: 1rem;
     overflow: visible;
     transition: opacity 0.75s;
     opacity: ${props.loginMode ? 0 : 1};
+    top: 52vh;
   `
 );

@@ -2,6 +2,7 @@ package com.password926.agijagi.child.domain;
 
 import com.password926.agijagi.child.infrastructure.ChildRepository;
 import com.password926.agijagi.media.domain.Image;
+import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.media.domain.MediaStorage;
 import com.password926.agijagi.member.domain.Member;
 import com.password926.agijagi.member.domain.MemberReader;
@@ -34,7 +35,7 @@ public class ChildAppender {
                 .build()
         );
         Member member = memberReader.read(memberId);
-        memberChildAppender.createRelation(member, child, "WRITE");
+        memberChildAppender.createRelation(member, child, Authority.WRITE);
         milestoneStateAppender.append(child);
     }
 
@@ -42,6 +43,6 @@ public class ChildAppender {
         if (image.isEmpty()) {
             return null;
         }
-        return mediaStorage.storeImage(image.getResource(), image.getContentType());
+        return mediaStorage.storeImage(MediaResource.from(image));
     }
 }

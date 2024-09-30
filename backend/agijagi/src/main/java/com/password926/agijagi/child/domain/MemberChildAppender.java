@@ -15,14 +15,14 @@ public class MemberChildAppender {
     private final MemberChildRepository memberChildRepository;
 
     @Transactional
-    public void createRelation(Member member, Child child, String role) {
+    public void createRelation(Member member, Child child, Authority authority) {
         if (memberChildRepository.existsByMemberIdAndChildId(member.getId(), child.getId())) {
             throw new RestApiException(ChildErrorCode.EXISTING_RELATION);
         }
         memberChildRepository.save(MemberChild.builder()
                 .member(member)
                 .child(child)
-                .role(role)
+                .authority(authority)
                 .build());
     }
 }

@@ -19,7 +19,7 @@ public class ChildDetailReader {
         MemberChild memberChild = memberChildReader.readByMemberAndChild(memberId, childId);
         long followerNum = memberChildReader.readFollowerNum(childId);
 
-        return ChildDetail.of(child, memberChild.getRole(), followerNum);
+        return ChildDetail.of(child, memberChild.getAuthority(), followerNum);
     }
 
     @Transactional(readOnly = true)
@@ -30,7 +30,7 @@ public class ChildDetailReader {
                 .map(memberChild -> {
                     Child child = childReader.read(memberChild.readChildId());
                     long followerNum = memberChildReader.readFollowerNum(child.getId());
-                    return ChildDetail.of(childReader.read(memberChild.readChildId()), memberChild.getRole(), followerNum);
+                    return ChildDetail.of(childReader.read(memberChild.readChildId()), memberChild.getAuthority(), followerNum);
                 })
                 .toList();
     }

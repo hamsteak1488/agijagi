@@ -17,6 +17,10 @@ export interface SizeStyles {
   translate: string;
 }
 
+export const Conatainer = styled.div`
+  position: relative;
+`;
+
 export const bottomTextStyles: Record<ValidationState, string> = {
   danger: `color : ${theme.color.danger[600]}; `,
   success: `color : ${theme.color.success[600]}; `,
@@ -168,6 +172,7 @@ export const StateText = styled.div<{
   fieldState: ValidationState;
 }>(
   (props) => css`
+    position: absolute;
     opacity: ${props.fieldState === 'normal' ? `50%` : `100%`};
     margin-left: 0.75rem;
     font-size: ${textfieldStyles[props.size].activeFontSize};

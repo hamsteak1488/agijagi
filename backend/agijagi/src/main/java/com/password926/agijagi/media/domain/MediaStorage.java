@@ -5,9 +5,10 @@ import com.password926.agijagi.media.controller.MediaErrorCode;
 import com.password926.agijagi.media.infrastructure.MediaRepository;
 import com.password926.agijagi.media.infrastructure.S3Manager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -15,21 +16,58 @@ public class MediaStorage {
     private final S3Manager s3Manager;
     private final MediaRepository mediaRepository;
     private static final String S3_KEY_PREFIX = "media/";
+    private final MediaValidator mediaValidator;
 
     @Transactional
-    public Image storeImage(Resource resource, String contentType) {
-        if (!contentType.startsWith("image/")) {
-            throw new RestApiException(MediaErrorCode.UNSUPPORTED_MEDIA_TYPE);
-        }
-        Image image = Image.builder().build();
-        mediaRepository.save(image);
-        image.updateUrl(s3Manager.upload(S3_KEY_PREFIX + image.getId(), resource, contentType));
+    public Image storeImage(MediaResource mediaResource) {
+        mediaValidator.validateImage(mediaResource);
 
-        return image;
+        UUID generatedUUID = UUID.randomUUID();
+        String uploadUrl = store(generatedUUID, mediaResource);
+
+        Image newImage = Image.builder()
+                .id(generatedUUID)
+                .url(uploadUrl)
+                .build();
+        mediaRepository.save(newImage);
+
+        return newImage;
     }
 
     @Transactional
-    public void removeMedia(long mediaId) {
+    public Video storeVideo(MediaResource mediaResource) {
+        mediaValidator.validateVideo(mediaResource);
+
+        UUID generatedUUID = UUID.randomUUID();
+        String uploadUrl = store(generatedUUID, mediaResource);
+
+        Video newVideo = Video.builder()
+                .id(generatedUUID)
+                .url(uploadUrl)
+                .build();
+        mediaRepository.save(newVideo);
+
+        return newVideo;
+    }
+
+    @Transactional
+    public Media storeAny(MediaResource mediaResource) {
+        if (mediaValidator.isImage(mediaResource)) {
+            return storeImage(mediaResource);
+        }
+        if (mediaValidator.isVideo(mediaResource)) {
+            return storeVideo(mediaResource);
+        }
+
+        throw new RestApiException(MediaErrorCode.UNSUPPORTED_MEDIA_TYPE);
+    }
+
+    private String store(UUID key, MediaResource mediaResource) {
+        return s3Manager.upload(S3_KEY_PREFIX + key, mediaResource);
+    }
+
+    @Transactional
+    public void removeMedia(UUID mediaId) {
         // TODO: 미디어 삭제
     }
 }
