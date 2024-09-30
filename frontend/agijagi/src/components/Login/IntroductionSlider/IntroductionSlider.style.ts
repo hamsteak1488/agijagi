@@ -74,9 +74,11 @@ export const Gradient = styled.div(
     background: rgb(255, 255, 255);
     background: radial-gradient(
       circle,
-      rgba(255, 255, 255, 0.8) 0%,
-      rgba(255, 255, 255, 0) 0%
+      rgba(255, 249, 196, 1) 0%,
+      rgba(255, 249, 196, 0) 75%
     );
+    transition: all 1s;
+    opacity: 1;
     z-index: 1;
   `
 );

@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import Button from '../../common/Button';
-import Typhography from '../../common/Typography';
+import Button from '../../../common/Button';
+import Typhography from '../../../common/Typography';
 import { useState } from 'react';
-import Textfield from '../../common/Textfield';
-import theme from '../../../styles/theme';
+import Textfield from '../../../common/Textfield';
+import theme from '../../../../styles/theme';
 
 export const Container = styled.div<{ width: number; isNext: boolean }>(
   (props) => css`

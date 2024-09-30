@@ -11,7 +11,8 @@ import GlobalStyle from './styles/GlobalStyle';
 import { ModalProvider } from './hooks/useModal';
 import Signup from './pages/Signup';
 import { Welcome } from './pages/Signup/Welcome';
-import { BabyInfoForm } from './components/Signup/BabyInfo/BabyInfoForm';
+import { BabyInfoForm } from './components/Signup/BabyInfo/BabyInfoForm/BabyInfoForm';
+import { Main } from './pages/Main';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="/schedule" element={<SchedulePage />} />
             <Route path="/babyform" element={<BabyInfoForm />} />
             <Route path="/board" element={<BoardPage />} />
+            <Route path="/main" element={<Main />} />
             <Route path="/board/write" element={<WriteArticlePage />} />
           </Routes>
         </ModalProvider>
