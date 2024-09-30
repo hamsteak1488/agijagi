@@ -27,6 +27,6 @@ public class ReportReader {
     // TODO: 보고서 읽기는 권한 어디까지 허용?
     public List<ReportTarget> readAll(long memberId, long childId) {
         childValidator.validateWriteAuthority(memberId, childId);
-        return reportRepository.findReportTargets(childId);
+        return reportRepository.findByChildId(childId);
     }
 }

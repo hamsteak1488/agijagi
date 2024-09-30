@@ -1,10 +1,12 @@
 package com.password926.agijagi.milestone.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDate;
 
 @Getter
+@AllArgsConstructor
 public class MilestoneStateDetail {
 
     private long id;
