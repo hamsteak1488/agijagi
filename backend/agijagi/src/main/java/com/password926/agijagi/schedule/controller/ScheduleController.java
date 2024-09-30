@@ -1,5 +1,6 @@
 package com.password926.agijagi.schedule.controller;
 
+import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.schedule.controller.dto.ScheduleDtoConverter;
 import com.password926.agijagi.schedule.controller.dto.request.AppendScheduleRequest;
@@ -21,6 +22,7 @@ public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
+    @Authenticate
     @GetMapping
     public ResponseEntity<List<ReadScheduleResponse>> readSchedule(
             LoginMember member,
@@ -32,6 +34,7 @@ public class ScheduleController {
                 .body(ScheduleDtoConverter.convert(scheduleService.readSchedule(member.getId(), childId, startDate, endDate)));
     }
 
+    @Authenticate
     @PostMapping
     public ResponseEntity<Void> appendSchedule(
             LoginMember member,
@@ -41,6 +44,7 @@ public class ScheduleController {
         return ResponseEntity.ok().build();
     }
 
+    @Authenticate
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity<Void> removeSchedule(
             LoginMember member,
@@ -50,6 +54,7 @@ public class ScheduleController {
         return ResponseEntity.ok().build();
     }
 
+    @Authenticate
     @PatchMapping("/{scheduleId}")
     public ResponseEntity<Void> updateSchedule(
             LoginMember member,

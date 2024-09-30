@@ -1,5 +1,6 @@
 package com.password926.agijagi.milestone.controller;
 
+import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.milestone.controller.dto.MilestoneDtoConverter;
 import com.password926.agijagi.milestone.controller.dto.request.UpdateMilestoneRequest;
@@ -19,6 +20,7 @@ public class MilestoneController {
 
     private final MilestoneService milestoneService;
 
+    @Authenticate
     @GetMapping
     public ResponseEntity<List<ReadMilestoneResponse>> readMilestone(
             LoginMember member,
@@ -28,6 +30,7 @@ public class MilestoneController {
         return ResponseEntity.ok().body(MilestoneDtoConverter.convert(milestoneService.readMilestone(member.getId(), childId, month)));
     }
 
+    @Authenticate
     @PatchMapping
     public ResponseEntity<Void> updateMilestone(
             LoginMember member,
