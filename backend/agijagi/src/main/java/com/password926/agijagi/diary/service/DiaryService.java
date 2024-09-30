@@ -76,8 +76,9 @@ public class DiaryService {
         diary.updateTitleOrContent(request.getTitle(), request.getContent());
 
         if (request.getRemoveMediaIdList() != null) {
-            for (Long removeMediaId : request.getRemoveMediaIdList()) {
-                for (DiaryMedia diaryMedia : diary.getDiaryMediaList()) {
+            for (UUID removeMediaId : request.getRemoveMediaIdList()) {
+                List<DiaryMedia> diaryMediaList = List.copyOf(diary.getDiaryMediaList());
+                for (DiaryMedia diaryMedia : diaryMediaList) {
                     if (diaryMedia.getMedia().getId().equals(removeMediaId)) {
                         diary.removeMedia(diaryMedia);
                     }
@@ -91,6 +92,8 @@ public class DiaryService {
                 diary.addMedia(image);
             }
         }
+
+        diaryRepository.save(diary);
     }
 
     @Transactional
@@ -101,8 +104,9 @@ public class DiaryService {
         childValidator.validateWriteAuthority(memberId, diary.getChild().getId());
 
         if (request.getRemoveMediaIdList() != null) {
-            for (Long removeMediaId : request.getRemoveMediaIdList()) {
-                for (DiaryMedia diaryMedia : diary.getDiaryMediaList()) {
+            for (UUID removeMediaId : request.getRemoveMediaIdList()) {
+                List<DiaryMedia> diaryMediaList = List.copyOf(diary.getDiaryMediaList());
+                for (DiaryMedia diaryMedia : diaryMediaList) {
                     if (diaryMedia.getMedia().getId().equals(removeMediaId)) {
                         diary.removeMedia(diaryMedia);
                     }
