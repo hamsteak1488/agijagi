@@ -38,7 +38,11 @@ public class RecordService {
         recordAppender.append(memberId, childId, recordContent);
     }
 
-    public void removeRecord(long memberId, long recordId) {
-        recordRemover.remove(memberId, recordId);
+    public void removeRecord(
+            long memberId,
+            long childId,
+            long recordId
+    ) {
+        recordRemover.remove(memberId, childId, recordId);
     }
 }
