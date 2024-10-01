@@ -10,10 +10,9 @@ import org.springframework.stereotype.Component;
 public class CreatorUsingOpenAi {
 
     private final OpenAiChatModel openAiChatModel;
-    private final JsonObjectMapper jsonObjectMapper;
 
     public <T> T create(Prompt prompt, Class<T> clazz) {
         String response = openAiChatModel.call(prompt).getResult().getOutput().getContent();
-        return jsonObjectMapper.fromJson(JsonFormatter.format(response), clazz);
+        return JsonObjectMapper.fromJson(JsonFormatter.format(response), clazz);
     }
 }
