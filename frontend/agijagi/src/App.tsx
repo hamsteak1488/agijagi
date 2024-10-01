@@ -16,6 +16,7 @@ import Report from './pages/ReportPage';
 import Signup from './pages/Signup';
 import { Welcome } from './pages/Signup/Welcome';
 import { BabyInfoForm } from './components/Signup/BabyInfo/BabyInfoForm';
+import CreateBook from './components/book/BookCreate';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -39,6 +40,7 @@ function App() {
               <Route path="/record" element={<RecordPage />} />
               <Route path="/baby" element={<BabyMain />} />
               <Route path="/book" element={<BookCarousel />} />
+              <Route path="/book-create" element={<CreateBook />} />
               <Route path="/baby/writing" element={<WritingDiary />} />
               <Route path="/baby" element={<BabyMain />} />
               <Route path="/signup" element={<Signup />} />

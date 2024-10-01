@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import BookItem from './BookItem';
 import BookListModal from './BookListModal';
@@ -6,6 +7,7 @@ import StoryBook from './StoryBook';
 import Typhography from '../common/Typography';
 import Logo7 from '../../assets/images/logo7.png';
 import Logo2 from '../../assets/images/logo2.png';
+import { PlusIcon } from '@heroicons/react/24/outline';
 // 임의로 책 표지 넣으려고 import
 import CoverImg1 from '../../assets/bookcover/cover1.png';
 import CoverImg2 from '../../assets/bookcover/cover2.png';
@@ -15,18 +17,45 @@ import CoverImg5 from '../../assets/bookcover/cover5.png';
 import CoverImg6 from '../../assets/bookcover/cover7.png';
 import CoverImg7 from '../../assets/bookcover/cover12.png';
 import CoverImg8 from '../../assets/bookcover/cover11.png';
+import Button from '../common/Button';
+import theme from '../../styles/theme';
 
 const Wrapper = styled.div`
-  background-color: #ffecb3;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  /* padding-top: 10px; */
-  /* overflow: hidden; */
 
   @media (min-width: 700px) {
     flex-direction: row; /* 가로 모드일 때 가로 정렬 */
   }
+`;
+
+const TitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px 10px 10px 30px;
+
+  @media (min-width: 700px) {
+    position: fixed;
+    width: 40%;
+  }
+`;
+
+const Title = styled.div`
+  display: flex;
+  align-items: flex-end;
+`;
+
+const TitleImg = styled.img`
+  width: 40px;
+  height: 35px;
+  margin-right: 10px;
+`;
+
+const CreateIcon = styled(PlusIcon)`
+  width: 15px;
+  color: ${theme.color.greyScale[800]};
 `;
 
 const CarouselWrapper = styled.div`
@@ -54,31 +83,6 @@ const ImageWrapper = styled.div`
   display: flex;
   padding-top: 20px;
   padding-bottom: 50px;
-`;
-
-const Title = styled.div`
-  display: flex;
-  width: 100%;
-  align-items: flex-end;
-  margin-top: 30px;
-  margin-bottom: 10px;
-  margin-left: 30px;
-
-  @media (min-width: 700px) {
-    position: fixed;
-    width: 40%;
-  }
-`;
-
-const TitleImg = styled.img`
-  width: 40px;
-  height: 35px;
-  margin-right: 10px;
-
-  @media (min-width: 700px) {
-    width: 50px;
-    height: 45px;
-  }
 `;
 
 const ModalWrapper = styled.div`
@@ -200,6 +204,7 @@ const BookCarousel = () => {
   const [month, setMonth] = useState(todayMonth);
   const [selectedBook, setSelectedBook] = useState<BookProps | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   // 책 클릭 시 호출되는 함수
   const handleBookSelect = (book: BookProps | null) => {
@@ -216,6 +221,10 @@ const BookCarousel = () => {
     setSelectedBook(null);
   };
 
+  const goCreateBook = () => {
+    navigate('/book-create');
+  };
+
   // 스크롤 위치를 업데이트하는 함수
   const handleListScroll = (scrollPos: number) => {
     if (carouselRef.current) {
@@ -227,7 +236,6 @@ const BookCarousel = () => {
   const handlePrev = () => {
     setMonth((prevMonth) => {
       if (prevMonth === 1) {
-        // 1월이면 작년 12월로
         setYear((prevYear) => prevYear - 1);
         return 12;
       } else {
@@ -258,12 +266,21 @@ const BookCarousel = () => {
 
   return (
     <Wrapper>
-      <Title>
-        <TitleImg src={Logo7} />
-        <Typhography size="lg" weight="bold" color="greyScale" shade="800">
-          Story Book
-        </Typhography>
-      </Title>
+      <TitleWrapper>
+        <Title>
+          <TitleImg src={Logo7} />
+          {selectedBook ? (
+            <Typhography size="lg" weight="bold" color="greyScale" shade="800">
+              {selectedBook.title}
+            </Typhography>
+          ) : (
+            <Typhography size="lg" weight="bold" color="greyScale" shade="800">
+              Story Book
+            </Typhography>
+          )}
+        </Title>
+        {!selectedBook && <Button size="sm" onClick={goCreateBook}>동화생성</Button>}
+      </TitleWrapper>
 
       {filteredBooks.length === 0 ? (
         <ImageWrapper>
