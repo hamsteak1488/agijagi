@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Entity
 public class StoryPage {
 
@@ -25,4 +23,11 @@ public class StoryPage {
     private int pageNumber;
 
 //    private String image;
+
+    @Builder
+    public StoryPage(Story story, String content, int pageNumber) {
+        this.story = story;
+        this.content = content;
+        this.pageNumber = pageNumber;
+    }
 }

@@ -14,13 +14,15 @@ import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.media.domain.MediaStorage;
 import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
 import com.password926.agijagi.story.entity.Story;
+import com.password926.agijagi.story.entity.StoryDetail;
 import com.password926.agijagi.story.entity.StoryPage;
+import com.password926.agijagi.story.entity.StoryPageDetail;
 import com.password926.agijagi.story.repository.StoryGPT;
 import com.password926.agijagi.story.repository.StoryPageRepository;
 import com.password926.agijagi.story.repository.StoryRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -39,7 +41,6 @@ public class StoryService {
     private final StoryGPT storyGPT;
     private final ChildValidator childValidator;
     private final MediaStorage mediaStorage;
-    private final ObjectMapper objectMapper;
 
     public void createStory(long memberId, CreateStoryRequest request) {
         childValidator.validateWriteAuthority(memberId, request.getChildId());
@@ -87,5 +88,63 @@ public class StoryService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<StoryDetail> getAllStory(long memberId, long storyId) {
+
+        Story story = storyRepository.findByIdAndIsDeletedFalse(storyId)
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+        childValidator.validateWriteAuthority(memberId, story.getChild().getId());
+
+        List<Story> stories = storyRepository.findAllByChildIdAndIsDeletedFalse(storyId);
+
+        stories.sort(new Comparator<Story>() {
+            @Override
+            public int compare(Story o1, Story o2) {
+                return Long.compare(o2.getId(), o1.getId());
+            }
+        });
+
+        List<StoryDetail> storyDetails = new ArrayList<>();
+
+        for (Story story1 : stories) {
+            StoryDetail storyDetail = StoryDetail.of(story1);
+            storyDetails.add(storyDetail);
+        }
+
+        return storyDetails;
+    }
+
+    @Transactional(readOnly = true)
+    public StoryDetail getStory(long memberId, long storyId) {
+
+        Story story = storyRepository.findByIdAndIsDeletedFalse(storyId)
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+        childValidator.validateWriteAuthority(memberId, story.getChild().getId());
+
+        return StoryDetail.of(story);
+    }
+
+    @Transactional(readOnly = true)
+    public List<StoryPageDetail> getStoryAllPage(long memberId, long storyId) {
+
+        Story story = storyRepository.findByIdAndIsDeletedFalse(storyId)
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+        childValidator.validateWriteAuthority(memberId, story.getChild().getId());
+
+        List<StoryPage> storyPages = storyPageRepository.findAllByStoryId(storyId);
+
+        List<StoryPageDetail> storyPageDetails = new ArrayList<>();
+
+        for (StoryPage storyPage : storyPages) {
+            StoryPageDetail storyPageDetail = StoryPageDetail.of(storyPage);
+            storyPageDetails.add(storyPageDetail);
+        }
+
+        return storyPageDetails;
     }
 }
