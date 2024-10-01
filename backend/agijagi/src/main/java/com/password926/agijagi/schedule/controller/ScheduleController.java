@@ -4,6 +4,7 @@ import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.schedule.controller.dto.ScheduleDtoConverter;
 import com.password926.agijagi.schedule.controller.dto.request.AppendScheduleRequest;
+import com.password926.agijagi.schedule.controller.dto.request.AppendVoiceScheduleRequest;
 import com.password926.agijagi.schedule.controller.dto.request.UpdateScheduleRequest;
 import com.password926.agijagi.schedule.controller.dto.response.ReadScheduleResponse;
 import com.password926.agijagi.schedule.service.ScheduleService;
@@ -42,6 +43,17 @@ public class ScheduleController {
             @RequestBody @Valid AppendScheduleRequest request
     ) {
         scheduleService.appendSchedule(member.getId(), childId, request.toContent());
+        return ResponseEntity.ok().build();
+    }
+
+    @Authenticate
+    @PostMapping("/{childId}/schedules/voice")
+    public ResponseEntity<Void> appendVoiceSchedule(
+            LoginMember member,
+            @PathVariable long childId,
+            @RequestBody @Valid AppendVoiceScheduleRequest request
+    ) {
+        scheduleService.appendVoiceSchedule(member.getId(), childId, request.toContent());
         return ResponseEntity.ok().build();
     }
 
