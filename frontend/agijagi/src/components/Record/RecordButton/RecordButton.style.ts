@@ -1,8 +1,6 @@
 import { css, keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 
-import theme from '../../../styles/theme';
-
 const twinkle = keyframes`
   from {
     filter: brightness(95%);

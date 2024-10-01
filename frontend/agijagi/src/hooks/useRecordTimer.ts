@@ -16,7 +16,7 @@ import useFetchLatestRecords from './api/useGetLatestRecords';
 
 const useRecordTimer = (key: string) => {
   const queryClient = useQueryClient();
-  const [update, setUpdate] = useState({});
+  const [, setUpdate] = useState({});
   const timerRef = useRef<NodeJS.Timer>();
 
   dayjs.extend(duration);
