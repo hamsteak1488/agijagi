@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import * as s from './style';
+import axios from 'axios';
 import Button from '../../components/common/Button';
 import Textfield from '../../components/common/Textfield';
 import Typhography from '../../components/common/Typography';
@@ -31,11 +32,8 @@ export const Login = () => {
   const handleLogin = () => {
     axiosInstance
       .post('/auth/login', {
-        headers: {
-          email: email,
-          nickname: '1',
-        },
-        withCredentials: true,
+        email: email,
+        password: password,
       })
       .then((response) => {
         console.log(response.data);
