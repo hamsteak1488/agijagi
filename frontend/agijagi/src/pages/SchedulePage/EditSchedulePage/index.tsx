@@ -24,6 +24,8 @@ const EditSchedulePage = () => {
 
   const [value, setValue] = useState<string>('');
 
+  const handleTimeChange = (start: string, end: string) => {};
+
   return (
     <s.Container>
       <AppBar>
@@ -36,7 +38,7 @@ const EditSchedulePage = () => {
       <s.Main>
         <Schedule.Calendar onClick={handleDateClick} />
         <s.TimerPickerWrapper>
-          <TimePicker />
+          <TimePicker onChange={handleTimeChange} />
         </s.TimerPickerWrapper>
         <s.Form>
           <Textfield

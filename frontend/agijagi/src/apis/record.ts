@@ -1,4 +1,3 @@
-import { InterfaceType } from 'typescript';
 import type {
   RecordData,
   RecordRequest,

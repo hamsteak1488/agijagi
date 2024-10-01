@@ -14,7 +14,7 @@ export const Main = styled.main`
   padding: 0 1rem;
 `;
 
-export const Form = styled.div`
+export const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
