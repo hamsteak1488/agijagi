@@ -1,5 +1,6 @@
 package com.password926.agijagi.schedule.service;
 
+import com.password926.agijagi.ai.domain.Base64Content;
 import com.password926.agijagi.schedule.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,14 @@ public class ScheduleService {
             ScheduleContent scheduleContent
     ) {
         scheduleAppender.append(memberId, childId, scheduleContent);
+    }
+
+    public void appendVoiceSchedule(
+            long memberId,
+            long childId,
+            Base64Content base64Content
+    ) {
+       scheduleAppender.appendVoice(memberId, childId, base64Content);
     }
 
     public void removeSchedule(
