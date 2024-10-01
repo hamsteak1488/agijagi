@@ -72,7 +72,7 @@ const TextFieldWrapper = styled.div`
   display: flex;
   margin: 5px 0 10px;
   flex-direction: column;
-  gap: 5px;
+  gap: 20px;
   margin-right: 10px;
 `;
 

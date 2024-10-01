@@ -38,16 +38,15 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/record" element={<RecordPage />} />
               <Route path="/baby" element={<BabyMain />} />
-            <Route path="/book" element={<BookCarousel />} />
+              <Route path="/book" element={<BookCarousel />} />
               <Route path="/baby/writing" element={<WritingDiary />} />
-              <Route path="/activity-record" element={<ActivityRecordPage />} />
-            <Route path="/baby" element={<BabyMain />} />
+              <Route path="/baby" element={<BabyMain />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/welcome" element={<Welcome />} />
               <Route path="/schedule" element={<SchedulePage />} />
-            <Route path="/milestone" element={<MileStone />} />
-            <Route path="/milestone-report" element={<MileStoneReport />} />
-            <Route path="/report" element={<Report />} />
+              <Route path="/milestone" element={<MileStone />} />
+              <Route path="/milestone-report" element={<MileStoneReport />} />
+              <Route path="/report" element={<Report />} />
               <Route path="/babyform" element={<BabyInfoForm />} />
               <Route path="/board" element={<BoardPage />} />
               <Route path="/board/write" element={<WriteArticlePage />} />

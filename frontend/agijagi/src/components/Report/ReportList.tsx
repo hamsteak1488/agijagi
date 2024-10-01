@@ -17,7 +17,7 @@ const ReportListWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
-  max-width: 1200px;
+  max-width: 700px;
   height: 550px;
   margin: 0 auto;
 
@@ -60,7 +60,7 @@ const ImageContainer = styled.div`
 
 const BookImage = styled.img`
   min-width: 65px;
-  height: 90px;
+  height: 95px;
   border-radius: 10px;
   box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.2);
 `;
