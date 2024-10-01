@@ -4,10 +4,10 @@ import { getLatestRecords } from '../../apis/record';
 
 const queryKey = ['record', 'latest'];
 
-const useFetchLatestRecords = () => {
+const useGetLatestRecords = (childId: number) => {
   const { data, error, isFetching } = useSuspenseQuery({
     queryKey,
-    queryFn: getLatestRecords,
+    queryFn: () => getLatestRecords(childId),
   });
 
   if (error && !isFetching) {
@@ -17,6 +17,6 @@ const useFetchLatestRecords = () => {
   return data;
 };
 
-useFetchLatestRecords.queryKey = queryKey;
+useGetLatestRecords.queryKey = queryKey;
 
-export default useFetchLatestRecords;
+export default useGetLatestRecords;

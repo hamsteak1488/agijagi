@@ -12,7 +12,7 @@ import { RecordData } from '../types/record';
 
 import now from '../utils/now';
 
-import useFetchLatestRecords from './api/useFetchLatestRecords';
+import useFetchLatestRecords from './api/useGetLatestRecords';
 
 const useRecordTimer = (key: string) => {
   const queryClient = useQueryClient();

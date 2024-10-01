@@ -1,13 +1,16 @@
 import dayjs from 'dayjs';
-import RecordList from '../../components/Record/RecordList';
-import useDeleteRecord from '../../hooks/api/useDeleteRecord';
 
-import useFetchRecords from '../../hooks/api/useFetchRecords';
+import RecordList from '../../components/Record/RecordList';
+
+import useDeleteRecord from '../../hooks/api/useDeleteRecord';
+import useGetRecords from '../../hooks/api/useGetRecords';
 import useDialog from '../../hooks/useDialog';
 import useRecord from '../../hooks/useRecord';
 
+import useChildStore from '../../stores/useChlidStore';
+
 const RecentRecordList = () => {
-  const { data } = useFetchRecords(
+  const { data } = useGetRecords(
     1,
     dayjs().subtract(1, 'month').format('YYYY-MM-DD'),
     dayjs().format('YYYY-MM-DD')
@@ -18,9 +21,11 @@ const RecentRecordList = () => {
 
   const { findMenuByType, groupRecord } = useRecord();
 
+  const { childId } = useChildStore();
+
   const handleListClick = async (id: number) => {
     if (await confirm('선택한 기록을 삭제할까요?')) {
-      mutate(id);
+      mutate({ childId, recordId: id });
       return;
     }
   };
