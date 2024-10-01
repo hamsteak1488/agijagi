@@ -11,6 +11,8 @@ import { TimelineDiary } from '../../components/Diary/TimelineDiary/TimelineDiar
 import useModal from '../../hooks/useModal';
 import moment from 'moment';
 import * as s from './style';
+import { BabyProfileCard } from '../../components/BabyMain/BabyProfileCard/BabyProfileCard';
+import { ScheduleCard } from '../../components/BabyMain/ScheduleCard/ScheduleCard';
 
 export const BabyMain = () => {
   const [fileList, setFileList] = useState<File[]>([]);
@@ -106,6 +108,8 @@ export const BabyMain = () => {
 
   return (
     <>
+      <BabyProfileCard />
+      <ScheduleCard />
       <s.WriteIconBox onClick={() => navigator('/baby/writing')}>
         {s.WriteIcon}
       </s.WriteIconBox>
