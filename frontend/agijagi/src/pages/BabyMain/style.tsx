@@ -70,6 +70,10 @@ export const CloseIconBox = styled.div`
   top: 8px;
 `;
 
+export const TapWrapper = styled.div`
+  margin-top: 0.5rem;
+`;
+
 export const CloseIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"

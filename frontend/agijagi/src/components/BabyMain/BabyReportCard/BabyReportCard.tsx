@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import defaultImg from '../../../assets/images/adult.png';
+import bathBaby from '../../../assets/images/babyprofile/bathBaby.png';
 import theme from '../../../styles/theme';
 import Button from '../../common/Button';
 import Typhography from '../../common/Typography';
@@ -13,10 +13,10 @@ export const Container = styled.div`
 
 export const GridCard = styled.div`
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 1fr 2fr;
   width: 90%;
   height: 100%;
-  min-height: 165px;
+  min-height: 160px;
   max-width: 500px;
   max-height: 200px;
   border-radius: 25px;
@@ -44,56 +44,70 @@ export const ContentSection = styled.div`
 export const DateContainer = styled.div`
   display: flex;
   justify-content: space-around;
-  gap: 0.5rem;
+  gap: 1rem;
   margin-top: 1rem;
 `;
 
 export const SchedualContainer = styled.div`
   width: 90%;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   text-align: center;
 `;
 
 export const ButtonContainer = styled.div`
   width: 80%;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 `;
 
 export const Photo = styled.img`
   width: 100%;
 `;
 
-export const ScheduleCard = () => {
+export const BabyReportCard = () => {
   return (
     <Container>
       <GridCard>
         <PhotoSection>
-          <Photo src={defaultImg} />
+          <Photo src={bathBaby} />
         </PhotoSection>
         <ContentSection>
-          <DateContainer>
-            <Typhography size="md" color="primary" weight="bold">
-              09월 05일 (목)
-            </Typhography>
-            <Typhography size="md" weight="bold">
-              오늘의 일정
-            </Typhography>
-          </DateContainer>
           <SchedualContainer>
-            <Typhography size="md" weight="bold">
-              오후 6시
-            </Typhography>
-            <Typhography size="md" color="secondary" shade="A700">
-              재훈의원 가기
-            </Typhography>
-            <Typhography size="xs" color="greyScale" shade="500">
-              외 다른 일정 4개
+            <div>
+              <Typhography size="xs" weight="bold">
+                아기의 마일스톤을 체크한지
+              </Typhography>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                }}
+              >
+                <Typhography
+                  size="xs"
+                  color="success"
+                  shade="600"
+                  weight="bold"
+                >
+                  36
+                </Typhography>
+                <Typhography size="xs" weight="bold">
+                  일이 지났어요!
+                </Typhography>
+              </div>
+            </div>
+            <Typhography size="xs" weight="bold">
+              아기의 상태를 체크하여 건강 보고서를 확인해보세요
             </Typhography>
           </SchedualContainer>
 
           <ButtonContainer>
             <Button size="sm" fullWidth={true}>
-              일정 확인하기
+              마일스톤 체크하기
             </Button>
           </ButtonContainer>
         </ContentSection>

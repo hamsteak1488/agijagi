@@ -2,10 +2,12 @@ import styled from '@emotion/styled';
 import defaultImg from '../../../assets/images/adult.png';
 import theme from '../../../styles/theme';
 import Typhography from '../../common/Typography';
+import UserIcon from '@heroicons/react/16/solid/UserIcon';
 
 export const Container = styled.div`
   display: flex;
   justify-content: center;
+  margin-top: 1rem;
 `;
 
 export const GridCard = styled.div`
@@ -17,7 +19,8 @@ export const GridCard = styled.div`
   max-width: 500px;
   max-height: 180px;
   border-radius: 25px;
-  background-color: ${theme.color.primary[200]};
+  background-color: ${theme.color.primary[50]};
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 `;
 
 export const PhotoSection = styled.div`
@@ -46,6 +49,23 @@ export const Photo = styled.img`
   border: 2px solid ${theme.color.greyScale[500]};
 `;
 
+export const MemberInfo = styled.div`
+  display: flex;
+  position: absolute;
+  align-items: center;
+  padding: 0.25rem;
+  border: 2px solid ${theme.color.primary[900]};
+  background-color: ${theme.color.primary[50]};
+  border-radius: 0.5rem;
+  top: 35%;
+  left: 72%;
+`;
+
+export const IconWrapper = styled.div`
+  width: 24px;
+  height: 24px;
+`;
+
 export const BabyProfileCard = () => {
   return (
     <Container>
@@ -60,6 +80,14 @@ export const BabyProfileCard = () => {
           <Typhography size="md" color="primary" shade="900" weight="regular">
             + 367일
           </Typhography>
+          <MemberInfo>
+            <Typhography size="xl" color="primary" weight="extraBold">
+              5
+            </Typhography>
+            <IconWrapper>
+              <UserIcon color={theme.color.primary[900]} />
+            </IconWrapper>
+          </MemberInfo>
         </ContentSection>
       </GridCard>
     </Container>

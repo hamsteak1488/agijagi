@@ -13,6 +13,7 @@ import Signup from './pages/Signup';
 import { Welcome } from './pages/Signup/Welcome';
 import { BabyInfoForm } from './components/Signup/BabyInfo/BabyInfoForm/BabyInfoForm';
 import { Main } from './pages/Main';
+import BabyProfile from './pages/BabyProfile';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/activity-record" element={<ActivityRecordPage />} />
             <Route path="/baby" element={<BabyMain />} />
+            <Route path="/baby/profile" element={<BabyProfile />} />
             <Route path="/baby/writing" element={<WritingDiary />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />

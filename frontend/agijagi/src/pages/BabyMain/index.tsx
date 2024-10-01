@@ -4,15 +4,13 @@ import adult from '../../assets/images/adult.png';
 import boy from '../../assets/images/boy.png';
 import girl from '../../assets/images/girl.png';
 import video from '../../assets/Test.mp4';
-import Button from '../../components/common/Button';
+import { BabyProfileCard } from '../../components/BabyMain/BabyProfileCard/BabyProfileCard';
+import { ScheduleCard } from '../../components/BabyMain/ScheduleCard/ScheduleCard';
 import FullCalendar from '../../components/common/FullCalendar';
 import Tab from '../../components/common/Tab';
 import { TimelineDiary } from '../../components/Diary/TimelineDiary/TimelineDiary';
 import useModal from '../../hooks/useModal';
-import moment from 'moment';
 import * as s from './style';
-import { BabyProfileCard } from '../../components/BabyMain/BabyProfileCard/BabyProfileCard';
-import { ScheduleCard } from '../../components/BabyMain/ScheduleCard/ScheduleCard';
 
 export const BabyMain = () => {
   const [fileList, setFileList] = useState<File[]>([]);
@@ -113,17 +111,19 @@ export const BabyMain = () => {
       <s.WriteIconBox onClick={() => navigator('/baby/writing')}>
         {s.WriteIcon}
       </s.WriteIconBox>
-      <Tab
-        selected="1"
-        size="md"
-        color="primary"
-        onChange={(value) => {
-          handleTab(value);
-        }}
-      >
-        <Tab.Item value="1">타임라인</Tab.Item>
-        <Tab.Item value="2">캘린더</Tab.Item>
-      </Tab>
+      <s.TapWrapper>
+        <Tab
+          selected="1"
+          size="md"
+          color="primary"
+          onChange={(value) => {
+            handleTab(value);
+          }}
+        >
+          <Tab.Item value="1">타임라인</Tab.Item>
+          <Tab.Item value="2">캘린더</Tab.Item>
+        </Tab>
+      </s.TapWrapper>
 
       {tabMenu === '1' ? (
         <s.TimelineContainer>

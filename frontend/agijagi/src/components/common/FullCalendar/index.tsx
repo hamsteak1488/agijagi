@@ -49,14 +49,20 @@ const StyledCalendar = styled(Calendar)`
     background-color: white;
     aspect-ratio: 1;
   }
+
   .react-calendar__month-view__days__day abbr {
     position: absolute;
+    padding: 1px;
+    border-radius: 50%;
+    font-size: 0.66rem;
+    bottom: 54%;
+    left: 5%;
+  }
+
+  .react-calendar__month-view__days__day abbr :enabled {
     background-color: white;
     padding: 1px;
     border-radius: 50%;
-    font-size: 0.75rem;
-    bottom: 60%;
-    left: 5%;
   }
 
   .react-calendar button:enabled:hover {
@@ -152,8 +158,7 @@ const StyledCalendar = styled(Calendar)`
   }
 
   .react-calendar__tile:disabled {
-    background-color: '#ccc';
-    color: '#f0f0f0';
+    background-color: ${theme.color.greyScale[200]};
   }
 
   .react-calendar__tile:enabled:hover,
