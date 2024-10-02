@@ -11,8 +11,6 @@ public class CreateDiaryRequest {
 
     private Long childId;
 
-    private String title;
-
     private String content;
 
     private List<MultipartFile> mediaList;

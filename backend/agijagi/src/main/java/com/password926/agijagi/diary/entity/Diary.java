@@ -30,9 +30,6 @@ public class Diary {
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    private String title;
-
-    @Column(nullable = false)
     private String content;
 
     private boolean isDeleted;
@@ -41,11 +38,10 @@ public class Diary {
     private List<DiaryMedia> diaryMediaList = new ArrayList<>();
 
     @Builder
-    public Diary(Child child, Member member, LocalDateTime createdAt, String title, String content) {
+    public Diary(Child child, Member member, LocalDateTime createdAt, String content) {
         this.child = child;
         this.member = member;
         this.createdAt = createdAt;
-        this.title = title;
         this.content = content;
     }
 
@@ -53,10 +49,7 @@ public class Diary {
         isDeleted = true;
     }
 
-    public void updateTitleOrContent(String title, String content) {
-        if (title != null) {
-            this.title = title;
-        }
+    public void updateContent(String content) {
         if (content != null) {
             this.content = content;
         }
