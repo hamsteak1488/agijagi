@@ -47,15 +47,12 @@ public class Story {
         this.createdAt = createdAt;
     }
 
-    public void remove() {
-        isDeleted = true;
-    }
-
     public void addMedia(Media media) {
         this.coverImage = media;
     }
 
-    public void removeMedia(Media media) {
+    public void remove() {
         this.coverImage = null;
+        isDeleted = true;
     }
 }
