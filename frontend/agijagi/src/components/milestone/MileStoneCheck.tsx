@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 import ProfileIcon from '../common/ProfileIcon/ProfileIcon';
@@ -8,6 +8,8 @@ import Textfield from '../common/Textfield';
 import useModal from '../../hooks/useModal';
 import ReportModal from '../Report/ReportCreateModal';
 import { ValidationState } from '../common/Textfield/Textfield.types';
+import { MilestoneDetail, putHeightWeight } from '../../apis/milestone';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 const Wrapper = styled.div`
   display: flex;
@@ -103,7 +105,7 @@ const WarningMessage = styled.div`
   font-size: ${theme.typography.fontSize.md};
 `;
 
-// 현재 우리아이가 몇개월인지 계산하는 함수
+// 현재 아이가 몇 개월인지 계산하는 함수
 const calculateAgeInMonths = (birthDate: Date): number => {
   const today = new Date();
   let yearsDiff = today.getFullYear() - birthDate.getFullYear();
@@ -116,14 +118,6 @@ const calculateAgeInMonths = (birthDate: Date): number => {
 
   return yearsDiff * 12 + monthsDiff;
 };
-
-interface MilestoneDetail {
-  milestoneId: number;
-  content: string;
-  requiredAmount: number;
-  currentAmount: number;
-  date: null | string;
-}
 
 interface MileStoneProps {
   month: number;
@@ -148,10 +142,20 @@ const MileStoneCheck = ({
 }: MileStoneProps) => {
   const [textFieldOpen, setTextFieldOpen] = useState<boolean>(false);
   const [currentHeight, setCurrentHeight] = useState<string>('');
-  const [currentWeight, setCurrentWeigh] = useState<string>('');
+  const [currentWeight, setCurrentWeight] = useState<string>('');
   const [warning, setWarning] = useState<string>('');
   const babyMonth = calculateAgeInMonths(birth);
+
   const modal = useModal();
+  const { mutate, isPending } = useMutation({
+    mutationFn: putHeightWeight,
+  });
+
+  useEffect(() => {
+    setCurrentHeight('');
+    setCurrentWeight('');
+    setTextFieldOpen(false);
+  }, [month]);
 
   const handleTextFieldOpen = () => {
     setTextFieldOpen(!textFieldOpen);
@@ -184,7 +188,15 @@ const MileStoneCheck = ({
       setWarning('키와 몸무게를 모두 입력해주세요');
       setTimeout(() => setWarning(''), 3000);
     }
-    // 키 / 몸무게 저장 API 호출 (post)
+    // 키 / 몸무게 저장 API 호출 (put)
+    mutate({
+      childId,
+      data: {
+        height: parseFloat(currentHeight),
+        weight: parseFloat(currentWeight),
+        month: month,
+      },
+    });
   };
 
   function validateInput(input: string): ValidationState {
@@ -244,14 +256,19 @@ const MileStoneCheck = ({
               color="tertiary"
               isColoredLabel={true}
               inputValue={currentWeight}
-              setInputValue={setCurrentWeigh}
+              setInputValue={setCurrentWeight}
               validationFunction={validateInput}
               helpText={'*숫자만 입력해주세요'}
               checkText={'올바르게 입력했습니다. 저장해주세요'}
               warningText={'숫자만 입력해주세요'}
             />
             <SaveButton visible={babyMonth === month}>
-              <Button size="sm" color="primary" onClick={handleWeightHeighSave}>
+              <Button
+                size="sm"
+                color="primary"
+                onClick={handleWeightHeighSave}
+                disabled={isPending}
+              >
                 키/몸무게 저장
               </Button>
             </SaveButton>

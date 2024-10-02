@@ -7,19 +7,20 @@ import Button from '../../components/common/Button';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import ReportFilter from '../../components/Report/ReportFilter';
 import ReportList from '../../components/Report/ReportList';
-import axios from 'axios';
 import BoyImg from '../../assets/images/boy.png';
-
+import useChildStore from '../../stores/useChlidStore';
 
 const Wrapper = styled.div`
-  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 `;
+
 const Title = styled.div`
   display: flex;
   margin: 5px 10px 5px 40px;
   height: 50px;
   align-items: center;
-
 `;
 
 const TitleText = styled.div`
@@ -51,8 +52,8 @@ const FilterContainer = styled.div`
 `;
 
 const ReportContainer = styled.div`
+  flex: 1 1 auto;
   background-color: ${theme.color.tertiary[50]};
-  height: 90vh;
   padding: 10px;
   overflow-y: auto;
 `;
@@ -70,7 +71,8 @@ const image = BoyImg;
 
 const Report = () => {
   const [year, setYear] = useState<number>(todayYear);
-  
+  const { childId } = useChildStore();
+
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -91,8 +93,6 @@ const Report = () => {
       return prevYear + 1;
     });
   };
-
-  const handleDelete = () => {};
 
   return (
     <Wrapper>
@@ -115,7 +115,7 @@ const Report = () => {
       </FilterContainer>
 
       <ReportContainer>
-        <ReportList name={name} birth={birth} year={year}/>
+        <ReportList name={name} birth={birth} year={year} childId={childId} />
       </ReportContainer>
     </Wrapper>
   );

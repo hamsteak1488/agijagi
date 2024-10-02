@@ -1,11 +1,12 @@
-import React, { useEffect, useState, useCallback} from 'react';
 import styled from '@emotion/styled';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import React, { useCallback, useEffect, useState } from 'react';
+import { getMilestone, MilestoneDetail } from '../../apis/milestone';
+import CheckImg from '../../assets/images/milestone/check.png';
 import theme from '../../styles/theme';
 import Typhography from '../common/Typography';
-import { babyDevelopmentData } from './MileStoneMockData';
-import CheckImg from '../../assets/images/milestone/check.png';
 import MileStoneAmount from './MileStoneAmount';
-import axios from 'axios';
 
 const CheckContainer = styled.div`
   display: flex;
@@ -25,6 +26,7 @@ const StyledInput = styled.input`
   height: 25px;
   border: 1.5px solid ${theme.color.tertiary[800]};
   border-radius: 50%;
+  aspect-ratio: 1 / 1;
 
   &:checked {
     border-color: transparent;
@@ -50,60 +52,47 @@ const Line = styled.hr`
   height: 1px;
 `;
 
-interface MilestoneDetail {
-  milestoneId: number;
-  content: string;
-  requiredAmount: number;
-  currentAmount: number;
-  date: null | string;
-}
-
 interface MileStoneProps {
   month: number;
   childId: number;
   handleCheckboxChange: (item: MilestoneDetail, isChecked: boolean) => void;
 }
 
-const DevelopmentList = (({ month, childId, handleCheckboxChange }: MileStoneProps) => {
-  const [developmentData, setDevelopmentData] = useState<any[]>([]);
+const DevelopmentList = ({
+  month,
+  childId,
+  handleCheckboxChange,
+}: MileStoneProps) => {
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['milestone', month],
+    queryFn: () => getMilestone(childId, month),
+  });
 
-  // 각 개월 수 마다 다른 마일스톤 데이터 호출
-  const getMileStone = useCallback(async () => {
-    try {
-      const response = await axios.get(
-        `https://api.password926.site/children/${childId}/milestone`, {params : {month: month}}
-      );
-      console.log('마일스톤 데이터 :', response.data);
-      setDevelopmentData(response.data);
-    } catch (error) {
-      console.error('마일스톤 데이터 받기 실패:', error);
-    }
-  }, [month]);
-
-  // useEffect(() => {
-  //   getMileStone();
-  // }, [developmentData]);
-
-  useEffect(() => {
-    setDevelopmentData(babyDevelopmentData);
-  }, []);
+  if (error) {
+    return <>데이터를 불러오지 못했습니다.</>;
+  }
+  if (isLoading) {
+    return <>로딩중</>;
+  }
 
   return (
     <>
-      {developmentData.map((stage) => (
+      {data?.data.map((stage) => (
         <React.Fragment key={stage.title}>
-          {stage.MilestoneDetails && (
+          {stage.milestones && (
             <CheckContainer>
               <Typhography size="lg" weight="bold" color="tertiary" shade="900">
                 {stage.title}
               </Typhography>
-              {stage.MilestoneDetails.map((item: MilestoneDetail) => (
-                <React.Fragment key={item.milestoneId}>
+              {stage.milestones.map((item: MilestoneDetail) => (
+                <React.Fragment key={item.id}>
                   <StyledLabel>
                     <StyledInput
                       type="checkbox"
                       id={item.content}
-                      onChange={(e) => handleCheckboxChange(item, e.target.checked)}
+                      onChange={(e) =>
+                        handleCheckboxChange(item, e.target.checked)
+                      }
                     />
                     <StyledP>{item.content}</StyledP>
                   </StyledLabel>
@@ -122,6 +111,6 @@ const DevelopmentList = (({ month, childId, handleCheckboxChange }: MileStonePro
       ))}
     </>
   );
-});
+};
 
 export default DevelopmentList;

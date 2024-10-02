@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
-import {
-  FaceSmileIcon,
-  CalendarIcon
-} from '@heroicons/react/24/outline';
+import { FaceSmileIcon, CalendarIcon } from '@heroicons/react/24/outline';
 import Typhography from '../common/Typography';
 
 const Container = styled.div`
@@ -54,20 +51,11 @@ const FaceIcon = styled(FaceSmileIcon)`
 `;
 
 interface FilterProps {
-  gender: string;
-  createDate: string;
+  gender: string | undefined;
+  createDate: string | undefined;
 }
 
 const ReportFilter = ({ gender, createDate }: FilterProps) => {
-  const [babayGender, setBabyGender] = useState<string>(gender);
-
-  useEffect(() => {
-    if (gender === 'boy') {
-      setBabyGender('남아');
-    } else if (gender === 'girl') {
-      setBabyGender('여아');
-    }
-  });
 
   return (
     <Container>
@@ -81,7 +69,7 @@ const ReportFilter = ({ gender, createDate }: FilterProps) => {
       <GenderContainer>
         <FaceIcon />
         <Typhography size="sm" color="greyScale" shade="800">
-          {babayGender}
+          {gender}
         </Typhography>
       </GenderContainer>
     </Container>

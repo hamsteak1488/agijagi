@@ -87,17 +87,20 @@ const Line = styled.hr`
 
 interface BabyData {
   image: string;
-  growthStatus: number;
+  growthStatus: number | undefined;
 }
 
 // 성장 상태에 따른 위치 비율 계산 함수
-const calculatePercentage = (growthStatus: number) => {
-  const clampedValue = Math.max(0, Math.min(10, growthStatus));
+const calculatePercentage = (growthStatus: number | undefined) => {
+  const clampedValue = Math.max(0, Math.min(10, growthStatus ?? 0));
   return (clampedValue / 10) * 100;
 };
 
 // 성장 상태에 따른 멘트
-const growthStatusText = (growthStatus: number) => {
+const growthStatusText = (growthStatus: number | undefined) => {
+  if (growthStatus === undefined) {
+    return '성장 상태를 확인할 수 없습니다.';
+  }
   if (growthStatus <= 3) {
     return '또래 아이들 보다 성장이 느린 편입니다 !';
   } else if (growthStatus <= 7) {

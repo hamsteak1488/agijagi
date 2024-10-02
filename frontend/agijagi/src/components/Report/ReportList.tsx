@@ -5,13 +5,8 @@ import Typhography from '../common/Typography';
 import { useNavigate } from 'react-router-dom';
 import { CalendarIcon } from '@heroicons/react/24/outline';
 import ReportCover from '../../assets/images/report/reportcover.png';
-
-const reportList = [
-  { id: 1, createAt: '2024-06-27' },
-  { id: 2, createAt: '2024-07-26' },
-  { id: 3, createAt: '2024-08-30' },
-  { id: 4, createAt: '2024-09-28' },
-];
+import { useQuery } from '@tanstack/react-query';
+import { getReportList } from '../../apis/report';
 
 const ReportListWrapper = styled.div`
   display: grid;
@@ -123,13 +118,26 @@ interface ReportListProps {
   name: string;
   birth: string;
   year: number;
+  childId: number;
 }
 
-const ReportList = ({ name, birth, year }: ReportListProps) => {
+const ReportList = ({ name, birth, year, childId }: ReportListProps) => {
   const navigate = useNavigate();
 
-  const onReportSelect = (id : number) => {
-    navigate('/milestone-report', { state: { reportId: id } })
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['reportlist', childId],
+    queryFn: () => getReportList(childId),
+  });
+
+  if (error) {
+    return <>데이터를 불러오지 못했습니다.</>;
+  }
+  if (isLoading) {
+    return <>로딩중</>;
+  }
+
+  const onReportSelect = (id: number) => {
+    navigate('/milestone-report', { state: { reportId: id } });
   };
 
   const calculateDays = (date: string) => {
@@ -147,7 +155,7 @@ const ReportList = ({ name, birth, year }: ReportListProps) => {
     return daysDifference;
   };
 
-  const filteredReport = reportList.filter((report) => {
+  const filteredReport = data?.data.filter((report) => {
     const date = new Date(report.createAt);
     const createdDate = date.getFullYear();
     return year === createdDate;
@@ -155,31 +163,38 @@ const ReportList = ({ name, birth, year }: ReportListProps) => {
 
   return (
     <ReportListWrapper>
-      {filteredReport.map((report) => (
-        <ReportContainer key={report.id} onClick={() => onReportSelect(report.id)}>
-          <ImageContainer>
-            <BookImage src={ReportCover} alt="report img" />
-            <DaysText>
-              {' '}
-              {calculateDays(report.createAt)} <br /> days
-            </DaysText>
-          </ImageContainer>
+      {filteredReport?.length === 0 ? (
+        <p>생성된 분석 보고서가 없습니다.</p>
+      ) : (
+        filteredReport?.map((report) => (
+          <ReportContainer
+            key={report.id}
+            onClick={() => onReportSelect(report.id)}
+          >
+            <ImageContainer>
+              <BookImage src={ReportCover} alt="report img" />
+              <DaysText>
+                {' '}
+                {calculateDays(report.createAt)} <br /> days
+              </DaysText>
+            </ImageContainer>
 
-          <LabelContainer>
-            <TitleLabel>
-              {name} 성장 분석 보고서 {report.id}
-            </TitleLabel>
-            <DateLabel>
-              <DateContainer>
-                <DateIcon />
-                <Typhography size="sm" color="greyScale" shade="800">
-                  생성일 : {report.createAt}
-                </Typhography>
-              </DateContainer>
-            </DateLabel>
-          </LabelContainer>
-        </ReportContainer>
-      ))}
+            <LabelContainer>
+              <TitleLabel>
+                {name} 성장 분석 보고서 {report.id}
+              </TitleLabel>
+              <DateLabel>
+                <DateContainer>
+                  <DateIcon />
+                  <Typhography size="sm" color="greyScale" shade="800">
+                    생성일 : {report.createAt.slice(0, 10)}
+                  </Typhography>
+                </DateContainer>
+              </DateLabel>
+            </LabelContainer>
+          </ReportContainer>
+        ))
+      )}
     </ReportListWrapper>
   );
 };

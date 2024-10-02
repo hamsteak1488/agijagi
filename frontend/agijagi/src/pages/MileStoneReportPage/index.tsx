@@ -2,17 +2,27 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import Typhography from '../../components/common/Typography';
 import theme from '../../styles/theme';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../components/common/Button';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
-import ReportFilter from '../../components/Report/ReportTarget';
+import ReportTarget from '../../components/Report/ReportTarget';
 import ReportIntro from '../../components/Report/ReportIntro';
 import ReportChart from '../../components/Report/ReportChart';
 import ReportSlide from '../../components/Report/ReportSlide';
 import ReportListModal from '../../components/Report/ReportListModal';
 import useModal from '../../hooks/useModal';
 import BoyImg from '../../assets/images/boy.png';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { deleteReport, getReport } from '../../apis/report';
+import useChildStore from '../../stores/useChlidStore';
+import { getChildInfo } from '../../apis/milestone';
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+`;
 
 const Title = styled.div`
   display: flex;
@@ -90,30 +100,66 @@ function calculateDays(birthDateString: string) {
 
 // 임의로 만든 아기 데이터
 const name = '다운';
+const weight = 3.5;
 const birth = '2024-07-02';
-const weight = 3.02;
-const currentWeight = 7.2;
 const gender = 'boy';
 const image = BoyImg;
-const increaseWeight = currentWeight - weight;
 const days = calculateDays(birth);
 
 const Report = () => {
-  const createDate = '2024-09-27';
-  const growthStatus = 6;
-  const result =
-    '다운이와 비슷한 출생 몸무게를 가진 아이들의 성장 그래프와 비교했을 때 다운이는 성장이 빠른 편이라고 할 수 있습니다. 마일스톤 결과를 봐도 성장 발달에 문제가 없는 것으로 보입니다. 다운이는 잘 자라고 있습니다!';
-
+  const location = useLocation();
   const navigate = useNavigate();
+  const reportId = parseInt(location.state.reportId) || 0;
+  const { childId } = useChildStore();
+
+  const childQuery = useQuery({
+    queryKey: ['child', childId],
+    queryFn: () => getChildInfo(childId),
+  });
+
+  const reportQuery = useQuery({
+    queryKey: ['report', reportId],
+    queryFn: () => getReport(childId, reportId),
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: deleteReport,
+    onSuccess: () => navigate('/report'),
+  });
+
+  const childData = childQuery.data?.data;
+  const reportData = reportQuery.data?.data;
+  console.log(childData)
+
+  if (childQuery.error) {
+    return <>아이 데이터를 불러오지 못했습니다.</>;
+  }
+  if (childQuery.isLoading) {
+    return <>로딩중</>;
+  }
+
+  if (reportQuery.error) {
+    return <>보고서 데이터를 불러오지 못했습니다.</>;
+  }
+  if (reportQuery.isLoading) {
+    return <>로딩중</>;
+  }
+
+
+
+  // const createDate = new Date(data ? data.data.createAt : '');
+  // const currentWeight = data ? data.data.graphData[-1].weight : 0;
 
   const handleReportList = () => {
     navigate('/report');
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    mutate({ childId, reportId });
+  };
 
   return (
-    <>
+    <Wrapper>
       <Title>
         <Button size="sm" color="secondary" onClick={handleReportList}>
           목록
@@ -123,38 +169,46 @@ const Report = () => {
             성장 분석 보고서
           </Typhography>
         </TitleText>
-        <Button size="sm" color="danger" onClick={handleDelete}>
+        <Button
+          size="sm"
+          color="danger"
+          onClick={handleDelete}
+          disabled={isPending}
+        >
           삭제
         </Button>
       </Title>
       <Line></Line>
 
       <FilterContainer>
-        <ReportFilter gender={gender} createDate={createDate} />
+        <ReportTarget
+          gender={childData?.gender}
+          createDate={reportData?.createdAt.slice(0, 10)}
+        />
       </FilterContainer>
 
       <ReportContainer>
-        <ReportIntro weight={weight} currentWeight={currentWeight} />
+        <ReportIntro weight={weight} currentWeight={reportData?.currWeight} />
 
         <ChartContainer>
-          <ReportChart />
+          <ReportChart data={reportData?.graphData} />
         </ChartContainer>
 
-        <ReportSlide image={image} growthStatus={growthStatus} />
+        <ReportSlide image={image} growthStatus={reportData?.growthDegree} />
 
         <ResultContainer>
           <Typhography size="md" color="primary" shade="800">
-            {name}(이)의 몸무게가 출생 후 {days}일 동안 {increaseWeight} kg
-            증가했습니다.
+            {name}(이)의 몸무게가 출생 후 {days}일 동안{' '}
+            {reportData ? reportData.currWeight - weight : 0} kg 증가했습니다.
           </Typhography>
           <Result>
             <Typhography size="md" color="greyScale" shade="800">
-              {result}
+              {reportData?.content}
             </Typhography>
           </Result>
         </ResultContainer>
       </ReportContainer>
-    </>
+    </Wrapper>
   );
 };
 
