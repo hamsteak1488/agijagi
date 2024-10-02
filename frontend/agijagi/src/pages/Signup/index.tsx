@@ -18,11 +18,6 @@ export const Container = styled.div`
 `;
 
 export const Signup = () => {
-  const [userData, setUserData] = useState<UserData>({
-    email: '',
-    password: '',
-    nickname: '',
-  });
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [nickname, setNickname] = useState<string>('');
