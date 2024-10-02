@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -32,10 +33,11 @@ public class ReadReportDetailResponse {
         List<StandardGrowth> standardGrowths = reportDetail.getStandardGrowths();
 
         List<GraphDataContent> graphData = IntStream.range(0, reportDetail.getGrowths().size())
-                .mapToObj(month -> GraphDataContent.of(
-                        month,
-                        growths.get(month),
-                        standardGrowths.get(month)
+                .mapToObj(index ->
+                        GraphDataContent.of(
+                        index + 1,
+                        growths.get(index),
+                        standardGrowths.get(index)
                 ))
                 .toList();
         double currWeight = growths.isEmpty() ? 0 : growths.get(growths.size() - 1).getWeight();
