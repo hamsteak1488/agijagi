@@ -4,6 +4,7 @@ import { ValidationState } from '../../components/common/Textfield/Textfield.typ
 import { ProfileForm } from '../../components/Signup/ProfileForm/ProfileForm';
 import { UserForm } from '../../components/Signup/UserForm/UserForm';
 import theme from '../../styles/theme';
+import { UserData } from '../../types/user';
 
 export const Container = styled.div`
   width: 100%;
@@ -17,6 +18,11 @@ export const Container = styled.div`
 `;
 
 export const Signup = () => {
+  const [userData, setUserData] = useState<UserData>({
+    email: '',
+    password: '',
+    nickname: '',
+  });
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [nickname, setNickname] = useState<string>('');
@@ -41,6 +47,7 @@ export const Signup = () => {
       return 'danger';
     }
   }
+
   function validateEmail(input: string): ValidationState {
     if (input.trim() === '') {
       return 'normal';
@@ -56,6 +63,7 @@ export const Signup = () => {
       return 'danger';
     }
   }
+
   function validateNickName(input: string): ValidationState {
     if (input.trim() === '') {
       return 'normal';
@@ -95,8 +103,11 @@ export const Signup = () => {
         validatePassword={validatePassword}
       />
       <ProfileForm
+        email={email}
+        password={password}
         isNext={isNext}
         uploadImg={uploadImg}
+        handleNext={handleNext}
         handleUpload={handleUpload}
         isValidated={isValidated}
         nickname={nickname}

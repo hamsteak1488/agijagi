@@ -8,6 +8,9 @@ import defaultImg from '../../../assets/images/adult.png';
 import { ValidationState } from '../../common/Textfield/Textfield.types';
 import PlusCircle from '@heroicons/react/24/outline/PlusCircleIcon';
 import { useNavigate } from 'react-router-dom';
+import { signUp } from '../../../apis/userApi';
+import BackIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
+import useModal from '../../../hooks/useModal';
 
 export const Container = styled.div<{ width: number; isNext: boolean }>(
   (props) => css`
@@ -23,6 +26,18 @@ export const Container = styled.div<{ width: number; isNext: boolean }>(
     transform: translate(${!props.isNext ? 0 : props.width * 1}px, 0);
   `
 );
+
+export const ModalBackground = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: ${theme.color.primary[50]};
+  margin: 1rem;
+  padding: 2.5rem 2rem 2rem 2rem;
+  border-radius: 0.5rem;
+  gap: 1rem;
+`;
 
 export const ProfileCircleWrapper = styled.label`
   display: flex;
@@ -47,6 +62,7 @@ export const ProfileImg = styled.img`
 `;
 
 export const ProfileContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -65,9 +81,29 @@ export const InvisibleInput = styled.input`
   display: none;
 `;
 
+export const BackButton = styled.div(
+  () => css`
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    padding: 0.2rem;
+    color: #fff;
+    background-color: ${theme.color.primary[300]};
+    border-radius: 50%;
+    transition: all 0.75s;
+    right: 120%;
+    top: 2%;
+    z-index: 1;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  `
+);
+
 interface ProfileForm {
+  email: string;
+  password: string;
   isNext: boolean;
   uploadImg: string;
+  handleNext: () => void;
   handleUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isValidated: Record<string, boolean>;
   nickname: string;
@@ -76,8 +112,11 @@ interface ProfileForm {
 }
 
 export const ProfileForm = ({
+  email,
+  password,
   isNext,
   uploadImg,
+  handleNext,
   handleUpload,
   isValidated,
   nickname,
@@ -87,13 +126,47 @@ export const ProfileForm = ({
   const width = window.innerWidth;
   const navigator = useNavigate();
 
+  const modal = useModal();
+
+  const handleSignup = () => {
+    signUp({
+      email: email,
+      password: password,
+      nickname: nickname,
+    })
+      .then((response) => {
+        console.log(response);
+        modal.push({
+          children: (
+            <ModalBackground>
+              <Typhography>회원가입이 완료되었어요!</Typhography>
+              <Button onClick={modal.pop}>닫기</Button>
+            </ModalBackground>
+          ),
+          onClose: () => navigator('/welcome'),
+        });
+      })
+      .catch((error) => {
+        modal.push({
+          children: (
+            <ModalBackground>
+              {error.response.data.message}
+              <Button onClick={modal.pop}>닫기</Button>
+            </ModalBackground>
+          ),
+        });
+      });
+  };
+
   return (
     <Container width={width} isNext={!isNext}>
       <ProfileContainer>
         <Typhography size="6xl" weight="bold">
           프로필 등록
         </Typhography>
-        <div></div>
+        <BackButton onClick={handleNext}>
+          <BackIcon />
+        </BackButton>
         <ProfileCircleWrapper htmlFor="file">
           <AddIconWrapper>
             <PlusCircle fill="#fff" />
@@ -130,7 +203,7 @@ export const ProfileForm = ({
         fullWidth={true}
         disabled={!isValidated['nickname']}
         onClick={() => {
-          navigator('/welcome');
+          handleSignup();
         }}
       >
         등록
