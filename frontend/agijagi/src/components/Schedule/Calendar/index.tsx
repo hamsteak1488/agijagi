@@ -10,10 +10,11 @@ import useChildStore from '../../../stores/useChlidStore';
 import dayjs from 'dayjs';
 
 interface CalendarProps {
+  date?: Date;
   onClick: (date: Date) => void;
 }
 
-const Calendar = ({ onClick }: CalendarProps) => {
+const Calendar = ({ date = new Date(), onClick }: CalendarProps) => {
   const { childId } = useChildStore();
 
   const [calendar, setCalendar] = useState<Date>(new Date());
@@ -37,7 +38,7 @@ const Calendar = ({ onClick }: CalendarProps) => {
         {calendar.getFullYear()}년 {calendar.getMonth() + 1}월
       </Typhography>
       <CompactCalendar
-        date={new Date()}
+        date={date}
         highlight={highlight}
         onChange={handleChange}
         onClick={onClick}

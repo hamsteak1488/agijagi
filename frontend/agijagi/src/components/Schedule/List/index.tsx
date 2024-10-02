@@ -7,6 +7,8 @@ import EditSchedulePage from '../../../pages/SchedulePage/EditSchedulePage';
 
 import useChildStore from '../../../stores/useChlidStore';
 
+import type { ScheduleResponse } from '../../../types/schedule';
+
 interface ScheduleListProps {
   start: string;
   end: string;
@@ -19,8 +21,8 @@ const List = ({ start, end }: ScheduleListProps) => {
 
   const modal = useModal();
 
-  const handleScheduleClick = (scheduleId: number) => {
-    modal.push({ children: <EditSchedulePage scheduleId={scheduleId} /> });
+  const handleScheduleClick = (data: ScheduleResponse) => {
+    modal.push({ children: <EditSchedulePage {...data} /> });
   };
 
   return (
@@ -32,7 +34,7 @@ const List = ({ start, end }: ScheduleListProps) => {
           description={item.description}
           start={item.startDateTime}
           end={item.endDateTime}
-          onClick={() => handleScheduleClick(item.id)}
+          onClick={() => handleScheduleClick(item)}
         />
       ))}
     </>

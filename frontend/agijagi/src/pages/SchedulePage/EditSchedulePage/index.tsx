@@ -1,4 +1,6 @@
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 import AppBar from '../../../components/common/AppBar';
 import IconButton from '../../../components/common/IconButton';
@@ -11,19 +13,15 @@ import XMarkIcon from '@heroicons/react/16/solid/XMarkIcon';
 
 import * as s from './style';
 
-import { useNavigate } from 'react-router-dom';
-
 import useDialog from '../../../hooks/useDialog';
 import useDeleteSchedule from '../../../hooks/api/useDeleteSchedule';
 import useEditSchedule from '../../../hooks/api/useEditSchedule';
 
 import useChildStore from '../../../stores/useChlidStore';
 
-interface EditSchedulePageProps {
-  scheduleId: number;
-}
+import type { ScheduleResponse } from '../../../types/schedule';
 
-const EditSchedulePage = ({ scheduleId }: EditSchedulePageProps) => {
+const EditSchedulePage = ({ id: scheduleId, ...props }: ScheduleResponse) => {
   const { childId } = useChildStore();
 
   const { confirm } = useDialog();
@@ -33,15 +31,15 @@ const EditSchedulePage = ({ scheduleId }: EditSchedulePageProps) => {
   const deleteSchedule = useDeleteSchedule();
   const editSchedule = useEditSchedule();
 
-  const [title, setTitle] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
+  const [title, setTitle] = useState<string>(props.title);
+  const [description, setDescription] = useState<string>(props.description);
 
   const isDisabled = title === '' || description === '';
 
   const dateRef = useRef<Date>();
   const timeRef = useRef<{ start: string; end: string }>({
-    start: '00:00',
-    end: '00:00',
+    start: dayjs(props.startDateTime).format('HH:mm'),
+    end: dayjs(props.endDateTime).format('HH:mm'),
   });
 
   const handleDateClick = (date: Date) => {
@@ -61,14 +59,19 @@ const EditSchedulePage = ({ scheduleId }: EditSchedulePageProps) => {
   };
 
   const handleEditClick = async () => {
+    const date = dayjs(dateRef.current).format('YYYY-MM-DD');
+
+    const start = `${date}T${timeRef.current.start}`,
+      end = `${date}T${timeRef.current.end}`;
+
     editSchedule.mutate({
       childId,
       scheduleId,
       data: {
         title,
         description,
-        startDateTime: timeRef.current.start,
-        endDateTime: timeRef.current.end,
+        startDateTime: start,
+        endDateTime: end,
       },
     });
   };
@@ -83,9 +86,16 @@ const EditSchedulePage = ({ scheduleId }: EditSchedulePageProps) => {
         <AppBar.Title>일정 수정</AppBar.Title>
       </AppBar>
       <s.Main>
-        <Schedule.Calendar onClick={handleDateClick} />
+        <Schedule.Calendar
+          date={new Date(props.startDateTime)}
+          onClick={handleDateClick}
+        />
         <s.TimerPickerWrapper>
-          <TimePicker onChange={handleTimeChange} />
+          <TimePicker
+            start={timeRef.current.start}
+            end={timeRef.current.end}
+            onChange={handleTimeChange}
+          />
         </s.TimerPickerWrapper>
         <s.Form>
           <Textfield

@@ -1,4 +1,8 @@
 import { FormEvent, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
+
+import * as s from './style';
 
 import AppBar from '../../../components/common/AppBar';
 import IconButton from '../../../components/common/IconButton';
@@ -9,15 +13,10 @@ import TimePicker from '../../../components/common/TimePicker';
 
 import XMarkIcon from '@heroicons/react/16/solid/XMarkIcon';
 
-import * as s from './style';
-
-import { useNavigate } from 'react-router-dom';
-
 import useAddSchedule from '../../../hooks/api/useAddSchedule';
 
 import useChildStore from '../../../stores/useChlidStore';
 
-import dayjs from 'dayjs';
 import toISOString from '../../../utils/toISOString';
 
 const AddSchedulePage = () => {
@@ -49,8 +48,8 @@ const AddSchedulePage = () => {
   const handleSubmit = (e: FormEvent) => {
     const date = dayjs(dateRef.current).format('YYYY-MM-DD');
 
-    const start = `${date} ${timeRef.current.start}`,
-      end = `${date} ${timeRef.current.end}`;
+    const start = `${date}T${timeRef.current.start}`,
+      end = `${date}T${timeRef.current.end}`;
 
     mutate({
       childId,

@@ -21,7 +21,7 @@ const CompactCalendar = ({
   onChange,
   onClick,
 }: CompactCalendarProps) => {
-  const [selected, setSelected] = useState<Date>(new Date());
+  const [selected, setSelected] = useState<Date>(date);
 
   const swipeRef = useRef<HTMLDivElement>(null);
 
