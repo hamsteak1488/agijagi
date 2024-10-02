@@ -1,6 +1,5 @@
 package com.password926.agijagi.diary.entity;
 
-import com.password926.agijagi.media.domain.Media;
 import lombok.*;
 
 import java.time.LocalDateTime;

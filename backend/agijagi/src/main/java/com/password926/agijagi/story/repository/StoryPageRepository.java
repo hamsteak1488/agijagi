@@ -1,7 +1,7 @@
 package com.password926.agijagi.story.repository;
 
-import com.password926.agijagi.story.entity.StoryPage;
 import org.springframework.data.jpa.repository.JpaRepository;
+import com.password926.agijagi.story.entity.StoryPage;
 
 import java.util.List;
 

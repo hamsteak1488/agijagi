@@ -1,33 +1,31 @@
 package com.password926.agijagi.story.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.password926.agijagi.child.domain.Child;
-import com.password926.agijagi.child.domain.ChildValidator;
-import com.password926.agijagi.child.infrastructure.ChildRepository;
-import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
-import com.password926.agijagi.common.errors.exception.RestApiException;
-import com.password926.agijagi.diary.entity.Diary;
-import com.password926.agijagi.diary.repository.DiaryRepository;
-import com.password926.agijagi.media.domain.Image;
-import com.password926.agijagi.media.domain.MediaResource;
-import com.password926.agijagi.media.domain.MediaStorage;
 import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
-import com.password926.agijagi.story.entity.Story;
-import com.password926.agijagi.story.entity.StoryDetail;
-import com.password926.agijagi.story.entity.StoryPage;
-import com.password926.agijagi.story.entity.StoryPageDetail;
-import com.password926.agijagi.story.repository.StoryGPT;
 import com.password926.agijagi.story.repository.StoryPageRepository;
 import com.password926.agijagi.story.repository.StoryRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.password926.agijagi.story.entity.StoryPageDetail;
+import com.password926.agijagi.story.entity.StoryDetail;
+import com.password926.agijagi.story.repository.StoryGPT;
+import com.password926.agijagi.story.entity.StoryPage;
+import com.password926.agijagi.story.entity.Story;
+import com.password926.agijagi.child.infrastructure.ChildRepository;
+import com.password926.agijagi.child.domain.ChildValidator;
+import com.password926.agijagi.child.domain.Child;
+import com.password926.agijagi.media.domain.MediaResource;
+import com.password926.agijagi.media.domain.MediaStorage;
+import com.password926.agijagi.media.domain.Image;
+import com.password926.agijagi.common.errors.exception.RestApiException;
+import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
+import com.password926.agijagi.diary.repository.DiaryRepository;
+import com.password926.agijagi.diary.entity.Diary;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.time.*;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -86,7 +84,7 @@ public class StoryService {
                 storyPageRepository.save(storyPageData);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR, e);
         }
     }
 
@@ -95,14 +93,7 @@ public class StoryService {
 
         childValidator.validateWriteAuthority(memberId, childId);
 
-        List<Story> stories = storyRepository.findAllByChildIdAndIsDeletedFalse(childId);
-
-        stories.sort(new Comparator<Story>() {
-            @Override
-            public int compare(Story o1, Story o2) {
-                return Long.compare(o2.getId(), o1.getId());
-            }
-        });
+        List<Story> stories = storyRepository.findAllByChildIdAndIsDeletedFalseOrderByIdDesc(childId);
 
         List<StoryDetail> storyDetails = new ArrayList<>();
 

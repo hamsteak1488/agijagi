@@ -3,13 +3,12 @@ package com.password926.agijagi.story.controller;
 import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
-import com.password926.agijagi.story.controller.dto.DeleteStoryRequest;
-import com.password926.agijagi.story.entity.StoryDetail;
 import com.password926.agijagi.story.entity.StoryPageDetail;
 import com.password926.agijagi.story.service.StoryService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import com.password926.agijagi.story.entity.StoryDetail;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
