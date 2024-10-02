@@ -11,9 +11,6 @@ import java.time.LocalDateTime;
 public class AppendScheduleRequest {
 
     @NotNull
-    private long childId;
-
-    @NotNull
     private LocalDateTime startDateTime;
 
     @NotNull

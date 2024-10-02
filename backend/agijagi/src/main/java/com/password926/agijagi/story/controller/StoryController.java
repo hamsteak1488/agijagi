@@ -1,8 +1,11 @@
 package com.password926.agijagi.story.controller;
 
+import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
-import com.password926.agijagi.story.entity.Story;
+import com.password926.agijagi.story.controller.dto.DeleteStoryRequest;
+import com.password926.agijagi.story.entity.StoryDetail;
+import com.password926.agijagi.story.entity.StoryPageDetail;
 import com.password926.agijagi.story.service.StoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,38 +20,40 @@ public class StoryController {
 
     private final StoryService storyService;
 
-    @GetMapping
-    public ResponseEntity<List<Story>> getAllStory(
+    @Authenticate
+    @PostMapping
+    public ResponseEntity<Void> createStory(
             LoginMember member,
-            @RequestParam long childId
+            CreateStoryRequest createStoryRequest
+    ) {
+        storyService.createStory(member.getId(), createStoryRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @Authenticate
+    @GetMapping
+    public ResponseEntity<List<StoryDetail>> getAllStory(
+            LoginMember member,
+            @RequestParam("childId") long childId
     ) {
         return ResponseEntity.ok().body(storyService.getAllStory(member.getId(), childId));
     }
 
+    @Authenticate
     @GetMapping("/{storyId}")
-    public ResponseEntity<Story> getStory(
+    public ResponseEntity<StoryDetail> getStory(
             LoginMember member,
             @PathVariable long storyId
     ) {
         return ResponseEntity.ok().body(storyService.getStory(member.getId(), storyId));
     }
 
-    @DeleteMapping("/{storyId}")
-    public ResponseEntity<Void> deleteStory(
+    @Authenticate
+    @GetMapping("/{storyId}/pages")
+    public ResponseEntity<List<StoryPageDetail>> getStoryAllPage(
             LoginMember member,
             @PathVariable long storyId
     ) {
-        storyService.deleteStory(member.getId(), storyId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(storyService.getStoryAllPage(member.getId(), storyId));
     }
-
-    @PostMapping
-    public ResponseEntity<Void> createStory(
-//            LoginMember member,
-            @RequestBody CreateStoryRequest createStoryRequest
-    ) {
-        storyService.createStory(1, createStoryRequest);
-        return ResponseEntity.ok().build();
-    }
-
 }

@@ -1,9 +1,12 @@
 package com.password926.agijagi.diary.controller;
 
+import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.diary.controller.dto.CreateDiaryRequest;
+import com.password926.agijagi.diary.controller.dto.DeleteDiaryRequest;
 import com.password926.agijagi.diary.controller.dto.UpdateDiaryRequest;
 import com.password926.agijagi.diary.entity.Diary;
+import com.password926.agijagi.diary.entity.DiaryDetail;
 import com.password926.agijagi.diary.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,7 @@ public class DiaryController {
 
     private final DiaryService diaryService;
 
+    @Authenticate
     @PostMapping
     public ResponseEntity<Void> createDiary(
             LoginMember member,
@@ -27,6 +31,7 @@ public class DiaryController {
         return ResponseEntity.ok().build();
     }
 
+    @Authenticate
     @PatchMapping("/{diaryId}")
     public ResponseEntity<Void> updateDiary(
             LoginMember member,
@@ -37,28 +42,32 @@ public class DiaryController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
-    public ResponseEntity<List<Diary>> getAllDiary(
+    @Authenticate
+    @DeleteMapping("/{diaryId}")
+    public ResponseEntity<Void> deleteDiary(
             LoginMember member,
-            @RequestParam long childId
+            @PathVariable long diaryId,
+            DeleteDiaryRequest deleteDiaryRequest
+    ) {
+        diaryService.deleteDiary(member.getId(), diaryId, deleteDiaryRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @Authenticate
+    @GetMapping
+    public ResponseEntity<List<DiaryDetail>> getAllDiary(
+            LoginMember member,
+            @RequestParam("childId") long childId
     ) {
         return ResponseEntity.ok().body(diaryService.getAllDiary(member.getId(), childId));
     }
 
+    @Authenticate
     @GetMapping("/{diaryId}")
-    public ResponseEntity<Diary> getDiary(
+    public ResponseEntity<DiaryDetail> getDiary(
             LoginMember member,
             @PathVariable long diaryId
     ) {
         return ResponseEntity.ok().body(diaryService.getDiary(member.getId(), diaryId));
-    }
-
-    @DeleteMapping("/{diaryId}")
-    public ResponseEntity<Void> deleteDiary(
-            LoginMember member,
-            @PathVariable long diaryId
-    ) {
-        diaryService.deleteDiary(member.getId(), diaryId);
-        return ResponseEntity.ok().build();
     }
 }

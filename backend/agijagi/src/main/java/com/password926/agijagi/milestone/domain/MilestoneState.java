@@ -22,7 +22,7 @@ public class MilestoneState {
     private Child child;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "milestone_id", nullable = false)
+    @JoinColumn(name = "milestaone_id", nullable = false)
     private Milestone milestone;
 
     @Column(nullable = false)

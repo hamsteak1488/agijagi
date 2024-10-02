@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import WritingDiary from './pages/WritingDiary';
-import ActivityRecordPage from './pages/ActivityRecordPage';
+import RecordPage from './pages/RecordPage';
 import SchedulePage from './pages/SchedulePage';
 import BabyMain from './pages/BabyMain';
 import Login from './pages/Login';
@@ -15,29 +15,41 @@ import { BabyInfoForm } from './components/Signup/BabyInfo/BabyInfoForm/BabyInfo
 import { Main } from './pages/Main';
 import BabyProfile from './pages/BabyProfile';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 function App() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: 1,
+      },
+    },
+  });
+
   return (
     <>
       <GlobalStyle />
-      <BrowserRouter>
-        <ModalProvider>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/activity-record" element={<ActivityRecordPage />} />
-            <Route path="/baby" element={<BabyMain />} />
-            <Route path="/baby/profile" element={<BabyProfile />} />
-            <Route path="/baby/writing" element={<WritingDiary />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/welcome" element={<Welcome />} />
-            <Route path="/schedule" element={<SchedulePage />} />
-            <Route path="/babyform" element={<BabyInfoForm />} />
-            <Route path="/board" element={<BoardPage />} />
-            <Route path="/main" element={<Main />} />
-            <Route path="/board/write" element={<WriteArticlePage />} />
-          </Routes>
-        </ModalProvider>
-      </BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <ModalProvider>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/record" element={<RecordPage />} />
+              <Route path="/baby" element={<BabyMain />} />
+              <Route path="/baby/profile" element={<BabyProfile />} />
+              <Route path="/baby/writing" element={<WritingDiary />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/welcome" element={<Welcome />} />
+              <Route path="/schedule" element={<SchedulePage />} />
+              <Route path="/babyform" element={<BabyInfoForm />} />
+              <Route path="/board" element={<BoardPage />} />
+              <Route path="/main" element={<Main />} />
+              <Route path="/board/write" element={<WriteArticlePage />} />
+            </Routes>
+          </ModalProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
     </>
   );
 }

@@ -7,17 +7,15 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
 import com.password926.agijagi.common.errors.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
-@Component
 public class JsonObjectMapper {
 
     private static final ObjectMapper objectMapper = new ObjectMapper()
                     .registerModule(new JavaTimeModule())
                     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-    public <T> T fromJson(String json, Class<T> clazz) {
+    public static <T> T fromJson(String json, Class<T> clazz) {
         try {
             return objectMapper.readValue(json, clazz);
         } catch (JsonProcessingException e) {
@@ -25,7 +23,7 @@ public class JsonObjectMapper {
         }
     }
 
-    public String toJson(Object obj) {
+    public static String toJson(Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);
         } catch (JsonProcessingException e) {

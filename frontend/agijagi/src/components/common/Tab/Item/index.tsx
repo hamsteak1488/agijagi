@@ -32,7 +32,7 @@ const Item = ({ children, value, disabled = false }: ItemProps) => {
     }
 
     tabContext.setSelected(itemRef.current, value);
-  }, [itemRef.current, tabContext.init]);
+  }, [itemRef, tabContext, value]);
 
   return (
     <s.Item

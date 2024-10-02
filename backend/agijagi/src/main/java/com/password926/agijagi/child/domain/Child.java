@@ -27,6 +27,10 @@ public class Child {
     @Column(nullable = false)
     private Gender gender;
 
+    private Double birthWeight;
+
+    private Double birthHeight;
+
     @Column(nullable = false)
     private LocalDate birthday;
 
@@ -49,5 +53,17 @@ public class Child {
 
     public void updateImage(Image image) {
         this.image = image;
+    }
+
+    public static Child of(ChildContent childContent, Image image) {
+        return Child.builder()
+                .name(childContent.getName())
+                .nickname(childContent.getNickname())
+                .gender(childContent.getGender())
+                .birthWeight(childContent.getBirthWeight())
+                .birthHeight(childContent.getBirthHeight())
+                .birthday(childContent.getBirthday())
+                .image(image)
+                .build();
     }
 }
