@@ -32,13 +32,8 @@ public class ReadReportDetailResponse {
         List<Growth> growths = reportDetail.getGrowths();
         List<StandardGrowth> standardGrowths = reportDetail.getStandardGrowths();
 
-        List<GraphDataContent> graphData = IntStream.range(0, reportDetail.getGrowths().size())
-                .mapToObj(index ->
-                        GraphDataContent.of(
-                        index + 1,
-                        growths.get(index),
-                        standardGrowths.get(index)
-                ))
+        List<GraphDataContent> graphData = growths.stream()
+                .map(growth -> GraphDataContent.of(growth.getMonth(), growth, standardGrowths.get(growth.getMonth())))
                 .toList();
         double currWeight = growths.isEmpty() ? 0 : growths.get(growths.size() - 1).getWeight();
 
