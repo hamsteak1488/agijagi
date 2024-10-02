@@ -12,6 +12,12 @@ interface DeleteScheduleProps {
   scheduleId: number;
 }
 
+interface EditScheduleProps {
+  childId: number;
+  scheduleId: number;
+  data: ScheduleData;
+}
+
 export const addSchedule = ({ childId, data }: AddScheduleProps) => {
   return axiosInstance.post(`/children/${childId}/schedules`, data);
 };
@@ -19,6 +25,17 @@ export const addSchedule = ({ childId, data }: AddScheduleProps) => {
 export const getSchedules = (childId: number, start: string, end: string) => {
   return axiosInstance.get<ScheduleResponse[]>(
     `/children/${childId}/schedules?startDate=${start}&endDate=${end}`
+  );
+};
+
+export const editSchedule = ({
+  childId,
+  scheduleId,
+  data,
+}: EditScheduleProps) => {
+  return axiosInstance.patch(
+    `/children/${childId}/schedules/${scheduleId}`,
+    data
   );
 };
 
