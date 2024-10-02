@@ -12,7 +12,7 @@ public class GrowthReader {
 
     private final GrowthRepository growthRepository;
 
-    public List<Growth> readAll(long childId) {
-        return growthRepository.findAllByChildId(childId);
+    public List<Growth> readAllByMonth(long childId, int month) {
+        return growthRepository.findAllByChildIdAndMonthLessThan(childId, month);
     }
 }

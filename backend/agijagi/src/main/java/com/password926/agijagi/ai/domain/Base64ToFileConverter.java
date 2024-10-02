@@ -16,6 +16,11 @@ public final class Base64ToFileConverter {
     public static File convert(Base64Content base64Content) {
         byte[] decodedBytes = Base64.getDecoder().decode(base64Content.getBase64Data());
         try {
+            Path directoryPath = Path.of(FILE_PATH);
+            if (Files.notExists(directoryPath)) {
+                Files.createDirectories(directoryPath);
+            }
+
             Path tempFilePath = Files.createTempFile(Path.of(FILE_PATH), "uploaded-", "." + base64Content.getExtension());
             Files.write(tempFilePath, decodedBytes);
             return tempFilePath.toFile();

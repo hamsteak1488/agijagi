@@ -1,5 +1,6 @@
 package com.password926.agijagi.child.controller;
 
+import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.child.controller.dto.ChildDtoConverter;
 import com.password926.agijagi.child.controller.dto.request.AppendChildRequest;
@@ -21,6 +22,7 @@ public class ChildController {
 
     private final ChildService childService;
 
+    @Authenticate
     @GetMapping("/{childId}")
     public ResponseEntity<ReadChildDetailResponse> readChildDetail(
             LoginMember member,
@@ -29,11 +31,13 @@ public class ChildController {
         return ResponseEntity.ok().body(ReadChildDetailResponse.from(childService.readChildDetail(member.getId(), childId)));
     }
 
+    @Authenticate
     @GetMapping
     public ResponseEntity<List<ReadChildDetailResponse>> readChildDetails(LoginMember member) {
         return ResponseEntity.ok().body(ChildDtoConverter.convert(childService.readChildDetailsByMember(member.getId())));
     }
 
+    @Authenticate
     @PostMapping
     public ResponseEntity<Void> appendChild(
             LoginMember member,
@@ -43,6 +47,7 @@ public class ChildController {
         return ResponseEntity.ok().build();
     }
 
+    @Authenticate
     @DeleteMapping("/{childId}")
     public ResponseEntity<Void> removeChild(
             LoginMember member,
@@ -52,6 +57,7 @@ public class ChildController {
         return ResponseEntity.ok().build();
     }
 
+    @Authenticate
     @PatchMapping("/{childId}")
     public ResponseEntity<Void> updateChild(
             LoginMember member,
@@ -62,6 +68,7 @@ public class ChildController {
         return ResponseEntity.ok().build();
     }
 
+    @Authenticate
     @PatchMapping("/{childId}/image")
     public ResponseEntity<Void> updateChildImage(
             LoginMember member,
@@ -72,6 +79,7 @@ public class ChildController {
         return ResponseEntity.ok().build();
     }
 
+    @Authenticate
     @DeleteMapping("/{childId}/image")
     public ResponseEntity<Void> deleteChildImage(
             LoginMember member,

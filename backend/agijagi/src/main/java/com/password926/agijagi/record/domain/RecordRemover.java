@@ -12,12 +12,14 @@ public class RecordRemover {
 
     private final RecordReader recordReader;
     private final ChildValidator childValidator;
+    private final RecordValidator recordValidator;
     private final RecordRepository recordRepository;
 
     @Transactional
-    public void remove(long memberId, long recordId) {
+    public void remove(long memberId, long childId, long recordId) {
         Record record = recordReader.read(recordId);
         childValidator.validateWriteAuthority(memberId, record.getChild().getId());
+        recordValidator.validateOwner(childId, record);
         recordRepository.delete(record);
     }
 }

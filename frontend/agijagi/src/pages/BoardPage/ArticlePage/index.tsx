@@ -4,7 +4,7 @@ import CustomizedBorderContainer from '../../../components/common/CustomizedBord
 
 import theme from '../../../styles/theme';
 
-import Waves from '../../../assets/images/activityRecord/waves.svg';
+import Waves from '../../../assets/images/record/waves.svg';
 
 import * as s from './style';
 import Button from '../../../components/common/Button';

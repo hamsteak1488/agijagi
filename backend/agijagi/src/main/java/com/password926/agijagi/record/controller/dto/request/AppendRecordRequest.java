@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 @Getter
 public class AppendRecordRequest {
 
-    private long childId;
-
     @NotBlank
     private String type;
 

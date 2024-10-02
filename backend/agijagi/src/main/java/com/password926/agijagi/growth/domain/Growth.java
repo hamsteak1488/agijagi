@@ -2,11 +2,9 @@ package com.password926.agijagi.growth.domain;
 
 import com.password926.agijagi.child.domain.Child;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,7 +16,7 @@ public class Growth {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "childId", nullable = false)
+    @JoinColumn(name = "child_id", nullable = false)
     private Child child;
 
     private double weight;

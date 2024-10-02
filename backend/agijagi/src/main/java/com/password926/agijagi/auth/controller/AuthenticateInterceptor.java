@@ -9,7 +9,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 public class AuthenticateInterceptor implements HandlerInterceptor {
-    @Value("${enable-header-auth}")
+    @Value("${enable-header-auth:false}")
     private boolean enableHeaderAuth;
 
     @Override

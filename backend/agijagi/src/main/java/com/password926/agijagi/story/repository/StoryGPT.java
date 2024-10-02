@@ -1,21 +1,19 @@
 package com.password926.agijagi.story.repository;
 
+import com.password926.agijagi.common.errors.exception.RestApiException;
+import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
+import com.password926.agijagi.diary.entity.Diary;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
-import com.password926.agijagi.common.errors.exception.RestApiException;
-import com.password926.agijagi.diary.entity.Diary;
-import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Component
@@ -28,9 +26,12 @@ public class StoryGPT {
                     .registerModule(new JavaTimeModule())
                     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-    public CreateStoryRequest getCreateStoryDtoFromQuery(List<Diary> diaries, String name, Long age){
-        String data = convertValuesToJson(diaries);
-
+    public String getCreateStoryDtoFromQuery(List<Diary> diaries, String name, Long age){
+        List<String> diaryData = new ArrayList<>();
+        for (Diary diary : diaries){
+            diaryData.add(diary.getContent());
+        }
+        String data = convertValuesToJson(diaryData);
         PromptTemplate promptTemplate = new PromptTemplate(
                 """
                 It has the task of creating a fairy tale based on the child's growth process using childcare diary data. This fairy tale should capture the child's growth process and the essence of a memorable moment in an ingenious and attractive story.
@@ -42,8 +43,7 @@ public class StoryGPT {
                 </child_name>
 
                 ‹parenting_diary>
-                (7월 8일 : {child_name}이 걸음마를 함,
-                7월 10일 : {child_name}이 옹알이를 함)
+                ({data})
                 </parenting_diary>
 
                 <child_age>
@@ -61,12 +61,12 @@ public class StoryGPT {
                 6. No more than 50 characters per sentence.
                 7. Fairy tales should be written in Korean.
                 8. Paragraphs should be written as examples below.
-                [{z}"index": 1, "content": "content1"{a}, {z}"index": 2,"content": "content2"{a}]
+                [{z}"pageNumber": 1, "content": "content1"{a}, {z}"pageNumber": 2,"content": "content2"{a}]
                 """);
         Prompt prompt = promptTemplate.create(Map.of("child_name", name, "child_age", age, "data", data, "a", "}", "z", "{"));
         String response = openAiChatModel.call(prompt).getResult().getOutput().getContent();
         System.out.println(response);
-        return convertJsonToObject(formatToJson(response), CreateStoryRequest.class);
+        return response;
     }
 
     private String convertValuesToJson(Object values) {
@@ -76,17 +76,5 @@ public class StoryGPT {
         } catch (JsonProcessingException e) {
             throw new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND);
         }
-    }
-
-    private <T> T convertJsonToObject(String json, Class<T> valueType) {
-        try {
-            return objectMapper.readValue(json, valueType);
-        } catch (JsonProcessingException e) {
-            throw new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND);
-        }
-    }
-
-    private String formatToJson(String string) {
-        return string.substring(7, string.length() - 3);
     }
 }

@@ -1,28 +1,26 @@
 package com.password926.agijagi.diary.service;
 
-import com.password926.agijagi.child.domain.Child;
-import com.password926.agijagi.child.domain.ChildValidator;
-import com.password926.agijagi.child.infrastructure.ChildRepository;
-import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
-import com.password926.agijagi.common.errors.exception.RestApiException;
 import com.password926.agijagi.diary.controller.dto.CreateDiaryRequest;
 import com.password926.agijagi.diary.controller.dto.DeleteDiaryRequest;
 import com.password926.agijagi.diary.controller.dto.UpdateDiaryRequest;
-import com.password926.agijagi.diary.entity.Diary;
+import com.password926.agijagi.diary.repository.DiaryRepository;
 import com.password926.agijagi.diary.entity.DiaryDetail;
 import com.password926.agijagi.diary.entity.DiaryMedia;
-import com.password926.agijagi.diary.repository.DiaryRepository;
-import com.password926.agijagi.media.domain.Image;
-import com.password926.agijagi.media.domain.Media;
+import com.password926.agijagi.diary.entity.Diary;
 import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.media.domain.MediaStorage;
-import com.password926.agijagi.media.infrastructure.MediaRepository;
-import com.password926.agijagi.member.domain.Member;
+import com.password926.agijagi.media.domain.Image;
+import com.password926.agijagi.child.infrastructure.ChildRepository;
+import com.password926.agijagi.child.domain.ChildValidator;
+import com.password926.agijagi.child.domain.Child;
+import com.password926.agijagi.common.errors.exception.RestApiException;
+import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
 import com.password926.agijagi.member.infrastructure.MemberRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.password926.agijagi.member.domain.Member;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -36,7 +34,6 @@ public class DiaryService {
     private final DiaryRepository diaryRepository;
     private final ChildValidator childValidator;
     private final MediaStorage mediaStorage;
-    private final MediaRepository mediaRepository;
 
     @Transactional
     public void createDiary(long memberId, CreateDiaryRequest request) {
@@ -76,8 +73,9 @@ public class DiaryService {
         diary.updateTitleOrContent(request.getTitle(), request.getContent());
 
         if (request.getRemoveMediaIdList() != null) {
-            for (Long removeMediaId : request.getRemoveMediaIdList()) {
-                for (DiaryMedia diaryMedia : diary.getDiaryMediaList()) {
+            for (UUID removeMediaId : request.getRemoveMediaIdList()) {
+                List<DiaryMedia> diaryMediaList = List.copyOf(diary.getDiaryMediaList());
+                for (DiaryMedia diaryMedia : diaryMediaList) {
                     if (diaryMedia.getMedia().getId().equals(removeMediaId)) {
                         diary.removeMedia(diaryMedia);
                     }
@@ -91,6 +89,8 @@ public class DiaryService {
                 diary.addMedia(image);
             }
         }
+
+        diaryRepository.save(diary);
     }
 
     @Transactional
@@ -101,8 +101,9 @@ public class DiaryService {
         childValidator.validateWriteAuthority(memberId, diary.getChild().getId());
 
         if (request.getRemoveMediaIdList() != null) {
-            for (Long removeMediaId : request.getRemoveMediaIdList()) {
-                for (DiaryMedia diaryMedia : diary.getDiaryMediaList()) {
+            for (UUID removeMediaId : request.getRemoveMediaIdList()) {
+                List<DiaryMedia> diaryMediaList = List.copyOf(diary.getDiaryMediaList());
+                for (DiaryMedia diaryMedia : diaryMediaList) {
                     if (diaryMedia.getMedia().getId().equals(removeMediaId)) {
                         diary.removeMedia(diaryMedia);
                     }
@@ -117,14 +118,7 @@ public class DiaryService {
     public List<DiaryDetail> getAllDiary(long memberId, long childId) {
         childValidator.validateWriteAuthority(memberId, childId);
 
-        List<Diary> diaries = diaryRepository.findAllByChildIdAndIsDeletedFalse(childId);
-
-        diaries.sort(new Comparator<Diary>() {
-            @Override
-            public int compare(Diary o1, Diary o2) {
-                return Long.compare(o2.getId(), o1.getId());
-            }
-        });
+        List<Diary> diaries = diaryRepository.findAllByChildIdAndIsDeletedFalseOrderByIdDesc(childId);
 
         List<DiaryDetail> diaryDetails = new ArrayList<>();
 

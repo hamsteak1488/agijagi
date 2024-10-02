@@ -1,5 +1,6 @@
 package com.password926.agijagi.growth.controller;
 
+import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.growth.controller.dto.request.AppendGrowthRequest;
 import com.password926.agijagi.growth.service.GrowthService;
@@ -15,7 +16,8 @@ public class GrowthController {
 
     private final GrowthService growthService;
 
-    @PutMapping("{childId}/growth")
+    @Authenticate
+    @PutMapping("/{childId}/growth")
     public ResponseEntity<Void> putGrowth(
             LoginMember member,
             @PathVariable long childId,
