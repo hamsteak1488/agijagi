@@ -57,3 +57,19 @@ export const AddIconWrapper = styled.div`
 export const InvisibleInput = styled.input`
   display: none;
 `;
+export const BackButton = styled.div(
+  () => css`
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    padding: 0.2rem;
+    color: #fff;
+    background-color: ${theme.color.primary[300]};
+    border-radius: 50%;
+    transition: all 0.75s;
+    right: 120%;
+    top: 2%;
+    z-index: 1;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  `
+);
