@@ -35,9 +35,9 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/record" element={<RecordPage />} />
-              <Route path="/baby" element={<BabyMain />} />
-              <Route path="/baby/profile" element={<BabyProfile />} />
-              <Route path="/baby/writing" element={<WritingDiary />} />
+              <Route path="/family" element={<BabyMain />} />
+              <Route path="/family/profile" element={<BabyProfile />} />
+              <Route path="/family/writing" element={<WritingDiary />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/welcome" element={<Welcome />} />

@@ -5,6 +5,7 @@ import Typhography from '../../../common/Typography';
 import { useState } from 'react';
 import Textfield from '../../../common/Textfield';
 import theme from '../../../../styles/theme';
+import { BabyGender } from '../../../../types/user';
 
 export const Container = styled.div<{ width: number; isNext: boolean }>(
   (props) => css`
@@ -53,7 +54,6 @@ export interface SecondBabyFormProps {
   isNext: boolean;
 }
 
-export type BabyGender = '남아' | '여아' | '알수없음';
 export type Relationship = '엄마' | '아빠' | '기타';
 
 export const SecondBabyForm = ({ isNext }: SecondBabyFormProps) => {

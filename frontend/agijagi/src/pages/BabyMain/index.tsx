@@ -1,16 +1,21 @@
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getChild } from '../../apis/childrenApi';
 import adult from '../../assets/images/adult.png';
 import boy from '../../assets/images/boy.png';
 import girl from '../../assets/images/girl.png';
 import video from '../../assets/Test.mp4';
+import { useQuery } from '@tanstack/react-query';
 import { BabyProfileCard } from '../../components/BabyMain/BabyProfileCard/BabyProfileCard';
 import { ScheduleCard } from '../../components/BabyMain/ScheduleCard/ScheduleCard';
 import FullCalendar from '../../components/common/FullCalendar';
 import Tab from '../../components/common/Tab';
 import { TimelineDiary } from '../../components/Diary/TimelineDiary/TimelineDiary';
 import useModal from '../../hooks/useModal';
+import { BabyResponse } from '../../types/user';
 import * as s from './style';
+import useChildStore from '../../stores/useChlidStore';
 
 export const BabyMain = () => {
   const [fileList, setFileList] = useState<File[]>([]);
@@ -19,13 +24,20 @@ export const BabyMain = () => {
 
   const modal = useModal();
   const navigator = useNavigate();
-
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const moment = require('moment');
+  const { childId } = useChildStore();
 
   const handleTab = (menu: string) => {
     setTabMenu(menu);
   };
+
+  const { data: child } = useQuery<BabyResponse>({
+    queryKey: ['child', childId],
+    queryFn: () => {
+      if (childId === 0)
+        return Promise.reject(new Error('유효하지 않은 childId입니다.'));
+      return getChild(childId);
+    },
+  });
 
   const data = [
     {
@@ -106,9 +118,9 @@ export const BabyMain = () => {
 
   return (
     <>
-      <BabyProfileCard />
+      <BabyProfileCard child={child} />
       <ScheduleCard />
-      <s.WriteIconBox onClick={() => navigator('/baby/writing')}>
+      <s.WriteIconBox onClick={() => navigator('/family/writing')}>
         {s.WriteIcon}
       </s.WriteIconBox>
       <s.TapWrapper>

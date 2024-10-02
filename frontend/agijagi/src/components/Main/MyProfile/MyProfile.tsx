@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import defaultImg from '../../../assets/images/adult.png';
 import theme from '../../../styles/theme';
+import { MemberResponse } from '../../../types/user';
 import Typhography from '../../common/Typography';
 
 export const Container = styled.div`
@@ -44,7 +45,10 @@ export const Photo = styled.img`
   border: 2px solid ${theme.color.greyScale[500]};
 `;
 
-export const MyProfile = () => {
+export interface MyProfileProps {
+  member: MemberResponse | undefined;
+}
+export const MyProfile = ({ member }: MyProfileProps) => {
   return (
     <Container>
       <GridCard>
@@ -53,7 +57,7 @@ export const MyProfile = () => {
         </PhotoSection>
         <ContentSection>
           <Typhography size="5xl" weight="bold">
-            아빠용진
+            {member?.nickname}
           </Typhography>
         </ContentSection>
       </GridCard>

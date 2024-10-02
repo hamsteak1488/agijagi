@@ -3,6 +3,8 @@ import defaultImg from '../../../assets/images/adult.png';
 import theme from '../../../styles/theme';
 import Typhography from '../../common/Typography';
 import UserIcon from '@heroicons/react/16/solid/UserIcon';
+import { BabyResponse } from '../../../types/user';
+import moment from 'moment';
 
 export const Container = styled.div`
   display: flex;
@@ -66,7 +68,22 @@ export const IconWrapper = styled.div`
   height: 24px;
 `;
 
-export const BabyProfileCard = () => {
+export const DayCountWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+`;
+export interface BabyProfileCardProps {
+  child?: BabyResponse;
+}
+
+export const BabyProfileCard = ({ child }: BabyProfileCardProps) => {
+  const today = moment();
+  const differenceIndays = today.diff(
+    moment(child?.birthday, 'YYYY-MM-DD'),
+    'days'
+  );
+
   return (
     <Container>
       <GridCard>
@@ -75,14 +92,19 @@ export const BabyProfileCard = () => {
         </PhotoSection>
         <ContentSection>
           <Typhography size="5xl" weight="bold">
-            아기다운
+            {child?.nickname}
           </Typhography>
-          <Typhography size="md" color="primary" shade="900" weight="regular">
-            + 367일
-          </Typhography>
+          <DayCountWrapper>
+            <Typhography size="sm">태어난지</Typhography>
+            <Typhography size="sm" color="primary" shade="900" weight="bold">
+              {differenceIndays ? differenceIndays : 0}
+            </Typhography>
+            <Typhography size="sm">일</Typhography>
+          </DayCountWrapper>
+
           <MemberInfo>
             <Typhography size="xl" color="primary" weight="extraBold">
-              5
+              {child?.followerNum}
             </Typhography>
             <IconWrapper>
               <UserIcon color={theme.color.primary[900]} />

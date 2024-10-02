@@ -11,6 +11,7 @@ import BackIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
 import { axiosInstance } from '../../apis/axiosInstance';
 import useModal from '../../hooks/useModal';
 import { ModalBackground } from './style';
+import useMemberStore from '../../stores/useMemberStore';
 
 export const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -19,6 +20,7 @@ export const Login = () => {
   const [loginMode, setLoginMode] = useState<boolean>(false);
   const [isValidated, setIsValidated] = useState<boolean[]>([false, false]);
 
+  const { memberId, updateMemberId } = useMemberStore();
   const navigator = useNavigate();
   const modal = useModal();
 
@@ -38,9 +40,11 @@ export const Login = () => {
     axiosInstance
       .post('/auth/login', {
         email: email,
-        password: password,
+        password: '1',
       })
       .then((response) => {
+        updateMemberId(response.data.memberId);
+        localStorage.setItem('memberId', response.data.memberId);
         navigator('/main');
       })
       .catch((error) => {
