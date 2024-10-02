@@ -1,6 +1,7 @@
 package com.password926.agijagi.story.entity;
 
 import com.password926.agijagi.child.domain.Child;
+import com.password926.agijagi.media.domain.Media;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,7 +29,9 @@ public class Story {
     @Column(nullable = false)
     private LocalDate endDate;
 
-    private String coverImageUrl;
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JoinColumn(name = "cover_image_id")
+    private Media coverImage;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -44,11 +47,12 @@ public class Story {
         this.createdAt = createdAt;
     }
 
-    public void remove() {
-        isDeleted = true;
+    public void addMedia(Media media) {
+        this.coverImage = media;
     }
 
-    public void addMedia(String mediaUrl) {
-        this.coverImageUrl = mediaUrl;
+    public void remove() {
+        this.coverImage = null;
+        isDeleted = true;
     }
 }

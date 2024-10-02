@@ -55,4 +55,14 @@ public class StoryController {
     ) {
         return ResponseEntity.ok().body(storyService.getStoryAllPage(member.getId(), storyId));
     }
+
+    @Authenticate
+    @DeleteMapping("/{storyId}")
+    public ResponseEntity<Void> deleteStory(
+            LoginMember member,
+            @PathVariable long storyId
+    ) {
+        storyService.deleteStory(member.getId(), storyId);
+        return ResponseEntity.ok().build();
+    }
 }

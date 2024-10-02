@@ -1,5 +1,6 @@
 package com.password926.agijagi.story.service;
 
+import com.password926.agijagi.media.infrastructure.MediaRepository;
 import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
 import com.password926.agijagi.story.repository.StoryPageRepository;
 import com.password926.agijagi.story.repository.StoryRepository;
@@ -39,7 +40,9 @@ public class StoryService {
     private final StoryGPT storyGPT;
     private final ChildValidator childValidator;
     private final MediaStorage mediaStorage;
+    private final MediaRepository mediaRepository;
 
+    @Transactional
     public void createStory(long memberId, CreateStoryRequest request) {
         childValidator.validateWriteAuthority(memberId, request.getChildId());
 
@@ -67,7 +70,7 @@ public class StoryService {
         );
 
         Image image = mediaStorage.storeImage(MediaResource.from(request.getCoverImage()));
-        story.addMedia(image.getUrl());
+        story.addMedia(image);
 
         storyRepository.save(story);
 
@@ -134,5 +137,18 @@ public class StoryService {
         }
 
         return storyPageDetails;
+    }
+
+    @Transactional
+    public void deleteStory(long memberId, long storyId) {
+
+        Story story = storyRepository.findByIdAndIsDeletedFalse(storyId)
+                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
+
+        childValidator.validateWriteAuthority(memberId, story.getChild().getId());
+
+        storyPageRepository.deleteAllByStoryId(storyId);
+
+        story.remove();
     }
 }
