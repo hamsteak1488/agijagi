@@ -1,12 +1,12 @@
 import styled from '@emotion/styled';
-import Button from '../../common/Button';
-import Textfield from '../../common/Textfield';
-import Typhography from '../../common/Typography';
+import Button from '../../../common/Button';
+import Textfield from '../../../common/Textfield';
+import Typhography from '../../../common/Typography';
 import PlusCircle from '@heroicons/react/24/outline/PlusCircleIcon';
-import theme from '../../../styles/theme';
-import defaultImg from '../../../assets/images/baby.png';
+import theme from '../../../../styles/theme';
+import defaultImg from '../../../../assets/images/baby.png';
 import { css } from '@emotion/react';
-import { ValidationState } from '../../common/Textfield/Textfield.types';
+import { ValidationState } from '../../../common/Textfield/Textfield.types';
 
 export const ProfileCircleWrapper = styled.label`
   display: flex;

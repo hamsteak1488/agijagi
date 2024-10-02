@@ -11,6 +11,17 @@ export const Container = styled.div(
   `
 );
 
+export const ModalBackground = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background-color: ${theme.color.primary[50]};
+  margin: 1rem;
+  padding: 2.5rem 2rem 2rem 2rem;
+  border-radius: 0.5rem;
+`;
+
 export const DateContainer = styled.div(
   () => css`
     display: flex;
