@@ -4,7 +4,7 @@ import { getRecords } from '../../apis/record';
 
 const queryKey = ['record', 'recent'];
 
-const useFetchRecords = (childId: number, start: string, end: string) => {
+const useGetRecords = (childId: number, start: string, end: string) => {
   const { data, error, isFetching } = useSuspenseQuery({
     queryKey,
     queryFn: () => getRecords(childId, start, end),
@@ -17,6 +17,6 @@ const useFetchRecords = (childId: number, start: string, end: string) => {
   return data;
 };
 
-useFetchRecords.queryKey = queryKey;
+useGetRecords.queryKey = queryKey;
 
-export default useFetchRecords;
+export default useGetRecords;

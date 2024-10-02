@@ -6,20 +6,30 @@ import type {
 
 import { axiosInstance } from './axiosInstance';
 
-export const getLatestRecords = () => {
-  return axiosInstance.get<RecordData[]>('/children/records/latest?childId=1');
+interface AddRecordProps {
+  childId: number;
+  data: RecordRequest;
+}
+
+interface DeleteRecordProps {
+  childId: number;
+  recordId: number;
+}
+
+export const getLatestRecords = (childId: number) => {
+  return axiosInstance.get<RecordData[]>(`/children/${childId}/records/latest`);
 };
 
-export const addRecord = (data: RecordRequest) => {
-  return axiosInstance.post('/children/records', data);
+export const addRecord = ({ childId, data }: AddRecordProps) => {
+  return axiosInstance.post(`/children/${childId}/records`, data);
 };
 
 export const getRecords = (childId: number, start: string, end: string) => {
   return axiosInstance.get<RecordResponse[]>(
-    `/children/records?childId=${childId}&startDate=${start}&endDate=${end}`
+    `/children/${childId}/records?startDate=${start}&endDate=${end}`
   );
 };
 
-export const deleteRecord = (recordId: number) => {
-  return axiosInstance.delete(`/children/records/${recordId}`);
+export const deleteRecord = ({ childId, recordId }: DeleteRecordProps) => {
+  return axiosInstance.delete(`/children/${childId}/records/${recordId}`);
 };

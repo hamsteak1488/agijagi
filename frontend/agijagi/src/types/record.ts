@@ -6,7 +6,6 @@ export interface RecordData {
 }
 
 export interface RecordRequest {
-  childId: number;
   type: RecordType;
   startDateTime: string;
   endDateTime: string | null;
@@ -17,6 +16,6 @@ export interface RecordMenu extends RecordData {
   color: string;
 }
 
-export interface RecordResponse extends Omit<RecordRequest, 'childId'> {
+export interface RecordResponse extends RecordRequest {
   id: number;
 }

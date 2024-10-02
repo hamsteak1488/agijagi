@@ -1,13 +1,15 @@
 import { useState } from 'react';
+
+import dayjs from 'dayjs';
+
 import AppBar from '../../components/common/AppBar';
 import Button from '../../components/common/Button';
 import Typhography from '../../components/common/Typography';
 import Schedule from '../../components/Schedule';
 
 import useModal from '../../hooks/useModal';
-import AddSchedulePage from './AddSchedulePage';
 
-import EditSchedulePage from './EditSchedulePage';
+import AddSchedulePage from './AddSchedulePage';
 
 import * as s from './style';
 
@@ -17,10 +19,6 @@ const SchedulePage = () => {
   const modal = useModal();
 
   const days = ['일', '월', '화', '수', '목', '금', '토', '일'];
-
-  const handleScheduleClick = () => {
-    modal.push({ children: <EditSchedulePage /> });
-  };
 
   const handleAddClick = () => {
     modal.push({ children: <AddSchedulePage /> });
@@ -49,41 +47,9 @@ const SchedulePage = () => {
           </Button>
         </s.ScheduleHeader>
         <s.ScheduleList>
-          <Schedule.Card
-            title="병원 가기"
-            description="용진의원"
-            time="08:00 ~ 08:30"
-            onClick={handleScheduleClick}
-          />
-          <Schedule.Card
-            title="병원 가기"
-            description="용진의원"
-            time="08:00 ~ 08:30"
-            onClick={handleScheduleClick}
-          />
-          <Schedule.Card
-            title="병원 가기"
-            description="용진의원"
-            time="08:00 ~ 08:30"
-            onClick={handleScheduleClick}
-          />
-          <Schedule.Card
-            title="병원 가기"
-            description="용진의원"
-            time="08:00 ~ 08:30"
-            onClick={handleScheduleClick}
-          />
-          <Schedule.Card
-            title="병원 가기"
-            description="용진의원"
-            time="08:00 ~ 08:30"
-            onClick={handleScheduleClick}
-          />
-          <Schedule.Card
-            title="병원 가기"
-            description="용진의원"
-            time="08:00 ~ 08:30"
-            onClick={handleScheduleClick}
+          <Schedule.List
+            start={dayjs(date).format('YYYY-MM-DD')}
+            end={dayjs(date).format('YYYY-MM-DD')}
           />
         </s.ScheduleList>
       </s.Main>
