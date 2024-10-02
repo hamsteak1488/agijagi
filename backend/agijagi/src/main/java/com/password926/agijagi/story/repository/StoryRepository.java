@@ -1,15 +1,13 @@
 package com.password926.agijagi.story.repository;
 
-import com.password926.agijagi.diary.entity.Diary;
-import com.password926.agijagi.story.entity.Story;
 import org.springframework.data.jpa.repository.JpaRepository;
+import com.password926.agijagi.story.entity.Story;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public interface StoryRepository extends JpaRepository<Story, Long> {
 
-    List<Story> findAllByChildIdAndIsDeletedFalse(long childId);
+    List<Story> findAllByChildIdAndIsDeletedFalseOrderByIdDesc(long childId);
 
     Optional<Story> findByIdAndIsDeletedFalse(long storyId);
 }

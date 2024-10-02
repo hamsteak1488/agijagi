@@ -1,7 +1,6 @@
 package com.password926.agijagi.story.controller.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -19,5 +18,4 @@ public class CreateStoryRequest {
     private LocalDate endDate;
 
     private MultipartFile coverImage;
-
 }

@@ -8,7 +8,7 @@ import java.util.*;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
-    List<Diary> findAllByChildIdAndIsDeletedFalse(long childId);
+    List<Diary> findAllByChildIdAndIsDeletedFalseOrderByIdDesc(long childId);
 
     Optional<Diary> findByIdAndIsDeletedFalse(long diaryId);
 
