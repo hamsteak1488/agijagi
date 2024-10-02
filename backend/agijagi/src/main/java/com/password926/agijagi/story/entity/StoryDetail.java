@@ -30,7 +30,7 @@ public class StoryDetail {
                 .startDate(story.getStartDate())
                 .endDate(story.getEndDate())
                 .createdAt(story.getCreatedAt())
-                .coverImageUrl(story.getCoverImageUrl())
+                .coverImageUrl(story.getCoverImage().getUrl())
                 .build();
     }
 }

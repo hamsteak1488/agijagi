@@ -3,6 +3,7 @@ package com.password926.agijagi.story.controller;
 import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
+import com.password926.agijagi.story.controller.dto.DeleteStoryRequest;
 import com.password926.agijagi.story.entity.StoryPageDetail;
 import com.password926.agijagi.story.service.StoryService;
 import com.password926.agijagi.story.entity.StoryDetail;
@@ -54,5 +55,16 @@ public class StoryController {
             @PathVariable long storyId
     ) {
         return ResponseEntity.ok().body(storyService.getStoryAllPage(member.getId(), storyId));
+    }
+
+    @Authenticate
+    @DeleteMapping("/{storyId}")
+    public ResponseEntity<Void> deleteStory(
+            LoginMember member,
+            @PathVariable long storyId,
+            DeleteStoryRequest deleteStoryRequest
+    ) {
+        storyService.deleteStory(member.getId(), storyId, deleteStoryRequest);
+        return ResponseEntity.ok().build();
     }
 }
