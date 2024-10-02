@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import * as s from './style';
+import axios from 'axios';
 import Button from '../../components/common/Button';
 import Textfield from '../../components/common/Textfield';
 import Typhography from '../../components/common/Typography';
@@ -7,6 +8,9 @@ import { IntroductionSlider } from '../../components/Login/IntroductionSlider/In
 import { ValidationState } from '../../components/common/Textfield/Textfield.types';
 import { useNavigate } from 'react-router-dom';
 import BackIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
+import { axiosInstance } from '../../apis/axiosInstance';
+import useModal from '../../hooks/useModal';
+import { ModalBackground } from './style';
 
 export const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -14,6 +18,9 @@ export const Login = () => {
   const [level, setLevel] = useState<number>(0);
   const [loginMode, setLoginMode] = useState<boolean>(false);
   const [isValidated, setIsValidated] = useState<boolean[]>([false, false]);
+
+  const navigator = useNavigate();
+  const modal = useModal();
 
   const widthRatio = window.innerWidth / 360;
   const width = window.innerWidth;
@@ -27,7 +34,26 @@ export const Login = () => {
     setLevel(level);
   };
 
-  const navigator = useNavigate();
+  const handleLogin = () => {
+    axiosInstance
+      .post('/auth/login', {
+        email: email,
+        password: password,
+      })
+      .then((response) => {
+        navigator('/main');
+      })
+      .catch((error) => {
+        modal.push({
+          children: (
+            <ModalBackground>
+              {error.response.data.message}
+              <Button onClick={modal.pop}>닫기</Button>
+            </ModalBackground>
+          ),
+        });
+      });
+  };
 
   function validatePassword(input: string): ValidationState {
     if (input.trim() === '') {
@@ -129,7 +155,7 @@ export const Login = () => {
           color={isValidated[0] && isValidated[1] ? 'primary' : 'greyScale'}
           fullWidth={true}
           disabled={!(isValidated[0] && isValidated[1])}
-          onClick={() => {}}
+          onClick={handleLogin}
         >
           <Typhography color="white">로그인</Typhography>
         </Button>

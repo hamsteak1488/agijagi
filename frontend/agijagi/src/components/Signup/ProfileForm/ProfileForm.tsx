@@ -5,8 +5,13 @@ import defaultImg from '../../../assets/images/adult.png';
 import { ValidationState } from '../../common/Textfield/Textfield.types';
 import PlusCircle from '@heroicons/react/24/outline/PlusCircleIcon';
 import { useNavigate } from 'react-router-dom';
+import { signUp } from '../../../apis/userApi';
+import BackIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
+import useModal from '../../../hooks/useModal';
+import { ModalBackground } from '../../../pages/Login/style';
 import {
   AddIconWrapper,
+  BackButton,
   Container,
   ImgWrapper,
   InvisibleInput,
@@ -16,8 +21,11 @@ import {
 } from './ProfileForm.styles';
 
 interface ProfileForm {
+  email: string;
+  password: string;
   isNext: boolean;
   uploadImg: string;
+  handleNext: () => void;
   handleUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isValidated: Record<string, boolean>;
   nickname: string;
@@ -26,8 +34,11 @@ interface ProfileForm {
 }
 
 export const ProfileForm = ({
+  email,
+  password,
   isNext,
   uploadImg,
+  handleNext,
   handleUpload,
   isValidated,
   nickname,
@@ -37,13 +48,47 @@ export const ProfileForm = ({
   const width = window.innerWidth;
   const navigator = useNavigate();
 
+  const modal = useModal();
+
+  const handleSignup = () => {
+    signUp({
+      email: email,
+      password: password,
+      nickname: nickname,
+    })
+      .then((response) => {
+        console.log(response);
+        modal.push({
+          children: (
+            <ModalBackground>
+              <Typhography>회원가입이 완료되었어요!</Typhography>
+              <Button onClick={modal.pop}>닫기</Button>
+            </ModalBackground>
+          ),
+          onClose: () => navigator('/welcome'),
+        });
+      })
+      .catch((error) => {
+        modal.push({
+          children: (
+            <ModalBackground>
+              {error.response.data.message}
+              <Button onClick={modal.pop}>닫기</Button>
+            </ModalBackground>
+          ),
+        });
+      });
+  };
+
   return (
     <Container width={width} isNext={!isNext}>
       <ProfileContainer>
         <Typhography size="6xl" weight="bold">
           프로필 등록
         </Typhography>
-        <div></div>
+        <BackButton onClick={handleNext}>
+          <BackIcon />
+        </BackButton>
         <ProfileCircleWrapper htmlFor="file">
           <AddIconWrapper>
             <PlusCircle fill="#fff" />
@@ -80,7 +125,7 @@ export const ProfileForm = ({
         fullWidth={true}
         disabled={!isValidated['nickname']}
         onClick={() => {
-          navigator('/welcome');
+          handleSignup();
         }}
       >
         등록
