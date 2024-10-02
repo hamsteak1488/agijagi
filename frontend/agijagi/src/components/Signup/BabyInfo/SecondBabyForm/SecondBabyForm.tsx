@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import Button from '../../common/Button';
-import Typhography from '../../common/Typography';
+import Button from '../../../common/Button';
+import Typhography from '../../../common/Typography';
 import { useState } from 'react';
-import Textfield from '../../common/Textfield';
-import theme from '../../../styles/theme';
+import Textfield from '../../../common/Textfield';
+import theme from '../../../../styles/theme';
 
 export const Container = styled.div<{ width: number; isNext: boolean }>(
   (props) => css`
@@ -57,14 +57,12 @@ export type BabyGender = '남아' | '여아' | '알수없음';
 export type Relationship = '엄마' | '아빠' | '기타';
 
 export const SecondBabyForm = ({ isNext }: SecondBabyFormProps) => {
-  // 성별과 관계 선택 상태 관리
   const [selectedGender, setSelectedGender] = useState<BabyGender>('남아');
   const [selectedRelation, setSelectedRelation] =
     useState<Relationship>('엄마');
   const [weight, setWeight] = useState<string>('');
   const [height, setHeight] = useState<string>('');
 
-  // 버튼 클릭 핸들러
   const handleGenderClick = (gender: BabyGender) => {
     setSelectedGender(gender);
   };
@@ -147,6 +145,7 @@ export const SecondBabyForm = ({ isNext }: SecondBabyFormProps) => {
           inputValue={height}
           setInputValue={setHeight}
           helpText="*선택사항"
+          type="number"
         />
       </InputContainer>
       <Button fullWidth={true}>등록</Button>

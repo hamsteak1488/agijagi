@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import adult from '../../assets/images/adult.png';
@@ -6,8 +7,10 @@ import girl from '../../assets/images/girl.png';
 import video from '../../assets/Test.mp4';
 import AppBar from '../../components/common/AppBar';
 import Button from '../../components/common/Button';
+import FullCalendar from '../../components/common/FullCalendar';
 import Typhography from '../../components/common/Typography';
 import MediaSlider from '../../components/Diary/MediaSlider';
+import useModal from '../../hooks/useModal';
 import {
   BottomArrow,
   Container,
@@ -16,15 +19,36 @@ import {
   DayContainer,
   DiaryTextArea,
   Icon,
+  ModalBackground,
   SelectBoxDiv,
 } from './WritingDiary.styles';
 
 export const WritingDiary = () => {
   const [fileList, setFileList] = useState<File[]>([]);
   const [isInitialRender, setIsInitialRender] = useState<boolean>(true);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const navigator = useNavigate();
+  const modal = useModal();
+
+  const handleDate = (value: Date) => {
+    setSelectedDate(value);
+    modal.pop();
+  };
+
+  const selectDate = () => {
+    modal.push({
+      children: (
+        <ModalBackground>
+          <FullCalendar
+            onClickDay={handleDate}
+            maxDate={moment().toDate()}
+          ></FullCalendar>
+        </ModalBackground>
+      ),
+    });
+  };
 
   //todo
   const handleSubmit = () => {
@@ -85,9 +109,9 @@ export const WritingDiary = () => {
               397
             </Typhography>
           </DateContainer>
-          <SelectBoxDiv>
+          <SelectBoxDiv onClick={selectDate}>
             <Typhography size="md" color="black">
-              2024년 7월 1일
+              {moment(selectedDate).format('YYYY년 MM월 DD일')}
             </Typhography>
             <Icon>{BottomArrow}</Icon>
           </SelectBoxDiv>
