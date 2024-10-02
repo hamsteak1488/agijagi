@@ -48,7 +48,6 @@ public class DiaryService {
         Diary diary = Diary.builder()
                 .child(child)
                 .member(member)
-                .title(request.getTitle())
                 .content(request.getContent())
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -70,7 +69,7 @@ public class DiaryService {
 
         childValidator.validateWriteAuthority(memberId, diary.getChild().getId());
 
-        diary.updateTitleOrContent(request.getTitle(), request.getContent());
+        diary.updateContent(request.getContent());
 
         if (request.getRemoveMediaIdList() != null) {
             for (UUID removeMediaId : request.getRemoveMediaIdList()) {

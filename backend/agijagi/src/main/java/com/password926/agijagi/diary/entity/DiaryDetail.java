@@ -15,8 +15,6 @@ public class DiaryDetail {
 
     private long memberId;
 
-    private String title;
-
     private String content;
 
     private LocalDateTime createdAt;
@@ -28,7 +26,6 @@ public class DiaryDetail {
                 .id(diary.getId())
                 .childId(diary.getChild().getId())
                 .memberId(diary.getMember().getId())
-                .title(diary.getTitle())
                 .content(diary.getContent())
                 .createdAt(diary.getCreatedAt())
                 .mediaUrls(new ArrayList<>())
