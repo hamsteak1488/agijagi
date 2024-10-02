@@ -13,7 +13,7 @@ public class GrowthContentReader {
     private final GrowthRepository growthRepository;
 
     public List<GrowthContent> readAllByMonth(long childId, int month) {
-        return growthRepository.findAllByChildIdAndMonthLessThan(childId, month).stream()
+        return growthRepository.findAllByChildIdAndMonthLessThanOrderByMonth(childId, month).stream()
                 .map(GrowthContent::from)
                 .toList();
     }

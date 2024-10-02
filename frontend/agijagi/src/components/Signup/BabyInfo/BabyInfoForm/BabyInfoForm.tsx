@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import theme from '../../../styles/theme';
-import { ValidationState } from '../../common/Textfield/Textfield.types';
-import { FirstBabyForm } from './FirstBabyForm';
-import { SecondBabyForm } from './SecondBabyForm';
+import theme from '../../../../styles/theme';
+import { ValidationState } from '../../../common/Textfield/Textfield.types';
+import { FirstBabyForm } from '../FirstBabyForm/FirstBabyForm';
+import { SecondBabyForm } from '../SecondBabyForm/SecondBabyForm';
 
 export const Background = styled.div`
   width: 100%;

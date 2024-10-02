@@ -32,7 +32,7 @@ public class ChildAppender {
     }
 
     private Image storeImageIfPresent(MultipartFile image) {
-        if (image.isEmpty()) {
+        if (image == null || image.isEmpty()) {
             return null;
         }
         return mediaStorage.storeImage(MediaResource.from(image));

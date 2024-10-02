@@ -1,13 +1,6 @@
 insert member(email, nickname, password)
 values ('abcd123@naver.com', '다르다', '$2a$10$TaxwwF9QrH5NEqjo8LLQCealD5OsN8d3VCrYpc5nGDNfYg7P7/1zC');
 
-insert child(name, nickname, gender, birth_weight, birth_height, birthday, is_deleted)
-    value('test', 'test', '남아', 3.3, 49.9, now(), 0);
-
-insert member_child(member_id, child_id, authority)
-    value (1, 1, 'WRITE');
-
-
 INSERT INTO milestone (month, required_amount, content, title)
 VALUES
     (0, 8, '엎드린 자세에서 고개를 잠깐 들 수 있다', '움직임 / 신체발달'),
