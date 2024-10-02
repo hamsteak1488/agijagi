@@ -19,8 +19,8 @@ const List = ({ start, end }: ScheduleListProps) => {
 
   const modal = useModal();
 
-  const handleScheduleClick = () => {
-    modal.push({ children: <EditSchedulePage /> });
+  const handleScheduleClick = (scheduleId: number) => {
+    modal.push({ children: <EditSchedulePage scheduleId={scheduleId} /> });
   };
 
   return (
@@ -32,7 +32,7 @@ const List = ({ start, end }: ScheduleListProps) => {
           description={item.description}
           start={item.startDateTime}
           end={item.endDateTime}
-          onClick={handleScheduleClick}
+          onClick={() => handleScheduleClick(item.id)}
         />
       ))}
     </>

@@ -13,8 +13,23 @@ import * as s from './style';
 
 import { useNavigate } from 'react-router-dom';
 
-const EditSchedulePage = () => {
+import useDialog from '../../../hooks/useDialog';
+import useDeleteSchedule from '../../../hooks/api/useDeleteSchedule';
+
+import useChildStore from '../../../stores/useChlidStore';
+
+interface EditSchedulePageProps {
+  scheduleId: number;
+}
+
+const EditSchedulePage = ({ scheduleId }: EditSchedulePageProps) => {
+  const { childId } = useChildStore();
+
+  const { confirm } = useDialog();
+
   const navigate = useNavigate();
+
+  const deleteSchedule = useDeleteSchedule();
 
   const dateRef = useRef<Date>();
 
@@ -25,6 +40,14 @@ const EditSchedulePage = () => {
   const [value, setValue] = useState<string>('');
 
   const handleTimeChange = (start: string, end: string) => {};
+
+  const handleDeleteClick = async () => {
+    if (!(await confirm('정말로 일정을 삭제할까요?'))) {
+      return;
+    }
+
+    deleteSchedule.mutate({ childId, scheduleId });
+  };
 
   return (
     <s.Container>
@@ -54,7 +77,13 @@ const EditSchedulePage = () => {
             fullWidth
           />
           <s.ButtonContainer>
-            <Button color="danger">삭제</Button>
+            <Button
+              color="danger"
+              onClick={handleDeleteClick}
+              disabled={deleteSchedule.isPending}
+            >
+              삭제
+            </Button>
             <Button color="success">수정</Button>
           </s.ButtonContainer>
         </s.Form>
