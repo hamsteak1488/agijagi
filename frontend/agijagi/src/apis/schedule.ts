@@ -7,6 +7,13 @@ interface AddScheduleProps {
   data: ScheduleData;
 }
 
+interface AddScheduleByVoiceProps {
+  childId: number;
+  name: string;
+  extension: string;
+  base64Data: string;
+}
+
 interface DeleteScheduleProps {
   childId: number;
   scheduleId: number;
@@ -20,6 +27,13 @@ interface EditScheduleProps {
 
 export const addSchedule = ({ childId, data }: AddScheduleProps) => {
   return axiosInstance.post(`/children/${childId}/schedules`, data);
+};
+
+export const addScheduleByVoice = ({
+  childId,
+  ...data
+}: AddScheduleByVoiceProps) => {
+  return axiosInstance.post(`/children/${childId}/schedules/voice`, data);
 };
 
 export const getSchedules = (childId: number, start: string, end: string) => {

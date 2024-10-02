@@ -1,16 +1,17 @@
+import dayjs from 'dayjs';
 import { FormEvent, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
 
 import * as s from './style';
 
 import AppBar from '../../../components/common/AppBar';
-import IconButton from '../../../components/common/IconButton';
-import Schedule from '../../../components/Schedule';
-import Textfield from '../../../components/common/Textfield';
 import Button from '../../../components/common/Button';
+import IconButton from '../../../components/common/IconButton';
+import Textfield from '../../../components/common/Textfield';
 import TimePicker from '../../../components/common/TimePicker';
+import Schedule from '../../../components/Schedule';
 
+import MicrophoneIcon from '@heroicons/react/16/solid/MicrophoneIcon';
 import XMarkIcon from '@heroicons/react/16/solid/XMarkIcon';
 
 import useAddSchedule from '../../../hooks/api/useAddSchedule';
@@ -18,11 +19,15 @@ import useAddSchedule from '../../../hooks/api/useAddSchedule';
 import useChildStore from '../../../stores/useChlidStore';
 
 import toISOString from '../../../utils/toISOString';
+import useModal from '../../../hooks/useModal';
+import { VoiceInputStatus } from '../../../components/Schedule/VoiceInput';
 
 const AddSchedulePage = () => {
   const navigate = useNavigate();
 
   const { childId } = useChildStore();
+
+  const modal = useModal();
 
   const dateRef = useRef<Date>(new Date());
   const timeRef = useRef<{ start: string; end: string }>({
@@ -32,6 +37,7 @@ const AddSchedulePage = () => {
 
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
+  const [status, setStatus] = useState<VoiceInputStatus>('done');
 
   const { mutate } = useAddSchedule();
 
@@ -61,6 +67,21 @@ const AddSchedulePage = () => {
       },
     });
 
+    e.preventDefault();
+  };
+
+  const handleStatusChange = (status: VoiceInputStatus) => {
+    setStatus(status);
+
+    if (status === 'done') {
+      navigate(-1);
+    }
+  };
+
+  const handleVoiceClick = (e: FormEvent) => {
+    modal.push({
+      children: <Schedule.VoiceInput onStatusChange={handleStatusChange} />,
+    });
     e.preventDefault();
   };
 
@@ -98,7 +119,23 @@ const AddSchedulePage = () => {
             fullWidth
           />
           <s.ButtonContainer>
-            <Button disabled={isDisabled}>추가</Button>
+            <Button
+              color="secondary"
+              disabled={status === 'pending'}
+              onClick={handleVoiceClick}
+            >
+              <s.IconButton>
+                {status === 'pending' ? (
+                  <Schedule.Pending />
+                ) : (
+                  <s.Icon>
+                    <MicrophoneIcon />
+                  </s.Icon>
+                )}
+                음성으로 추가하기
+              </s.IconButton>
+            </Button>
+            <Button disabled={isDisabled || status === 'pending'}>추가</Button>
           </s.ButtonContainer>
         </s.Form>
       </s.Main>

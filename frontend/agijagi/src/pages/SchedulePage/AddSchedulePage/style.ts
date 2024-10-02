@@ -17,7 +17,7 @@ export const Main = styled.main`
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
   padding: 1rem 0;
 `;
 
@@ -32,4 +32,15 @@ export const TimerPickerWrapper = styled.div`
   padding: 0.75rem 0;
   text-align: right;
   line-height: 0;
+`;
+
+export const Icon = styled.div`
+  width: 1.5rem;
+  height: 1.5rem;
+`;
+
+export const IconButton = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
 `;
