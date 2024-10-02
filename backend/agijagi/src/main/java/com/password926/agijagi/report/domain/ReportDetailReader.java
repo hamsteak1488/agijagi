@@ -1,5 +1,7 @@
 package com.password926.agijagi.report.domain;
 
+import com.password926.agijagi.child.domain.Child;
+import com.password926.agijagi.child.domain.ChildReader;
 import com.password926.agijagi.child.domain.ChildValidator;
 import com.password926.agijagi.growth.domain.Growth;
 import com.password926.agijagi.growth.domain.GrowthReader;
@@ -19,6 +21,7 @@ public class ReportDetailReader {
     private final ReportReader reportReader;
     private final ReportValidator reportValidator;
     private final GrowthReader growthReader;
+    private final ChildReader childReader;
     private final StandardGrowthReader standardGrowthReader;
 
     @Transactional(readOnly = true)
@@ -27,7 +30,7 @@ public class ReportDetailReader {
         Report report = reportReader.read(childId, reportId);
         reportValidator.validateOwner(childId, report);
         List<Growth> growth = growthReader.readAllByMonth(childId, report.getMonth());
-        List<StandardGrowth> standardGrowths = standardGrowthReader.read(report.getMonth());
+        List<StandardGrowth> standardGrowths = standardGrowthReader.read(report.getMonth(), childReader.read(childId).getGender());
         return ReportDetail.of(report, growth, standardGrowths);
     }
 }
