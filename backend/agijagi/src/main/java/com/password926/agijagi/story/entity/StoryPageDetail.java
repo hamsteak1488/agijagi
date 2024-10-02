@@ -1,7 +1,6 @@
 package com.password926.agijagi.story.entity;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @Builder

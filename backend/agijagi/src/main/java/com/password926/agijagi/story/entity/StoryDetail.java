@@ -1,10 +1,8 @@
 package com.password926.agijagi.story.entity;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 
 @Getter
 @Builder

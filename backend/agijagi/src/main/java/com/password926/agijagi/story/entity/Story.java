@@ -1,12 +1,10 @@
 package com.password926.agijagi.story.entity;
 
 import com.password926.agijagi.child.domain.Child;
-import com.password926.agijagi.media.domain.Media;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
