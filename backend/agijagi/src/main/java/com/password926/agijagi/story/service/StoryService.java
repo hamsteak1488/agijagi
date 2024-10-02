@@ -91,14 +91,11 @@ public class StoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<StoryDetail> getAllStory(long memberId, long storyId) {
+    public List<StoryDetail> getAllStory(long memberId, long childId) {
 
-        Story story = storyRepository.findByIdAndIsDeletedFalse(storyId)
-                .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
+        childValidator.validateWriteAuthority(memberId, childId);
 
-        childValidator.validateWriteAuthority(memberId, story.getChild().getId());
-
-        List<Story> stories = storyRepository.findAllByChildIdAndIsDeletedFalse(storyId);
+        List<Story> stories = storyRepository.findAllByChildIdAndIsDeletedFalse(childId);
 
         stories.sort(new Comparator<Story>() {
             @Override
@@ -109,8 +106,8 @@ public class StoryService {
 
         List<StoryDetail> storyDetails = new ArrayList<>();
 
-        for (Story story1 : stories) {
-            StoryDetail storyDetail = StoryDetail.of(story1);
+        for (Story story : stories) {
+            StoryDetail storyDetail = StoryDetail.of(story);
             storyDetails.add(storyDetail);
         }
 

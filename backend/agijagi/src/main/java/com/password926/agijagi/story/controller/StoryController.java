@@ -49,7 +49,7 @@ public class StoryController {
     }
 
     @Authenticate
-    @GetMapping("/pages/{storyId}")
+    @GetMapping("/{storyId}/pages")
     public ResponseEntity<List<StoryPageDetail>> getStoryAllPage(
             LoginMember member,
             @PathVariable long storyId
