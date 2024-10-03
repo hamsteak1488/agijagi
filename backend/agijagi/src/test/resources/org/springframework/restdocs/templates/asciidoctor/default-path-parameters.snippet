@@ -1,10 +1,11 @@
 `{{path}}`
 |===
-|Path Parameter|Description
+|Path Parameter|Description|Optional
 
 {{#parameters}}
 |{{#tableCellContent}}`+{{name}}+`{{/tableCellContent}}
-|{{#tableCellContent}}{{description}}{{/tableCellContent}}
+|{{#tableCellContent}}`+{{description}}+`{{/tableCellContent}}
+|{{#tableCellContent}}`+{{optional}}+`{{/tableCellContent}}
 
 {{/parameters}}
 |===

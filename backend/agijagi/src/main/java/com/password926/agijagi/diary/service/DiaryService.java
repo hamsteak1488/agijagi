@@ -42,7 +42,7 @@ public class DiaryService {
         Child child = childRepository.findByIdAndIsDeletedFalse(request.getChildId())
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByIdAndIsDeletedIsFalse(memberId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
         Diary diary = Diary.builder()

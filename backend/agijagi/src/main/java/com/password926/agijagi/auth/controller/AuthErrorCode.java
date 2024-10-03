@@ -8,9 +8,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum AuthErrorCode implements ErrorCode {
-    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 이메일을 찾을 수 없습니다."),
-    EMAIL_DUPLICATED(HttpStatus.CONFLICT, "해당 이메일은 이미 존재합니다."),
-    PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.")
+    PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "회원의 비밀번호가 일치하지 않습니다.")
     ;
 
     private final HttpStatus httpStatus;

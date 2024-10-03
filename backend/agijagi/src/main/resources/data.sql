@@ -1,5 +1,5 @@
-insert member(email, nickname, password)
-values ('abcd123@naver.com', '다르다', '$2a$10$TaxwwF9QrH5NEqjo8LLQCealD5OsN8d3VCrYpc5nGDNfYg7P7/1zC');
+insert member(email, nickname, password, created_at, is_deleted)
+values ('abcd123@naver.com', '다르다', '$2a$10$TaxwwF9QrH5NEqjo8LLQCealD5OsN8d3VCrYpc5nGDNfYg7P7/1zC', now(), false);
 
 INSERT INTO milestone (month, required_amount, content, title)
 VALUES
