@@ -23,6 +23,7 @@ export const GridItem = styled.div<{ isParent: boolean }>(
         ${props.isParent
           ? theme.color.primary[300]
           : theme.color.secondary[300]};
+      overflow: hidden;
     `
 );
 
@@ -45,7 +46,7 @@ export const MemberInfo = styled.div`
   background-color: ${theme.color.primary[50]};
   border-radius: 0.5rem;
   top: 4%;
-  left: 72%;
+  left: 75%;
 `;
 
 export const BottomLine = styled.div`
@@ -73,7 +74,7 @@ function getDefaultImg(gender: BabyGender) {
       return defaultBoy;
     case '여아':
       return defaultGirl;
-    case '알수없음':
+    case '모름':
       return defaultNone;
   }
 }
@@ -105,7 +106,9 @@ export const FamilyItem = ({ babyInfo }: FamilyItem) => {
       </MemberInfo>
       <BottomLine>
         <FamilyName>
-          <Typhography weight="bold">{babyInfo.nickname}</Typhography>
+          <Typhography size="sm" weight="bold">
+            {babyInfo.nickname}
+          </Typhography>
         </FamilyName>
       </BottomLine>
     </GridItem>

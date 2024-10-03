@@ -5,6 +5,9 @@ import Typhography from '../../common/Typography';
 import UserIcon from '@heroicons/react/16/solid/UserIcon';
 import { BabyResponse } from '../../../types/user';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
+import useModal from '../../../hooks/useModal';
+import { FollowerModal } from '../FollowerModal/FollowerModal';
 
 export const Container = styled.div`
   display: flex;
@@ -78,17 +81,30 @@ export interface BabyProfileCardProps {
 }
 
 export const BabyProfileCard = ({ child }: BabyProfileCardProps) => {
+  const modal = useModal();
+  const navigator = useNavigate();
   const today = moment();
   const differenceIndays = today.diff(
     moment(child?.birthday, 'YYYY-MM-DD'),
     'days'
   );
 
+  const handleFollowerModal = () => {
+    modal.push({
+      children: <FollowerModal />,
+      animation: 'bottom',
+    });
+  };
+
   return (
     <Container>
       <GridCard>
-        <PhotoSection>
-          <Photo src={defaultImg} />
+        <PhotoSection
+          onClick={() => {
+            navigator('/family/profile');
+          }}
+        >
+          <Photo src={child?.imageUrl ? child.imageUrl : defaultImg} />
         </PhotoSection>
         <ContentSection>
           <Typhography size="5xl" weight="bold">
@@ -102,7 +118,7 @@ export const BabyProfileCard = ({ child }: BabyProfileCardProps) => {
             <Typhography size="sm">일</Typhography>
           </DayCountWrapper>
 
-          <MemberInfo>
+          <MemberInfo onClick={handleFollowerModal}>
             <Typhography size="xl" color="primary" weight="extraBold">
               {child?.followerNum}
             </Typhography>

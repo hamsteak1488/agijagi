@@ -12,13 +12,13 @@ import moment from 'moment';
 
 interface TimelineDiaryProps {
   date: string;
-  fileList: File[];
+  urlList: string[];
   DiaryText: string;
 }
 
 export const TimelineDiary = ({
   date,
-  fileList,
+  urlList,
   DiaryText,
 }: TimelineDiaryProps) => {
   const formattedDate = moment(date).format('YYYY년 M월 D일');
@@ -41,7 +41,7 @@ export const TimelineDiary = ({
         </DateDiv>
       </DayContainer>
       <MediaSlider
-        fileList={fileList}
+        urlList={urlList}
         isWriteMode={false}
         handleDelete={() => {}}
         handleUpload={() => {}}

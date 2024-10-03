@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import theme from '../../styles/theme';
+import theme from '../../../styles/theme';
 
 export const TimelineContainer = styled.div`
   position: relative;

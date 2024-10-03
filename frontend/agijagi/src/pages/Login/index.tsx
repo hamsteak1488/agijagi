@@ -12,6 +12,7 @@ import { axiosInstance } from '../../apis/axiosInstance';
 import useModal from '../../hooks/useModal';
 import { ModalBackground } from './style';
 import useMemberStore from '../../stores/useMemberStore';
+import { login } from '../../apis/authApi';
 
 export const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -37,11 +38,11 @@ export const Login = () => {
   };
 
   const handleLogin = () => {
-    axiosInstance
-      .post('/auth/login', {
-        email: email,
-        password: '1',
-      })
+    const loginInfo = {
+      email: email,
+      password: password,
+    };
+    login(loginInfo)
       .then((response) => {
         updateMemberId(response.data.memberId);
         localStorage.setItem('memberId', response.data.memberId);

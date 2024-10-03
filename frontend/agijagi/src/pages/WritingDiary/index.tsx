@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { addDiary } from '../../apis/diaryApi';
 import adult from '../../assets/images/adult.png';
 import boy from '../../assets/images/boy.png';
 import girl from '../../assets/images/girl.png';
@@ -11,6 +12,7 @@ import FullCalendar from '../../components/common/FullCalendar';
 import Typhography from '../../components/common/Typography';
 import MediaSlider from '../../components/Diary/MediaSlider';
 import useModal from '../../hooks/useModal';
+import useChildStore from '../../stores/useChlidStore';
 import {
   BottomArrow,
   Container,
@@ -32,6 +34,8 @@ export const WritingDiary = () => {
   const navigator = useNavigate();
   const modal = useModal();
 
+  const { childId } = useChildStore();
+
   const handleDate = (value: Date) => {
     setSelectedDate(value);
     modal.pop();
@@ -52,8 +56,19 @@ export const WritingDiary = () => {
 
   //todo
   const handleSubmit = () => {
-    console.log(textAreaRef.current?.value);
-    console.log(fileList);
+    const diary = {
+      childId: childId,
+      content: textAreaRef.current ? textAreaRef.current.value : '',
+      mediaList: fileList,
+    };
+    console.log(diary);
+    addDiary(diary)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,25 +83,6 @@ export const WritingDiary = () => {
     const updatedFileList = fileList.filter((_, i) => i !== index);
     setFileList(updatedFileList);
   };
-
-  useEffect(() => {
-    const convertToFile = async (imageUrl: string, fileName: string) => {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const file = new File([blob], fileName, { type: blob.type });
-      return file;
-    };
-
-    const loadImages = async () => {
-      const boyFile = await convertToFile(boy, 'boy.png');
-      const girlFile = await convertToFile(girl, 'girl.png');
-      const adultFile = await convertToFile(adult, 'adult.png');
-      const videoFile = await convertToFile(video, 'Test.mp4');
-      setFileList([boyFile, girlFile, adultFile, videoFile]);
-    };
-    loadImages();
-    setIsInitialRender(true);
-  }, []);
 
   return (
     <>

@@ -13,6 +13,7 @@ import {
 
 interface MediaSliderProps {
   fileList?: File[];
+  urlList?: string[]; // 추가된 부분
   isWriteMode: boolean;
   handleUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleDelete?: (index: number) => void;
@@ -21,6 +22,7 @@ interface MediaSliderProps {
 
 export const MediaSlider = ({
   fileList = [],
+  urlList = [], // 추가된 부분
   isWriteMode,
   handleUpload = () => {},
   handleDelete = () => {},
@@ -41,7 +43,11 @@ export const MediaSlider = ({
   };
 
   useEffect(() => {
-    if (scrollContainerRef.current && fileList.length > 0 && isWriteMode) {
+    if (
+      scrollContainerRef.current &&
+      (fileList.length > 0 || urlList.length > 0) &&
+      isWriteMode
+    ) {
       if (isInitialRender) {
         scrollContainerRef.current.scrollTo({
           left: 5000,
@@ -61,11 +67,28 @@ export const MediaSlider = ({
   const renderMedia = () => {
     return (
       <>
-        {fileList.map((file, index) => (
-          <MediaBox key={index}>
+        {/* API로부터 받은 URL 기반 미디어 렌더링 */}
+        {urlList.map((url, index) => (
+          <MediaBox key={`url-${index}`}>
             <IndexLabel>
               <Typhography size="xs" color="white">
-                {index + 1}/{fileList.length}
+                {index + 1}/{urlList.length + fileList.length}
+              </Typhography>
+            </IndexLabel>
+            <img
+              src={url}
+              alt={`media-url-${index}`}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          </MediaBox>
+        ))}
+
+        {/* 파일 기반 미디어 렌더링 */}
+        {fileList.map((file, index) => (
+          <MediaBox key={`file-${index}`}>
+            <IndexLabel>
+              <Typhography size="xs" color="white">
+                {urlList.length + index + 1}/{urlList.length + fileList.length}
               </Typhography>
             </IndexLabel>
             {isWriteMode && (
@@ -88,6 +111,8 @@ export const MediaSlider = ({
             )}
           </MediaBox>
         ))}
+
+        {/* 업로드 버튼 */}
         {isWriteMode && (
           <MediaBox>
             <MediaInput handleUpload={handleScroll}></MediaInput>

@@ -29,7 +29,7 @@ export const MyFamily = ({ families }: MyFamilyProps) => {
           {families.map((item, index) => (
             <FamilyItem babyInfo={item} key={index} />
           ))}
-          <AddFamily></AddFamily>
+          <AddFamily />
         </>
       </FamilyGrid>
     </Container>
