@@ -14,7 +14,7 @@ public class AppendGrowthRequest {
     @NotNull
     private double height;
 
-    @Min(1)
+    @Min(0)
     private int month;
 
     public GrowthContent toContent() {
