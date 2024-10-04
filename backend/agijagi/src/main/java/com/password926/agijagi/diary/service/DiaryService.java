@@ -50,6 +50,7 @@ public class DiaryService {
                 .member(member)
                 .content(request.getContent())
                 .createdAt(LocalDateTime.now())
+                .wroteAt(request.getWroteAt())
                 .build();
 
         if (request.getMediaList() != null) {
