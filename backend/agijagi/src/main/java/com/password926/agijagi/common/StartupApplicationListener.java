@@ -28,7 +28,7 @@ public class StartupApplicationListener implements ApplicationListener<ContextRe
                 .gender(Gender.MALE)
                 .birthWeight(3.5)
                 .birthHeight(51.2)
-                .birthday(LocalDate.of(2023,9,1))
+                .birthday(LocalDate.of(2024,5,24))
                 .build();
         childAppender.append(1, childContent, null);
     }
