@@ -29,7 +29,7 @@ public class Story {
     @Column(nullable = false)
     private LocalDate endDate;
 
-    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cover_image_id")
     private Media coverImage;
 
