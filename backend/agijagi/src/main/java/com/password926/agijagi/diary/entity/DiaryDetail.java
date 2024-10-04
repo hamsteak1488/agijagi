@@ -2,6 +2,7 @@ package com.password926.agijagi.diary.entity;
 
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -17,6 +18,8 @@ public class DiaryDetail {
 
     private String content;
 
+    private LocalDate wroteAt;
+
     private LocalDateTime createdAt;
 
     private List<String> mediaUrls;
@@ -28,6 +31,7 @@ public class DiaryDetail {
                 .memberId(diary.getMember().getId())
                 .content(diary.getContent())
                 .createdAt(diary.getCreatedAt())
+                .wroteAt(diary.getWroteAt())
                 .mediaUrls(new ArrayList<>())
                 .build();
     }
