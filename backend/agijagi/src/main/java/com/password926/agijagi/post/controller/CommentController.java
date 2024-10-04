@@ -26,6 +26,7 @@ public class CommentController {
         long commentId = commentService.createComment(
                 loginMember.getId(),
                 postId,
+                request.getParentCommentId(),
                 request.getContent()
         );
 
