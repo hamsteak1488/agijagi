@@ -1,15 +1,12 @@
 package com.password926.agijagi.diary.service;
 
 import com.password926.agijagi.diary.controller.dto.CreateDiaryRequest;
-import com.password926.agijagi.diary.controller.dto.DeleteDiaryRequest;
 import com.password926.agijagi.diary.controller.dto.UpdateDiaryRequest;
 import com.password926.agijagi.diary.repository.DiaryRepository;
 import com.password926.agijagi.diary.entity.DiaryDetail;
 import com.password926.agijagi.diary.entity.DiaryMedia;
 import com.password926.agijagi.diary.entity.Diary;
-import com.password926.agijagi.media.domain.MediaResource;
-import com.password926.agijagi.media.domain.MediaStorage;
-import com.password926.agijagi.media.domain.Image;
+import com.password926.agijagi.media.domain.*;
 import com.password926.agijagi.child.infrastructure.ChildRepository;
 import com.password926.agijagi.child.domain.ChildValidator;
 import com.password926.agijagi.child.domain.Child;
@@ -17,6 +14,7 @@ import com.password926.agijagi.common.errors.exception.RestApiException;
 import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
 import com.password926.agijagi.member.infrastructure.MemberRepository;
 import com.password926.agijagi.member.domain.Member;
+import org.hibernate.Hibernate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.stereotype.Service;
@@ -55,8 +53,8 @@ public class DiaryService {
 
         if (request.getMediaList() != null) {
             for (MultipartFile multipartFile : request.getMediaList() ) {
-                Image image = mediaStorage.storeImage(MediaResource.from(multipartFile));
-                diary.addMedia(image);
+                Media media = mediaStorage.storeAny(MediaResource.from(multipartFile));
+                diary.addMedia(media);
             }
         }
 
@@ -85,8 +83,8 @@ public class DiaryService {
 
         if (request.getNewMediaList() != null) {
             for (MultipartFile multipartFile : request.getNewMediaList() ) {
-                Image image = mediaStorage.storeImage(MediaResource.from(multipartFile));
-                diary.addMedia(image);
+                Media media = mediaStorage.storeAny(MediaResource.from(multipartFile));
+                diary.addMedia(media);
             }
         }
     }
@@ -119,6 +117,11 @@ public class DiaryService {
             if (diary.getDiaryMediaList() != null) {
                 for (DiaryMedia diaryMedia : diary.getDiaryMediaList()) {
                     diaryDetail.getMediaUrls().add(diaryMedia.getMedia().getUrl());
+                    if (Hibernate.getClass(diaryMedia.getMedia()).equals(Video.class)) {
+                        diaryDetail.getMediaTypes().add("video");
+                    }else if (Hibernate.getClass(diaryMedia.getMedia()).equals(Image.class)) {
+                        diaryDetail.getMediaTypes().add("image");
+                    }
                 }
             }
             diaryDetails.add(diaryDetail);
@@ -139,6 +142,11 @@ public class DiaryService {
         if (diary.getDiaryMediaList() != null) {
             for (DiaryMedia diaryMedia : diary.getDiaryMediaList()) {
                 diaryDetail.getMediaUrls().add(diaryMedia.getMedia().getUrl());
+                if (Hibernate.getClass(diaryMedia.getMedia()).equals(Video.class)) {
+                    diaryDetail.getMediaTypes().add("video");
+                }else if (Hibernate.getClass(diaryMedia.getMedia()).equals(Image.class)) {
+                    diaryDetail.getMediaTypes().add("image");
+                }
             }
         }
 
