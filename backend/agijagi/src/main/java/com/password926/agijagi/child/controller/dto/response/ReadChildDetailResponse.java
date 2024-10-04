@@ -18,6 +18,10 @@ public class ReadChildDetailResponse {
 
     private String gender;
 
+    private Double birthWeight;
+
+    private Double birthHeight;
+
     private LocalDate birthday;
 
     private String imageUrl;
@@ -32,6 +36,8 @@ public class ReadChildDetailResponse {
                 .name(childDetail.getName())
                 .nickname(childDetail.getNickname())
                 .gender(childDetail.getGender().getDesc())
+                .birthWeight(childDetail.getBirthWeight())
+                .birthHeight(childDetail.getBirthHeight())
                 .birthday(childDetail.getBirthday())
                 .imageUrl(childDetail.getImageUrl())
                 .authority(childDetail.getAuthority().name())
