@@ -4,7 +4,7 @@ public class JsonFormatter {
 
     public static String format(String string) {
         if (string.startsWith("`")) {
-            string.substring(7, string.length() - 3);
+            return string.substring(7, string.length() - 3);
         }
         return string;
     }
