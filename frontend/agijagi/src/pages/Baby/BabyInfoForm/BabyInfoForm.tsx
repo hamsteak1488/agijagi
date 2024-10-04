@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { addChild } from '../../../apis/childApi';
 import { ValidationState } from '../../../components/common/Textfield/Textfield.types';
 import { FirstBabyForm } from '../../../components/Signup/BabyInfo/FirstBabyForm/FirstBabyForm';
@@ -40,6 +41,8 @@ export const BabyInfoForm = () => {
   const [isValidated, setIsValidated] = useState<boolean>(false);
   const [isNext, setIsNext] = useState<boolean>(false);
 
+  const navigator = useNavigate();
+
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -74,7 +77,7 @@ export const BabyInfoForm = () => {
     console.log(newChild);
     addChild(newChild)
       .then((response) => {
-        console.log(response);
+        navigator('/main');
       })
       .catch((error) => {
         console.error(error);

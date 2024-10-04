@@ -13,19 +13,24 @@ import {
 
 interface MediaSliderProps {
   fileList?: File[];
-  urlList?: string[];
+  urlList: string[];
+  urlType: string[];
   isWriteMode: boolean;
   handleUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleDelete?: (index: number) => void;
+  handleUrlDelete?: (index: number) => void;
+  removedList?: string[];
   isInitialRender: boolean;
 }
 
 export const MediaSlider = ({
   fileList = [],
   urlList = [],
+  urlType = [],
   isWriteMode,
   handleUpload = () => {},
   handleDelete = () => {},
+  handleUrlDelete = () => {},
   isInitialRender = true,
 }: MediaSliderProps) => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -74,11 +79,22 @@ export const MediaSlider = ({
                 {index + 1}/{urlList.length + fileList.length}
               </Typhography>
             </IndexLabel>
-            <img
-              src={url}
-              alt={`media-url-${index}`}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
+            {isWriteMode && (
+              <DelIconDiv onClick={() => handleUrlDelete(index)}>
+                {DelIcon}
+              </DelIconDiv>
+            )}
+            {urlType[index] === 'image' ? (
+              <img
+                src={url}
+                alt={`media-url-${index}`}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            ) : (
+              <video controls style={{ width: '100%', height: '100%' }}>
+                <source src={url} />
+              </video>
+            )}
           </MediaBox>
         ))}
 

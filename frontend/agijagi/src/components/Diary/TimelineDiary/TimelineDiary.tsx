@@ -14,6 +14,7 @@ import { BabyResponse } from '../../../types/user';
 interface TimelineDiaryProps {
   date: string;
   urlList: string[];
+  urlType: string[];
   DiaryText: string;
   child?: BabyResponse;
 }
@@ -21,6 +22,7 @@ interface TimelineDiaryProps {
 export const TimelineDiary = ({
   date,
   urlList,
+  urlType,
   DiaryText,
   child,
 }: TimelineDiaryProps) => {
@@ -49,6 +51,7 @@ export const TimelineDiary = ({
       </DayContainer>
       <MediaSlider
         urlList={urlList}
+        urlType={urlType}
         isWriteMode={false}
         handleDelete={() => {}}
         handleUpload={() => {}}

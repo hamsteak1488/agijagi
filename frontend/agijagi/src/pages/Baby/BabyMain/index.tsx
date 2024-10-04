@@ -14,6 +14,7 @@ import * as s from './style';
 import useChildStore from '../../../stores/useChlidStore';
 import { BabyResponse } from '../../../types/user';
 import { DiaryResponse } from '../../../types/diary';
+import videoIcon from '../../../assets/images/diary/videoIcon.jpeg';
 
 export const BabyMain = () => {
   const [fileLists, setFileLists] = useState<File[][]>([]); // 각 diary에 대해 File[] 배열 저장
@@ -70,7 +71,8 @@ export const BabyMain = () => {
             </s.CloseIconBox>
             <TimelineDiary
               date={moment(diaryData.wroteAt).format('YYYY-MM-DD')}
-              urlList={diaryData.mediaUrls} // File[] 전달
+              urlList={diaryData.mediaUrls}
+              urlType={diaryData.mediaTypes}
               DiaryText={diaryData.content}
               child={child}
             />
@@ -111,7 +113,8 @@ export const BabyMain = () => {
               <TimelineDiary
                 key={index}
                 date={moment(item.wroteAt).format('YYYY-MM-DD')}
-                urlList={item.mediaUrls} // File[] 전달
+                urlList={item.mediaUrls}
+                urlType={item.mediaTypes}
                 DiaryText={item.content}
                 child={child}
               />
@@ -136,7 +139,11 @@ export const BabyMain = () => {
                 ) {
                   return (
                     <img
-                      src={matchedDate.mediaUrls[0]}
+                      src={
+                        matchedDate.mediaTypes[0] === 'image'
+                          ? matchedDate.mediaUrls[0]
+                          : videoIcon
+                      }
                       alt="day-image"
                       style={{ width: '100%', height: '100%' }}
                     />

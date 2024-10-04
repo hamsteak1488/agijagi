@@ -1,22 +1,18 @@
-import { DiaryRequest, DiaryResponse } from '../types/diary';
-import { BabyResponse } from '../types/user';
+import { DiaryRequest, EditDiaryRequest } from '../types/diary';
 import { axiosInstance } from './axiosInstance';
 
-export const getAllDiaries = async (
-  childId: number
-): Promise<DiaryResponse[]> => {
+export const getAllDiaries = async (childId: number) => {
   const response = await axiosInstance.get(`/diaries?childId=${childId}`);
   return response.data;
 };
 
 export const addDiary = async (diary: DiaryRequest) => {
   const formData = new FormData();
-
   formData.append('childId', diary.childId.toString());
   formData.append('content', diary.content);
   formData.append('wroteAt', diary.date);
   diary.mediaList.forEach((file, index) => {
-    formData.append(`mediaList`, file); // 파일 추가
+    formData.append(`mediaList`, file);
   });
 
   const response = await axiosInstance.post(`/diaries`, formData, {
@@ -24,5 +20,25 @@ export const addDiary = async (diary: DiaryRequest) => {
       'Content-Type': 'multipart/form-data',
     },
   });
+  return response;
+};
+
+export const editDiary = async (request: EditDiaryRequest) => {
+  const formData = new FormData();
+  formData.append('content', request.content);
+
+  request.removeMediaIdList.forEach((id) => {
+    formData.append('removeMediaIdList', id);
+  });
+
+  request.newMediaList.forEach((file) => {
+    formData.append('newMediaList', file);
+  });
+
+  const response = await axiosInstance.patch(
+    `/diaries/${request.storyId}`,
+    formData
+  );
+
   return response;
 };

@@ -57,7 +57,6 @@ export const ProfileForm = ({
       nickname: nickname,
       profileImg: uploadImg,
     };
-    console.log(userInfo);
 
     signUp(userInfo)
       .then((response) => {

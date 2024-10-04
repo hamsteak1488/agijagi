@@ -4,7 +4,7 @@ import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getChild } from '../../apis/childApi';
-import { addDiary, getAllDiaries } from '../../apis/diaryApi';
+import { addDiary, editDiary, getAllDiaries } from '../../apis/diaryApi';
 import AppBar from '../../components/common/AppBar';
 import Button from '../../components/common/Button';
 import FullCalendar from '../../components/common/FullCalendar';
@@ -14,6 +14,8 @@ import useModal from '../../hooks/useModal';
 import useChildStore from '../../stores/useChlidStore';
 import { DiaryResponse } from '../../types/diary';
 import { BabyResponse } from '../../types/user';
+import { extractIdFromUrl } from '../../utils/getIdFromUrl';
+import videoIcon from '../../assets/images/diary/videoIcon.jpeg';
 import {
   BottomArrow,
   Container,
@@ -28,6 +30,9 @@ import {
 
 export const WritingDiary = () => {
   const [fileList, setFileList] = useState<File[]>([]);
+  const [urlType, setUrlType] = useState<string[]>([]);
+  const [urlList, setUrlList] = useState<string[]>([]);
+  const [removeMediaIdList, setRemoveMediaIdList] = useState<string[]>([]);
   const [isInitialRender, setIsInitialRender] = useState<boolean>(true);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedDiary, setSelectedDiary] = useState<DiaryResponse | null>(
@@ -68,6 +73,8 @@ export const WritingDiary = () => {
       ) || null;
 
     setSelectedDiary(selectedDiary);
+    setUrlList(selectedDiary ? selectedDiary.mediaUrls : []);
+    setUrlList(selectedDiary ? selectedDiary.mediaUrls : []);
   }, []);
 
   useEffect(() => {
@@ -78,6 +85,16 @@ export const WritingDiary = () => {
       ) || null;
 
     setSelectedDiary(diary);
+    setUrlType(diary ? diary.mediaTypes : []);
+    setUrlList(diary ? diary.mediaUrls : []);
+
+    if (textAreaRef.current && !diary) {
+      textAreaRef.current.value = '';
+    }
+
+    if (textAreaRef.current && diary) {
+      textAreaRef.current.value = diary?.content ? diary.content : '';
+    }
   }, [selectedDate, diaries]);
 
   const differenceIndays = day.diff(
@@ -117,7 +134,11 @@ export const WritingDiary = () => {
               ) {
                 return (
                   <img
-                    src={matchedDate.mediaUrls[0]}
+                    src={
+                      matchedDate.mediaTypes[0] === 'image'
+                        ? matchedDate.mediaUrls[0]
+                        : videoIcon
+                    }
                     alt="day-image"
                     style={{ width: '100%', height: '100%' }}
                   />
@@ -131,7 +152,27 @@ export const WritingDiary = () => {
     });
   };
 
-  //todo
+  const handleEdit = () => {
+    if (selectedDiary) {
+      const request = {
+        storyId: selectedDiary.id,
+        content: textAreaRef.current ? textAreaRef.current.value : '',
+        removeMediaIdList: removeMediaIdList,
+        newMediaList: fileList,
+      };
+
+      editDiary(request)
+        .then((response) => {
+          navigator('/family');
+        })
+        .catch((error) => {
+          if (axios.isAxiosError(error)) {
+            alert(error.response?.data.message);
+          }
+        });
+    }
+  };
+
   const handleSubmit = () => {
     const diary = {
       childId: childId,
@@ -163,6 +204,17 @@ export const WritingDiary = () => {
     setFileList(updatedFileList);
   };
 
+  const handleUrlDelete = (index: number) => {
+    const updatedUrlList = urlList?.filter((_, i) => i !== index);
+    const updatedUrlTypes = urlType?.filter((_, i) => i !== index);
+    setRemoveMediaIdList((prevList) => {
+      const newId = extractIdFromUrl(urlList[index]);
+      return newId ? [...prevList, newId] : prevList;
+    });
+    setUrlList(updatedUrlList ? updatedUrlList : []);
+    setUrlType(updatedUrlTypes ? updatedUrlTypes : []);
+  };
+
   return (
     <>
       <Container>
@@ -176,8 +228,14 @@ export const WritingDiary = () => {
           >
             <Typhography>닫기</Typhography>
           </Button>
-          <AppBar.Title>일기 쓰기</AppBar.Title>
-          <Button color="secondary" size="md" onClick={handleSubmit}>
+          <AppBar.Title>
+            {selectedDiary ? '일기 수정' : '일기 쓰기'}
+          </AppBar.Title>
+          <Button
+            color="secondary"
+            size="md"
+            onClick={selectedDiary ? handleEdit : handleSubmit}
+          >
             <Typhography>{selectedDiary ? '수정' : '쓰기'}</Typhography>
           </Button>
         </AppBar>
@@ -202,10 +260,12 @@ export const WritingDiary = () => {
         <ContentContainer>
           <MediaSlider
             fileList={fileList}
-            urlList={selectedDiary?.mediaUrls}
+            urlType={urlType}
+            urlList={urlList}
             isWriteMode={true}
             handleUpload={handleUpload}
             handleDelete={handleDelete}
+            handleUrlDelete={handleUrlDelete}
             isInitialRender={isInitialRender}
           ></MediaSlider>
           <DiaryTextArea

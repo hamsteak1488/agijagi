@@ -6,6 +6,7 @@ export interface DiaryResponse {
   createdAt: string;
   wroteAt: string;
   mediaUrls: string[];
+  mediaTypes: string[];
 }
 
 export interface DiaryRequest {
@@ -13,4 +14,11 @@ export interface DiaryRequest {
   content: string;
   date: string;
   mediaList: File[];
+}
+
+export interface EditDiaryRequest {
+  storyId: number;
+  content: string;
+  removeMediaIdList: string[];
+  newMediaList: File[];
 }
