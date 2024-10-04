@@ -6,7 +6,6 @@ import Typhography from '../common/Typography';
 import { useNavigate } from 'react-router-dom';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import Loading from './ReportLoading';
-import axios from 'axios';
 import { MilestoneDetail } from '../../apis/milestone';
 import { useMutation } from '@tanstack/react-query';
 import { postReport } from '../../apis/report';
@@ -20,6 +19,15 @@ const ModalContainer = styled.div`
   height: 200px;
   border-radius: 10px;
   background-color: ${theme.color.tertiary[50]};
+`;
+
+const LoadingWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 300px;
+  height: 500px;
+  border-radius: 10px;
 `;
 
 const HeaderWrapper = styled.div`
@@ -74,11 +82,9 @@ const ReportModal = ({
     mutationFn: postReport,
     onSuccess: (data) => {
       pop();
-      setTimeout(
-        () =>
-          navigate('/milestone-report', { state: { reportId: data.data.id } }),
-        100
-      );
+      setTimeout(() => {
+        navigate('/milestone-report', { state: { reportId: data.data.id } });
+      }, 300);
     },
   });
 
@@ -87,27 +93,34 @@ const ReportModal = ({
   };
 
   const createReport = async () => {
-    // 선택된 마일스톤이 있거나 키몸무게를 입력했다면 저장부터 하기
-    if (selectedMilestones.length) {
-      handleSave();
-    }
-    if (currentHeight && currentWeight) {
-      handleWeightHeighSave();
-    }
-    // 보고서 생성 API 호출 (post)
-    mutate(childId);
+    setIsLoading(true);
+
+    setTimeout(() => {
+      // 선택된 마일스톤이 있거나 키/몸무게를 입력했다면 저장 처리
+      if (selectedMilestones.length) {
+        handleSave();
+      }
+      if (currentHeight && currentWeight) {
+        handleWeightHeighSave();
+      }
+
+      // 2초 후 보고서 생성 API 호출 (post)
+      mutate(childId);
+    }, 1800);
   };
 
   return (
     <ModalContainer>
-      <HeaderWrapper>
-        <CloseButton onClick={handleBack} />
-      </HeaderWrapper>
-
       {isLoading ? (
-        <Loading />
+        <LoadingWrapper>
+          <Loading />
+        </LoadingWrapper>
       ) : (
         <>
+          <HeaderWrapper>
+            <CloseButton onClick={handleBack} />
+          </HeaderWrapper>
+
           <TextWrapper>
             {selectedMilestones.length || (currentHeight && currentWeight) ? (
               <Typhography size="lg" color="greyScale" shade="800">

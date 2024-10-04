@@ -13,7 +13,7 @@ const ReportListWrapper = styled.div`
   grid-template-columns: 1fr;
   gap: 10px;
   max-width: 700px;
-  height: 550px;
+  height: 100px;
   margin: 0 auto;
 
   /* 화면 너비가 700px 이상일 때 */
@@ -30,6 +30,7 @@ const ReportListWrapper = styled.div`
 const ReportContainer = styled.div`
   display: flex;
   justify-content: center;
+  height: 100px;
   gap: 20px;
   padding: 15px;
   align-items: center;
@@ -115,8 +116,8 @@ const DateIcon = styled(CalendarIcon)`
 `;
 
 interface ReportListProps {
-  name: string;
-  birth: string;
+  name: string | undefined;
+  birth: string | undefined;
   year: number;
   childId: number;
 }
@@ -142,7 +143,7 @@ const ReportList = ({ name, birth, year, childId }: ReportListProps) => {
 
   const calculateDays = (date: string) => {
     const createDate = new Date(date);
-    const birthDate = new Date(birth);
+    const birthDate = new Date(birth? birth: '');
 
     // 두 날짜 간의 차이를 밀리초로 계산
     const timeDifference: number = createDate.getTime() - birthDate.getTime();
@@ -181,7 +182,7 @@ const ReportList = ({ name, birth, year, childId }: ReportListProps) => {
 
             <LabelContainer>
               <TitleLabel>
-                {name} 성장 분석 보고서 {report.id}
+                {name} 성장 분석 보고서
               </TitleLabel>
               <DateLabel>
                 <DateContainer>

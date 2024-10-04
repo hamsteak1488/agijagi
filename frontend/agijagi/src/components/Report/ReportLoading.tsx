@@ -1,16 +1,18 @@
 import React from 'react';
 import styled from '@emotion/styled';
-// import babyFlowerImage from '../assets/images/아기자기 로고2.png';
+
 import babyFlowerImage from '../../assets/images/logo4.png';
+import theme from '../../styles/theme';
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: #ffecb3;
-  width: 100%;
-  height: 100vh;
+  background-color: ${theme.color.tertiary[50]};
+  width: 300px;
+  height: 300px;
+  border-radius: 10px;
   position: relative;
 `;
 
@@ -42,7 +44,7 @@ function Loading() {
   return (
     <Container>
       <BouncingImage src={babyFlowerImage} />
-      <LoadingText>성장 분석 보고서가 생성중입니다..</LoadingText>
+      <LoadingText>성장 분석 보고서를 생성중입니다 !</LoadingText>
     </Container>
   );
 }

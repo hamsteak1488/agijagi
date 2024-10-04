@@ -2,6 +2,8 @@ import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 import TurtleImg from '../../assets/images/milestone/turtle.png';
 import RabbitImg from '../../assets/images/milestone/rabbit.png';
+import BoyImg from '../../assets/images/boy.png';
+import GirlImg from '../../assets/images/girl.png';
 
 const Wrapper = styled.div`
   display: flex;
@@ -86,7 +88,8 @@ const Line = styled.hr`
 `;
 
 interface BabyData {
-  image: string;
+  gender: string | undefined;
+  image: string | undefined | null;
   growthStatus: number | undefined;
 }
 
@@ -111,7 +114,7 @@ const growthStatusText = (growthStatus: number | undefined) => {
 };
 
 // 컴포넌트
-const ReportSlide = ({ image, growthStatus }: BabyData) => {
+const ReportSlide = ({ gender, image, growthStatus }: BabyData) => {
   const percentage = calculatePercentage(growthStatus);
   const status = growthStatusText(growthStatus);
 
@@ -124,7 +127,13 @@ const ReportSlide = ({ image, growthStatus }: BabyData) => {
         <SliderContainer>
           <ProgressBar percentage={percentage} />
           <Thumb percentage={percentage}>
-            <BabyImage src={image} alt="Baby" />
+            {image && <BabyImage src={image} alt="Baby" />}
+            {!image && (
+              <>
+                {gender === '남아' && <BabyImage src={BoyImg} alt="Baby" />}
+                {gender === '여아' && <BabyImage src={GirlImg} alt="Baby" />}
+              </>
+            )}
           </Thumb>
         </SliderContainer>
         <Rabbit src={RabbitImg} />

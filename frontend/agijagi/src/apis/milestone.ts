@@ -45,9 +45,17 @@ export interface ChildProps {
   nickname: string;
   gender: string;
   birthday: string;
+  birthWeight: number;
+  birthHeight: number;
   imageUrl: string;
   authority: string;
   followerNum: number;
+}
+
+export interface HeightWeightInfoProps {
+  weight: number;
+  height: number;
+  month: number;
 }
 
 export const getMilestone = (childId: number, month: number) => {
@@ -66,4 +74,8 @@ export const patchMilestone = ({ childId, data }: patchMilestoneProps) => {
 
 export const getChildInfo = (childId: number) => {
   return axiosInstance.get<ChildProps>(`/children/${childId}`);
+};
+
+export const getHeightWeightInfo = (childId: number) => {
+  return axiosInstance.get<HeightWeightInfoProps[]>(`/children/${childId}/growth`);
 };

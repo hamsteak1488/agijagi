@@ -15,7 +15,7 @@ const GaugeContainer = styled.div`
 
 const GaugeFill = styled.div<{ fillPercentage: number }>`
   height: 100%;
-  border-radius: 8px;
+  border-radius: 10px;
   background-color: ${theme.color.primary[500]};
   width: ${({ fillPercentage }) => `${fillPercentage}%`};
   transition: width 0.8s ease-in-out;

@@ -9,6 +9,8 @@ import ReportFilter from '../../components/Report/ReportFilter';
 import ReportList from '../../components/Report/ReportList';
 import BoyImg from '../../assets/images/boy.png';
 import useChildStore from '../../stores/useChlidStore';
+import { useQuery } from '@tanstack/react-query';
+import { getChildInfo } from '../../apis/milestone';
 
 const Wrapper = styled.div`
   display: flex;
@@ -61,19 +63,19 @@ const ReportContainer = styled.div`
 const today = new Date();
 const todayYear = today.getFullYear();
 
-// 임의로 만든 아기 데이터
-const name = '다운';
-const birth = '2024-06-14';
-const weight = 3.02;
-const currentWeight = 7.2;
-const gender = 'boy';
-const image = BoyImg;
-
 const Report = () => {
   const [year, setYear] = useState<number>(todayYear);
   const { childId } = useChildStore();
 
   const navigate = useNavigate();
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['child', childId],
+    queryFn: () => getChildInfo(childId),
+  });
+
+  const name = data?.data.nickname;
+  const birth = data?.data.birthday;
 
   const handleBack = () => {
     navigate(-1);

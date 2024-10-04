@@ -8,7 +8,11 @@ import Textfield from '../common/Textfield';
 import useModal from '../../hooks/useModal';
 import ReportModal from '../Report/ReportCreateModal';
 import { ValidationState } from '../common/Textfield/Textfield.types';
-import { MilestoneDetail, putHeightWeight } from '../../apis/milestone';
+import {
+  HeightWeightInfoProps,
+  MilestoneDetail,
+  putHeightWeight,
+} from '../../apis/milestone';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 const Wrapper = styled.div`
@@ -45,8 +49,8 @@ const ButtonWrapper = styled.div<{ visible: boolean }>`
     props.visible ? 'space-between' : 'space-around'};
   padding: 10px;
 
-  @media (min-width: 700px) {
-    width: 90%;
+  @media (min-width: 600px) {
+    width: 95%;
     margin: 0 auto;
   }
 `;
@@ -55,9 +59,15 @@ const ReportButton = styled.div<{ visible: boolean }>`
   display: ${(props) => (props.visible ? 'block' : 'none')};
 `;
 
+const InputButton = styled.div<{ visible: boolean }>`
+  display: ${(props) => (props.visible ? 'block' : 'none')};
+`;
+
 const TextFieldContainer = styled.div<{ expanded: boolean; visible: boolean }>`
   display: flex;
-  justify-content: ${(props) => (props.visible ? 'flex-end' : 'center')};
+  flex-direction: column;
+  gap: 15px;
+  align-items: ${(props) => (props.visible ? 'flex-end' : 'center')};
   width: 100%;
   margin: 5px auto;
   max-height: ${(props) => (props.expanded ? '500px' : '0')};
@@ -72,21 +82,28 @@ const TextFieldContainer = styled.div<{ expanded: boolean; visible: boolean }>`
 
 const TextFieldWrapper = styled.div`
   display: flex;
-  margin: 5px 0 10px;
+  margin: 0px 10px 10px;
   flex-direction: column;
-  gap: 20px;
-  margin-right: 10px;
+  gap: 5px;
+`;
+
+const PrevDataText = styled.p`
+  font-size: ${theme.typography.fontSize.xs};
+  color: ${theme.color.secondary[700]};
+  margin: 5px 0 0 10px;
 `;
 
 const SaveButton = styled.div<{ visible: boolean }>`
   display: flex;
   justify-content: ${(props) => (props.visible ? 'flex-end' : 'center')};
+  margin-top: 20px;
 `;
 
 const CheckContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px 20px;
+  margin-top: 10px;
   margin-bottom: 50px;
 `;
 
@@ -94,7 +111,7 @@ const WarningMessage = styled.div`
   position: fixed;
   text-align: center;
   width: 230px;
-  bottom: 250px;
+  bottom: 220px;
   left: 50%;
   transform: translateX(-50%);
   background-color: ${theme.color.danger[500]};
@@ -105,27 +122,48 @@ const WarningMessage = styled.div`
   font-size: ${theme.typography.fontSize.md};
 `;
 
-// 현재 아이가 몇 개월인지 계산하는 함수
+const SuccessMessage = styled.div`
+  position: fixed;
+  text-align: center;
+  width: 230px;
+  bottom: 220px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: ${theme.color.success[500]};
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  z-index: 1000;
+  font-size: ${theme.typography.fontSize.md};
+`;
+
+// 태어난지 몇개월 인지 계산하는 함수
 const calculateAgeInMonths = (birthDate: Date): number => {
   const today = new Date();
+
   let yearsDiff = today.getFullYear() - birthDate.getFullYear();
   let monthsDiff = today.getMonth() - birthDate.getMonth();
+  let daysDiff = today.getDate() - birthDate.getDate();
 
   if (monthsDiff < 0) {
     yearsDiff--;
     monthsDiff += 12;
   }
 
-  return yearsDiff * 12 + monthsDiff;
+  if (daysDiff < 0) {
+    monthsDiff--;
+  }
+  return Math.floor(yearsDiff * 12 + monthsDiff);
 };
 
 interface MileStoneProps {
   month: number;
-  name: string;
+  name: string | undefined;
   childId: number;
-  birth: Date;
-  weight: number | null;
+  birth: Date | undefined;
+  weight: number | null | undefined;
   selectedMilestones: MilestoneDetail[];
+  heightWeightData: HeightWeightInfoProps[] | undefined;
   handleSave: () => void;
   handleCheckboxChange: (item: MilestoneDetail, isChecked: boolean) => void;
 }
@@ -137,18 +175,25 @@ const MileStoneCheck = ({
   birth,
   weight,
   selectedMilestones,
+  heightWeightData,
   handleSave,
   handleCheckboxChange,
 }: MileStoneProps) => {
   const [textFieldOpen, setTextFieldOpen] = useState<boolean>(false);
   const [currentHeight, setCurrentHeight] = useState<string>('');
   const [currentWeight, setCurrentWeight] = useState<string>('');
+  const [success, setSuccess] = useState<string>('');
   const [warning, setWarning] = useState<string>('');
-  const babyMonth = calculateAgeInMonths(birth);
-
+  const babyMonth = calculateAgeInMonths(birth ? birth : new Date());
+  console.log(heightWeightData);
   const modal = useModal();
+
   const { mutate, isPending } = useMutation({
     mutationFn: putHeightWeight,
+    onSuccess: () => {
+      setSuccess('키와 몸무게를 저장했습니다');
+      setTimeout(() => setSuccess(''), 1000);
+    },
   });
 
   useEffect(() => {
@@ -164,8 +209,8 @@ const MileStoneCheck = ({
 
   const handleReportModalOpen = () => {
     if (!weight) {
-      setWarning('출생 몸무게를 먼저 입력해주세요');
-      setTimeout(() => setWarning(''), 3000);
+      setWarning('출생 몸무게를 먼저 등록해주세요');
+      setTimeout(() => setWarning(''), 2000);
     } else {
       modal.push({
         children: (
@@ -186,7 +231,8 @@ const MileStoneCheck = ({
     // 입력이 없으면 경고 메세지
     if (!currentHeight || !currentWeight) {
       setWarning('키와 몸무게를 모두 입력해주세요');
-      setTimeout(() => setWarning(''), 3000);
+      setTimeout(() => setWarning(''), 2000);
+      return;
     }
     // 키 / 몸무게 저장 API 호출 (put)
     mutate({
@@ -197,6 +243,8 @@ const MileStoneCheck = ({
         month: month,
       },
     });
+    setCurrentHeight('');
+    setCurrentWeight('');
   };
 
   function validateInput(input: string): ValidationState {
@@ -226,18 +274,23 @@ const MileStoneCheck = ({
             성장 분석보고서 생성
           </Button>
         </ReportButton>
-
-        <Button size="sm" color="primary" onClick={handleTextFieldOpen}>
-          키/몸무게 입력
-        </Button>
+        <InputButton visible={babyMonth >= month}>
+          <Button size="sm" color="primary" onClick={handleTextFieldOpen}>
+            키/몸무게 입력
+          </Button>
+        </InputButton>
       </ButtonWrapper>
 
-      <TextFieldContainer
-        expanded={textFieldOpen}
-        visible={babyMonth === month}
-      >
         {textFieldOpen && (
+          <TextFieldContainer
+          expanded={textFieldOpen}
+          visible={babyMonth === month}
+        >
           <TextFieldWrapper>
+            {heightWeightData?.length !== 0 && (
+              <PrevDataText>최근 저장된 키 데이터 : {heightWeightData? heightWeightData[0].height : 0}cm</PrevDataText>
+            )}
+
             <Textfield
               label="키 cm"
               size="md"
@@ -250,6 +303,9 @@ const MileStoneCheck = ({
               checkText={'올바르게 입력했습니다. 저장해주세요'}
               warningText={'숫자만 입력해주세요'}
             />
+            </TextFieldWrapper>
+            <TextFieldWrapper>
+            <PrevDataText>최근 저장된 몸무게 데이터 : {heightWeightData? heightWeightData[0].weight : 0}kg</PrevDataText>
             <Textfield
               label="몸무게 kg"
               size="md"
@@ -273,10 +329,12 @@ const MileStoneCheck = ({
               </Button>
             </SaveButton>
           </TextFieldWrapper>
+          </TextFieldContainer>
         )}
-      </TextFieldContainer>
+      
 
       {warning && <WarningMessage>{warning}</WarningMessage>}
+      {success && <SuccessMessage>{success}</SuccessMessage>}
 
       <CheckContainer>
         <MileStoneCheckList

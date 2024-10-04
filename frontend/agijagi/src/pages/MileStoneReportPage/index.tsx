@@ -5,14 +5,10 @@ import theme from '../../styles/theme';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../components/common/Button';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import axios from 'axios';
 import ReportTarget from '../../components/Report/ReportTarget';
 import ReportIntro from '../../components/Report/ReportIntro';
 import ReportChart from '../../components/Report/ReportChart';
 import ReportSlide from '../../components/Report/ReportSlide';
-import ReportListModal from '../../components/Report/ReportListModal';
-import useModal from '../../hooks/useModal';
-import BoyImg from '../../assets/images/boy.png';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { deleteReport, getReport } from '../../apis/report';
 import useChildStore from '../../stores/useChlidStore';
@@ -66,11 +62,11 @@ const ReportContainer = styled.div`
   padding: 10px;
 `;
 
-const ChartContainer = styled.div`
+const ChartContainer = styled.div<{visible: boolean}>`
   width: 100%;
   max-width: 700px;
   margin: 10px auto;
-  height: 280px;
+  height: ${(props) => (props.visible ? '' : '280px')};
 `;
 
 const ResultContainer = styled.div`
@@ -98,14 +94,6 @@ function calculateDays(birthDateString: string) {
   return daysDifference;
 }
 
-// 임의로 만든 아기 데이터
-const name = '다운';
-const weight = 3.5;
-const birth = '2024-07-02';
-const gender = 'boy';
-const image = BoyImg;
-const days = calculateDays(birth);
-
 const Report = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -127,9 +115,14 @@ const Report = () => {
     onSuccess: () => navigate('/report'),
   });
 
-  const childData = childQuery.data?.data;
   const reportData = reportQuery.data?.data;
-  console.log(childData)
+  const childData = childQuery.data?.data;
+  const name = childData?.nickname;
+  const weight = childData?.birthWeight;
+  const birth = childData?.birthday;
+  const gender = childData?.gender;
+  const image = childData?.imageUrl;
+  const days = calculateDays(birth ? birth : '');
 
   if (childQuery.error) {
     return <>아이 데이터를 불러오지 못했습니다.</>;
@@ -144,11 +137,6 @@ const Report = () => {
   if (reportQuery.isLoading) {
     return <>로딩중</>;
   }
-
-
-
-  // const createDate = new Date(data ? data.data.createAt : '');
-  // const currentWeight = data ? data.data.graphData[-1].weight : 0;
 
   const handleReportList = () => {
     navigate('/report');
@@ -182,7 +170,7 @@ const Report = () => {
 
       <FilterContainer>
         <ReportTarget
-          gender={childData?.gender}
+          gender={gender}
           createDate={reportData?.createdAt.slice(0, 10)}
         />
       </FilterContainer>
@@ -190,17 +178,25 @@ const Report = () => {
       <ReportContainer>
         <ReportIntro weight={weight} currentWeight={reportData?.currWeight} />
 
-        <ChartContainer>
+        <ChartContainer visible={reportData?.graphData.length === 0}>
           <ReportChart data={reportData?.graphData} />
         </ChartContainer>
 
-        <ReportSlide image={image} growthStatus={reportData?.growthDegree} />
+        <ReportSlide
+          gender={gender}
+          image={image}
+          growthStatus={reportData?.growthDegree}
+        />
 
         <ResultContainer>
-          <Typhography size="md" color="primary" shade="800">
-            {name}(이)의 몸무게가 출생 후 {days}일 동안{' '}
-            {reportData ? reportData.currWeight - weight : 0} kg 증가했습니다.
-          </Typhography>
+          {reportData?.currWeight ? (
+            <Typhography size="md" color="primary" shade="800">
+              {name}(이)의 몸무게가 출생 후 {days}일 동안{' '}
+              {reportData && weight ? reportData.currWeight - weight : 0} kg 증가했습니다.
+            </Typhography>
+          ) : (
+            ''
+          )}
           <Result>
             <Typhography size="md" color="greyScale" shade="800">
               {reportData?.content}
