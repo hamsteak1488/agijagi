@@ -45,10 +45,9 @@ public class DiaryController {
     @DeleteMapping("/{diaryId}")
     public ResponseEntity<Void> deleteDiary(
             LoginMember member,
-            @PathVariable long diaryId,
-            DeleteDiaryRequest deleteDiaryRequest
+            @PathVariable long diaryId
     ) {
-        diaryService.deleteDiary(member.getId(), diaryId, deleteDiaryRequest);
+        diaryService.deleteDiary(member.getId(), diaryId);
         return ResponseEntity.ok().build();
     }
 
