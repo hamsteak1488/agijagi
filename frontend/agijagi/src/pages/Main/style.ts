@@ -11,4 +11,5 @@ export const Container = styled.div`
   background-color: ${theme.color.primary[50]};
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 `;

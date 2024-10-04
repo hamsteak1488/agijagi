@@ -13,7 +13,7 @@ import {
 
 interface MediaSliderProps {
   fileList?: File[];
-  urlList?: string[]; // 추가된 부분
+  urlList?: string[];
   isWriteMode: boolean;
   handleUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleDelete?: (index: number) => void;
@@ -22,7 +22,7 @@ interface MediaSliderProps {
 
 export const MediaSlider = ({
   fileList = [],
-  urlList = [], // 추가된 부분
+  urlList = [],
   isWriteMode,
   handleUpload = () => {},
   handleDelete = () => {},
@@ -67,7 +67,6 @@ export const MediaSlider = ({
   const renderMedia = () => {
     return (
       <>
-        {/* API로부터 받은 URL 기반 미디어 렌더링 */}
         {urlList.map((url, index) => (
           <MediaBox key={`url-${index}`}>
             <IndexLabel>
@@ -83,7 +82,6 @@ export const MediaSlider = ({
           </MediaBox>
         ))}
 
-        {/* 파일 기반 미디어 렌더링 */}
         {fileList.map((file, index) => (
           <MediaBox key={`file-${index}`}>
             <IndexLabel>
@@ -112,7 +110,6 @@ export const MediaSlider = ({
           </MediaBox>
         ))}
 
-        {/* 업로드 버튼 */}
         {isWriteMode && (
           <MediaBox>
             <MediaInput handleUpload={handleScroll}></MediaInput>

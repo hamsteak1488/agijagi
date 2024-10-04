@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { editUserInfo } from '../../../apis/userApi';
+import useModal from '../../../hooks/useModal';
 import theme from '../../../styles/theme';
 import { MemberResponse } from '../../../types/user';
 import Button from '../../common/Button';
@@ -59,22 +60,24 @@ export const EditMember = ({ member }: EditMemberProps) => {
     nickname: true,
   });
 
+  const navigator = useNavigate();
+  const modal = useModal();
+
   const submitEditMember = () => {
     const editMemberInfo = {
       email: member.email,
       password: password,
       nickname: nickname,
     };
-
-    console.log(editMemberInfo);
     editUserInfo(editMemberInfo)
-      .then((reponse) => console.log(reponse))
+      .then((response) => {
+        modal.pop();
+      })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  const navigator = useNavigate();
   function validateNickname(input: string): ValidationState {
     if (input.trim() === '') {
       return 'normal';
@@ -161,7 +164,7 @@ export const EditMember = ({ member }: EditMemberProps) => {
           size="sm"
           color="danger"
           onClick={() => {
-            navigator(-1);
+            modal.pop();
           }}
         >
           닫기

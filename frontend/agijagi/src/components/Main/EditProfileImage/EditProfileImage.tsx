@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import Typhography from '../../common/Typography';
 import { deleteUserImage, editUserImage } from '../../../apis/userApi';
 import { error } from 'console';
+import useModal from '../../../hooks/useModal';
 
 export const ModalBackground = styled.div`
   position: relative;
@@ -76,6 +77,7 @@ export interface EditProfileImageProps {
 export const EditProfileImage = () => {
   const [uploadImg, setUploadImg] = useState<File | null>(null);
   const navigator = useNavigate();
+  const modal = useModal();
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -136,7 +138,7 @@ export const EditProfileImage = () => {
           size="sm"
           color="danger"
           onClick={() => {
-            navigator(-1);
+            modal.pop();
           }}
         >
           닫기

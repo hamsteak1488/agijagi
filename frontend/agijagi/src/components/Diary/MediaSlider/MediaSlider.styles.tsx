@@ -12,9 +12,9 @@ export const InnerBox = styled.div(
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     border-radius: 1rem;
-    scrollbar-width: none; /* Firefox에서 스크롤바 숨김 */
+    scrollbar-width: none;
     &::-webkit-scrollbar {
-      display: none; /* Chrome, Safari에서 스크롤바 숨김 */
+      display: none;
     }
   `
 );

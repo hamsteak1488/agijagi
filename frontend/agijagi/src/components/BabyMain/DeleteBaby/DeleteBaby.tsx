@@ -54,7 +54,7 @@ export const DeleteBaby = () => {
         </Button>
         <Button
           onClick={() => {
-            navigator(-1);
+            modal.pop();
           }}
         >
           취소

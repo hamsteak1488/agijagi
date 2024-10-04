@@ -52,8 +52,7 @@ const StyledCalendar = styled(Calendar)`
 
   .react-calendar__month-view__days__day abbr {
     position: absolute;
-    padding: 1px;
-    border-radius: 50%;
+    border-radius: 100rem;
     font-size: 0.66rem;
     bottom: 54%;
     left: 5%;
@@ -64,7 +63,6 @@ const StyledCalendar = styled(Calendar)`
     padding: 1px;
     border-radius: 50%;
   }
-
   .react-calendar button:enabled:hover {
     cursor: pointer;
   }
@@ -76,20 +74,17 @@ const StyledCalendar = styled(Calendar)`
   }
 
   .react-calendar__navigation__label__labelText {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .react-calendar__navigation button {
     color: ${theme.color.primary[700]};
-    min-width: 44px;
+    min-width: 34px;
     background: none;
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 800;
     border: 0;
     margin-top: 8px;
-    @media (max-width: 768px) {
-      font-size: 20px;
-    }
   }
 
   .react-calendar__navigation button:disabled:first-of-type {

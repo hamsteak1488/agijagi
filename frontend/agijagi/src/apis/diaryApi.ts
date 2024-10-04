@@ -6,15 +6,15 @@ export const getAllDiaries = async (
   childId: number
 ): Promise<DiaryResponse[]> => {
   const response = await axiosInstance.get(`/diaries?childId=${childId}`);
-  console.log(response);
   return response.data;
 };
 
-export const addDiary = async (diary: DiaryRequest): Promise<number> => {
+export const addDiary = async (diary: DiaryRequest) => {
   const formData = new FormData();
 
   formData.append('childId', diary.childId.toString());
   formData.append('content', diary.content);
+  formData.append('wroteAt', diary.date);
   diary.mediaList.forEach((file, index) => {
     formData.append(`mediaList`, file); // 파일 추가
   });
@@ -24,5 +24,5 @@ export const addDiary = async (diary: DiaryRequest): Promise<number> => {
       'Content-Type': 'multipart/form-data',
     },
   });
-  return response.status;
+  return response;
 };

@@ -230,7 +230,7 @@ export const EditBabyInfo = ({ child }: EditBabyProps) => {
           size="sm"
           color="danger"
           onClick={() => {
-            navigator(-1);
+            modal.pop();
           }}
         >
           닫기

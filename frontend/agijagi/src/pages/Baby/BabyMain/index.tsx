@@ -28,20 +28,20 @@ export const BabyMain = () => {
     setTabMenu(menu);
   };
 
-  useEffect(() => {
-    const handlePopState = (event: PopStateEvent) => {
-      navigator('/main', { replace: true });
-    };
+  // useEffect(() => {
+  //   const handlePopState = (event: PopStateEvent) => {
+  //     navigator('/main', { replace: true });
+  //   };
 
-    window.addEventListener('popstate', handlePopState);
+  //   window.addEventListener('popstate', handlePopState);
 
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [navigator]);
+  //   return () => {
+  //     window.removeEventListener('popstate', handlePopState);
+  //   };
+  // }, [navigator]);
 
   const { data: diaries = [] } = useQuery<DiaryResponse[]>({
-    queryKey: ['diaries'],
+    queryKey: ['diaries', childId],
     queryFn: () => {
       return getAllDiaries(childId);
     },
@@ -58,7 +58,7 @@ export const BabyMain = () => {
 
   const handleModalDiary = async (selectedDate: string) => {
     const diaryData = diaries.find(
-      (item) => moment(item.createdAt).format('YYYY-MM-DD') === selectedDate
+      (item) => moment(item.wroteAt).format('YYYY-MM-DD') === selectedDate
     );
 
     if (diaryData) {
@@ -69,9 +69,10 @@ export const BabyMain = () => {
               {s.CloseIcon}
             </s.CloseIconBox>
             <TimelineDiary
-              date={moment(diaryData.createdAt).format('YYYY-MM-DD')}
+              date={moment(diaryData.wroteAt).format('YYYY-MM-DD')}
               urlList={diaryData.mediaUrls} // File[] 전달
               DiaryText={diaryData.content}
+              child={child}
             />
           </s.ModalBackground>
         ),
@@ -109,9 +110,10 @@ export const BabyMain = () => {
             {diaries.map((item, index) => (
               <TimelineDiary
                 key={index}
-                date={moment(item.createdAt).format('YYYY-MM-DD')}
+                date={moment(item.wroteAt).format('YYYY-MM-DD')}
                 urlList={item.mediaUrls} // File[] 전달
                 DiaryText={item.content}
+                child={child}
               />
             ))}
           </s.PostContainer>
@@ -124,7 +126,8 @@ export const BabyMain = () => {
               tileContent={({ date, view }: { date: Date; view: string }) => {
                 const formattedDate = moment(date).format('YYYY-MM-DD');
                 const matchedDate = diaries.find(
-                  (item) => item.createdAt === formattedDate
+                  (item) =>
+                    moment(item.wroteAt).format('YYYY-MM-DD') === formattedDate
                 );
                 if (
                   view === 'month' &&
@@ -141,9 +144,9 @@ export const BabyMain = () => {
                 }
                 return null;
               }}
-              onClickDay={(value: Date) =>
-                handleModalDiary(moment(value).format('YYYY-MM-DD'))
-              }
+              onClickDay={(value: Date) => {
+                handleModalDiary(moment(value).format('YYYY-MM-DD'));
+              }}
             />
           </s.CalendarInnerContainer>
         </s.CalendarOutterContainer>

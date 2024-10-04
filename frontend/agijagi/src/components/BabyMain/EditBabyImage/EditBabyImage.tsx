@@ -10,6 +10,7 @@ import Typhography from '../../common/Typography';
 import { deleteUserImage, editUserImage } from '../../../apis/userApi';
 import { deleteChildImage, editChildImage } from '../../../apis/childApi';
 import useChildStore from '../../../stores/useChlidStore';
+import useModal from '../../../hooks/useModal';
 
 export const ModalBackground = styled.div`
   position: relative;
@@ -77,7 +78,7 @@ export interface EditBabyImageProps {
 
 export const EditBabyImage = () => {
   const [uploadImg, setUploadImg] = useState<File | null>(null);
-  const navigator = useNavigate();
+
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -86,6 +87,8 @@ export const EditBabyImage = () => {
   };
 
   const { childId } = useChildStore();
+  const navigator = useNavigate();
+  const modal = useModal();
 
   const submitEditImage = () => {
     const request = {
@@ -144,7 +147,7 @@ export const EditBabyImage = () => {
           size="sm"
           color="danger"
           onClick={() => {
-            navigator(-1);
+            modal.pop();
           }}
         >
           닫기

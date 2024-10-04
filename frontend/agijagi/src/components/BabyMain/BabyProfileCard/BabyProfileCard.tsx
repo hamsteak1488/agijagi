@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import defaultImg from '../../../assets/images/adult.png';
+import defaultBoy from '../../../assets/images/boy.png';
+import defaultGirl from '../../../assets/images/girl.png';
 import theme from '../../../styles/theme';
 import Typhography from '../../common/Typography';
 import UserIcon from '@heroicons/react/16/solid/UserIcon';
@@ -104,9 +105,20 @@ export const BabyProfileCard = ({ child }: BabyProfileCardProps) => {
             navigator('/family/profile');
           }}
         >
-          <Photo src={child?.imageUrl ? child.imageUrl : defaultImg} />
+          <Photo
+            src={
+              child?.imageUrl
+                ? child.imageUrl
+                : child?.gender === '남아'
+                ? defaultBoy
+                : defaultGirl
+            }
+          />
         </PhotoSection>
         <ContentSection>
+          <Typhography size="xs" color="primary" weight="bold">
+            {child?.name}
+          </Typhography>
           <Typhography size="5xl" weight="bold">
             {child?.nickname}
           </Typhography>

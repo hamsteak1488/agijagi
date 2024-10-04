@@ -47,7 +47,7 @@ export const LogoutModal = () => {
         </Button>
         <Button
           onClick={() => {
-            navigator(-1);
+            modal.pop();
           }}
         >
           아니오
