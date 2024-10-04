@@ -33,11 +33,11 @@ public class ImageGenerator {
         return base64Images.stream()
                 .map(base64Image -> new Base64Content("temp", "png", base64Image))
                 .map(Base64ToFileConverter::convert)
-                .map(this::uploadToS3)
+                .map(this::storeGeneratedImage)
                 .toList();
     }
 
-    private Image uploadToS3(File tempFile) {
+    private Image storeGeneratedImage(File tempFile) {
         try {
             Resource imageResource = new FileSystemResource(tempFile);
             MediaResource mediaResource = new MediaResource(imageResource, "image/png", Map.of());
