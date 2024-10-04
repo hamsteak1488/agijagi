@@ -88,26 +88,18 @@ public class DiaryService {
                 diary.addMedia(image);
             }
         }
-
-        diaryRepository.save(diary);
     }
 
     @Transactional
-    public void deleteDiary(long memberId, long diaryId, DeleteDiaryRequest request) {
+    public void deleteDiary(long memberId, long diaryId) {
         Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
         childValidator.validateWriteAuthority(memberId, diary.getChild().getId());
 
-        if (request.getRemoveMediaIdList() != null) {
-            for (UUID removeMediaId : request.getRemoveMediaIdList()) {
-                List<DiaryMedia> diaryMediaList = List.copyOf(diary.getDiaryMediaList());
-                for (DiaryMedia diaryMedia : diaryMediaList) {
-                    if (diaryMedia.getMedia().getId().equals(removeMediaId)) {
-                        diary.removeMedia(diaryMedia);
-                    }
-                }
-            }
+        List<DiaryMedia> diaryMediaList = List.copyOf(diary.getDiaryMediaList());
+        for (DiaryMedia diaryMedia : diaryMediaList) {
+            diary.removeMedia(diaryMedia);
         }
 
         diary.remove();
