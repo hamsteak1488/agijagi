@@ -14,6 +14,6 @@ public class StandardGrowthReader {
     private final StandardGrowthRepository standardGrowthRepository;
 
     public List<StandardGrowth> read(int month, Gender gender) {
-        return standardGrowthRepository.findAllByMonthLessThanAndGender(month, gender);
+        return standardGrowthRepository.findAllByMonthLessThanEqualAndGender(month, gender);
     }
 }

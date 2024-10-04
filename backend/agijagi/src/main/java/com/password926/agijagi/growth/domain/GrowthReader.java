@@ -13,6 +13,6 @@ public class GrowthReader {
     private final GrowthRepository growthRepository;
 
     public List<Growth> readAllByMonth(long childId, int month) {
-        return growthRepository.findAllByChildIdAndMonthLessThanOrderByMonth(childId, month);
+        return growthRepository.findAllByChildIdAndMonthLessThanEqualOrderByMonth(childId, month);
     }
 }
