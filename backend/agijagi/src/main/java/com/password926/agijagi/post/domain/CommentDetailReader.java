@@ -32,7 +32,6 @@ public class CommentDetailReader {
                 .map(comment -> CommentDetail.builder()
                         .commentId(comment.getId())
                         .writerId(comment.getWriter().getId())
-                        .parentCommentId(comment.getParentComment().getId())
                         .writerNickname(comment.getWriter().getNickname())
                         .content(comment.getContent())
                         .createdAt(comment.getCreatedAt())

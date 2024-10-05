@@ -13,14 +13,12 @@ public class CommentAppender {
     private final CommentRepository commentRepository;
     private final MemberReader memberReader;
     private final PostReader postReader;
-    private final CommentReader commentReader;
 
     @Transactional
-    public long append(long writerId, long postId, Long parentCommentId, String content) {
+    public long append(long writerId, long postId, String content) {
         Member writer = memberReader.read(writerId);
         Post post = postReader.read(postId);
-        Comment parentComment = parentCommentId != null ? commentReader.read(parentCommentId) : null;
-        Comment comment = Comment.createComment(writer, post, parentComment, content);
+        Comment comment = Comment.createComment(writer, post, content);
 
         commentRepository.save(comment);
 

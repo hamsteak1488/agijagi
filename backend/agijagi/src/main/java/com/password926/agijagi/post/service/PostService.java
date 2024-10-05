@@ -3,8 +3,6 @@ package com.password926.agijagi.post.service;
 import com.password926.agijagi.post.domain.*;
 import com.password926.agijagi.media.domain.MediaResource;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,9 +35,5 @@ public class PostService {
 
     public PostDetail getPostDetail(long postId) {
         return postDetailReader.readPostDetail(postId);
-    }
-
-    public Page<PostDetail> getPostDetailPage(PostSearchFilter filter, Pageable pageable) {
-        return postDetailReader.readPostDetailPage(filter, pageable);
     }
 }
