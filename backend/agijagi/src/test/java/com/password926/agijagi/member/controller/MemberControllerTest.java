@@ -1,7 +1,8 @@
 package com.password926.agijagi.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.password926.agijagi.config.TestAuthConfig;
+import com.password926.agijagi.auth.controller.LoginMemberArgumentResolver;
+import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.config.RestDocsConfig;
 import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.member.controller.dto.request.ModifyMemberRequest;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
@@ -36,10 +38,11 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.snippet.Attributes.key;
 
-@Import({RestDocsConfig.class, TestAuthConfig.class})
+@Import(RestDocsConfig.class)
 @AutoConfigureRestDocs
 @WebMvcTest(MemberController.class)
 class MemberControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -47,6 +50,8 @@ class MemberControllerTest {
 
     @MockBean
     private MemberService memberService;
+    @MockBean
+    private LoginMemberArgumentResolver loginMemberArgumentResolver;
 
     @DisplayName("회원가입")
     @Test
@@ -87,6 +92,41 @@ class MemberControllerTest {
                 );
     }
 
+    @DisplayName("회원 정보 조회")
+    @Test
+    void getMemberDetail() throws Exception {
+        long memberId = 1L;
+
+        given(memberService.getMemberDetail(memberId))
+                .willReturn(MemberDetail.builder()
+                        .memberId(memberId)
+                        .email("test@example.com")
+                        .nickname("test")
+                        .profileImageUrl("test.image-url.com")
+                        .build());
+
+        mockMvc.perform(
+                RestDocumentationRequestBuilders
+                        .get("/members/{memberId}", 1)
+                        .cookie(new Cookie("SESSION", "Session Value"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document(
+                        "member/get-member",
+                                pathParameters(
+                                        parameterWithName("memberId").description("회원 ID")
+                                ),
+                                responseFields(
+                                        fieldWithPath("memberId").description("회원 ID"),
+                                        fieldWithPath("email").description("이메일"),
+                                        fieldWithPath("nickname").description("닉네임"),
+                                        fieldWithPath("profileImageUrl").description("프로필 이미지 URL")
+                                )
+                        )
+                );
+    }
+
     @DisplayName("회원 정보 변경")
     @Test
     void updateMember() throws Exception {
@@ -101,10 +141,19 @@ class MemberControllerTest {
         willDoNothing().given(memberService)
                 .updateMember(anyLong(), anyString(), anyString(), anyString());
 
+        given(loginMemberArgumentResolver.supportsParameter(any(MethodParameter.class)))
+                .willAnswer(invocation -> {
+                    MethodParameter parameter = invocation.getArgument(0);
+                    return parameter.getParameterType().equals(LoginMember.class);
+                });
+
+        given(loginMemberArgumentResolver.resolveArgument(any(), any(), any(), any()))
+                .willReturn(new LoginMember(1L));
+
         mockMvc.perform(
                 RestDocumentationRequestBuilders
                         .patch("/members")
-                        .cookie(new Cookie("SESSION", "AUTH_SESSION"))
+                        .cookie(new Cookie("SESSION", "Session Value"))
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -124,45 +173,10 @@ class MemberControllerTest {
     }
 
     @Test
-    void updateMemberProfileImage() {
+    void modifyMemberProfileImage() {
     }
 
     @Test
     void deleteMember() {
-    }
-
-    @DisplayName("회원 정보 조회")
-    @Test
-    void getMemberDetail() throws Exception {
-        long memberId = 1L;
-
-        given(memberService.getMemberDetail(memberId))
-                .willReturn(MemberDetail.builder()
-                        .memberId(memberId)
-                        .email("test@example.com")
-                        .nickname("test")
-                        .profileImageUrl("test.image-url.com")
-                        .build());
-
-        mockMvc.perform(
-                        RestDocumentationRequestBuilders
-                                .get("/members/{memberId}", 1)
-                                .cookie(new Cookie("SESSION", "AUTH_SESSION"))
-                                .contentType(MediaType.ALL)
-                )
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(document(
-                                "member/get-member",
-                                pathParameters(
-                                        parameterWithName("memberId").description("회원 ID")
-                                ),
-                                responseFields(
-                                        fieldWithPath("memberId").description("회원 ID"),
-                                        fieldWithPath("email").description("이메일"),
-                                        fieldWithPath("nickname").description("닉네임"),
-                                        fieldWithPath("profileImageUrl").description("프로필 이미지 URL")
-                                )
-                        )
-                );
     }
 }

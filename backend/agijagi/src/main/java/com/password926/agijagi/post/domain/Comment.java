@@ -14,16 +14,12 @@ public class Comment {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writer_id", nullable = false)
+    @JoinColumn(name = "writer_id")
     private Member writer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_id")
     private Post post;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_comment_id")
-    private Comment parentComment;
 
     @Column(nullable = false)
     private String content;
@@ -34,11 +30,10 @@ public class Comment {
     @Column(nullable = false)
     private boolean isDeleted;
 
-    public static Comment createComment(Member writer, Post post, Comment parentComment, String content) {
+    public static Comment createComment(Member writer, Post post, String content) {
         Comment comment = new Comment();
         comment.writer = writer;
         comment.post = post;
-        comment.parentComment = parentComment;
         comment.content = content;
 
         comment.createdAt = LocalDateTime.now();
