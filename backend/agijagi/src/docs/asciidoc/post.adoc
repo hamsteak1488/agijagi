@@ -4,7 +4,13 @@
 = *게시판 API*
 
 == 게시글 등록
-operation::post/create-post[snippets='request-parts,http-request,http-response']
+operation::post/create-post[snippets='request-cookies,request-parts,http-request,http-response']
+
+== 게시글 수정
+operation::post/update-post[snippets='request-cookies,request-parts,http-request,http-response']
+
+== 게시글 삭제
+operation::post/delete-post[snippets='request-cookies,path-parameters,http-request,http-response']
 
 == 게시글 단일 조회
 operation::post/get-post[snippets='path-parameters,http-request,http-response']

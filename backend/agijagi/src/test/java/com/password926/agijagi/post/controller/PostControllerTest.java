@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.password926.agijagi.config.TestAuthConfig;
 import com.password926.agijagi.config.RestDocsConfig;
 import com.password926.agijagi.post.controller.dto.request.CreatePostRequest;
+import com.password926.agijagi.post.controller.dto.request.UpdatePostRequest;
 import com.password926.agijagi.post.domain.PostDetail;
 import com.password926.agijagi.post.service.PostService;
 import jakarta.servlet.http.Cookie;
@@ -17,14 +18,18 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
+import org.springframework.restdocs.cookies.CookieDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,6 +37,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -80,21 +86,72 @@ class PostControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andDo(document(
                         "post/create-post",
-                                requestParts(
-                                        partWithName("title").description("제목").attributes(key("constraints").value(titleDescription)),
-                                        partWithName("content").description("내용").attributes(key("constraints").value(contentDescription)),
-                                        partWithName("mediaList").description("미디어 목록").attributes(key("constraints").value("None")).optional()
-                                )
-                        )
+                        requestCookies(
+                                CookieDocumentation.cookieWithName("SESSION").description("세션 ID")
+                        ),
+                        requestParts(
+                                partWithName("title").description("제목").attributes(key("constraints").value(titleDescription)),
+                                partWithName("content").description("내용").attributes(key("constraints").value(contentDescription)),
+                                partWithName("mediaList").description("미디어 목록").attributes(key("constraints").value("None")).optional()
+                        ))
                 );
     }
 
     @Test
-    void updatePost() {
+    void updatePost() throws Exception {
+        ConstraintDescriptions constraintDescriptions = new ConstraintDescriptions(UpdatePostRequest.class);
+
+        List<String> titleDescription = constraintDescriptions.descriptionsForProperty("title");
+        List<String> contentDescription = constraintDescriptions.descriptionsForProperty("content");
+
+        MockMultipartFile mockMultipartFile1 = new MockMultipartFile("newMediaList", "image1.png", "image/png", InputStream.nullInputStream());
+        MockPart titlePart = new MockPart("title", "Updated Title".getBytes());
+        MockPart contentPart = new MockPart("content", "Updated Content".getBytes());
+        MockPart deleteMediaIdListPart = new MockPart("deleteMediaIdList", "abcdabcd-abcd-abcd-abcd-abcdabcdabcd,dcbadcba-dcba-dcba-dcba-dcbadcbadcba".getBytes());
+        mockMvc.perform(
+                RestDocumentationRequestBuilders
+                        .multipart("/posts/{postId}", 1)
+                        .file(mockMultipartFile1)
+                        .part(titlePart, contentPart, deleteMediaIdListPart)
+                        .cookie(new Cookie("SESSION", "AUTH_SESSION"))
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document(
+                        "post/update-post",
+                        requestCookies(
+                                CookieDocumentation.cookieWithName("SESSION").description("세션 ID")
+                        ),
+                        pathParameters(
+                                parameterWithName("postId").description("게시글 ID")
+                        ),
+                        requestParts(
+                                partWithName("title").description("수정할 제목").attributes(key("constraints").value("None")).optional(),
+                                partWithName("content").description("수정할 내용").attributes(key("constraints").value("None")).optional(),
+                                partWithName("newMediaList").description("새로 추가할 미디어 목록").attributes(key("constraints").value("None")).optional(),
+                                partWithName("deleteMediaIdList").description("삭제할 미디어 아이디 목록").attributes(key("constraints").value("None")).optional()
+                        )
+                ));
     }
 
     @Test
-    void deletePost() {
+    void deletePost() throws Exception {
+        mockMvc.perform(
+                RestDocumentationRequestBuilders
+                        .delete("/posts/{postId}", 1)
+                        .cookie(new Cookie("SESSION", "AUTH_SESSION"))
+                        .contentType(MediaType.ALL)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document(
+                        "post/delete-post",
+                        requestCookies(
+                                CookieDocumentation.cookieWithName("SESSION").description("세션 ID")
+                        ),
+                        pathParameters(
+                                parameterWithName("postId").description("게시글 ID")
+                        )
+                ));
     }
 
     @Test
@@ -118,21 +175,20 @@ class PostControllerTest {
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(document(
-                                "post/get-post",
-                                pathParameters(
-                                        parameterWithName("postId").description("게시글 ID")
-                                ),
-                                responseFields(
-                                        fieldWithPath("postId").description("게시글 ID"),
-                                        fieldWithPath("writerId").description("작성자 ID"),
-                                        fieldWithPath("writerNickname").description("작성자 닉네임"),
-                                        fieldWithPath("title").description("게시글 제목"),
-                                        fieldWithPath("content").description("게시글 본문"),
-                                        fieldWithPath("createdAt").description("게시글 작성일시"),
-                                        fieldWithPath("mediaUrls").description("게시글 본문 미디어 URL")
-                                )
+                        "post/get-post",
+                        pathParameters(
+                                parameterWithName("postId").description("게시글 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("postId").description("게시글 ID"),
+                                fieldWithPath("writerId").description("작성자 ID"),
+                                fieldWithPath("writerNickname").description("작성자 닉네임"),
+                                fieldWithPath("title").description("게시글 제목"),
+                                fieldWithPath("content").description("게시글 본문"),
+                                fieldWithPath("createdAt").description("게시글 작성일시"),
+                                fieldWithPath("mediaUrls").description("게시글 본문 미디어 URL")
                         )
-                );
+                ));
     }
 
     @Test
@@ -142,7 +198,7 @@ class PostControllerTest {
         int pageNumber = 0;
 
         List<PostDetail> postDetails = new ArrayList<>();
-        for (int i=1; i<= totalCount; i++) {
+        for (int i=totalCount; i>= 0; i--) {
             postDetails.add(PostDetail.builder()
                     .postId(i)
                     .writerId(i)

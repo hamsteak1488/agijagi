@@ -7,8 +7,6 @@ import com.password926.agijagi.post.domain.PostSearchFilter;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -34,6 +32,7 @@ public class PostQueryRepository {
                         likeTitle(filter.getTitle()),
                         likeWriterNickname(filter.getWriterNickname())
                 )
+                .orderBy(post.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

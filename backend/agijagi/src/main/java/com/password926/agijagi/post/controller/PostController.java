@@ -52,7 +52,7 @@ public class PostController {
     }
 
     @Authenticate
-    @PatchMapping("/{postId}")
+    @PostMapping("/{postId}")
     public ResponseEntity<Void> updatePost(LoginMember loginMember,
                                            @PathVariable long postId,
                                            @Valid UpdatePostRequest request)

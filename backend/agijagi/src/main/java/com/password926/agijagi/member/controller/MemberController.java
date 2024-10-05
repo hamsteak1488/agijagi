@@ -49,7 +49,7 @@ public class MemberController {
     }
 
     @Authenticate
-    @PatchMapping("/profile-image")
+    @PostMapping("/profile-image/update")
     public ResponseEntity<Void> updateMemberProfileImage(
             LoginMember member,
             @RequestPart MultipartFile profileImage
@@ -60,7 +60,7 @@ public class MemberController {
     }
 
     @Authenticate
-    @PatchMapping("/profile-image/remove")
+    @PostMapping("/profile-image/delete")
     public ResponseEntity<Void> deleteMemberProfileImage(
             LoginMember member
     ) {
