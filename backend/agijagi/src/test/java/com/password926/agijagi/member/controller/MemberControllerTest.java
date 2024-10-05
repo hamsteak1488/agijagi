@@ -31,6 +31,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -57,15 +58,13 @@ class MemberControllerTest {
         List<String> passwordDescription = constraintDescriptions.descriptionsForProperty("password");
         List<String> nicknameDescription = constraintDescriptions.descriptionsForProperty("nickname");
 
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("profileImage", "profile.png", "image/png", InputStream.nullInputStream());
-
         given(memberService.registerMember(anyString(), anyString(), anyString(), any(MediaResource.class)))
                 .willReturn(1L);
 
         MockPart emailPart = new MockPart("email", "test@example.com".getBytes());
         MockPart passwordPart = new MockPart("password", "password".getBytes());
         MockPart nicknamePart = new MockPart("nickname", "test".getBytes());
-
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("profileImage", "profile.png", "image/png", InputStream.nullInputStream());
 
         mockMvc.perform(
                         RestDocumentationRequestBuilders
@@ -111,7 +110,7 @@ class MemberControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(document(
                         "member/modify-member",
-                                CookieDocumentation.requestCookies(
+                                requestCookies(
                                         CookieDocumentation.cookieWithName("SESSION").description("세션 ID")
                                 ),
                                 requestFields(
@@ -124,11 +123,59 @@ class MemberControllerTest {
     }
 
     @Test
-    void updateMemberProfileImage() {
+    void updateMemberProfileImage() throws Exception {
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("profileImage", "profile.png", "image/png", InputStream.nullInputStream());
+
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders
+                                .multipart("/members/profile-image/update")
+                                .file(mockMultipartFile)
+                                .cookie(new Cookie("SESSION", "AUTH_SESSION"))
+                                .contentType(MediaType.MULTIPART_FORM_DATA)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document(
+                        "member/modify-member-profile-image",
+                        requestCookies(
+                                CookieDocumentation.cookieWithName("SESSION").description("세션 ID")
+                        ),
+                        requestParts(
+                                partWithName("profileImage").description("새 프로필 이미지").attributes(key("constraints").value("None"))
+                        )
+                ));
     }
 
     @Test
-    void deleteMember() {
+    void deleteMemberProfileImage() throws Exception {
+        mockMvc.perform(
+                RestDocumentationRequestBuilders
+                        .post("/members/profile-image/delete")
+                        .cookie(new Cookie("SESSION", "AUTH_SESSION"))
+                        .contentType(MediaType.ALL))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document(
+                        "member/delete-member-profile-image",
+                        requestCookies(
+                                CookieDocumentation.cookieWithName("SESSION").description("세션 ID")
+                        )
+                ));
+    }
+
+    @Test
+    void deleteMember() throws Exception {
+        mockMvc.perform(
+                RestDocumentationRequestBuilders
+                        .delete("/members")
+                        .cookie(new Cookie("SESSION", "AUTH_SESSION"))
+                        .contentType(MediaType.ALL)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document(
+                        "member/delete-member",
+                        requestCookies(
+                                CookieDocumentation.cookieWithName("SESSION").description("세션 ID")
+                        )
+                ));
     }
 
     @DisplayName("회원 정보 조회")
