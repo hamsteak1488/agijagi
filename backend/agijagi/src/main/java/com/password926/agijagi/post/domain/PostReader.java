@@ -14,9 +14,7 @@ public class PostReader {
 
     @Transactional(readOnly = true)
     public Post read(long postId) {
-        Post post = postRepository.findByIdAndIsDeletedIsFalse(postId)
+        return postRepository.findByIdAndIsDeletedIsFalse(postId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
-
-        return post;
     }
 }
