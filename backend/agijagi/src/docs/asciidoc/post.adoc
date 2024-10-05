@@ -1,0 +1,13 @@
+:source-highlighter: highlightjs
+
+[[Post-API]]
+= *게시판 API*
+
+== 게시글 등록
+operation::post/create-post[snippets='request-parts,http-request,http-response']
+
+== 게시글 단일 조회
+operation::post/get-post[snippets='path-parameters,http-request,http-response']
+
+== 게시글 페이지 조회
+operation::post/get-post-page[snippets='query-parameters,http-request,response-fields,http-response']

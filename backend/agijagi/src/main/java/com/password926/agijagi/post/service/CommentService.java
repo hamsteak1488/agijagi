@@ -15,8 +15,8 @@ public class CommentService {
     private final CommentDetailReader commentDetailReader;
     private final CommentAuthorityValidator commentAuthorityValidator;
 
-    public long createComment(long requesterId, long postId, String content) {
-        return commentAppender.append(requesterId, postId, content);
+    public long createComment(long requesterId, long postId, Long parentCommentId, String content) {
+        return commentAppender.append(requesterId, postId, parentCommentId, content);
     }
 
     public void updateComment(long requesterId, long commentId, String content) {
