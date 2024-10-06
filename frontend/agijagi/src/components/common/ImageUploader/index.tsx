@@ -7,10 +7,11 @@ import Upload from './Uplaod';
 import useDialog from '../../../hooks/useDialog';
 
 interface ImageUploaderProps {
+  name: string;
   maxFileCount?: number;
 }
 
-const ImageUploader = ({ maxFileCount = 1 }: ImageUploaderProps) => {
+const ImageUploader = ({ name, maxFileCount = 1 }: ImageUploaderProps) => {
   const { alert } = useDialog();
 
   const [fileList, setFileList] = useState<File[]>([]);
@@ -45,7 +46,7 @@ const ImageUploader = ({ maxFileCount = 1 }: ImageUploaderProps) => {
           />
         ))}
       </s.Preview>
-      <Upload onChange={handleFileChange} />
+      <Upload name={name} onChange={handleFileChange} />
     </s.Container>
   );
 };
