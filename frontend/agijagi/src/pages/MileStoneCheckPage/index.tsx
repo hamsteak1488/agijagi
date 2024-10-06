@@ -14,7 +14,7 @@ import {
   patchMilestone,
 } from '../../apis/milestone';
 import useChildStore from '../../stores/useChlidStore';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const Wrapper = styled.div`
   display: flex;
@@ -120,27 +120,27 @@ const MilestoneCheck = () => {
   const [warning, setWarning] = useState<string>('');
   const navigate = useNavigate();
   const { childId } = useChildStore();
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
     mutationFn: patchMilestone,
     onSuccess: () => {
       setSuccess('마일스톤을 저장했습니다');
       setTimeout(() => setSuccess(''), 1000);
+      queryClient.invalidateQueries({
+        queryKey: ['milestone', months],
+        exact: true, // 이 옵션은 해당 쿼리 키와 정확히 일치하는 쿼리를 무효화함
+      });
     },
     onError: () => {
       setWarning('마일스톤을 체크해주세요');
-      setTimeout(() => setWarning(''), 3000);
+      setTimeout(() => setWarning(''), 2000);
     },
   });
 
   const childQuery = useQuery({
     queryKey: ['child', childId],
     queryFn: () => getChildInfo(childId),
-  });
-
-  const weightQuery = useQuery({
-    queryKey: ['child', childId, 'weight'],
-    queryFn: () => getHeightWeightInfo(childId),
   });
 
   useEffect(() => {
@@ -170,11 +170,6 @@ const MilestoneCheck = () => {
   const weight = childData?.birthWeight;
   const birthday = childData?.birthday;
   const birthDate = new Date(birthday ? birthday : '');
-  const heightWeightData = weightQuery.data?.data;
-
-  const filteredHeightWeightData = weightQuery.data?.data.filter((data) => {
-    return data.month === months;
-  });
 
   // 체크박스 선택 처리
   const handleCheckboxChange = (item: MilestoneDetail, isChecked: boolean) => {
@@ -187,7 +182,7 @@ const MilestoneCheck = () => {
     }
   };
 
-  const handleSave = async () => {
+  const handleMileStoneSave = async () => {
     const milestoneDatas = selectedMilestones.map((item) => ({
       id: item.id,
       currentAmount: item.currentAmount + 1,
@@ -201,6 +196,7 @@ const MilestoneCheck = () => {
         milestones: milestoneDatas,
       },
     });
+    setSelectedMilestones([]);
   };
 
   const handlePrev = () => {
@@ -231,7 +227,7 @@ const MilestoneCheck = () => {
         <Button
           size="sm"
           color="primary"
-          onClick={handleSave}
+          onClick={handleMileStoneSave}
           disabled={isPending}
         >
           저장
@@ -253,9 +249,8 @@ const MilestoneCheck = () => {
           birth={birthDate}
           weight={weight}
           selectedMilestones={selectedMilestones}
-          handleSave={handleSave}
+          handleMileStoneSave={handleMileStoneSave}
           handleCheckboxChange={handleCheckboxChange}
-          heightWeightData={filteredHeightWeightData}
         />
       </MileStoneContainer>
 

@@ -13,7 +13,7 @@ const ReportListWrapper = styled.div`
   grid-template-columns: 1fr;
   gap: 10px;
   max-width: 700px;
-  height: 100px;
+  height: 130px;
   margin: 0 auto;
 
   /* 화면 너비가 700px 이상일 때 */
@@ -90,7 +90,10 @@ const TitleLabel = styled.div`
 
 const DateLabel = styled.div`
   display: flex;
-  margin-top: 20px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  margin-top: 15px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -114,6 +117,34 @@ const DateIcon = styled(CalendarIcon)`
   margin-right: 5px;
   color: ${theme.color.primary[800]};
 `;
+
+const CreateText = styled.span`
+  display: flex;
+  font-size: ${theme.typography.fontSize.xs};
+  color: ${theme.color.greyScale[600]};
+  text-decoration: underline;
+  margin-right: 10px;
+`;
+
+const timeSince = (date: string) => {
+  const today = new Date();
+  const createDate = new Date(date);
+  const milliSeconds = today.getTime() - createDate.getTime();
+  const seconds = milliSeconds / 1000;
+  if (seconds < 60) return `방금 전`;
+  const minutes = seconds / 60;
+  if (minutes < 60) return `${Math.floor(minutes)}분 전`;
+  const hours = minutes / 60;
+  if (hours < 24) return `${Math.floor(hours)}시간 전`;
+  const days = hours / 24;
+  if (days < 7) return `${Math.floor(days)}일 전`;
+  const weeks = days / 7;
+  if (weeks < 5) return `${Math.floor(weeks)}주 전`;
+  const months = days / 30;
+  if (months < 12) return `${Math.floor(months)}개월 전`;
+  const years = days / 365;
+  return `${Math.floor(years)}년 전`;
+};
 
 interface ReportListProps {
   name: string | undefined;
@@ -143,7 +174,7 @@ const ReportList = ({ name, birth, year, childId }: ReportListProps) => {
 
   const calculateDays = (date: string) => {
     const createDate = new Date(date);
-    const birthDate = new Date(birth? birth: '');
+    const birthDate = new Date(birth ? birth : '');
 
     // 두 날짜 간의 차이를 밀리초로 계산
     const timeDifference: number = createDate.getTime() - birthDate.getTime();
@@ -154,6 +185,11 @@ const ReportList = ({ name, birth, year, childId }: ReportListProps) => {
     );
 
     return daysDifference;
+  };
+
+  const createMonth = (date: string) => {
+    const createDate = new Date(date);
+    return createDate.getMonth() + 1;
   };
 
   const filteredReport = data?.data.filter((report) => {
@@ -182,7 +218,7 @@ const ReportList = ({ name, birth, year, childId }: ReportListProps) => {
 
             <LabelContainer>
               <TitleLabel>
-                {name} 성장 분석 보고서
+                {name} {createMonth(report.createAt)}월 성장 분석 보고서
               </TitleLabel>
               <DateLabel>
                 <DateContainer>
@@ -191,11 +227,13 @@ const ReportList = ({ name, birth, year, childId }: ReportListProps) => {
                     생성일 : {report.createAt.slice(0, 10)}
                   </Typhography>
                 </DateContainer>
+                <CreateText>{timeSince(report.createAt)}</CreateText>
               </DateLabel>
             </LabelContainer>
           </ReportContainer>
         ))
       )}
+      <div style={{ height: '80px' }}></div>
     </ReportListWrapper>
   );
 };

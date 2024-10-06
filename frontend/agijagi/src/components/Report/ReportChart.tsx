@@ -6,7 +6,6 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Label,
   Legend,
   ResponsiveContainer,
 } from 'recharts';
@@ -42,19 +41,20 @@ const WeightChart = ({ data }: ChartProps) => {
             margin={{ top: 20, right: 20, left: 0, bottom: 12 }}
           >
             <CartesianGrid stroke="#ccc" strokeDasharray="3 3" />
-            <YAxis
-              dataKey="weight"
-              label={{
-                value: 'kg',
-                angle: -90,
-                position: 'insideLeft',
-                offset: 10,
-              }}
+            <YAxis dataKey="weight" type="number" tickFormatter={(weight) => (weight === 0 ? '' : `${weight}kg`)}/>
+            <XAxis
+              dataKey="day"
+              type="number"
+              domain={[0, 'maxData']}
+              tickFormatter={(day) => (day === 0 ? '0' : `${day}일`)}
+            ></XAxis>
+            <Tooltip
+              formatter={(value, name) => [
+                `${value} kg`,
+                name === 'weight' ? '우리 아이 몸무게' : '또래 아이 몸무게',
+              ]}
+              labelFormatter={(label) => `${label}일`}
             />
-            <XAxis dataKey="day" type="category" domain={[0, 'maxData']}>
-              <Label value="일" offset={-10} position="insideBottom" />
-            </XAxis>
-            <Tooltip />
             <Legend
               verticalAlign="top"
               align="right"

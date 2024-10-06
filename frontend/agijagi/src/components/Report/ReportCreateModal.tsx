@@ -63,7 +63,7 @@ interface ModalProps {
   currentWeight: string;
   currentHeight: string;
   handleWeightHeighSave: () => void;
-  handleSave: () => void;
+  handleMileStoneSave: () => void;
   childId: number;
 }
 
@@ -72,7 +72,7 @@ const ReportModal = ({
   currentHeight,
   currentWeight,
   handleWeightHeighSave,
-  handleSave,
+  handleMileStoneSave,
   childId,
 }: ModalProps) => {
   const { pop } = useModal();
@@ -96,15 +96,13 @@ const ReportModal = ({
     setIsLoading(true);
 
     setTimeout(() => {
-      // 선택된 마일스톤이 있거나 키/몸무게를 입력했다면 저장 처리
       if (selectedMilestones.length) {
-        handleSave();
+        handleMileStoneSave();
       }
       if (currentHeight && currentWeight) {
         handleWeightHeighSave();
       }
-
-      // 2초 후 보고서 생성 API 호출 (post)
+      // 1.8초 후 보고서 생성 API 호출 (post)
       mutate(childId);
     }, 1800);
   };

@@ -55,12 +55,14 @@ const Line = styled.hr`
 interface MileStoneProps {
   month: number;
   childId: number;
+  selectedMilestones: MilestoneDetail[];
   handleCheckboxChange: (item: MilestoneDetail, isChecked: boolean) => void;
 }
 
 const DevelopmentList = ({
   month,
   childId,
+  selectedMilestones,
   handleCheckboxChange,
 }: MileStoneProps) => {
   const { data, error, isLoading } = useQuery({
@@ -74,6 +76,11 @@ const DevelopmentList = ({
   if (isLoading) {
     return <>로딩중</>;
   }
+
+   // 체크된 상태인지 확인하는 함수
+  const isChecked = (milestone: MilestoneDetail) => {
+    return selectedMilestones.some((selected) => selected.id === milestone.id);
+  };
 
   return (
     <>
@@ -90,6 +97,7 @@ const DevelopmentList = ({
                     <StyledInput
                       type="checkbox"
                       id={item.content}
+                      checked={isChecked(item)}
                       onChange={(e) =>
                         handleCheckboxChange(item, e.target.checked)
                       }
