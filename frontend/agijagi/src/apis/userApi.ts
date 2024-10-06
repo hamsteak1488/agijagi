@@ -40,14 +40,14 @@ export const editUserImage = async (
 ): Promise<number> => {
   const formData = new FormData();
   if (userImage.image) formData.append('profileImage', userImage.image);
-  const response = await axiosInstance.patch(
-    `/members/profile-image`,
+  const response = await axiosInstance.post(
+    `/members/profile-image/update`,
     formData
   );
   return response.status;
 };
 
 export const deleteUserImage = async (): Promise<number> => {
-  const response = await axiosInstance.patch(`/members/profile-image/remove`);
+  const response = await axiosInstance.post(`/members/profile-image/remove`);
   return response.status;
 };

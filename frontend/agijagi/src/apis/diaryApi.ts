@@ -1,4 +1,8 @@
-import { DiaryRequest, EditDiaryRequest } from '../types/diary';
+import {
+  DeleteDiaryRequest,
+  DiaryRequest,
+  EditDiaryRequest,
+} from '../types/diary';
 import { axiosInstance } from './axiosInstance';
 
 export const getAllDiaries = async (childId: number) => {
@@ -39,6 +43,19 @@ export const editDiary = async (request: EditDiaryRequest) => {
     `/diaries/${request.storyId}`,
     formData
   );
+
+  return response;
+};
+
+export const deleteDiary = async (request: DeleteDiaryRequest) => {
+  // Join the media ID list into a space-separated string, or set it to null if the list is empty
+  const removeMediaIdList = request.removeMediaIdList
+    ? request.removeMediaIdList.join(' ')
+    : null;
+
+  const response = await axiosInstance.delete(`/diaries/${request.storyId}`, {
+    data: { removeMediaIdList }, // Pass the removeMediaIdList as part of the data payload
+  });
 
   return response;
 };

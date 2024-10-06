@@ -1,4 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getAllChildren, getUserInfo } from '../../apis/userApi';
 import Typhography from '../../components/common/Typography';
 import { MyFamily } from '../../components/Main/MyFamily/MyFamily';
@@ -7,9 +9,9 @@ import Alert from '../../hooks/useDialog/Alert';
 import useMemberStore from '../../stores/useMemberStore';
 import { BabyResponse, MemberResponse } from '../../types/user';
 import { Container, TitleContainer } from './style';
-import { useNavigate } from 'react-router-dom';
 
 export const Main = () => {
+  const [renderKey, setRenderKey] = useState<number>(0);
   const { memberId } = useMemberStore();
   const navigator = useNavigate();
 
@@ -21,7 +23,7 @@ export const Main = () => {
     isLoading,
     error,
   } = useQuery<MemberResponse>({
-    queryKey: ['member', validMemberId],
+    queryKey: ['member', validMemberId, renderKey],
     queryFn: () => {
       if (!validMemberId) {
         return Promise.reject(new Error('유효하지 않은 memberId입니다.'));
@@ -35,6 +37,10 @@ export const Main = () => {
     queryKey: ['families'],
     queryFn: getAllChildren,
   });
+
+  const handleRender = () => {
+    setRenderKey(renderKey + 1);
+  };
 
   if (isLoading)
     return (
@@ -67,7 +73,7 @@ export const Main = () => {
           내 프로필
         </Typhography>
       </TitleContainer>
-      <MyProfile member={member} />
+      <MyProfile member={member} handleRender={handleRender} />
     </Container>
   );
 };

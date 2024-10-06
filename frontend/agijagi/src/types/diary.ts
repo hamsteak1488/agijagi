@@ -22,3 +22,8 @@ export interface EditDiaryRequest {
   removeMediaIdList: string[];
   newMediaList: File[];
 }
+
+export interface DeleteDiaryRequest {
+  removeMediaIdList: string[] | null;
+  storyId: number;
+}

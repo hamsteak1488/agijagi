@@ -39,14 +39,16 @@ export const Login = () => {
   const handleLogin = async () => {
     const loginInfo = {
       email: email,
-      password: password,
+      password: '1',
     };
 
     try {
-      const response = await login(loginInfo);
-      const memberId = response.data.memberId;
-      updateMemberId(memberId);
-      localStorage.setItem('memberId', memberId);
+      await login(loginInfo).then((response) => {
+        const memberId = response.data.memberId;
+        console.log(memberId);
+        updateMemberId(memberId);
+        localStorage.setItem('memberId', memberId);
+      });
       navigator('/main');
     } catch (error) {
       if (axios.isAxiosError(error)) {

@@ -1,15 +1,20 @@
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import theme from '../../../styles/theme';
+import { NoDiary } from '../../../components/Diary/NoDiary/NoDiary';
 
-export const TimelineContainer = styled.div`
-  position: relative;
-  padding: 0.25rem 1rem 0.25rem 1.25rem;
-  margin-left: 0.75rem;
-  margin-right: 1rem;
-  margin-top: 2rem;
-  border-left: 4px dashed ${theme.color.tertiary[700]};
-`;
+export const TimelineContainer = styled.div<{ noDiary: boolean }>(
+  (props) =>
+    css`
+      position: relative;
+      padding: 0.25rem 1rem 0.25rem 1.25rem;
+      margin-left: 0.75rem;
+      margin-right: 1rem;
+      margin-top: 2rem;
+      border-left: ${props.noDiary ? 0 : 4}px dashed
+        ${theme.color.tertiary[700]};
+    `
+);
 
 export const CalendarOutterContainer = styled.div`
   display: flex;
@@ -23,15 +28,18 @@ export const CalendarInnerContainer = styled.div`
   background-color: white;
 `;
 
-export const Circle = styled.div`
-  position: absolute;
-  width: 1rem;
-  height: 1rem;
-  background-color: ${theme.color.tertiary[700]};
-  border-radius: 100rem;
-  left: -10px;
-  top: -10px;
-`;
+export const Circle = styled.div<{ noDiary: boolean }>(
+  (props) => css`
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    background-color: ${theme.color.tertiary[700]};
+    border-radius: 100rem;
+    left: -10px;
+    top: -10px;
+    visibility: ${props.noDiary ? 'hidden' : 'visible'};
+  `
+);
 
 export const PostContainer = styled.div`
   display: flex;
@@ -56,7 +64,7 @@ export const WriteIconBox = styled.div`
   height: 24px;
   padding: 0.75rem;
   right: 8px;
-  bottom: 24px;
+  bottom: 60px;
   background-color: ${theme.color.primary[400]};
   color: #fff;
   border-radius: 50rem;

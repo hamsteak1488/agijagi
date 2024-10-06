@@ -50,9 +50,10 @@ export const ButtonWrapper = styled.div`
 
 export interface EditMemberProps {
   member: MemberResponse;
+  handleRender: () => void;
 }
 
-export const EditMember = ({ member }: EditMemberProps) => {
+export const EditMember = ({ member, handleRender }: EditMemberProps) => {
   const [password, setPassword] = useState<string>('');
   const [nickname, setNickname] = useState<string>(member.nickname);
   const [isValidated, setIsValidated] = useState<Record<string, boolean>>({
@@ -72,6 +73,7 @@ export const EditMember = ({ member }: EditMemberProps) => {
     editUserInfo(editMemberInfo)
       .then((response) => {
         modal.pop();
+        handleRender();
       })
       .catch((error) => {
         console.error(error);

@@ -60,7 +60,6 @@ export const ProfileForm = ({
 
     signUp(userInfo)
       .then((response) => {
-        console.log(response);
         modal.push({
           children: (
             <ModalBackground>

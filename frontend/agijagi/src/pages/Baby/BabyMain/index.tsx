@@ -1,20 +1,22 @@
-import { useEffect, useState } from 'react';
-import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import moment from 'moment';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getChild } from '../../../apis/childApi';
 import { getAllDiaries } from '../../../apis/diaryApi';
+import videoIcon from '../../../assets/images/diary/videoIcon.jpeg';
 import { BabyProfileCard } from '../../../components/BabyMain/BabyProfileCard/BabyProfileCard';
 import { ScheduleCard } from '../../../components/BabyMain/ScheduleCard/ScheduleCard';
-import { TimelineDiary } from '../../../components/Diary/TimelineDiary/TimelineDiary';
+import { BottomNavigation } from '../../../components/common/BottomNavigation/BottomNavigation';
 import FullCalendar from '../../../components/common/FullCalendar';
 import Tab from '../../../components/common/Tab';
+import { NoDiary } from '../../../components/Diary/NoDiary/NoDiary';
+import { TimelineDiary } from '../../../components/Diary/TimelineDiary/TimelineDiary';
 import useModal from '../../../hooks/useModal';
-import * as s from './style';
 import useChildStore from '../../../stores/useChlidStore';
-import { BabyResponse } from '../../../types/user';
 import { DiaryResponse } from '../../../types/diary';
-import videoIcon from '../../../assets/images/diary/videoIcon.jpeg';
+import { BabyResponse } from '../../../types/user';
+import * as s from './style';
 
 export const BabyMain = () => {
   const [fileLists, setFileLists] = useState<File[][]>([]); // 각 diary에 대해 File[] 배열 저장
@@ -106,20 +108,26 @@ export const BabyMain = () => {
       </s.TapWrapper>
 
       {tabMenu === '1' ? (
-        <s.TimelineContainer>
-          <s.Circle />
-          <s.PostContainer>
-            {diaries.map((item, index) => (
-              <TimelineDiary
-                key={index}
-                date={moment(item.wroteAt).format('YYYY-MM-DD')}
-                urlList={item.mediaUrls}
-                urlType={item.mediaTypes}
-                DiaryText={item.content}
-                child={child}
-              />
-            ))}
-          </s.PostContainer>
+        <s.TimelineContainer noDiary={diaries.length < 1}>
+          {diaries.length > 0 ? (
+            <>
+              <s.Circle noDiary={diaries.length < 1} />
+              <s.PostContainer>
+                {diaries.map((item, index) => (
+                  <TimelineDiary
+                    key={index}
+                    date={moment(item.wroteAt).format('YYYY-MM-DD')}
+                    urlList={item.mediaUrls}
+                    urlType={item.mediaTypes}
+                    DiaryText={item.content}
+                    child={child}
+                  />
+                ))}
+              </s.PostContainer>{' '}
+            </>
+          ) : (
+            <NoDiary />
+          )}
         </s.TimelineContainer>
       ) : (
         <s.CalendarOutterContainer>

@@ -72,9 +72,9 @@ export const ButtonWrapper = styled.div`
 `;
 
 export interface EditProfileImageProps {
-  member: MemberResponse;
+  handleRender: () => void;
 }
-export const EditProfileImage = () => {
+export const EditProfileImage = ({ handleRender }: EditProfileImageProps) => {
   const [uploadImg, setUploadImg] = useState<File | null>(null);
   const navigator = useNavigate();
   const modal = useModal();
@@ -91,7 +91,8 @@ export const EditProfileImage = () => {
     };
     editUserImage(newImage)
       .then((response) => {
-        window.location.href = '/main';
+        handleRender();
+        modal.pop();
       })
       .catch((error) => {
         console.error(error);

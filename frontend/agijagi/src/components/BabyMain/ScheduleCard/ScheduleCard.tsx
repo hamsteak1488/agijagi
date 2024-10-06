@@ -76,11 +76,11 @@ export const ScheduleCard = () => {
         </PhotoSection>
         <ContentSection>
           <DateContainer>
-            <Typhography size="sm" color="primary" weight="bold">
-              {formattedDate}
-            </Typhography>
             <Typhography size="sm" weight="bold">
               오늘의 일정
+            </Typhography>
+            <Typhography size="sm" color="primary" weight="bold">
+              {formattedDate}
             </Typhography>
           </DateContainer>
           <SchedualContainer>

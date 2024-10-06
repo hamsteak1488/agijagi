@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import LogoutIcon from '@heroicons/react/24/solid/ArrowRightStartOnRectangleIcon';
 import EditIcon from '@heroicons/react/24/solid/PencilIcon';
 import PhotoIcon from '@heroicons/react/24/solid/PhotoIcon';
+import { render } from '@testing-library/react';
 import { useNavigate } from 'react-router-dom';
 import defaultImg from '../../../assets/images/adult.png';
 import useModal from '../../../hooks/useModal';
@@ -76,19 +77,23 @@ export const MenuItem = styled.div`
 
 export interface MyProfileProps {
   member: MemberResponse | undefined;
+  handleRender: () => void;
 }
-export const MyProfile = ({ member }: MyProfileProps) => {
+export const MyProfile = ({ member, handleRender }: MyProfileProps) => {
   const modal = useModal();
   const navigator = useNavigate();
 
   const handleEditMember = () => {
-    if (member) modal.push({ children: <EditMember member={member} /> });
+    if (member)
+      modal.push({
+        children: <EditMember member={member} handleRender={handleRender} />,
+      });
   };
 
   const handleEditMemberImage = () => {
     if (member)
       modal.push({
-        children: <EditProfileImage />,
+        children: <EditProfileImage handleRender={handleRender} />,
       });
   };
 

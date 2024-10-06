@@ -4,7 +4,12 @@ import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getChild } from '../../apis/childApi';
-import { addDiary, editDiary, getAllDiaries } from '../../apis/diaryApi';
+import {
+  addDiary,
+  deleteDiary,
+  editDiary,
+  getAllDiaries,
+} from '../../apis/diaryApi';
 import AppBar from '../../components/common/AppBar';
 import Button from '../../components/common/Button';
 import FullCalendar from '../../components/common/FullCalendar';
@@ -27,6 +32,7 @@ import {
   ModalBackground,
   SelectBoxDiv,
 } from './WritingDiary.styles';
+import { DeleteDiary } from '../../components/Diary/DeleteModal/DeleteModal';
 
 export const WritingDiary = () => {
   const [fileList, setFileList] = useState<File[]>([]);
@@ -102,6 +108,11 @@ export const WritingDiary = () => {
     'days'
   );
 
+  const handleDeleteDiaryModal = () => {
+    modal.push({
+      children: <DeleteDiary handleDeleteDiary={handleDeleteDiary} />,
+    });
+  };
   const handleDate = (value: Date) => {
     setSelectedDate(value);
     const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
@@ -170,6 +181,27 @@ export const WritingDiary = () => {
             alert(error.response?.data.message);
           }
         });
+    }
+  };
+
+  const handleDeleteDiary = () => {
+    modal.pop();
+    if (selectedDiary) {
+      if (selectedDiary.mediaUrls) {
+        const removedList = urlList
+          .map((item) => extractIdFromUrl(item))
+          .filter((id): id is string => id !== null);
+
+        const request = {
+          removeMediaIdList: removedList.length > 0 ? removedList : null,
+          storyId: selectedDiary.id,
+        };
+
+        deleteDiary(request).then((response) => {
+          alert('삭제되었습니다');
+          navigator('/family');
+        });
+      }
     }
   };
 
@@ -272,6 +304,11 @@ export const WritingDiary = () => {
             ref={textAreaRef}
             placeholder="오늘의 이야기를 써주세요!"
           />
+          {selectedDiary && (
+            <Button size="sm" color="danger" onClick={handleDeleteDiaryModal}>
+              일기 삭제하기
+            </Button>
+          )}
         </ContentContainer>
       </Container>
     </>
