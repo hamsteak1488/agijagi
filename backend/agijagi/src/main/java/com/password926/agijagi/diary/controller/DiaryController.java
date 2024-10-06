@@ -3,14 +3,12 @@ package com.password926.agijagi.diary.controller;
 import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.diary.controller.dto.CreateDiaryRequest;
-import com.password926.agijagi.diary.controller.dto.DeleteDiaryRequest;
 import com.password926.agijagi.diary.controller.dto.UpdateDiaryRequest;
-import com.password926.agijagi.diary.entity.Diary;
 import com.password926.agijagi.diary.entity.DiaryDetail;
 import com.password926.agijagi.diary.service.*;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
@@ -46,10 +44,9 @@ public class DiaryController {
     @DeleteMapping("/{diaryId}")
     public ResponseEntity<Void> deleteDiary(
             LoginMember member,
-            @PathVariable long diaryId,
-            DeleteDiaryRequest deleteDiaryRequest
+            @PathVariable long diaryId
     ) {
-        diaryService.deleteDiary(member.getId(), diaryId, deleteDiaryRequest);
+        diaryService.deleteDiary(member.getId(), diaryId);
         return ResponseEntity.ok().build();
     }
 

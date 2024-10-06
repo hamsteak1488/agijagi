@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@RequestMapping("/children/records")
+@RequestMapping("/children")
 @RequiredArgsConstructor
 @RestController
 public class RecordController {
@@ -23,10 +23,10 @@ public class RecordController {
     private final RecordService recordService;
 
     @Authenticate
-    @GetMapping
+    @GetMapping("/{childId}/records")
     public ResponseEntity<List<ReadRecordResponse>> readRecord(
             LoginMember member,
-            @RequestParam long childId,
+            @PathVariable long childId,
             @RequestParam(required = false) String type,
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate
@@ -36,32 +36,34 @@ public class RecordController {
     }
 
     @Authenticate
-    @GetMapping("/latest")
+    @GetMapping("/{childId}/records/latest")
     public ResponseEntity<List<ReadLatestRecordResponse>> readLatestRecord(
             LoginMember member,
-            @RequestParam long childId
+            @PathVariable long childId
     ) {
         return ResponseEntity.ok()
                 .body(RecordDtoConverter.convertToLatest(recordService.readLatestRecord(member.getId(), childId)));
     }
 
     @Authenticate
-    @PostMapping
+    @PostMapping("/{childId}/records")
     public ResponseEntity<Void> appendRecord(
             LoginMember member,
+            @PathVariable long childId,
             @RequestBody @Valid AppendRecordRequest request
     ) {
-        recordService.appendRecord(member.getId(), request.getChildId(), request.toContent());
+        recordService.appendRecord(member.getId(), childId, request.toContent());
         return ResponseEntity.ok().build();
     }
 
     @Authenticate
-    @DeleteMapping("/{recordId}")
+    @DeleteMapping("/{childId}/records/{recordId}")
     public ResponseEntity<Void> removeRecord(
             LoginMember member,
+            @PathVariable long childId,
             @PathVariable long recordId
     ) {
-        recordService.removeRecord(member.getId(), recordId);
+        recordService.removeRecord(member.getId(), childId, recordId);
         return ResponseEntity.ok().build();
     }
 }

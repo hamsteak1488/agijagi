@@ -4,6 +4,7 @@ import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.schedule.controller.dto.ScheduleDtoConverter;
 import com.password926.agijagi.schedule.controller.dto.request.AppendScheduleRequest;
+import com.password926.agijagi.schedule.controller.dto.request.AppendVoiceScheduleRequest;
 import com.password926.agijagi.schedule.controller.dto.request.UpdateScheduleRequest;
 import com.password926.agijagi.schedule.controller.dto.response.ReadScheduleResponse;
 import com.password926.agijagi.schedule.service.ScheduleService;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@RequestMapping("/schedules")
+@RequestMapping("/children")
 @RequiredArgsConstructor
 @RestController
 public class ScheduleController {
@@ -23,10 +24,10 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @Authenticate
-    @GetMapping
+    @GetMapping("/{childId}/schedules")
     public ResponseEntity<List<ReadScheduleResponse>> readSchedule(
             LoginMember member,
-            @RequestParam long childId,
+            @PathVariable long childId,
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate
     ) {
@@ -35,33 +36,47 @@ public class ScheduleController {
     }
 
     @Authenticate
-    @PostMapping
+    @PostMapping("/{childId}/schedules")
     public ResponseEntity<Void> appendSchedule(
             LoginMember member,
+            @PathVariable long childId,
             @RequestBody @Valid AppendScheduleRequest request
     ) {
-        scheduleService.appendSchedule(member.getId(), request.getChildId(), request.toContent());
+        scheduleService.appendSchedule(member.getId(), childId, request.toContent());
         return ResponseEntity.ok().build();
     }
 
     @Authenticate
-    @DeleteMapping("/{scheduleId}")
+    @PostMapping("/{childId}/schedules/voice")
+    public ResponseEntity<Void> appendVoiceSchedule(
+            LoginMember member,
+            @PathVariable long childId,
+            @RequestBody @Valid AppendVoiceScheduleRequest request
+    ) {
+        scheduleService.appendVoiceSchedule(member.getId(), childId, request.toContent());
+        return ResponseEntity.ok().build();
+    }
+
+    @Authenticate
+    @DeleteMapping("/{childId}/schedules/{scheduleId}")
     public ResponseEntity<Void> removeSchedule(
             LoginMember member,
+            @PathVariable long childId,
             @PathVariable long scheduleId
     ) {
-        scheduleService.removeSchedule(member.getId(), scheduleId);
+        scheduleService.removeSchedule(member.getId(), childId, scheduleId);
         return ResponseEntity.ok().build();
     }
 
     @Authenticate
-    @PatchMapping("/{scheduleId}")
+    @PatchMapping("/{childId}/schedules/{scheduleId}")
     public ResponseEntity<Void> updateSchedule(
             LoginMember member,
+            @PathVariable long childId,
             @PathVariable long scheduleId,
             @RequestBody @Valid UpdateScheduleRequest request
     ) {
-        scheduleService.updateSchedule(member.getId(), scheduleId, request.toContent());
+        scheduleService.updateSchedule(member.getId(), childId, scheduleId, request.toContent());
         return ResponseEntity.ok().build();
     }
 }

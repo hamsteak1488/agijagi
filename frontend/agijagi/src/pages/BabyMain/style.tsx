@@ -11,6 +11,18 @@ export const TimelineContainer = styled.div`
   border-left: 4px dashed ${theme.color.tertiary[700]};
 `;
 
+export const CalendarOutterContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+`;
+export const CalendarInnerContainer = styled.div`
+  width: 85%;
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: white;
+`;
+
 export const Circle = styled.div`
   position: absolute;
   width: 1rem;
@@ -56,6 +68,10 @@ export const CloseIconBox = styled.div`
   height: 30px;
   right: 8px;
   top: 8px;
+`;
+
+export const TapWrapper = styled.div`
+  margin-top: 0.5rem;
 `;
 
 export const CloseIcon = (

@@ -1,5 +1,6 @@
 package com.password926.agijagi.report.controller;
 
+import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.milestone.controller.dto.response.AppendReportResponse;
 import com.password926.agijagi.report.controller.dto.ReportDtoConverter;
@@ -19,6 +20,7 @@ public class ReportController {
 
     private final ReportService reportService;
 
+    @Authenticate
     @GetMapping("/{childId}/reports/{reportId}")
     public ResponseEntity<ReadReportDetailResponse> readReportDetail(
             LoginMember member,
@@ -28,6 +30,7 @@ public class ReportController {
         return ResponseEntity.ok().body(ReadReportDetailResponse.from(reportService.readReportDetail(member.getId(), childId, reportId)));
     }
 
+    @Authenticate
     @GetMapping("/{childId}/reports")
     public ResponseEntity<List<ReadReportsResponse>> readReports(
             LoginMember member,
@@ -36,6 +39,7 @@ public class ReportController {
         return ResponseEntity.ok().body(ReportDtoConverter.convert(reportService.readReports(member.getId(), childId)));
     }
 
+    @Authenticate
     @PostMapping("/{childId}/reports")
     public ResponseEntity<AppendReportResponse> appendReport(
             LoginMember member,
@@ -44,6 +48,7 @@ public class ReportController {
         return ResponseEntity.ok().body(AppendReportResponse.from(reportService.appendReport(member.getId(), childId)));
     }
 
+    @Authenticate
     @DeleteMapping("/{childId}/reports/{reportId}")
     public ResponseEntity<Void> removeReport(
             LoginMember member,

@@ -19,6 +19,7 @@ interface TextfieldProps {
   warningText?: string;
   type?: string;
   disabled?: boolean;
+  name?: string;
   validationFunction?: (text: string) => ValidationState;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -39,6 +40,7 @@ const Textfield = ({
   inputValue = '',
   type = '',
   disabled = false,
+  name,
   setInputValue,
   validationFunction = defaultValidationFunction,
   onChange,
@@ -103,6 +105,7 @@ const Textfield = ({
           fieldSize={size}
           fieldState={fieldState}
           disabled={disabled}
+          name={name}
           ref={inputRef}
           onFocus={handleFocus}
           onBlur={handleBlur}

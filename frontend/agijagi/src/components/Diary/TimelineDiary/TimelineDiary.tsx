@@ -8,13 +8,21 @@ import {
   DateDiv,
   DayContainer,
 } from './Timeline.styles';
+import moment from 'moment';
 
 interface TimelineDiaryProps {
+  date: string;
   fileList: File[];
   DiaryText: string;
 }
 
-export const TimelineDiary = ({ fileList, DiaryText }: TimelineDiaryProps) => {
+export const TimelineDiary = ({
+  date,
+  fileList,
+  DiaryText,
+}: TimelineDiaryProps) => {
+  const formattedDate = moment(date).format('YYYY년 M월 D일');
+
   return (
     <Container>
       <DayContainer>
@@ -28,7 +36,7 @@ export const TimelineDiary = ({ fileList, DiaryText }: TimelineDiaryProps) => {
         </DateContainer>
         <DateDiv>
           <Typhography size="md" color="black">
-            2024년 7월 1일
+            {formattedDate}
           </Typhography>
         </DateDiv>
       </DayContainer>

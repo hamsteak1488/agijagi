@@ -27,48 +27,22 @@ public class ReportAppender {
     private final GrowthContentReader growthContentReader;
     private final MilestoneStateDetailReader milestoneStateDetailReader;
     private final CreatorUsingOpenAi creatorUsingOpenAi;
-    private final JsonObjectMapper jsonObjectMapper;
     private final ReportRepository reportRepository;
-    private final PromptTemplate promptTemplate = new PromptTemplate(
-            """
-            The challenge is to use growth and milestone data to create a child's growth report. This report should be prepared by comparing the average growth data of other babies with the child's birth weight and growth data.
-                        
-            First, the following information is provided:
-        
-            <birthWeight>
-            birthWeight : {birthWeight}
-            </birthWeight>
-           
-            <growth>
-            growth : {growth}
-            </growth>
-                        
-            <milestone>
-            milestone: {milestone}
-            </milestone>
-                           
-            Use this information to create a baby growth report that incorporates baby growth and milestones.
-            Follow these instructions:
-                        
-           1. "maxDegree" must be 10
-           2. "growthDegree" must be less than "maxDegree" and is a relative degree of growth compared to other babies
-           3. The baby's growth report should include overall growth status, weight changes, and key developmental milestones
-           4. The report may include advice for parents or predictions about the next developmental stages
-           5. Report should be written in Korean.
-           6. The number of characters must be less than 250 characters.
-           7. The answer must be a json value containing:
-            "content": "paragraph content in Korean", "growthDegree": X, "maxDegree": 10
-            """
-    );
 
     public long append(long memberId, long childId) {
         childValidator.validateWriteAuthority(memberId, childId);
         Child child = childReader.read(childId);
-        int monthsOld = childReader.readMonthsOld(childId);
 
+        // 아이 출생 몸무게 없을 시, 보고서 생성 못함.
+        if (child.getBirthWeight() == null) {
+            return 0;
+        }
+
+        int monthsOld = childReader.readMonthsOld(childId);
         double birthWeight = child.getBirthWeight();
-        String growthData = jsonObjectMapper.toJson(growthContentReader.readAllByMonth(child.getId(), monthsOld));
+        String growthData = JsonObjectMapper.toJson(growthContentReader.readAllByMonth(child.getId(), monthsOld));
         List<MilestoneStateDetail> milestone = milestoneStateDetailReader.read(memberId, childId, monthsOld);
+
         Prompt prompt = promptTemplate.create(Map.of(
                 "birthWeight", birthWeight,
                 "growth", growthData,
@@ -87,4 +61,36 @@ public class ReportAppender {
         reportRepository.save(report);
         return report.getId();
     }
+
+    private final PromptTemplate promptTemplate = new PromptTemplate(
+            """
+            The challenge is to use growth and milestone data to create a child's growth report. This report should be prepared by comparing the average growth data of other babies with the child's birth weight and growth data.
+            
+            First, the following information is provided:
+            
+            <birthWeight>
+            birthWeight : {birthWeight}
+            </birthWeight>
+            
+            <growth>
+            growth : {growth}
+            </growth>
+            
+            <milestone>
+            milestone: {milestone}
+            </milestone>
+            
+            Use this information to create a baby growth report that incorporates baby growth and milestones.
+            Follow these instructions:
+            
+            1. "maxDegree" must be 10
+            2. "growthDegree" must be less than "maxDegree" and is a relative degree of growth compared to other babies
+            3. The baby's growth report should include overall growth status, weight changes, and key developmental milestones
+            4. The report may include advice for parents or predictions about the next developmental stages
+            5. Report should be written in Korean.
+            6. The number of characters must be less than 250 characters.
+            7. The answer must be a json value containing:
+               "content": "paragraph content in Korean", "growthDegree": X, "maxDegree": 10
+            """
+    );
 }

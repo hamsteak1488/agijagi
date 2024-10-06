@@ -3,34 +3,33 @@ package com.password926.agijagi.member.service;
 import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.member.domain.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-    private final MemberReader memberReader;
     private final MemberRegistry memberRegistry;
-    private final MemberModifier memberModifier;
+    private final MemberUpdater memberUpdater;
     private final MemberRemover memberRemover;
+    private final MemberDetailReader memberDetailReader;
 
-    public long registerMember(ProfileDetail profileDetail, String password) {
-        return memberRegistry.register(profileDetail, password);
+    public long registerMember(String email, String password, String nickname, MediaResource profileImage) {
+        return memberRegistry.register(email, password, nickname, profileImage);
     }
 
-    public ProfileDetail getMemberProfileDetail(long memberId) {
-        return memberReader.readProfileDetail(memberId);
+    public void updateMember(long memberId, String email, String password, String nickname) {
+        memberUpdater.update(memberId, email, password, nickname);
     }
 
-    public void modifyMemberProfileDetail(long memberId, ProfileDetail profileDetail) {
-        memberModifier.modifyProfileDetail(memberId, profileDetail);
-    }
-
-    public void modifyMemberProfileImage(long memberId, MediaResource mediaResource) {
-        memberModifier.modifyProfileImage(memberId, mediaResource);
+    public void updateMemberProfileImage(long memberId, MediaResource profileImage) {
+        memberUpdater.updateProfileImage(memberId, profileImage);
     }
 
     public void removeMember(long memberId) {
         memberRemover.remove(memberId);
+    }
+
+    public MemberDetail getMemberDetail(long memberId) {
+        return memberDetailReader.read(memberId);
     }
 }

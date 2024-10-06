@@ -10,12 +10,18 @@ import Week from './Week';
 
 interface CompactCalendarProps {
   date: Date;
+  highlight?: Set<string>;
   onChange: (date: Date) => void;
   onClick: (date: Date) => void;
 }
 
-const CompactCalendar = ({ date, onChange, onClick }: CompactCalendarProps) => {
-  const [selected, setSelected] = useState<Date>(new Date());
+const CompactCalendar = ({
+  date,
+  highlight = new Set<string>(),
+  onChange,
+  onClick,
+}: CompactCalendarProps) => {
+  const [selected, setSelected] = useState<Date>(date);
 
   const swipeRef = useRef<HTMLDivElement>(null);
 
@@ -42,7 +48,12 @@ const CompactCalendar = ({ date, onChange, onClick }: CompactCalendarProps) => {
           selected={selected}
           onClick={handleClick}
         />
-        <Week date={week.toDate()} selected={selected} onClick={handleClick} />
+        <Week
+          date={week.toDate()}
+          selected={selected}
+          highlight={highlight}
+          onClick={handleClick}
+        />
         <Week
           date={nextWeek.toDate()}
           selected={selected}

@@ -15,5 +15,8 @@ public class ModifyMemberRequest {
     private String email;
 
     @Size(min = 2, max = 20)
+    private String password;
+
+    @Size(min = 2, max = 20)
     private String nickname;
 }

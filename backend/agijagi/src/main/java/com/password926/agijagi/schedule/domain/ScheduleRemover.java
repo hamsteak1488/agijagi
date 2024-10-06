@@ -12,12 +12,14 @@ public class ScheduleRemover {
 
     private final ScheduleReader scheduleReader;
     private final ChildValidator childValidator;
+    private final ScheduleValidator scheduleValidator;
     private final ScheduleRepository scheduleRepository;
 
     @Transactional
-    public void remove(long memberId, long scheduleId) {
+    public void remove(long memberId, long childId, long scheduleId) {
         Schedule schedule = scheduleReader.read(scheduleId);
         childValidator.validateWriteAuthority(memberId, schedule.getChild().getId());
+        scheduleValidator.validateOwner(childId, schedule);
         scheduleRepository.delete(schedule);
     }
 }
