@@ -11,7 +11,7 @@ interface ItemProps {
   title?: string;
   description: string;
   writer: string;
-  createdAt: Date;
+  createdAt: string;
   onClick?: () => void;
 }
 
@@ -49,7 +49,7 @@ const Item = ({
           {writer}
         </Typhography>
         <Typhography size="sm" color="secondary">
-          {getReadableTimeDiff(createdAt)}
+          {getReadableTimeDiff(new Date(createdAt))}
         </Typhography>
       </s.Detail>
     </s.Container>

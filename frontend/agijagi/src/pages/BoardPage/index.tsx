@@ -1,18 +1,16 @@
-import theme from '../../styles/theme';
 import * as s from './style';
 
-import ArticleList from '../../components/Board/ArticleList';
 import AppBar from '../../components/common/AppBar';
 import Button from '../../components/common/Button';
-import CustomizedBorderContainer from '../../components/common/CustomizedBorderContainer';
+import RecentArticleList from '../../components/Board/RecentArticleList';
 
 import useModal from '../../hooks/useModal';
 
-import ArticlePage from './ArticlePage';
-
-import Waves from '../../assets/images/record/waves.svg';
-
 import WritePage from './WritePage';
+import { Suspense } from 'react';
+import SuspenseFallback from '../../components/common/SuspenseFallback';
+import { ErrorBoundary } from 'react-error-boundary';
+import ErrorBoundaryFallback from '../../components/common/ErrorBoundaryFallback';
 
 const BoardPage = () => {
   const modal = useModal();
@@ -34,36 +32,17 @@ const BoardPage = () => {
       </s.AppBar>
       <main>
         <s.ArticleList>
-          <ArticleList>
-            {new Array(20).fill(0).map((_, index) => (
-              <s.ArticleListItem key={index}>
-                <CustomizedBorderContainer
-                  backgroundColor={theme.color.primary[index % 2 ? 100 : 300]}
-                  border={Waves}
-                  borderHeight="24px"
-                >
-                  <ArticleList.Item
-                    id={index}
-                    image="asd"
-                    title="용진맘의 일기"
-                    description={`${index + 1}번 게시글입니다 #우리아기 #용진`}
-                    writer={'용진맘'}
-                    createdAt={
-                      new Date(
-                        new Date().getTime() -
-                          1000 * 3600 * Math.random() * 1000
-                      )
-                    }
-                    onClick={() =>
-                      modal.push({
-                        children: <ArticlePage articleId={index} />,
-                      })
-                    }
-                  />
-                </CustomizedBorderContainer>
-              </s.ArticleListItem>
-            ))}
-          </ArticleList>
+          <ErrorBoundary
+            fallbackRender={(props) => (
+              <ErrorBoundaryFallback height="20rem" {...props}>
+                게시글을 불러오지 못했어요.
+              </ErrorBoundaryFallback>
+            )}
+          >
+            <Suspense fallback={<SuspenseFallback height="20rem" />}>
+              <RecentArticleList />
+            </Suspense>
+          </ErrorBoundary>
         </s.ArticleList>
       </main>
     </div>
