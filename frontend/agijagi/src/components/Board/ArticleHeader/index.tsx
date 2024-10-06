@@ -3,6 +3,7 @@ import * as s from './style';
 import Button from '../../common/Button';
 
 import useDialog from '../../../hooks/useDialog';
+import useDeleteArticle from '../../../hooks/api/useDeleteArticle';
 
 interface ArticleHeaderProps {
   title: string;
@@ -13,11 +14,13 @@ interface ArticleHeaderProps {
 const ArticleHeader = ({ title, articleId, isAuthor }: ArticleHeaderProps) => {
   const { confirm } = useDialog();
 
+  const { mutate } = useDeleteArticle();
+
   const handleDeleteClick = async () => {
     if (!(await confirm('정말로 삭제할까요?'))) {
       return;
     }
-    alert('삭제');
+    mutate(articleId);
   };
 
   return (

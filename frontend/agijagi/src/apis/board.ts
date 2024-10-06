@@ -31,3 +31,7 @@ export const getArticle = (articleId: number) => {
 export const getArticleList = () => {
   return axiosInstance.get<ArticleList>('/posts?size=100');
 };
+
+export const deleteArticle = (articleId: number) => {
+  return axiosInstance.delete(`/posts/${articleId}`);
+};
