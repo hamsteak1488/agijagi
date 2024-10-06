@@ -7,6 +7,9 @@ import Button from '../common/Button';
 import { BookCover } from './BookCoverImage';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { postStoryBook } from '../../apis/book';
+import useChildStore from '../../stores/useChlidStore';
 
 const Wrapper = styled.div`
   display: flex;
@@ -155,6 +158,16 @@ const BookCreate = () => {
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [coverImg, setCoverImg] = useState<string>('');
+  const { childId } = useChildStore();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: postStoryBook,
+    onSuccess: () => {
+      setTimeout(() => {
+        navigate('/book');
+      }, 300);
+    },
+  });
 
   const BookCovers = coverImg
     ? BookCover.filter((cover) => cover === coverImg)
@@ -170,6 +183,18 @@ const BookCreate = () => {
 
   const handleResetClick = () => {
     setCoverImg('');
+  };
+
+  const createStoryBook = async () => {
+    mutate({
+      data: {
+        childId: childId,
+        title: title,
+        startDate: startDate,
+        endDate: endDate,
+        coverImage: coverImg,
+      },
+    });
   };
 
   return (
@@ -247,7 +272,7 @@ const BookCreate = () => {
       </CoverWrapper>
 
       <ButtonWrapper>
-        <Button size="md">생성하기</Button>
+        <Button size="md" onClick={createStoryBook} disabled={isPending}>생성하기</Button>
       </ButtonWrapper>
     </Wrapper>
   );

@@ -4,6 +4,7 @@ import theme from '../../styles/theme';
 import BookFilter from './BookFilter';
 import Typhography from '../../components/common/Typography';
 import { CalendarIcon } from '@heroicons/react/24/outline';
+import { StoryBookDetail } from '../../apis/book';
 
 const ModalBox = styled.div`
   background-color: #fff;
@@ -119,18 +120,9 @@ interface DateNavigationProps {
   handleNext: () => void;
 }
 
-interface BookProps {
-  id: number;
-  image: string;
-  title: string;
-  start: string;
-  end: string;
-  page: number;
-}
-
 interface BookListModalProps {
-  onBookSelect: (book: BookProps | null) => void;
-  filteredBooks: BookProps[];
+  onBookSelect: (book: StoryBookDetail | null) => void;
+  filteredBooks: StoryBookDetail[] | undefined;
   onScroll: (scrollPos: number) => void; // 스크롤 위치 전달하는 콜백 함수
 }
 
@@ -178,7 +170,7 @@ const BookListModal = ({
       </FilterContainer>
 
       <BookList ref={listRef}>
-        {filteredBooks.length === 0 ? (
+        {filteredBooks?.length === 0 ? (
           <div style={{ marginTop: '30px' }}>
             <Typhography
               size="md"
@@ -190,13 +182,13 @@ const BookListModal = ({
             </Typhography>
           </div>
         ) : (
-          filteredBooks.map((book) => (
+          filteredBooks?.map((book) => (
             <BookContainer key={book.id} onClick={() => onBookSelect(book)}>
-              <BookImage src={book.image} alt={book.title} />
+              <BookImage src={book.coverImageUrl} alt={book.title} />
 
               <LabelContainer>
                 <TitleLabel>{book.title}</TitleLabel>
-                <PageLabel>{book.page} pages</PageLabel>
+                <PageLabel>{10} pages</PageLabel>
                 <DateLabel>
                   <CalendarImg />
                   <Typhography
@@ -205,7 +197,7 @@ const BookListModal = ({
                     shade="700"
                     weight="bold"
                   >
-                    {book.start} ~ {book.end}
+                    {book.startDate} ~ {book.endDate}
                   </Typhography>
                 </DateLabel>
               </LabelContainer>

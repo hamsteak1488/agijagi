@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 import Typhography from '../common/Typography';
 import { CalendarIcon } from '@heroicons/react/24/outline';
+import { StoryBookDetail } from '../../apis/book';
 
 const CardContainer = styled.div`
   perspective: 1000px;
@@ -131,20 +132,12 @@ const BounceImage = styled.img`
 `;
 
 type BookItemProps = {
-  book: BookProps | null;
+  book: StoryBookDetail | null;
   image: string;
-  onBookSelect: (book: BookProps | null) => void;
+  onBookSelect: (book: StoryBookDetail | null) => void;
   isSelected: boolean;
 };
 
-interface BookProps {
-  id: number;
-  image: string;
-  title: string;
-  start: string;
-  end: string;
-  page: number;
-}
 
 const BookItem = ({ image, book, onBookSelect, isSelected }: BookItemProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -160,7 +153,7 @@ const BookItem = ({ image, book, onBookSelect, isSelected }: BookItemProps) => {
     }
   }, [isSelected]);
 
-  const handleCardClick = (book: BookProps | null) => {
+  const handleCardClick = (book: StoryBookDetail | null) => {
     if (!isSelected) {
       onBookSelect(book);
     } else {
@@ -176,7 +169,7 @@ const BookItem = ({ image, book, onBookSelect, isSelected }: BookItemProps) => {
             {isFlipped && isLifted ? (
               <BookBack>
                 <TitleLabel>{book.title}</TitleLabel>
-                <PageLabel>{book.page} pages</PageLabel>
+                <PageLabel>{10} pages</PageLabel>
                 <DateLabel>
                   <CalendarImg />
                   <Typhography
@@ -185,8 +178,8 @@ const BookItem = ({ image, book, onBookSelect, isSelected }: BookItemProps) => {
                     shade="700"
                     weight="bold"
                   >
-                    {book.start} ~ <br />
-                    {book.end}
+                    {book.startDate} ~ <br />
+                    {book.endDate}
                   </Typhography>
                 </DateLabel>
               </BookBack>

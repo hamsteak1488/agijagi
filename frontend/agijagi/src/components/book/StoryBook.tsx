@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useCallback, useRef, useState, useEffect } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import styled from '@emotion/styled';
@@ -14,6 +15,14 @@ import PageImg7 from '../../assets/bookcontent/pageImg7.png';
 import PageImg8 from '../../assets/bookcontent/pageImg8.png';
 import PageImg9 from '../../assets/bookcontent/pageImg9.png';
 import PageImg10 from '../../assets/bookcontent/pageImg10.png';
+import {
+  getStoryBook,
+  getStoryBookPages,
+  StoryBookDetail,
+  StoryBookPage,
+} from '../../apis/book';
+import { useQuery } from '@tanstack/react-query';
+import { useLocation } from 'react-router-dom';
 
 // 동화 예시 - 추후 데이터로 받아올 예정
 const storyBook = {
@@ -184,6 +193,7 @@ const BookPage = React.forwardRef<HTMLDivElement, BookPageProps>(
   }
 );
 
+// eslint-disable-next-line react/display-name
 const BookCover = React.forwardRef<HTMLDivElement, BookCoverProps>(
   (props, ref) => {
     return (
@@ -197,17 +207,8 @@ const BookCover = React.forwardRef<HTMLDivElement, BookCoverProps>(
 
 BookPage.displayName = 'BookPage'; // forwardRef 사용 시 displayName 설정 권장
 
-interface Book {
-  id: number;
-  image: string;
-  title: string;
-  start: string;
-  end: string;
-  page: number;
-}
-
 interface StoryBookProps {
-  book: Book;
+  book: StoryBookDetail;
   goBack: () => void;
 }
 
@@ -216,15 +217,41 @@ interface HTMLDivElementWithVendorPrefix extends HTMLDivElement {
   webkitRequestFullscreen: () => void;
 }
 
-const BookComponent = ({ book, goBack }: StoryBookProps) => {
+const StoryBook = ({ book, goBack }: StoryBookProps) => {
+  // const location = useLocation();
+  // const storyId = location.state.storyId;
+  const storyId = book.id;
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [warning, setWarning] = useState<string>('');
-  const totalPages = book.page;
+  const totalPages = 10;
 
-  // @ts-ignore
-  const mybook = useRef<HTMLFlipBook | null>(book);
-  const bookContainer = useRef<HTMLDivElement>(null);
+  const storyBookQuery = useQuery({
+    queryKey: ['storybook', storyId],
+    queryFn: () => getStoryBook(storyId),
+  });
+
+  const storyBookPagesQuery = useQuery({
+    queryKey: ['storybookpages', storyId],
+    queryFn: () => getStoryBookPages(storyId),
+  });
+
+  useEffect(() => {
+    const handleFullScreenChange = () => {
+      if (document.fullscreenElement) {
+        setIsFullScreen(true);
+        return;
+      }
+
+      setIsFullScreen(false);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+    };
+  }, [setIsFullScreen]);
 
   const onFlip = useCallback(
     (e: FlipEvent) => {
@@ -240,6 +267,25 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
     },
     [totalPages]
   );
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const mybook = useRef<HTMLFlipBook | null>(book);
+  const bookContainer = useRef<HTMLDivElement>(null);
+
+  if (storyBookQuery.error) {
+    return <>동화 데이터를 불러오지 못했습니다.</>;
+  }
+  if (storyBookQuery.isLoading) {
+    return <>로딩중</>;
+  }
+
+  if (storyBookPagesQuery.error) {
+    return <>동화 페이지 데이터를 불러오지 못했습니다.</>;
+  }
+  if (storyBookPagesQuery.isLoading) {
+    return <>로딩중</>;
+  }
 
   const toggleFullscreen = () => {
     if (!bookContainer.current) {
@@ -274,23 +320,6 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
     }
   };
 
-  useEffect(() => {
-    const handleFullScreenChange = () => {
-      if (document.fullscreenElement) {
-        setIsFullScreen(true);
-        return;
-      }
-
-      setIsFullScreen(false);
-    };
-
-    document.addEventListener('fullscreenchange', handleFullScreenChange);
-
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullScreenChange);
-    };
-  }, [setIsFullScreen]);
-
   return (
     <BookWrapper>
       <BackButtonContainer>
@@ -303,6 +332,7 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
       </BackButtonContainer>
 
       <BookContainer ref={bookContainer}>
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore */}
         <HTMLFlipBook
           ref={mybook}
@@ -315,17 +345,17 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
           onFlip={onFlip}
           key={isFullScreen ? 'landscape' : 'portrait'}
         >
-          <BookCover img={book.image}></BookCover>
-          {storyBook.story.map((pageText, index) => (
+          <BookCover img={book.coverImageUrl}></BookCover>
+          {storyBookPagesQuery.data?.data.map((page, index) => (
             <BookPage
               key={index}
-              number={index + 1}
+              number={page.pageNumber}
               img={storyBook.image[index]}
             >
-              {pageText}
+              {page.content}
             </BookPage>
           ))}
-          <BookCover img={book.image}></BookCover>
+          <BookCover img={book.coverImageUrl}></BookCover>
         </HTMLFlipBook>
       </BookContainer>
 
@@ -360,4 +390,4 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
   );
 };
 
-export default BookComponent;
+export default StoryBook;

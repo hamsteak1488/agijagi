@@ -7,18 +7,11 @@ import StoryBook from './StoryBook';
 import Typhography from '../common/Typography';
 import Logo7 from '../../assets/images/logo7.png';
 import Logo2 from '../../assets/images/logo2.png';
-import { PlusIcon } from '@heroicons/react/24/outline';
-// 임의로 책 표지 넣으려고 import
-import CoverImg1 from '../../assets/bookcover/cover1.png';
-import CoverImg2 from '../../assets/bookcover/cover2.png';
-import CoverImg3 from '../../assets/bookcover/cover3.png';
-import CoverImg4 from '../../assets/bookcover/cover4.png';
-import CoverImg5 from '../../assets/bookcover/cover5.png';
-import CoverImg6 from '../../assets/bookcover/cover7.png';
-import CoverImg7 from '../../assets/bookcover/cover12.png';
-import CoverImg8 from '../../assets/bookcover/cover11.png';
+import { StoryBookDetail } from '../../apis/book';
 import Button from '../common/Button';
-import theme from '../../styles/theme';
+import { useQuery } from '@tanstack/react-query';
+import { getStoryBookList } from '../../apis/book';
+import useChildStore from '../../stores/useChlidStore';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -51,11 +44,6 @@ const TitleImg = styled.img`
   width: 40px;
   height: 35px;
   margin-right: 10px;
-`;
-
-const CreateIcon = styled(PlusIcon)`
-  width: 15px;
-  color: ${theme.color.greyScale[800]};
 `;
 
 const CarouselWrapper = styled.div`
@@ -118,83 +106,6 @@ const StoryBookWrapper = styled.div`
   }
 `;
 
-// 임의로 만든 책 목록 -> 추후 데이터로 받아야함
-const books: BookProps[] = [
-  {
-    id: 1,
-    image: CoverImg1,
-    title: '우리 아기 태어난지 2주차',
-    start: '2024-07-02',
-    end: '2024-07-16',
-    page: 10,
-  },
-  {
-    id: 2,
-    image: CoverImg2,
-    title: '우리 아기 한달 일기',
-    start: '2024-07-02',
-    end: '2024-07-31',
-    page: 10,
-  },
-  {
-    id: 3,
-    image: CoverImg3,
-    title: '우리 아기 태어난지 6주주주주주주차',
-    start: '2024-07-02',
-    end: '2024-08-09',
-    page: 10,
-  },
-  {
-    id: 4,
-    image: CoverImg4,
-    title: '우리 아기 태어난지 8주차',
-    start: '2024-07-25',
-    end: '2024-08-26',
-    page: 10,
-  },
-  {
-    id: 5,
-    image: CoverImg5,
-    title: '우리 아기 태어난지 9주차',
-    start: '2024-07-02',
-    end: '2024-09-07',
-    page: 10,
-  },
-  {
-    id: 6,
-    image: CoverImg6,
-    title: '우리 아기 태어난지 10주차',
-    start: '2024-07-02',
-    end: '2024-09-16',
-    page: 10,
-  },
-  {
-    id: 7,
-    image: CoverImg7,
-    title: '우리 아기 태어난지 11주차',
-    start: '2024-07-02',
-    end: '2024-09-23',
-    page: 10,
-  },
-  {
-    id: 8,
-    image: CoverImg8,
-    title: '우리 아기 태어난지 12주차',
-    start: '2024-07-02',
-    end: '2024-09-30',
-    page: 10,
-  },
-];
-
-interface BookProps {
-  id: number;
-  image: string;
-  title: string;
-  start: string;
-  end: string;
-  page: number;
-}
-
 const today = new Date();
 const todayYear = today.getFullYear();
 const todayMonth = today.getMonth() + 1;
@@ -202,12 +113,27 @@ const todayMonth = today.getMonth() + 1;
 const BookCarousel = () => {
   const [year, setYear] = useState(todayYear);
   const [month, setMonth] = useState(todayMonth);
-  const [selectedBook, setSelectedBook] = useState<BookProps | null>(null);
+  const [selectedBook, setSelectedBook] = useState<StoryBookDetail | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const { childId } = useChildStore();
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['storybooklist', childId],
+    queryFn: () => getStoryBookList(childId),
+  });
+  console.log(data?.data);
+
+  if (error) {
+    return <>동화 데이터를 불러오지 못했습니다.</>;
+  }
+  if (isLoading) {
+    return <>로딩중</>;
+  }
+
 
   // 책 클릭 시 호출되는 함수
-  const handleBookSelect = (book: BookProps | null) => {
+  const handleBookSelect = (book: StoryBookDetail | null) => {
     // 책 한권이 선택되면 나머지 책들은 안보이게 함
     if (selectedBook && book && selectedBook.id === book.id) {
       setSelectedBook(null);
@@ -257,8 +183,8 @@ const BookCarousel = () => {
   };
 
   // 동화책 마지막 날짜의 년과 달을 기준으로 필터링
-  const filteredBooks = books.filter((book) => {
-    const startDate = new Date(book.end); // 문자열을 Date 객체로 변환
+  const filteredBooks = data?.data.filter((book) => {
+    const startDate = new Date(book.endDate); // 문자열을 Date 객체로 변환
     const startMonth = startDate.getMonth() + 1;
     const startYear = startDate.getFullYear();
     return startMonth === month && startYear === year;
@@ -282,7 +208,7 @@ const BookCarousel = () => {
         {!selectedBook && <Button size="sm" onClick={goCreateBook}>동화생성</Button>}
       </TitleWrapper>
 
-      {filteredBooks.length === 0 ? (
+      {filteredBooks?.length === 0 ? (
         <ImageWrapper>
           <BookItem
             image={Logo2}
@@ -293,13 +219,13 @@ const BookCarousel = () => {
         </ImageWrapper>
       ) : (
         <CarouselWrapper ref={carouselRef}>
-          {filteredBooks.map(
+          {filteredBooks?.map(
             (book) =>
               // 선택된 책이 없으면 모든 책을 보여주고, 선택된 책이 있으면 해당 책만 보여줌
               (selectedBook === null || selectedBook.id === book.id) && (
                 <BookItem
                   key={book.id}
-                  image={book.image}
+                  image={book.coverImageUrl}
                   book={book}
                   onBookSelect={handleBookSelect}
                   isSelected={selectedBook?.id === book.id}
