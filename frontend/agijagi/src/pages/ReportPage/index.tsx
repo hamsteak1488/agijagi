@@ -15,7 +15,7 @@ import { getChildInfo } from '../../apis/milestone';
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: calc(var(--vh) * 100);
 `;
 
 const Title = styled.div`

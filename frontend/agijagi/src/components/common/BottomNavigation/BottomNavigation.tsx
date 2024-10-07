@@ -90,7 +90,7 @@ export const BottomNavigation = () => {
             동화
           </Typhography>
         </Item>
-        <Item to={'/'}>
+        <Item onClick={() => document.body.requestFullscreen()} to={'/'}>
           <IconWrapper>
             <MicIcon />
           </IconWrapper>
