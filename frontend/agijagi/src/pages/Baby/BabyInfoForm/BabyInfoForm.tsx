@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import moment from 'moment';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addChild } from '../../../apis/childApi';
@@ -26,19 +27,22 @@ export const Container = styled.div`
   height: 100%;
 `;
 
-const today = new Date();
-
 export const BabyInfoForm = () => {
   const [uploadImg, setUploadImg] = useState<File | null>(null);
   const [babyName, setBabyName] = useState<string>('');
   const [babyNickname, setBabyNickname] = useState<string>('');
-  const [birthday, setBirthday] = useState<string>('2024-09-27');
+  const [birthday, setBirthday] = useState<string>(
+    moment(new Date()).format('YYYY-MM-DD')
+  );
   const [selectedGender, setSelectedGender] = useState<BabyGender>('남아');
   const [selectedRelation, setSelectedRelation] =
     useState<Relationship>('엄마');
   const [weight, setWeight] = useState<string>('');
   const [height, setHeight] = useState<string>('');
-  const [isValidated, setIsValidated] = useState<boolean>(false);
+  const [isValidated, setIsValidated] = useState<Record<string, boolean>>({
+    name: false,
+    nickname: false,
+  });
   const [isNext, setIsNext] = useState<boolean>(false);
 
   const navigator = useNavigate();
@@ -50,16 +54,30 @@ export const BabyInfoForm = () => {
     }
   };
 
+  function validateName(input: string): ValidationState {
+    if (input.trim() === '') {
+      return 'normal';
+    }
+
+    if (input.length >= 2 && input.length <= 8) {
+      setIsValidated({ ...isValidated, name: true });
+      return 'success';
+    } else {
+      setIsValidated({ ...isValidated, name: false });
+      return 'danger';
+    }
+  }
+
   function validateNickName(input: string): ValidationState {
     if (input.trim() === '') {
       return 'normal';
     }
 
     if (input.length >= 2 && input.length <= 8) {
-      setIsValidated(true);
+      setIsValidated({ ...isValidated, nickname: true });
       return 'success';
     } else {
-      setIsValidated(false);
+      setIsValidated({ ...isValidated, nickname: false });
       return 'danger';
     }
   }
@@ -67,7 +85,7 @@ export const BabyInfoForm = () => {
   const submitBaby = () => {
     const newChild = {
       name: babyName,
-      nickname: '똘똘한놈',
+      nickname: babyNickname,
       gender: selectedGender,
       birthday: birthday,
       image: uploadImg,
@@ -94,6 +112,8 @@ export const BabyInfoForm = () => {
           handleUpload={handleUpload}
           babyName={babyName}
           setBabyName={setBabyName}
+          babyNickname={babyNickname}
+          setBabyNickname={setBabyNickname}
           birthday={birthday}
           validationNickname={validateNickName}
           setBirthday={setBirthday}

@@ -85,11 +85,14 @@ export const Container = styled.div<{ width: number; isNext: boolean }>(
 export interface FirstBabyFormProps {
   isNext: boolean;
   uploadImg: File | null;
-  isValidated: boolean;
+  isValidated: Record<string, boolean>;
   handleUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   babyName: string;
   setBabyName: React.Dispatch<React.SetStateAction<string>>;
+  babyNickname: string;
+  setBabyNickname: React.Dispatch<React.SetStateAction<string>>;
   birthday: string;
+  valudationName: (input: string) => ValidationState;
   validationNickname: (input: string) => ValidationState;
   setBirthday: React.Dispatch<React.SetStateAction<string>>;
   setIsNext: React.Dispatch<React.SetStateAction<boolean>>;
@@ -101,6 +104,8 @@ export const FirstBabyForm = ({
   handleUpload,
   babyName,
   setBabyName,
+  babyNickname,
+  setBabyNickname,
   birthday,
   validationNickname,
   setBirthday,
@@ -139,6 +144,19 @@ export const FirstBabyForm = ({
         isColoredLabel={false}
         inputValue={babyName}
         setInputValue={setBabyName}
+        disabled={isNext}
+        validationFunction={validationNickname}
+        helpText={'이름은 2~8자의 규칙을 만족해야해요'}
+        checkText={'올바르게 입력했어요'}
+        warningText={'이름 형식이 일치하지 않아요'}
+      />
+      <Textfield
+        label="닉네임"
+        size="lg"
+        color="tertiary"
+        isColoredLabel={false}
+        inputValue={babyNickname}
+        setInputValue={setBabyNickname}
         disabled={isNext}
         validationFunction={validationNickname}
         helpText={'닉네임은 2~8자의 규칙을 만족해야해요'}
