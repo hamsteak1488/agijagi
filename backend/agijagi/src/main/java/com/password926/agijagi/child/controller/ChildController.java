@@ -5,7 +5,10 @@ import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.child.controller.dto.ChildDtoConverter;
 import com.password926.agijagi.child.controller.dto.request.AppendChildRequest;
 import com.password926.agijagi.child.controller.dto.request.UpdateChildRequest;
+import com.password926.agijagi.child.controller.dto.request.UpdateFollowerRequest;
 import com.password926.agijagi.child.controller.dto.response.ReadChildDetailResponse;
+import com.password926.agijagi.child.controller.dto.response.ReadFollowerResponse;
+import com.password926.agijagi.child.domain.Authority;
 import com.password926.agijagi.child.service.ChildService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +41,15 @@ public class ChildController {
     }
 
     @Authenticate
+    @GetMapping("/{childId}/followers")
+    public ResponseEntity<List<ReadFollowerResponse>> readFollowers(
+            LoginMember member,
+            @PathVariable long childId
+    ) {
+        return ResponseEntity.ok().body(ChildDtoConverter.convertFollowers(childService.readFollowers(member.getId(), childId)));
+    }
+
+    @Authenticate
     @PostMapping
     public ResponseEntity<Void> appendChild(
             LoginMember member,
@@ -48,12 +60,12 @@ public class ChildController {
     }
 
     @Authenticate
-    @DeleteMapping("/{childId}")
-    public ResponseEntity<Void> removeChild(
+    @PostMapping("/{childId}/followers")
+    public ResponseEntity<Void> appendFollower(
             LoginMember member,
             @PathVariable long childId
     ) {
-        childService.removeChild(member.getId(), childId);
+        childService.appendFollower(member.getId(), childId);
         return ResponseEntity.ok().build();
     }
 
@@ -80,12 +92,44 @@ public class ChildController {
     }
 
     @Authenticate
+    @PatchMapping("/{childId}/followers")
+    public ResponseEntity<Void> updateFollower(
+            LoginMember member,
+            @PathVariable long childId,
+            @RequestBody @Valid UpdateFollowerRequest request
+    ) {
+        childService.updateFollower(member.getId(), childId, request.getFollowerId(), Authority.of(request.getAuthority()));
+        return ResponseEntity.ok().build();
+    }
+
+    @Authenticate
+    @DeleteMapping("/{childId}")
+    public ResponseEntity<Void> removeChild(
+            LoginMember member,
+            @PathVariable long childId
+    ) {
+        childService.removeChild(member.getId(), childId);
+        return ResponseEntity.ok().build();
+    }
+
+    @Authenticate
     @DeleteMapping("/{childId}/image")
-    public ResponseEntity<Void> deleteChildImage(
+    public ResponseEntity<Void> removeChildImage(
             LoginMember member,
             @PathVariable long childId
     ) {
         childService.removeChildImage(member.getId(), childId);
+        return ResponseEntity.ok().build();
+    }
+
+    @Authenticate
+    @DeleteMapping("/{childId}/followers/{followerId}")
+    public ResponseEntity<Void> removeFollower(
+            LoginMember member,
+            @PathVariable long childId,
+            @PathVariable long followerId
+    ) {
+        childService.removeFollower(member.getId(), childId, followerId);
         return ResponseEntity.ok().build();
     }
 }

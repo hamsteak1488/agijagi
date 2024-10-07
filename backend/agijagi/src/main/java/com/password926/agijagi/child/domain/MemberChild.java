@@ -31,4 +31,8 @@ public class MemberChild {
     public long readChildId() {
         return child.getId();
     }
+
+    public void update(Authority authority) {
+        this.authority = authority;
+    }
 }

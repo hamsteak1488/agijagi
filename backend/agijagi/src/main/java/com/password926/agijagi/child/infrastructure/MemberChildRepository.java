@@ -19,4 +19,6 @@ public interface MemberChildRepository extends Repository<MemberChild, Long> {
     boolean existsByMemberIdAndChildId(long memberId, long childId);
 
     void deleteAllByChildId(long childId);
+
+    void delete(MemberChild memberChild);
 }

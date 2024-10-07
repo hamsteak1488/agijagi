@@ -12,11 +12,15 @@ import java.util.List;
 public class ChildService {
 
     private final ChildDetailReader childDetailReader;
+    private final FollowerReader followerReader;
     private final ChildAppender childAppender;
+    private final FollowerAppender followerAppender;
     private final ChildRemover childRemover;
     private final ChildUpdater childUpdater;
+    private final FollowerUpdater followerUpdater;
     private final ChildImageUpdater childImageUpdater;
     private final ChildImageRemover childImageRemover;
+    private final FollowerRemover followerRemover;
 
     public ChildDetail readChildDetail(long memberId, long childId) {
         return childDetailReader.readByMemberAndChild(memberId, childId);
@@ -24,6 +28,10 @@ public class ChildService {
 
     public List<ChildDetail> readChildDetailsByMember(long memberId) {
         return childDetailReader.readByMember(memberId);
+    }
+
+    public List<Follower> readFollowers(long memberId, long childId) {
+        return followerReader.readFollowers(memberId, childId);
     }
 
     public void appendChild(
@@ -34,19 +42,48 @@ public class ChildService {
         childAppender.append(memberId, childContent, image);
     }
 
+    public void appendFollower(long memberId, long childId) {
+        followerAppender.append(memberId, childId, Authority.READ);
+    }
+
     public void removeChild(long memberId, long childId) {
         childRemover.remove(memberId, childId);
     }
 
-    public void updateChild(long memberId, long childId, ChildContent childContent) {
+    public void updateChild(
+            long memberId,
+            long childId,
+            ChildContent childContent
+    ) {
         childUpdater.update(memberId, childId, childContent);
     }
 
-    public void updateChildImage(long memberId, long childId, MultipartFile image) {
+    public void updateFollower(
+            long memberId,
+            long childId,
+            long followerId,
+            Authority authority
+    ) {
+        followerUpdater.update(memberId, childId, followerId, authority);
+    }
+
+    public void updateChildImage(
+            long memberId,
+            long childId,
+            MultipartFile image
+    ) {
         childImageUpdater.update(memberId, childId, image);
     }
 
     public void removeChildImage(long memberId, long childId) {
         childImageRemover.remove(memberId, childId);
+    }
+
+    public void removeFollower(
+            long memberId,
+            long childId,
+            long followerId
+    ) {
+        followerRemover.remove(memberId, childId, followerId);
     }
 }
