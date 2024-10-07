@@ -18,7 +18,7 @@ public class StartupApplicationListener implements ApplicationListener<ContextRe
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        createChild();
+//        createChild();
     }
 
     private void createChild() {
