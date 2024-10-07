@@ -28,7 +28,7 @@ export const Bar = styled.div`
   bottom: 0;
   right: 0;
   background-color: ${theme.color.primary[50]};
-  border-top: 2px solid ${theme.color.primary[900]};
+  border-top: 2px solid ${theme.color.primary[500]};
   z-index: 2;
   height: 48px;
 `;
@@ -91,7 +91,7 @@ export const BottomNavigation = () => {
             동화
           </Typhography>
         </Item>
-        <Item to={''}>
+        <Item to={'/'}>
           <IconWrapper>
             <MicIcon />
           </IconWrapper>

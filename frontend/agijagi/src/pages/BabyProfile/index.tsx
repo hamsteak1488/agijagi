@@ -19,6 +19,7 @@ import { EditBabyImage } from '../../components/BabyMain/EditBabyImage/EditBabyI
 import { DeleteBaby } from '../../components/BabyMain/DeleteBaby/DeleteBaby';
 import { useEffect } from 'react';
 import { EditBabyInfo } from '../../components/BabyMain/EditBabyInfo/EditBabyInfo';
+import { useNavigate } from 'react-router-dom';
 
 export const Container = styled.div`
   display: flex;
@@ -68,6 +69,7 @@ export const BabyProfile = () => {
   });
 
   const modal = useModal();
+  const navigator = useNavigate();
   const handleEditBabyInfo = () => {
     modal.push({
       children: <EditBabyInfo child={child} />,
@@ -95,7 +97,7 @@ export const BabyProfile = () => {
       <BabyProfileCard child={child}></BabyProfileCard>
       <BabyReportCard></BabyReportCard>
       <MenuConatiner>
-        <MenuItem>
+        <MenuItem onClick={() => navigator('/report')}>
           <IconWrapper>
             <ReportIcon />
           </IconWrapper>
