@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class StoryController {
 
     @Authenticate
     @PostMapping
-    public ResponseEntity<Long> createStory(
+    public ResponseEntity<HashMap<String, Long>> createStory(
             LoginMember member,
             CreateStoryRequest createStoryRequest
     ) {

@@ -43,7 +43,7 @@ public class StoryService {
     private final ImageGenerator imageGenerator;
 
     @Transactional
-    public Long createStory(long memberId, CreateStoryRequest request) {
+    public HashMap<String, Long> createStory(long memberId, CreateStoryRequest request) {
         childValidator.validateWriteAuthority(memberId, request.getChildId());
 
         Child child = childRepository.findByIdAndIsDeletedFalse(request.getChildId())
@@ -101,7 +101,9 @@ public class StoryService {
         }
         storyPageRepository.saveAll(storyPageData);
 
-        return story.getId();
+        HashMap<String,Long> idMap = new HashMap<String,Long>();
+        idMap.put("id", story.getId());
+        return idMap;
     }
 
     @Transactional(readOnly = true)
