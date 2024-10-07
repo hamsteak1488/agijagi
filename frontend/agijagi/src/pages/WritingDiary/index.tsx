@@ -48,7 +48,6 @@ export const WritingDiary = () => {
 
   const navigator = useNavigate();
   const modal = useModal();
-  const queryClient = useQueryClient();
 
   const { childId } = useChildStore();
 

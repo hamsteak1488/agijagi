@@ -13,7 +13,7 @@ import theme from '../../../styles/theme';
 import { BabyResponse } from '../../../types/user';
 import Typhography from '../Typography';
 
-export const Container = styled.div`
+export const Container = styled.nav`
   width: 100%;
   height: auto;
   margin-top: 4rem;
@@ -39,6 +39,9 @@ export const Item = styled(Link)`
   align-items: center;
   text-decoration: none;
 
+  color: ${theme.color.primary[900]};
+  cursor: pointer;
+
   &.active {
     color: ${theme.color.primary[500]};
   }
@@ -54,7 +57,7 @@ export const ProfileImg = styled.img`
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 2px solid ${theme.color.greyScale[600]};
+  border: 2px solid ${theme.color.greyScale[700]};
 `;
 
 export const BottomNavigation = () => {

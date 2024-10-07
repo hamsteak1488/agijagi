@@ -92,7 +92,7 @@ export interface FirstBabyFormProps {
   babyNickname: string;
   setBabyNickname: React.Dispatch<React.SetStateAction<string>>;
   birthday: string;
-  valudationName: (input: string) => ValidationState;
+  validationName: (input: string) => ValidationState;
   validationNickname: (input: string) => ValidationState;
   setBirthday: React.Dispatch<React.SetStateAction<string>>;
   setIsNext: React.Dispatch<React.SetStateAction<boolean>>;
@@ -107,6 +107,7 @@ export const FirstBabyForm = ({
   babyNickname,
   setBabyNickname,
   birthday,
+  validationName,
   validationNickname,
   setBirthday,
   setIsNext,
@@ -145,7 +146,7 @@ export const FirstBabyForm = ({
         inputValue={babyName}
         setInputValue={setBabyName}
         disabled={isNext}
-        validationFunction={validationNickname}
+        validationFunction={validationName}
         helpText={'이름은 2~8자의 규칙을 만족해야해요'}
         checkText={'올바르게 입력했어요'}
         warningText={'이름 형식이 일치하지 않아요'}
@@ -186,7 +187,7 @@ export const FirstBabyForm = ({
           color={isValidated && birthday !== '' ? 'primary' : 'greyScale'}
           style={{ marginTop: '2rem', transition: 'all 0.3s' }}
           fullWidth={true}
-          disabled={(!isValidated || birthday === '') && false}
+          disabled={!isValidated.name || !isValidated.nickname}
           onClick={() => {
             setIsNext(true);
           }}

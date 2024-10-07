@@ -115,6 +115,7 @@ export const BabyInfoForm = () => {
           babyNickname={babyNickname}
           setBabyNickname={setBabyNickname}
           birthday={birthday}
+          validationName={validateName}
           validationNickname={validateNickName}
           setBirthday={setBirthday}
           setIsNext={setIsNext}

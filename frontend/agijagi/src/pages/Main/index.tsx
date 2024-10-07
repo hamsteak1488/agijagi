@@ -16,7 +16,7 @@ export const Main = () => {
   const navigator = useNavigate();
 
   const validMemberId =
-    memberId !== 0 ? memberId : Number(localStorage.getItem('memberId')) || 0;
+    memberId !== 0 ? memberId : Number(localStorage.getItem('memberId'));
 
   const {
     data: member,

@@ -97,7 +97,8 @@ export const EditBabyImage = () => {
     };
     editChildImage(request)
       .then((response) => {
-        window.location.href = '/family';
+        modal.pop();
+        navigator('/family');
       })
       .catch((error) => {
         console.error(error);
@@ -109,7 +110,10 @@ export const EditBabyImage = () => {
       childId: childId,
     };
     deleteChildImage(request)
-      .then((response) => console.log(response))
+      .then((response) => {
+        modal.pop();
+        navigator('/family');
+      })
       .catch((error) => console.error(error));
   };
 
