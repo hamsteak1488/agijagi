@@ -1,21 +1,19 @@
 package com.password926.agijagi.story.repository;
 
+import com.password926.agijagi.common.errors.exception.RestApiException;
+import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
+import com.password926.agijagi.diary.entity.Diary;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
-import com.password926.agijagi.common.errors.exception.RestApiException;
-import com.password926.agijagi.diary.entity.Diary;
-import lombok.RequiredArgsConstructor;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Component
@@ -59,8 +57,8 @@ public class StoryGPT {
                 2. Use your child's age to determine the appropriate length and complexity of the story.
                 3. Translate real events from parenting diaries into magical or fantasy scenarios.
                 4. Include character growth and development that reflects your child's actual progress.
-                5. It should be generated up to 10 sentences. Before that, I need to finish the story.
-                6. No more than 50 characters per sentence.
+                5. It should be generated up to 6 sentences. Before that, I need to finish the story.
+                6. No more than 100 characters per sentence.
                 7. Fairy tales should be written in Korean.
                 8. Paragraphs should be written as examples below.
                 [{z}"pageNumber": 1, "content": "content1"{a}, {z}"pageNumber": 2,"content": "content2"{a}]
@@ -68,7 +66,6 @@ public class StoryGPT {
         Prompt prompt = promptTemplate.create(Map.of("child_name", name, "child_age", age, "data", data, "a", "}", "z", "{"));
         String response = openAiChatModel.call(prompt).getResult().getOutput().getContent();
         System.out.println(response);
-//        return convertJsonToObject(response, StoryPage.class);
         return response;
     }
 
@@ -79,17 +76,5 @@ public class StoryGPT {
         } catch (JsonProcessingException e) {
             throw new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND);
         }
-    }
-
-    private <T> T convertJsonToObject(String json, Class<T> valueType) {
-        try {
-            return objectMapper.readValue(json, valueType);
-        } catch (JsonProcessingException e) {
-            throw new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND);
-        }
-    }
-
-    private String formatToJson(String string) {
-        return string.substring(7, string.length() - 3);
     }
 }

@@ -69,6 +69,18 @@ export const FormContainer = styled.div<{ width: number; loginMode: boolean }>(
   `
 );
 
+export const ModalBackground = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: ${theme.color.primary[50]};
+  margin: 1rem;
+  padding: 2.5rem 2rem 2rem 2rem;
+  border-radius: 0.5rem;
+  gap: 1rem;
+`;
+
 export const PatternContainer = styled.div(
   () => css`
     position: relative;

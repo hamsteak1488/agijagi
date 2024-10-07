@@ -1,10 +1,15 @@
 import useRecord from '../../hooks/useRecord';
+import useGetLatestRecords from '../../hooks/api/useGetLatestRecords';
 
 import RecordButton from '../../components/Record/RecordButton';
-import useFetchLatestRecords from '../../hooks/api/useFetchLatestRecords';
+
+import useChildStore from '../../stores/useChlidStore';
 
 const RecordMenu = () => {
-  const { data } = useFetchLatestRecords();
+  const { childId } = useChildStore();
+
+  const { data } = useGetLatestRecords(childId);
+
   const record = useRecord();
 
   return (

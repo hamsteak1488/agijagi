@@ -1,12 +1,12 @@
 package com.password926.agijagi.story.entity;
 
+import com.password926.agijagi.media.domain.Image;
+import com.password926.agijagi.media.domain.Media;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Entity
 public class StoryPage {
 
@@ -24,5 +24,18 @@ public class StoryPage {
     @Column(nullable = false)
     private int pageNumber;
 
-//    private String image;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "image_id")
+    private Media storyImage;
+
+    @Builder
+    public StoryPage(Story story, String content, int pageNumber) {
+        this.story = story;
+        this.content = content;
+        this.pageNumber = pageNumber;
+    }
+
+    public void addMedia(Media media) {
+        this.storyImage = media;
+    }
 }

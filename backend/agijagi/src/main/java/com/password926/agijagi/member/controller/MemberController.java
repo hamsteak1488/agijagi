@@ -5,7 +5,7 @@ import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.member.controller.dto.request.ModifyMemberRequest;
 import com.password926.agijagi.member.controller.dto.request.RegisterMemberRequest;
-import com.password926.agijagi.member.domain.ProfileDetail;
+import com.password926.agijagi.member.domain.MemberDetail;
 import com.password926.agijagi.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,42 +23,48 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<Void> registerMember(@Valid @RequestBody RegisterMemberRequest request) {
+    public ResponseEntity<Void> registerMember(@Valid RegisterMemberRequest request) {
+        MediaResource mediaResource = request.getProfileImage() != null
+                ? MediaResource.from(request.getProfileImage()) : null;
+
         long memberId = memberService.registerMember(
-                ProfileDetail.of(request.getEmail(), request.getPassword()),
-                request.getPassword()
+                request.getEmail(),
+                request.getPassword(),
+                request.getNickname(),
+                mediaResource
         );
 
         return ResponseEntity.created(URI.create("/members/" + memberId)).build();
     }
 
-    @GetMapping("/{memberId}")
-    public ResponseEntity<ProfileDetail> getProfileDetail(@PathVariable Long memberId) {
-        ProfileDetail profileDetail = memberService.getMemberProfileDetail(memberId);
-
-        return ResponseEntity.ok(profileDetail);
-    }
-
     @Authenticate
     @PatchMapping
-    public ResponseEntity<Void> modifyMemberProfileDetail(
+    public ResponseEntity<Void> updateMember(
             LoginMember member,
             @Valid @RequestBody ModifyMemberRequest request
     ) {
-        memberService.modifyMemberProfileDetail(member.getId(), ProfileDetail.of(request.getEmail(), request.getNickname()));
+        memberService.updateMember(member.getId(), request.getEmail(), request.getPassword(), request.getNickname());
 
         return ResponseEntity.ok().build();
     }
 
     @Authenticate
-    @PatchMapping("/profile-image")
-    public ResponseEntity<Void> modifyMemberProfileImage(
+    @PostMapping("/profile-image/update")
+    public ResponseEntity<Void> updateMemberProfileImage(
             LoginMember member,
-            @RequestPart("profileImage") MultipartFile profileImage
+            @RequestPart MultipartFile profileImage
     ) {
-        memberService.modifyMemberProfileImage(
-                member.getId(), MediaResource.from(profileImage)
-        );
+        memberService.updateMemberProfileImage(member.getId(), MediaResource.from(profileImage));
+
+        return ResponseEntity.ok().build();
+    }
+
+    @Authenticate
+    @PostMapping("/profile-image/delete")
+    public ResponseEntity<Void> deleteMemberProfileImage(
+            LoginMember member
+    ) {
+        memberService.updateMemberProfileImage(member.getId(), null);
 
         return ResponseEntity.ok().build();
     }
@@ -69,5 +75,12 @@ public class MemberController {
         memberService.removeMember(member.getId());
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{memberId}")
+    public ResponseEntity<MemberDetail> getProfileDetail(@PathVariable Long memberId) {
+        MemberDetail memberDetail = memberService.getMemberDetail(memberId);
+
+        return ResponseEntity.ok(memberDetail);
     }
 }

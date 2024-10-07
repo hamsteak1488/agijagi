@@ -14,7 +14,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MediaStorage {
     private final S3Manager s3Manager;
-    private final MediaRepository mediaRepository;
     private static final String S3_KEY_PREFIX = "media/";
     private final MediaValidator mediaValidator;
 
@@ -25,13 +24,10 @@ public class MediaStorage {
         UUID generatedUUID = UUID.randomUUID();
         String uploadUrl = store(generatedUUID, mediaResource);
 
-        Image newImage = Image.builder()
+        return Image.builder()
                 .id(generatedUUID)
                 .url(uploadUrl)
                 .build();
-        mediaRepository.save(newImage);
-
-        return newImage;
     }
 
     @Transactional
@@ -41,13 +37,10 @@ public class MediaStorage {
         UUID generatedUUID = UUID.randomUUID();
         String uploadUrl = store(generatedUUID, mediaResource);
 
-        Video newVideo = Video.builder()
+        return Video.builder()
                 .id(generatedUUID)
                 .url(uploadUrl)
                 .build();
-        mediaRepository.save(newVideo);
-
-        return newVideo;
     }
 
     @Transactional

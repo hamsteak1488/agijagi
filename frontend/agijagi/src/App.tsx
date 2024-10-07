@@ -15,7 +15,9 @@ import MileStoneReport from './pages/MileStoneReportPage';
 import Report from './pages/ReportPage';
 import Signup from './pages/Signup';
 import { Welcome } from './pages/Signup/Welcome';
-import { BabyInfoForm } from './components/Signup/BabyInfo/BabyInfoForm';
+import { BabyInfoForm } from './components/Signup/BabyInfo/BabyInfoForm/BabyInfoForm';
+import { Main } from './pages/Main';
+import BabyProfile from './pages/BabyProfile';
 import CreateBook from './components/book/BookCreate';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -41,6 +43,7 @@ function App() {
               <Route path="/baby" element={<BabyMain />} />
               <Route path="/book" element={<BookCarousel />} />
               <Route path="/book-create" element={<CreateBook />} />
+              <Route path="/baby/profile" element={<BabyProfile />} />
               <Route path="/baby/writing" element={<WritingDiary />} />
               <Route path="/baby" element={<BabyMain />} />
               <Route path="/signup" element={<Signup />} />
@@ -51,6 +54,7 @@ function App() {
               <Route path="/report" element={<Report />} />
               <Route path="/babyform" element={<BabyInfoForm />} />
               <Route path="/board" element={<BoardPage />} />
+              <Route path="/main" element={<Main />} />
               <Route path="/board/write" element={<WriteArticlePage />} />
             </Routes>
           </ModalProvider>

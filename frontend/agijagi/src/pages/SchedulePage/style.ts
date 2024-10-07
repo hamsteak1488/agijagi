@@ -25,5 +25,6 @@ export const ScheduleList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  flex: 1 1 auto;
   overflow-y: scroll;
 `;

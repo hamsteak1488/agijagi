@@ -1,6 +1,3 @@
-import { css } from '@emotion/react';
-import styled from '@emotion/styled';
-import theme from '../../../styles/theme';
 import Button from '../../common/Button';
 import Textfield from '../../common/Textfield';
 import Typhography from '../../common/Typography';
@@ -8,66 +5,27 @@ import defaultImg from '../../../assets/images/adult.png';
 import { ValidationState } from '../../common/Textfield/Textfield.types';
 import PlusCircle from '@heroicons/react/24/outline/PlusCircleIcon';
 import { useNavigate } from 'react-router-dom';
-
-export const Container = styled.div<{ width: number; isNext: boolean }>(
-  (props) => css`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 500px;
-    width: 80%;
-    margin: 0% 0% 18vh 0%;
-    gap: 4vh;
-    z-index: 10;
-    transition: all 1s;
-    transform: translate(${!props.isNext ? 0 : props.width * 1}px, 0);
-  `
-);
-
-export const ProfileCircleWrapper = styled.label`
-  display: flex;
-  position: relative;
-  width: 128px;
-  height: 128px;
-  border-radius: 50%;
-  border: 2px solid ${theme.color.greyScale[400]};
-  background-color: ${theme.color.greyScale[200]};
-`;
-
-export const ImgWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-`;
-
-export const ProfileImg = styled.img`
-  width: 100%;
-  height: 100%;
-`;
-
-export const ProfileContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-`;
-
-export const AddIconWrapper = styled.div`
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  left: 80%;
-  top: 7%;
-`;
-
-export const InvisibleInput = styled.input`
-  display: none;
-`;
+import { signUp } from '../../../apis/userApi';
+import BackIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
+import useModal from '../../../hooks/useModal';
+import { ModalBackground } from '../../../pages/Login/style';
+import {
+  AddIconWrapper,
+  BackButton,
+  Container,
+  ImgWrapper,
+  InvisibleInput,
+  ProfileCircleWrapper,
+  ProfileContainer,
+  ProfileImg,
+} from './ProfileForm.styles';
 
 interface ProfileForm {
+  email: string;
+  password: string;
   isNext: boolean;
   uploadImg: string;
+  handleNext: () => void;
   handleUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isValidated: Record<string, boolean>;
   nickname: string;
@@ -76,8 +34,11 @@ interface ProfileForm {
 }
 
 export const ProfileForm = ({
+  email,
+  password,
   isNext,
   uploadImg,
+  handleNext,
   handleUpload,
   isValidated,
   nickname,
@@ -87,13 +48,47 @@ export const ProfileForm = ({
   const width = window.innerWidth;
   const navigator = useNavigate();
 
+  const modal = useModal();
+
+  const handleSignup = () => {
+    signUp({
+      email: email,
+      password: password,
+      nickname: nickname,
+    })
+      .then((response) => {
+        console.log(response);
+        modal.push({
+          children: (
+            <ModalBackground>
+              <Typhography>회원가입이 완료되었어요!</Typhography>
+              <Button onClick={modal.pop}>닫기</Button>
+            </ModalBackground>
+          ),
+          onClose: () => navigator('/welcome'),
+        });
+      })
+      .catch((error) => {
+        modal.push({
+          children: (
+            <ModalBackground>
+              {error.response.data.message}
+              <Button onClick={modal.pop}>닫기</Button>
+            </ModalBackground>
+          ),
+        });
+      });
+  };
+
   return (
     <Container width={width} isNext={!isNext}>
       <ProfileContainer>
         <Typhography size="6xl" weight="bold">
           프로필 등록
         </Typhography>
-        <div></div>
+        <BackButton onClick={handleNext}>
+          <BackIcon />
+        </BackButton>
         <ProfileCircleWrapper htmlFor="file">
           <AddIconWrapper>
             <PlusCircle fill="#fff" />
@@ -130,7 +125,7 @@ export const ProfileForm = ({
         fullWidth={true}
         disabled={!isValidated['nickname']}
         onClick={() => {
-          navigator('/welcome');
+          handleSignup();
         }}
       >
         등록

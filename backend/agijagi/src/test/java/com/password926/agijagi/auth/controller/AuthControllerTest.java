@@ -3,21 +3,20 @@ package com.password926.agijagi.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.password926.agijagi.auth.controller.dto.request.LoginRequest;
 import com.password926.agijagi.auth.service.AuthService;
-import com.password926.agijagi.member.controller.MemberController;
+import com.password926.agijagi.config.RestDocsConfig;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
@@ -25,11 +24,10 @@ import static org.springframework.restdocs.cookies.CookieDocumentation.requestCo
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.snippet.Attributes.key;
 
-@AutoConfigureMockMvc
+@Import(RestDocsConfig.class)
 @AutoConfigureRestDocs
 @WebMvcTest(AuthController.class)
 class AuthControllerTest {
@@ -59,8 +57,6 @@ class AuthControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(document(
                         "auth/login",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
                                 requestFields(
                                         fieldWithPath("email").description("이메일").attributes(key("constraints").value("None")),
                                         fieldWithPath("password").description("비밀번호").attributes(key("constraints").value("None"))
@@ -78,7 +74,7 @@ class AuthControllerTest {
         mockMvc.perform(
                 RestDocumentationRequestBuilders
                         .post("/auth/logout")
-                        .cookie(new Cookie("SESSION", "SESSION_VALUE"))
+                        .cookie(new Cookie("SESSION", "Session Value"))
                         .header(AuthConstants.HEADER_LOGIN_MEMBER_KEY, 1)
                         .contentType(MediaType.ALL)
                 )

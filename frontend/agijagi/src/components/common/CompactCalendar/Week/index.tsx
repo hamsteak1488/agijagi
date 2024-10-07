@@ -7,10 +7,16 @@ import * as s from './Week.style';
 interface WeekProps {
   date: Date;
   selected: Date;
+  highlight?: Set<string>;
   onClick: (date: Date) => void;
 }
 
-const Week = ({ date, selected, onClick }: WeekProps) => {
+const Week = ({
+  date,
+  selected,
+  highlight = new Set<string>(),
+  onClick,
+}: WeekProps) => {
   const day = dayjs(date);
   const days = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -50,6 +56,8 @@ const Week = ({ date, selected, onClick }: WeekProps) => {
                 shade={
                   selected.toDateString() === day.toDate().toDateString()
                     ? '500'
+                    : highlight.has(day.format('YYYY-MM-DD'))
+                    ? '100'
                     : undefined
                 }
               >
