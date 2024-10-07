@@ -10,6 +10,7 @@ import IconButton from '../../../components/common/IconButton';
 import ImageUploader from '../../../components/common/ImageUploader';
 
 import XMarkIcon from '@heroicons/react/16/solid/XMarkIcon';
+
 import useWritePost from '../../../hooks/api/useWritePost';
 import useDialog from '../../../hooks/useDialog';
 
@@ -20,10 +21,11 @@ const WritePage = () => {
 
   const { mutate, isPending } = useWritePost();
 
+  const filesRef = useRef<File[]>([]);
+
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = (e: FormEvent) => {
-    console.log(e);
     e.preventDefault();
   };
 
@@ -39,7 +41,17 @@ const WritePage = () => {
       return;
     }
 
+    data.delete('mediaList');
+
+    for (const file of filesRef.current) {
+      data.append('mediaList', file);
+    }
+
     mutate({ data });
+  };
+
+  const handleChange = (files: File[]) => {
+    filesRef.current = files;
   };
 
   return (
@@ -69,7 +81,11 @@ const WritePage = () => {
         <s.Title type="text" id="title" name="title" />
         <label htmlFor="content">내용</label>
         <s.Body id="content" name="content" />
-        <ImageUploader name="mediaList" maxFileCount={5} />
+        <ImageUploader
+          name="mediaList"
+          maxFileCount={5}
+          onChange={handleChange}
+        />
       </s.Main>
     </s.Container>
   );

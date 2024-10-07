@@ -34,7 +34,7 @@ const BoardPage = () => {
         <s.ArticleList>
           <ErrorBoundary
             fallbackRender={(props) => (
-              <ErrorBoundaryFallback height="20rem" {...props}>
+              <ErrorBoundaryFallback height="20rem" padding="1rem" {...props}>
                 게시글을 불러오지 못했어요.
               </ErrorBoundaryFallback>
             )}
