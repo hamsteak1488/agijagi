@@ -1,6 +1,10 @@
 insert member(email, nickname, password, created_at, is_deleted)
 values ('abcd123@naver.com', '다르다', '$2a$10$TaxwwF9QrH5NEqjo8LLQCealD5OsN8d3VCrYpc5nGDNfYg7P7/1zC', now(), false);
 
+insert member(email, nickname, password, created_at, is_deleted)
+values ('abcd1234@naver.com', '다르다달라', '$2a$10$TaxwwF9QrH5NEqjo8LLQCealD5OsN8d3VCrYpc5nGDNfYg7P7/1zC', now(), false);
+
+
 INSERT INTO milestone (month, required_amount, content, title)
 VALUES
     (0, 8, '엎드린 자세에서 고개를 잠깐 들 수 있다', '움직임 / 신체발달'),
