@@ -4,8 +4,10 @@ import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.child.controller.dto.ChildDtoConverter;
 import com.password926.agijagi.child.controller.dto.request.AppendChildRequest;
+import com.password926.agijagi.child.controller.dto.request.AppendFollowerRequest;
 import com.password926.agijagi.child.controller.dto.request.UpdateChildRequest;
 import com.password926.agijagi.child.controller.dto.request.UpdateFollowerRequest;
+import com.password926.agijagi.child.controller.dto.response.CreateInvitationCodeRequest;
 import com.password926.agijagi.child.controller.dto.response.ReadChildDetailResponse;
 import com.password926.agijagi.child.controller.dto.response.ReadFollowerResponse;
 import com.password926.agijagi.child.domain.Authority;
@@ -60,13 +62,22 @@ public class ChildController {
     }
 
     @Authenticate
-    @PostMapping("/{childId}/followers")
+    @PostMapping("/followers")
     public ResponseEntity<Void> appendFollower(
+            LoginMember member,
+            @RequestBody @Valid AppendFollowerRequest request
+    ) {
+        childService.appendFollower(member.getId(), request.getInvitationCode());
+        return ResponseEntity.ok().build();
+    }
+
+    @Authenticate
+    @PostMapping("/{childId}/invitation-code")
+    public ResponseEntity<CreateInvitationCodeRequest> createInvitationCode(
             LoginMember member,
             @PathVariable long childId
     ) {
-        childService.appendFollower(member.getId(), childId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(CreateInvitationCodeRequest.of(childService.createInvitationCode(member.getId(), childId)));
     }
 
     @Authenticate
