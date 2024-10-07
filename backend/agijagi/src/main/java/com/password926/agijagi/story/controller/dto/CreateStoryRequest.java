@@ -17,5 +17,5 @@ public class CreateStoryRequest {
 
     private LocalDate endDate;
 
-    private MultipartFile coverImage;
+    private Short coverImageIndex;
 }

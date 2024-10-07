@@ -29,9 +29,8 @@ public class Story {
     @Column(nullable = false)
     private LocalDate endDate;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "cover_image_id")
-    private Media coverImage;
+    @Column(nullable = false)
+    private Short coverImageIndex;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -47,12 +46,11 @@ public class Story {
         this.createdAt = createdAt;
     }
 
-    public void addMedia(Media media) {
-        this.coverImage = media;
+    public void addCoverImage(Short coverImageIndex) {
+        this.coverImageIndex = coverImageIndex;
     }
 
     public void remove() {
-        this.coverImage = null;
         isDeleted = true;
     }
 }

@@ -13,7 +13,6 @@ import com.password926.agijagi.story.entity.Story;
 import com.password926.agijagi.child.infrastructure.ChildRepository;
 import com.password926.agijagi.child.domain.ChildValidator;
 import com.password926.agijagi.child.domain.Child;
-import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.media.domain.MediaStorage;
 import com.password926.agijagi.media.domain.Image;
 import com.password926.agijagi.common.errors.exception.RestApiException;
@@ -70,8 +69,7 @@ public class StoryService {
                 ChronoUnit.DAYS.between(child.getBirthday(), LocalDate.now())
         );
 
-        Image image = mediaStorage.storeImage(MediaResource.from(request.getCoverImage()));
-        story.addMedia(image);
+        story.addCoverImage(request.getCoverImageIndex());
 
         storyRepository.save(story);
 
