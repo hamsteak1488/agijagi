@@ -4,54 +4,14 @@ import HTMLFlipBook from 'react-pageflip';
 import styled from '@emotion/styled';
 import Button from '../common/Button';
 import theme from '../../styles/theme';
-// 임의로 동화 이미지 import
-import PageImg1 from '../../assets/bookcontent/pageImg1.png';
-import PageImg2 from '../../assets/bookcontent/pageImg2.png';
-import PageImg3 from '../../assets/bookcontent/pageImg3.png';
-import PageImg4 from '../../assets/bookcontent/pageImg4.png';
-import PageImg5 from '../../assets/bookcontent/pageImg5.png';
-import PageImg6 from '../../assets/bookcontent/pageImg6.png';
-import PageImg7 from '../../assets/bookcontent/pageImg7.png';
-import PageImg8 from '../../assets/bookcontent/pageImg8.png';
-import PageImg9 from '../../assets/bookcontent/pageImg9.png';
-import PageImg10 from '../../assets/bookcontent/pageImg10.png';
+import { BookCoverImg } from './BookCoverImage';
 import {
   getStoryBook,
   getStoryBookPages,
   StoryBookDetail,
-  StoryBookPage,
 } from '../../apis/book';
 import { useQuery } from '@tanstack/react-query';
-import { useLocation } from 'react-router-dom';
-
-// 동화 예시 - 추후 데이터로 받아올 예정
-const storyBook = {
-  cover: PageImg1,
-  story: [
-    '옛날 옛적에 다운이라는 아이가 있었어요.',
-    '다운이는 2살 3개월로, 호기심 많은 아이였죠.',
-    '3월 15일, 다운이가 처음 말을 했어요.',
-    '말이 마법처럼 나와서 온 세상이 놀랐답니다.',
-    '그날 이후 다운이는 동물들과 대화를 시작했어요.',
-    '3월 16일, 다운이가 첫 발을 내딛었어요.',
-    '그 발걸음이 마치 구름을 걷는 것 같았죠.',
-    '그 후로 다운이는 숲속 친구들과 모험을 떠났어요.',
-    '나무 요정들과 놀며 세상을 배우기 시작했어요.',
-    '다운이는 계속 자라며 더 큰 모험을 꿈꾸었답니다.',
-  ],
-  image: [
-    PageImg1,
-    PageImg2,
-    PageImg3,
-    PageImg4,
-    PageImg5,
-    PageImg6,
-    PageImg7,
-    PageImg8,
-    PageImg9,
-    PageImg10,
-  ],
-};
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const BookWrapper = styled.div`
   display: flex;
@@ -216,14 +176,13 @@ interface HTMLDivElementWithVendorPrefix extends HTMLDivElement {
   webkitRequestFullscreen: () => void;
 }
 
-const StoryBook = ({ book, goBack }: StoryBookProps) => {
-  // const location = useLocation();
-  // const storyId = location.state.storyId;
-  const storyId = book.id;
+const StoryBook = () => {
+  const { id } = useParams<{ id: string }>();
+  const storyId = id? parseInt(id, 10) : 0;
+  const navigate = useNavigate();
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [warning, setWarning] = useState<string>('');
-  const totalPages = 10;
 
   const storyBookQuery = useQuery({
     queryKey: ['storybook', storyId],
@@ -251,6 +210,16 @@ const StoryBook = ({ book, goBack }: StoryBookProps) => {
       document.removeEventListener('fullscreenchange', handleFullScreenChange);
     };
   }, [setIsFullScreen]);
+
+  const book = storyBookQuery.data?.data;
+
+  const totalPages = storyBookPagesQuery.data
+    ? storyBookPagesQuery.data?.data.length
+    : 6;
+
+  const goBack = () => {
+    navigate('/book');
+  };
 
   const onFlip = useCallback(
     (e: FlipEvent) => {
@@ -320,69 +289,71 @@ const StoryBook = ({ book, goBack }: StoryBookProps) => {
 
   return (
     <BookWrapper>
-      <BackButtonContainer>
-        <Button color="secondary" size="sm" onClick={goBack}>
-          목록보기
-        </Button>
-        <Button color="secondary" size="sm" onClick={toggleFullscreen}>
-          전체화면
-        </Button>
-      </BackButtonContainer>
+      {book ? (
+        <>
+          <BackButtonContainer>
+            <Button color="secondary" size="sm" onClick={goBack}>
+              목록보기
+            </Button>
+            <Button color="secondary" size="sm" onClick={toggleFullscreen}>
+              전체화면
+            </Button>
+          </BackButtonContainer>
 
-      <BookContainer ref={bookContainer}>
-        {/* @ts-ignore */}
-        <HTMLFlipBook
-          ref={mybook}
-          size={'stretch'}
-          width={isFullScreen ? 740 : 360}
-          height={isFullScreen ? 720 : 500}
-          drawShadow={false}
-          usePortrait={false}
-          showCover={true}
-          onFlip={onFlip}
-          key={isFullScreen ? 'landscape' : 'portrait'}
-        >
-          <BookCover img={book.coverImageUrl}></BookCover>
-          {storyBookPagesQuery.data?.data.map((page, index) => (
-            <BookPage
-              key={index}
-              number={page.pageNumber}
-              img={storyBook.image[index]}
+          <BookContainer ref={bookContainer}>
+            {/* @ts-ignore */}
+            <HTMLFlipBook
+              ref={mybook}
+              size={'stretch'}
+              width={isFullScreen ? 740 : 360}
+              height={isFullScreen ? 720 : 500}
+              drawShadow={false}
+              usePortrait={false}
+              showCover={true}
+              onFlip={onFlip}
+              key={isFullScreen ? 'landscape' : 'portrait'}
             >
-              {page.content}
-            </BookPage>
-          ))}
-          <BookCover img={book.coverImageUrl}></BookCover>
-        </HTMLFlipBook>
-      </BookContainer>
+              <BookCover
+                img={BookCoverImg[book.coverImageIndex]}
+              ></BookCover>
+              {storyBookPagesQuery.data?.data.map((page, index) => (
+                <BookPage
+                  key={index}
+                  number={page.pageNumber}
+                  img={page.storyPageImageUrl}
+                >
+                  {page.content}
+                </BookPage>
+              ))}
+              <BookCover
+                img={BookCoverImg[book.coverImageIndex]}
+              ></BookCover>
+            </HTMLFlipBook>
+          </BookContainer>
 
-      <PageButtonWrapper>
-        <Button
-          size="sm"
-          color="primary"
-          onClick={() => mybook.current?.pageFlip().flipPrev()}
-        >
-          {'<'}
-        </Button>
+          <PageButtonWrapper>
+            <Button
+              size="sm"
+              color="primary"
+              onClick={() => mybook.current?.pageFlip().flipPrev()}
+            >
+              {'<'}
+            </Button>
 
-        {/* {currentPage === 0 && <PageInfo>{totalPages} pages</PageInfo>}
-        {currentPage !== 0 && currentPage - 1 != totalPages && (
-          <PageInfo>
-            {currentPage} - {currentPage + 1}
-          </PageInfo>
-        )}
-        {currentPage - 1 == totalPages && <PageInfo>End</PageInfo>} */}
+            <Button
+              size="sm"
+              color="primary"
+              onClick={() => mybook.current?.pageFlip().flipNext()}
+            >
+              {'>'}
+            </Button>
+          </PageButtonWrapper>
 
-        <Button
-          size="sm"
-          color="primary"
-          onClick={() => mybook.current?.pageFlip().flipNext()}
-        >
-          {'>'}
-        </Button>
-      </PageButtonWrapper>
-
-      {warning && <WarningMessage>{warning}</WarningMessage>}
+          {warning && <WarningMessage>{warning}</WarningMessage>}
+        </>
+      ) : (
+        ''
+      )}
     </BookWrapper>
   );
 };

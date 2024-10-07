@@ -1,17 +1,18 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
-import BookItem from './BookItem';
-import BookListModal from './BookListModal';
-import StoryBook from './StoryBook';
-import Typhography from '../common/Typography';
+import BookItem from '../../components/book/BookItem';
+import BookListModal from '../../components/book/BookListModal';
+import StoryBook from '../../components/book/StoryBook';
+import Typhography from '../../components/common/Typography';
 import Logo7 from '../../assets/images/logo7.png';
 import Logo2 from '../../assets/images/logo2.png';
-import { StoryBookDetail } from '../../apis/book';
-import Button from '../common/Button';
-import { useQuery } from '@tanstack/react-query';
+import { deleteStoryBook, StoryBookDetail } from '../../apis/book';
+import Button from '../../components/common/Button';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { getStoryBookList } from '../../apis/book';
 import useChildStore from '../../stores/useChlidStore';
+import { BookCoverImg } from '../../components/book/BookCoverImage';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -31,7 +32,7 @@ const TitleWrapper = styled.div`
 
   @media (min-width: 700px) {
     position: fixed;
-    width: 40%;
+    width: 38%;
   }
 `;
 
@@ -76,7 +77,7 @@ const ImageWrapper = styled.div`
 const ModalWrapper = styled.div`
   display: flex;
   width: 100%;
-  height: 100%;
+  height: 55%;
   box-sizing: border-box;
 
   @media (min-width: 700px) {
@@ -110,19 +111,32 @@ const today = new Date();
 const todayYear = today.getFullYear();
 const todayMonth = today.getMonth() + 1;
 
-const BookCarousel = () => {
+const BookDetial = () => {
   const [year, setYear] = useState(todayYear);
   const [month, setMonth] = useState(todayMonth);
-  const [selectedBook, setSelectedBook] = useState<StoryBookDetail | null>(null);
+  const [selectedBook, setSelectedBook] = useState<StoryBookDetail | null>(
+    null
+  );
   const carouselRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { childId } = useChildStore();
+  const storyId = selectedBook?.id;
 
   const { data, error, isLoading } = useQuery({
     queryKey: ['storybooklist', childId],
     queryFn: () => getStoryBookList(childId),
   });
-  console.log(data?.data);
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: deleteStoryBook,
+    onSuccess: () => navigate('/book'),
+  });
+
+  useEffect(() => {
+    if (selectedBook) {
+      navigate(`/book/${selectedBook.id}`);
+    }
+  }, [selectedBook, navigate]);
 
   if (error) {
     return <>동화 데이터를 불러오지 못했습니다.</>;
@@ -130,7 +144,6 @@ const BookCarousel = () => {
   if (isLoading) {
     return <>로딩중</>;
   }
-
 
   // 책 클릭 시 호출되는 함수
   const handleBookSelect = (book: StoryBookDetail | null) => {
@@ -142,9 +155,9 @@ const BookCarousel = () => {
     }
   };
 
-  // 뒤로가기
-  const goBack = () => {
-    setSelectedBook(null);
+  const deleteBook = () => {
+    //동화 삭제 api 호출
+    mutate({ storyId });
   };
 
   const goCreateBook = () => {
@@ -205,7 +218,15 @@ const BookCarousel = () => {
             </Typhography>
           )}
         </Title>
-        {!selectedBook && <Button size="sm" onClick={goCreateBook}>동화생성</Button>}
+        {!selectedBook ? (
+          <Button size="sm" onClick={goCreateBook}>
+            동화생성
+          </Button>
+        ) : (
+          <Button size="sm" onClick={deleteBook}>
+            동화삭제
+          </Button>
+        )}
       </TitleWrapper>
 
       {filteredBooks?.length === 0 ? (
@@ -225,7 +246,7 @@ const BookCarousel = () => {
               (selectedBook === null || selectedBook.id === book.id) && (
                 <BookItem
                   key={book.id}
-                  image={book.coverImageUrl}
+                  image={BookCoverImg[book.coverImageIndex]}
                   book={book}
                   onBookSelect={handleBookSelect}
                   isSelected={selectedBook?.id === book.id}
@@ -237,7 +258,7 @@ const BookCarousel = () => {
 
       {selectedBook ? (
         <StoryBookWrapper>
-          <StoryBook book={selectedBook} goBack={goBack} />
+          <StoryBook />
         </StoryBookWrapper>
       ) : (
         <ModalWrapper>
@@ -256,4 +277,4 @@ const BookCarousel = () => {
   );
 };
 
-export default BookCarousel;
+export default BookDetial;

@@ -1,17 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 import BookFilter from './BookFilter';
 import Typhography from '../../components/common/Typography';
 import { CalendarIcon } from '@heroicons/react/24/outline';
 import { StoryBookDetail } from '../../apis/book';
+import { BookCoverImg } from './BookCoverImage';
 
 const ModalBox = styled.div`
   background-color: #fff;
   width: 100%;
   height: 100%;
   padding: 10px 0;
-  /* padding: 10px 0px; */
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.2);
@@ -184,11 +184,11 @@ const BookListModal = ({
         ) : (
           filteredBooks?.map((book) => (
             <BookContainer key={book.id} onClick={() => onBookSelect(book)}>
-              <BookImage src={book.coverImageUrl} alt={book.title} />
+              <BookImage src={BookCoverImg[book.coverImageIndex]} alt={book.title} />
 
               <LabelContainer>
                 <TitleLabel>{book.title}</TitleLabel>
-                <PageLabel>{10} pages</PageLabel>
+                <PageLabel>6 pages</PageLabel>
                 <DateLabel>
                   <CalendarImg />
                   <Typhography

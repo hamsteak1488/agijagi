@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 import Typhography from '../common/Typography';
 import { CalendarIcon } from '@heroicons/react/24/outline';
 import { StoryBookDetail } from '../../apis/book';
+import { BookCoverImg } from './BookCoverImage';
 
 const CardContainer = styled.div`
   perspective: 1000px;
@@ -169,7 +170,7 @@ const BookItem = ({ image, book, onBookSelect, isSelected }: BookItemProps) => {
             {isFlipped && isLifted ? (
               <BookBack>
                 <TitleLabel>{book.title}</TitleLabel>
-                <PageLabel>{10} pages</PageLabel>
+                <PageLabel>6 pages</PageLabel>
                 <DateLabel>
                   <CalendarImg />
                   <Typhography

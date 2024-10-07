@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import BookCarousel from './components/book/BookCarousel';
+import BookCarousel from './pages/BookDetialPage';
 import HomePage from './pages/HomePage';
 import WritingDiary from './pages/WritingDiary';
 import RecordPage from './pages/RecordPage';
@@ -21,6 +21,9 @@ import BabyProfile from './pages/BabyProfile';
 import CreateBook from './components/book/BookCreate';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import BookDetial from './pages/BookDetialPage';
+import BookComponent from './components/book/BookComponent';
+
 
 function App() {
   const queryClient = new QueryClient({
@@ -41,10 +44,12 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/record" element={<RecordPage />} />
               <Route path="/baby" element={<BabyMain />} />
-              <Route path="/book" element={<BookCarousel />} />
+              <Route path="/book" element={<BookComponent />} />
+              <Route path="/book/:id" element={<BookDetial />} />
               <Route path="/book-create" element={<CreateBook />} />
               <Route path="/baby/profile" element={<BabyProfile />} />
               <Route path="/baby/writing" element={<WritingDiary />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/baby" element={<BabyMain />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/welcome" element={<Welcome />} />

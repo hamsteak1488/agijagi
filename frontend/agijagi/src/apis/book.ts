@@ -1,15 +1,11 @@
 import { axiosInstance } from './axiosInstance';
 
-interface StoryBook {
+export interface StoryBook {
   childId: number;
   title: string;
   startDate: string;
   endDate: string;
-  coverImage: string;
-}
-
-interface PostStoryBookProps {
-  data: StoryBook;
+  coverImageIndex: number;
 }
 
 export interface StoryBookDetail {
@@ -19,7 +15,7 @@ export interface StoryBookDetail {
   startDate: string;
   endDate: string;
   createdAt: string;
-  coverImageUrl: string;
+  coverImageIndex: number;
 }
 
 export interface StoryBookPage {
@@ -28,14 +24,27 @@ export interface StoryBookPage {
   storyId: number;
   pageNumber: number;
   content: string;
+  storyPageImageUrl: string;
 }
 
 interface StoryBookProps {
-  storyId: number;
+  storyId: number | undefined;
 }
 
-export const postStoryBook = ({ data }: PostStoryBookProps) => {
-  return axiosInstance.post('/stories', data);
+export const postStoryBook = async (storybook: StoryBook) => {
+  const formData = new FormData();
+  formData.append('childId', storybook.childId.toString());
+  formData.append('title', storybook.title);
+  formData.append('startDate', storybook.startDate);
+  formData.append('endDate', storybook.endDate);
+  formData.append('coverImageIndex', storybook.coverImageIndex.toString());
+
+  const response = await axiosInstance.post('/stories', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response;
 };
 
 export const getStoryBookList = (childId: number) => {

@@ -4,11 +4,11 @@ import theme from '../../styles/theme';
 import Textfield from '../common/Textfield';
 import Logo7 from '../../assets/images/logo7.png';
 import Button from '../common/Button';
-import { BookCover } from './BookCoverImage';
+import { BookCoverImg } from './BookCoverImage';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { postStoryBook } from '../../apis/book';
+import { postStoryBook, StoryBook } from '../../apis/book';
 import useChildStore from '../../stores/useChlidStore';
 
 const Wrapper = styled.div`
@@ -48,19 +48,45 @@ const InputWrapper = styled.div`
   background-color: ${theme.color.primary[50]};
   border-radius: 20px;
   padding: 20px 30px 30px;
-  margin: 20px auto;
+  margin: 15px auto;
 `;
 
 const PeriodField = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
 
   @media (min-width: 530px) {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     gap: 30px;
+  }
+`;
+
+const PeriodLabel = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const StartLabel = styled.div`
+  display: flex;
+  margin-left: 5px;
+  margin-top: 5px;
+  font-size: ${theme.typography.fontSize.md};
+  font-weight: ${theme.typography.fontWeight.bold};
+  color: ${theme.color.primary[800]};
+`;
+
+const EndLabel = styled.div`
+  display: flex;
+  margin-left: 5px;
+  margin-top: 25px;
+  font-size: ${theme.typography.fontSize.md};
+  font-weight: ${theme.typography.fontWeight.bold};
+  color: ${theme.color.primary[800]};
+
+  @media (min-width: 530px) {
+    margin-top: 5px;
   }
 `;
 
@@ -71,7 +97,7 @@ const CoverWrapper = styled.div`
   max-width: 500px;
   padding-top: 20px;
   padding-left: 30px;
-  padding-bottom: 30px;
+  padding-bottom: 20px;
   background-color: ${theme.color.primary[50]};
   border-radius: 20px;
   margin: 10px auto;
@@ -100,10 +126,11 @@ const Carousel = styled.div`
   }
 `;
 
-const CoverContainer = styled.div`
+const CoverContainer = styled.div<{ hasAnimation: boolean }>`
   display: flex;
   perspective: 1000px;
-  animation: slide 0.6s ease-in-out;
+  animation: ${({ hasAnimation }) =>
+    hasAnimation ? 'slide 0.6s ease-in-out' : 'none'};
   width: 100%;
 
   @keyframes slide {
@@ -149,7 +176,7 @@ const ButtonWrapper = styled.div`
   justify-content: end;
   max-width: 500px;
   width: 100%;
-  margin: 20px auto;
+  margin: 10px auto;
 `;
 
 const BookCreate = () => {
@@ -157,44 +184,46 @@ const BookCreate = () => {
   const [title, setTitle] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
-  const [coverImg, setCoverImg] = useState<string>('');
+  const [coverImageIndex, setCoverImageIndex] = useState<number>(10);
   const { childId } = useChildStore();
 
   const { mutate, isPending } = useMutation({
     mutationFn: postStoryBook,
-    onSuccess: () => {
+    onSuccess: (data) => {
       setTimeout(() => {
-        navigate('/book');
+        navigate(`/book/${data.data.id}`);
       }, 300);
+      console.log('동화생성 성공', data);
+    },
+    onError: (error) => {
+      console.error('동화생성 실패', error);
     },
   });
 
-  const BookCovers = coverImg
-    ? BookCover.filter((cover) => cover === coverImg)
-    : BookCover;
+  const selectedCover = coverImageIndex ? BookCoverImg[coverImageIndex] : null;
 
   const goBack = () => {
-    navigate(-1);
+    navigate('/book');
   };
 
-  const handleImageClick = (image: string) => {
-    setCoverImg(image);
+  const handleImageClick = (index: number) => {
+    setCoverImageIndex(index);
   };
 
   const handleResetClick = () => {
-    setCoverImg('');
+    setCoverImageIndex(10);
   };
 
-  const createStoryBook = async () => {
-    mutate({
-      data: {
-        childId: childId,
-        title: title,
-        startDate: startDate,
-        endDate: endDate,
-        coverImage: coverImg,
-      },
-    });
+  const createStoryBook = () => {
+    const storybookData = {
+      childId,
+      title,
+      startDate,
+      endDate,
+      coverImageIndex,
+    };
+
+    mutate(storybookData);
   };
 
   return (
@@ -225,24 +254,32 @@ const BookCreate = () => {
           helpText={'*필수사항'}
         />
         <PeriodField>
-          <Textfield
-            label="시작일"
-            size="md"
-            color="primary"
-            isColoredLabel={true}
-            inputValue={startDate}
-            setInputValue={setStartDate}
-            helpText={'*필수사항'}
-          />
-          <Textfield
-            label="종료일"
-            size="md"
-            color="primary"
-            isColoredLabel={true}
-            inputValue={endDate}
-            setInputValue={setEndDate}
-            helpText={'*필수사항'}
-          />
+          <PeriodLabel>
+            <StartLabel>시작일</StartLabel>
+            <Textfield
+              label=""
+              size="md"
+              color="primary"
+              isColoredLabel={true}
+              inputValue={startDate}
+              setInputValue={setStartDate}
+              type={'date'}
+              helpText={'*필수사항'}
+            />
+          </PeriodLabel>
+          <PeriodLabel>
+            <EndLabel>종료일</EndLabel>
+            <Textfield
+              label=""
+              size="md"
+              color="primary"
+              isColoredLabel={true}
+              inputValue={endDate}
+              setInputValue={setEndDate}
+              type={'date'}
+              helpText={'*필수사항'}
+            />
+          </PeriodLabel>
         </PeriodField>
       </InputWrapper>
 
@@ -254,25 +291,46 @@ const BookCreate = () => {
           <Typhography size="xs" color="greyScale" shade="700">
             *필수사항
           </Typhography>
-          {coverImg && (
+          {coverImageIndex !== 10 && (
             <Button size="sm" onClick={handleResetClick}>
               다시 선택
             </Button>
           )}
         </SelectContainer>
-        <Carousel>
-          {BookCovers.map((cover) => (
-            <CoverContainer key={cover} onClick={() => handleImageClick(cover)}>
-              <CoverImg isSelected={coverImg === '' || coverImg === cover}>
-                <Image src={cover} />
+
+        {selectedCover ? (
+          <Carousel>
+            <CoverContainer hasAnimation={false}>
+              <CoverImg isSelected={true}>
+                <Image src={selectedCover} />
               </CoverImg>
             </CoverContainer>
-          ))}
-        </Carousel>
+          </Carousel>
+        ) : (
+          <Carousel>
+            {BookCoverImg.map((cover, index) => (
+              <CoverContainer
+                key={cover}
+                onClick={() => handleImageClick(index)}
+                hasAnimation={true}
+              >
+                <CoverImg
+                  isSelected={
+                    coverImageIndex === 10 || coverImageIndex === index
+                  }
+                >
+                  <Image src={cover} />
+                </CoverImg>
+              </CoverContainer>
+            ))}
+          </Carousel>
+        )}
       </CoverWrapper>
 
       <ButtonWrapper>
-        <Button size="md" onClick={createStoryBook} disabled={isPending}>생성하기</Button>
+        <Button size="md" onClick={createStoryBook} disabled={isPending}>
+          생성하기
+        </Button>
       </ButtonWrapper>
     </Wrapper>
   );
