@@ -44,12 +44,12 @@ export const Login = () => {
 
     try {
       await login(loginInfo).then((response) => {
-        const memberId = response.data.memberId;
+        const memberId: string = response.data.memberId;
         console.log(memberId);
-        updateMemberId(memberId);
+        updateMemberId(Number(memberId));
         localStorage.setItem('memberId', memberId);
+        navigator('/main');
       });
-      navigator('/main');
     } catch (error) {
       if (axios.isAxiosError(error)) {
         modal.push({

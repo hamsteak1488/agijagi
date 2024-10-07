@@ -44,9 +44,10 @@ const Layout = () => {
   const location = useLocation();
   const showBottomNavigation = [
     '/family',
-    '/',
+    '/record',
     '/family/profile',
-    '/board',
+    '/schedule',
+    '/',
   ].includes(location.pathname);
 
   return (
