@@ -120,8 +120,8 @@ class PostControllerTest {
                                 parameterWithName("postId").description("게시글 ID")
                         ),
                         requestParts(
-                                partWithName("title").description("수정할 제목").attributes(key("constraints").value("None")).optional(),
-                                partWithName("content").description("수정할 내용").attributes(key("constraints").value("None")).optional(),
+                                partWithName("title").description("수정할 제목").attributes(key("constraints").value(titleDescription)).optional(),
+                                partWithName("content").description("수정할 내용").attributes(key("constraints").value(contentDescription)).optional(),
                                 partWithName("newMediaList").description("새로 추가할 미디어 목록").attributes(key("constraints").value("None")).optional(),
                                 partWithName("deleteMediaIdList").description("삭제할 미디어 아이디 목록").attributes(key("constraints").value("None")).optional()
                         )

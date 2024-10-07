@@ -1,12 +1,17 @@
 package com.password926.agijagi.post.controller.dto.request;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class CreateCommentRequest {
-    private long parentCommentId;
+    private Long parentCommentId;
 
-    @NotNull
+    @NotBlank
     private String content;
 }

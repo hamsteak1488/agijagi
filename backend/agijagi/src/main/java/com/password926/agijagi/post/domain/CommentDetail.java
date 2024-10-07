@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommentDetail {
     private final long commentId;
-    private final long parentCommentId;
+    private final Long parentCommentId;
     private final long writerId;
     private final String writerNickname;
     private final String content;

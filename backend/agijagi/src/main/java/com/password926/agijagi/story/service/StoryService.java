@@ -13,7 +13,6 @@ import com.password926.agijagi.story.entity.Story;
 import com.password926.agijagi.child.infrastructure.ChildRepository;
 import com.password926.agijagi.child.domain.ChildValidator;
 import com.password926.agijagi.child.domain.Child;
-import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.media.domain.MediaStorage;
 import com.password926.agijagi.media.domain.Image;
 import com.password926.agijagi.common.errors.exception.RestApiException;
@@ -44,7 +43,7 @@ public class StoryService {
     private final ImageGenerator imageGenerator;
 
     @Transactional
-    public Long createStory(long memberId, CreateStoryRequest request) {
+    public Map<String, Long> createStory(long memberId, CreateStoryRequest request) {
         childValidator.validateWriteAuthority(memberId, request.getChildId());
 
         Child child = childRepository.findByIdAndIsDeletedFalse(request.getChildId())
@@ -70,8 +69,7 @@ public class StoryService {
                 ChronoUnit.DAYS.between(child.getBirthday(), LocalDate.now())
         );
 
-        Image image = mediaStorage.storeImage(MediaResource.from(request.getCoverImage()));
-        story.addMedia(image);
+        story.addCoverImage(request.getCoverImageIndex());
 
         storyRepository.save(story);
 
@@ -103,7 +101,9 @@ public class StoryService {
         }
         storyPageRepository.saveAll(storyPageData);
 
-        return story.getId();
+        Map<String,Long> idMap = new HashMap<String,Long>();
+        idMap.put("id", story.getId());
+        return idMap;
     }
 
     @Transactional(readOnly = true)

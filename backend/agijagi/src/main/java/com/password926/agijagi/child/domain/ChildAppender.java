@@ -18,16 +18,14 @@ public class ChildAppender {
 
     private final MediaStorage mediaStorage;
     private final ChildRepository childRepository;
-    private final MemberChildAppender memberChildAppender;
+    private final FollowerAppender followerAppender;
     private final MilestoneStateAppender milestoneStateAppender;
-    private final MemberReader memberReader;
 
     @Transactional
     public void append(long memberId, ChildContent childContent, MultipartFile image) {
         Image storedImage = storeImageIfPresent(image);
         Child child = childRepository.save(Child.of(childContent, storedImage));
-        Member member = memberReader.read(memberId);
-        memberChildAppender.createRelation(member, child, Authority.WRITE);
+        followerAppender.append(memberId, child.getId(), Authority.WRITE);
         milestoneStateAppender.append(child);
     }
 

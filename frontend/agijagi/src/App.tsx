@@ -9,6 +9,9 @@ import BoardPage from './pages/BoardPage';
 import WriteArticlePage from './pages/BoardPage/WritePage';
 import GlobalStyle from './styles/GlobalStyle';
 import { ModalProvider } from './hooks/useModal';
+import MileStone from './pages/MileStoneCheckPage';
+import MileStoneReport from './pages/MileStoneReportPage';
+import Report from './pages/ReportPage';
 import Signup from './pages/Signup';
 import { Welcome } from './pages/Signup/Welcome';
 import { BabyInfoForm } from './pages/Baby/BabyInfoForm/BabyInfoForm';
@@ -16,6 +19,7 @@ import { Main } from './pages/Main';
 import BabyProfile from './pages/BabyProfile';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BottomNavigation } from './components/common/BottomNavigation/BottomNavigation';
+import BookCarousel from './components/book/BookCarousel';
 import Layout from './components/common/Layout';
 
 function App() {
@@ -48,6 +52,9 @@ const Router = () => {
     '/record',
     '/family/profile',
     '/schedule',
+    '/milestone',
+    '/milestone-report',
+    '/report',
     '/',
   ].includes(location.pathname);
 
@@ -57,6 +64,7 @@ const Router = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/record" element={<RecordPage />} />
+          <Route path="/book" element={<BookCarousel />} />
           <Route path="/family" element={<BabyMain />} />
           <Route path="/family/profile" element={<BabyProfile />} />
           <Route path="/family/writing" element={<WritingDiary />} />

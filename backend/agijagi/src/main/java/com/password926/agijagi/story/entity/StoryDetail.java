@@ -20,7 +20,7 @@ public class StoryDetail {
 
     private LocalDateTime createdAt;
 
-    private String coverImageUrl;
+    private Short coverImageIndex;
 
     public static StoryDetail of(Story story) {
         return StoryDetail.builder()
@@ -30,7 +30,7 @@ public class StoryDetail {
                 .startDate(story.getStartDate())
                 .endDate(story.getEndDate())
                 .createdAt(story.getCreatedAt())
-                .coverImageUrl(story.getCoverImage().getUrl())
+                .coverImageIndex(story.getCoverImageIndex())
                 .build();
     }
 }

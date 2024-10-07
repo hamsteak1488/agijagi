@@ -18,6 +18,7 @@ import useChildStore from '../../stores/useChlidStore';
 import theme from '../../styles/theme';
 import { BabyResponse } from '../../types/user';
 import SchedulePage from '../SchedulePage';
+import { useNavigate } from 'react-router-dom';
 
 export const Container = styled.div`
   display: flex;
@@ -67,6 +68,7 @@ export const BabyProfile = () => {
   });
 
   const modal = useModal();
+  const navigator = useNavigate();
   const handleEditBabyInfo = () => {
     modal.push({
       children: <EditBabyInfo child={child} />,
@@ -100,7 +102,7 @@ export const BabyProfile = () => {
       <BabyProfileCard child={child}></BabyProfileCard>
       <BabyReportCard></BabyReportCard>
       <MenuConatiner>
-        <MenuItem>
+        <MenuItem onClick={() => navigator('/report')}>
           <IconWrapper>
             <ReportIcon />
           </IconWrapper>
