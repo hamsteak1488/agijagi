@@ -3,6 +3,7 @@ package com.password926.agijagi.story.controller;
 import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
+import com.password926.agijagi.story.entity.Story;
 import com.password926.agijagi.story.entity.StoryPageDetail;
 import com.password926.agijagi.story.service.StoryService;
 import com.password926.agijagi.story.entity.StoryDetail;
@@ -21,12 +22,11 @@ public class StoryController {
 
     @Authenticate
     @PostMapping
-    public ResponseEntity<Void> createStory(
+    public ResponseEntity<Long> createStory(
             LoginMember member,
             CreateStoryRequest createStoryRequest
     ) {
-        storyService.createStory(member.getId(), createStoryRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(storyService.createStory(member.getId(), createStoryRequest));
     }
 
     @Authenticate
