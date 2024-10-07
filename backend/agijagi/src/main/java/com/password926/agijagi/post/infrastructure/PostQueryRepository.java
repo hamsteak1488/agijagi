@@ -5,6 +5,7 @@ import com.password926.agijagi.common.errors.exception.RestApiException;
 import com.password926.agijagi.post.domain.Post;
 import com.password926.agijagi.post.domain.PostSearchFilter;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
@@ -29,8 +30,10 @@ public class PostQueryRepository {
                 .select(post)
                 .from(post)
                 .where(
-                        likeTitle(filter.getTitle()),
-                        likeWriterNickname(filter.getWriterNickname())
+                        Expressions.TRUE
+                                .and(likeTitle(filter.getTitle()))
+                                .and(likeWriterNickname(filter.getWriterNickname()))
+                                .and(post.isDeleted.isFalse())
                 )
                 .orderBy(post.id.desc())
                 .offset(pageable.getOffset())
@@ -41,8 +44,10 @@ public class PostQueryRepository {
                 .select(post.count())
                 .from(post)
                 .where(
-                        likeTitle(filter.getTitle()),
-                        likeWriterNickname(filter.getWriterNickname())
+                        Expressions.TRUE
+                                .and(likeTitle(filter.getTitle()))
+                                .and(likeWriterNickname(filter.getWriterNickname()))
+                                .and(post.isDeleted.isFalse())
                 )
                 .fetchFirst();
 
