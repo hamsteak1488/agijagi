@@ -14,9 +14,10 @@ import { BabyResponse } from '../../../types/user';
 import Typhography from '../Typography';
 
 export const Container = styled.nav`
+  position: sticky;
+  bottom: 0;
   width: 100%;
   height: auto;
-  margin-top: 4rem;
 `;
 
 export const Bar = styled.div`
