@@ -12,12 +12,13 @@ public class ChildDetailReader {
 
     private final MemberChildReader memberChildReader;
     private final ChildReader childReader;
+    private final FollowerReader followerReader;
 
     @Transactional(readOnly = true)
     public ChildDetail readByMemberAndChild(long memberId, long childId) {
         Child child = childReader.read(childId);
         MemberChild memberChild = memberChildReader.readByMemberAndChild(memberId, childId);
-        long followerNum = memberChildReader.readFollowerNum(childId);
+        long followerNum = followerReader.readFollowerNum(childId);
 
         return ChildDetail.of(child, memberChild.getAuthority(), followerNum);
     }
@@ -29,7 +30,7 @@ public class ChildDetailReader {
         return memberChilds.stream()
                 .map(memberChild -> {
                     Child child = childReader.read(memberChild.readChildId());
-                    long followerNum = memberChildReader.readFollowerNum(child.getId());
+                    long followerNum = followerReader.readFollowerNum(child.getId());
                     return ChildDetail.of(childReader.read(memberChild.readChildId()), memberChild.getAuthority(), followerNum);
                 })
                 .toList();
