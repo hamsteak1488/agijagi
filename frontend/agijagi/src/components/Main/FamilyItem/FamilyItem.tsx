@@ -1,9 +1,14 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import theme from '../../../styles/theme';
-import defaultImg from '../../../assets/images/adult.png';
+import defaultBoy from '../../../assets/images/boy.png';
+import defaultGirl from '../../../assets/images/girl.png';
+import defaultNone from '../../../assets/images/adult.png';
 import Typhography from '../../common/Typography';
 import UserIcon from '@heroicons/react/16/solid/UserIcon';
+import { BabyGender, BabyResponse } from '../../../types/user';
+import { useNavigate } from 'react-router-dom';
+import useChildStore from '../../../stores/useChlidStore';
 
 export const GridItem = styled.div<{ isParent: boolean }>(
   (props) =>
@@ -18,6 +23,7 @@ export const GridItem = styled.div<{ isParent: boolean }>(
         ${props.isParent
           ? theme.color.primary[300]
           : theme.color.secondary[300]};
+      overflow: hidden;
     `
 );
 
@@ -40,7 +46,7 @@ export const MemberInfo = styled.div`
   background-color: ${theme.color.primary[50]};
   border-radius: 0.5rem;
   top: 4%;
-  left: 72%;
+  left: 75%;
 `;
 
 export const BottomLine = styled.div`
@@ -59,13 +65,40 @@ export const IconWrapper = styled.div`
   height: 18px;
 `;
 
-export const FamilyItem = () => {
+export interface FamilyItem {
+  babyInfo: BabyResponse;
+}
+function getDefaultImg(gender: BabyGender) {
+  switch (gender) {
+    case '남아':
+      return defaultBoy;
+    case '여아':
+      return defaultGirl;
+    case '모름':
+      return defaultNone;
+  }
+}
+export const FamilyItem = ({ babyInfo }: FamilyItem) => {
+  const navigator = useNavigate();
+
+  const { childId, updateChildId } = useChildStore();
+
   return (
-    <GridItem isParent={true}>
-      <Photo src={defaultImg} />
+    <GridItem
+      isParent={babyInfo.authority === 'WRITE'}
+      onClick={() => {
+        updateChildId(babyInfo.childId);
+        navigator('/family');
+      }}
+    >
+      <Photo
+        src={
+          babyInfo.imageUrl ? babyInfo.imageUrl : getDefaultImg(babyInfo.gender)
+        }
+      />
       <MemberInfo>
         <Typhography size="xs" color="primary" weight="extraBold">
-          5
+          {babyInfo.followerNum}
         </Typhography>
         <IconWrapper>
           <UserIcon color={theme.color.primary[900]} />
@@ -73,7 +106,9 @@ export const FamilyItem = () => {
       </MemberInfo>
       <BottomLine>
         <FamilyName>
-          <Typhography weight="bold">아기다운</Typhography>
+          <Typhography size="sm" weight="bold">
+            {babyInfo.nickname}
+          </Typhography>
         </FamilyName>
       </BottomLine>
     </GridItem>

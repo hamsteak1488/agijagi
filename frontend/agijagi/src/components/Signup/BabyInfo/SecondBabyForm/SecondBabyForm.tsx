@@ -5,6 +5,7 @@ import Typhography from '../../../common/Typography';
 import { useState } from 'react';
 import Textfield from '../../../common/Textfield';
 import theme from '../../../../styles/theme';
+import { BabyGender } from '../../../../types/user';
 
 export const Container = styled.div<{ width: number; isNext: boolean }>(
   (props) => css`
@@ -51,18 +52,31 @@ export const RadioForm = styled.div`
 
 export interface SecondBabyFormProps {
   isNext: boolean;
+  selectedGender: BabyGender;
+  setSelectedGender: React.Dispatch<React.SetStateAction<BabyGender>>;
+  selectedRelation: Relationship;
+  setSelectedRelation: React.Dispatch<React.SetStateAction<Relationship>>;
+  weight: string;
+  setWeight: React.Dispatch<React.SetStateAction<string>>;
+  height: string;
+  setHeight: React.Dispatch<React.SetStateAction<string>>;
+  submitBaby: () => void;
 }
 
-export type BabyGender = '남아' | '여아' | '알수없음';
 export type Relationship = '엄마' | '아빠' | '기타';
 
-export const SecondBabyForm = ({ isNext }: SecondBabyFormProps) => {
-  const [selectedGender, setSelectedGender] = useState<BabyGender>('남아');
-  const [selectedRelation, setSelectedRelation] =
-    useState<Relationship>('엄마');
-  const [weight, setWeight] = useState<string>('');
-  const [height, setHeight] = useState<string>('');
-
+export const SecondBabyForm = ({
+  isNext,
+  selectedGender,
+  setSelectedGender,
+  selectedRelation,
+  setSelectedRelation,
+  weight,
+  setWeight,
+  height,
+  setHeight,
+  submitBaby,
+}: SecondBabyFormProps) => {
   const handleGenderClick = (gender: BabyGender) => {
     setSelectedGender(gender);
   };
@@ -81,7 +95,7 @@ export const SecondBabyForm = ({ isNext }: SecondBabyFormProps) => {
           아기 성별
         </Typhography>
         <ButtonContainer>
-          {['남아', '여아', '알수없음'].map((gender, _) => (
+          {['남아', '여아', '모름'].map((gender, _) => (
             <Button
               color={selectedGender === gender ? 'primary' : 'greyScale'}
               key={gender}
@@ -148,7 +162,13 @@ export const SecondBabyForm = ({ isNext }: SecondBabyFormProps) => {
           type="number"
         />
       </InputContainer>
-      <Button fullWidth={true}>등록</Button>
+      <Button
+        fullWidth={true}
+        disabled={!weight || !height}
+        onClick={submitBaby}
+      >
+        등록
+      </Button>
     </Container>
   );
 };

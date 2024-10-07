@@ -103,7 +103,7 @@ export const Welcome = () => {
         >
           <Typhography color="white">아니오 (아기 등록)</Typhography>
         </Button>
-        <SkipButton>
+        <SkipButton onClick={() => navigator('/main')}>
           <Typhography color="greyScale" shade="500">
             건너뛰기
           </Typhography>

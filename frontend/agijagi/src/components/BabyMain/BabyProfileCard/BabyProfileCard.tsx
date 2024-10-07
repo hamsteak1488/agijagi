@@ -1,8 +1,14 @@
 import styled from '@emotion/styled';
-import defaultImg from '../../../assets/images/adult.png';
+import defaultBoy from '../../../assets/images/boy.png';
+import defaultGirl from '../../../assets/images/girl.png';
 import theme from '../../../styles/theme';
 import Typhography from '../../common/Typography';
 import UserIcon from '@heroicons/react/16/solid/UserIcon';
+import { BabyResponse } from '../../../types/user';
+import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
+import useModal from '../../../hooks/useModal';
+import { FollowerModal } from '../FollowerModal/FollowerModal';
 
 export const Container = styled.div`
   display: flex;
@@ -66,23 +72,67 @@ export const IconWrapper = styled.div`
   height: 24px;
 `;
 
-export const BabyProfileCard = () => {
+export const DayCountWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+`;
+export interface BabyProfileCardProps {
+  child?: BabyResponse;
+}
+
+export const BabyProfileCard = ({ child }: BabyProfileCardProps) => {
+  const modal = useModal();
+  const navigator = useNavigate();
+  const today = moment();
+  const differenceIndays = today.diff(
+    moment(child?.birthday, 'YYYY-MM-DD'),
+    'days'
+  );
+
+  const handleFollowerModal = () => {
+    modal.push({
+      children: <FollowerModal />,
+      animation: 'bottom',
+    });
+  };
+
   return (
     <Container>
       <GridCard>
-        <PhotoSection>
-          <Photo src={defaultImg} />
+        <PhotoSection
+          onClick={() => {
+            navigator('/family/profile');
+          }}
+        >
+          <Photo
+            src={
+              child?.imageUrl
+                ? child.imageUrl
+                : child?.gender === '남아'
+                ? defaultBoy
+                : defaultGirl
+            }
+          />
         </PhotoSection>
         <ContentSection>
+          <Typhography size="xs" color="primary" weight="bold">
+            {child?.name}
+          </Typhography>
           <Typhography size="5xl" weight="bold">
-            아기다운
+            {child?.nickname}
           </Typhography>
-          <Typhography size="md" color="primary" shade="900" weight="regular">
-            + 367일
-          </Typhography>
-          <MemberInfo>
+          <DayCountWrapper>
+            <Typhography size="sm">태어난지</Typhography>
+            <Typhography size="sm" color="primary" shade="900" weight="bold">
+              {differenceIndays ? differenceIndays : 0}
+            </Typhography>
+            <Typhography size="sm">일</Typhography>
+          </DayCountWrapper>
+
+          <MemberInfo onClick={handleFollowerModal}>
             <Typhography size="xl" color="primary" weight="extraBold">
-              5
+              {child?.followerNum}
             </Typhography>
             <IconWrapper>
               <UserIcon color={theme.color.primary[900]} />

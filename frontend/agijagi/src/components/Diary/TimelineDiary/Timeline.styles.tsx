@@ -30,6 +30,10 @@ export const DateDiv = styled.div(
     display: flex;
     flex-direction: row;
     align-items: center;
+    border: 2px solid ${theme.color.primary[500]};
+    padding: 0.33rem;
+    border-radius: 1rem;
+    background-color: ${theme.color.primary[50]};
     cursor: pointer;
   `
 );
