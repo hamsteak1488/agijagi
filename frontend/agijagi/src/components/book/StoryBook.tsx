@@ -193,7 +193,6 @@ const BookPage = React.forwardRef<HTMLDivElement, BookPageProps>(
   }
 );
 
-// eslint-disable-next-line react/display-name
 const BookCover = React.forwardRef<HTMLDivElement, BookCoverProps>(
   (props, ref) => {
     return (
@@ -205,7 +204,7 @@ const BookCover = React.forwardRef<HTMLDivElement, BookCoverProps>(
   }
 );
 
-BookPage.displayName = 'BookPage'; // forwardRef 사용 시 displayName 설정 권장
+// BookPage.displayName = 'BookPage'; // forwardRef 사용 시 displayName 설정 권장
 
 interface StoryBookProps {
   book: StoryBookDetail;
@@ -268,7 +267,6 @@ const StoryBook = ({ book, goBack }: StoryBookProps) => {
     [totalPages]
   );
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const mybook = useRef<HTMLFlipBook | null>(book);
   const bookContainer = useRef<HTMLDivElement>(null);
@@ -332,7 +330,6 @@ const StoryBook = ({ book, goBack }: StoryBookProps) => {
       </BackButtonContainer>
 
       <BookContainer ref={bookContainer}>
-        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
         {/* @ts-ignore */}
         <HTMLFlipBook
           ref={mybook}

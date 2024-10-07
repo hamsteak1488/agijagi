@@ -76,7 +76,7 @@ const ImageWrapper = styled.div`
 const ModalWrapper = styled.div`
   display: flex;
   width: 100%;
-  height: 52%;
+  height: 100%;
   box-sizing: border-box;
 
   @media (min-width: 700px) {
