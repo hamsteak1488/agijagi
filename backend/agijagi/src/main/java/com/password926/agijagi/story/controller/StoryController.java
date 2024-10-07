@@ -3,7 +3,6 @@ package com.password926.agijagi.story.controller;
 import com.password926.agijagi.auth.controller.Authenticate;
 import com.password926.agijagi.auth.controller.dto.LoginMember;
 import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
-import com.password926.agijagi.story.entity.Story;
 import com.password926.agijagi.story.entity.StoryPageDetail;
 import com.password926.agijagi.story.service.StoryService;
 import com.password926.agijagi.story.entity.StoryDetail;
