@@ -28,7 +28,7 @@ public class ArticleService {
 
     @Transactional
     public void createArticle(long memberId, CreateArticleRequest request) {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByIdAndIsDeletedIsFalse(memberId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
         Article article = Article.builder()

@@ -14,12 +14,15 @@ public class StoryPageDetail {
 
     private String content;
 
+    private String storyPageImageUrl;
+
     public static StoryPageDetail of(StoryPage storyPage) {
         return StoryPageDetail.builder()
                 .id(storyPage.getId())
                 .storyId(storyPage.getStory().getId())
                 .pageNumber(storyPage.getPageNumber())
                 .content(storyPage.getContent())
+                .storyPageImageUrl(storyPage.getStoryImage().getUrl())
                 .build();
     }
 }

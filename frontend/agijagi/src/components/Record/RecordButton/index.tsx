@@ -34,9 +34,11 @@ const RecordButton = ({
     if (!toggle) {
       mutate({
         childId,
-        startDateTime: now(),
-        endDateTime: null,
-        type,
+        data: {
+          startDateTime: now(),
+          endDateTime: null,
+          type,
+        },
       });
       return;
     }
@@ -44,9 +46,11 @@ const RecordButton = ({
     if (isActive()) {
       mutate({
         childId,
-        startDateTime: getStart() || '',
-        endDateTime: now(),
-        type,
+        data: {
+          startDateTime: getStart() || '',
+          endDateTime: now(),
+          type,
+        },
       });
       stop();
     } else {

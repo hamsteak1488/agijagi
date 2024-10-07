@@ -8,4 +8,6 @@ import java.util.List;
 public interface StoryPageRepository extends JpaRepository<StoryPage, Long> {
 
     List<StoryPage> findAllByStoryId(long storyId);
+
+    void deleteAllByStoryId(long storyId);
 }

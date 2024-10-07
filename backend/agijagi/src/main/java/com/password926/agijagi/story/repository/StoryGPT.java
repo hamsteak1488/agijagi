@@ -57,8 +57,8 @@ public class StoryGPT {
                 2. Use your child's age to determine the appropriate length and complexity of the story.
                 3. Translate real events from parenting diaries into magical or fantasy scenarios.
                 4. Include character growth and development that reflects your child's actual progress.
-                5. It should be generated up to 10 sentences. Before that, I need to finish the story.
-                6. No more than 50 characters per sentence.
+                5. It should be generated up to 6 sentences. Before that, I need to finish the story.
+                6. No more than 100 characters per sentence.
                 7. Fairy tales should be written in Korean.
                 8. Paragraphs should be written as examples below.
                 [{z}"pageNumber": 1, "content": "content1"{a}, {z}"pageNumber": 2,"content": "content2"{a}]

@@ -9,8 +9,6 @@ import java.util.*;
 @AllArgsConstructor
 public class UpdateDiaryRequest {
 
-    private String title;
-
     private String content;
 
     private List<MultipartFile> newMediaList;

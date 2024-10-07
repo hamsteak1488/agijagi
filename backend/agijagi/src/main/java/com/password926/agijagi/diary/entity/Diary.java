@@ -6,6 +6,7 @@ import com.password926.agijagi.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -28,9 +29,9 @@ public class Diary {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
-
+    
     @Column(nullable = false)
-    private String title;
+    private LocalDate wroteAt;
 
     @Column(nullable = false)
     private String content;
@@ -41,22 +42,19 @@ public class Diary {
     private List<DiaryMedia> diaryMediaList = new ArrayList<>();
 
     @Builder
-    public Diary(Child child, Member member, LocalDateTime createdAt, String title, String content) {
+    public Diary(Child child, Member member, LocalDateTime createdAt, String content, LocalDate wroteAt) {
         this.child = child;
         this.member = member;
         this.createdAt = createdAt;
-        this.title = title;
         this.content = content;
+        this.wroteAt = wroteAt;
     }
 
     public void remove() {
         isDeleted = true;
     }
 
-    public void updateTitleOrContent(String title, String content) {
-        if (title != null) {
-            this.title = title;
-        }
+    public void updateContent(String content) {
         if (content != null) {
             this.content = content;
         }

@@ -1,5 +1,6 @@
 package com.password926.agijagi.growth.domain;
 
+import com.password926.agijagi.child.domain.Gender;
 import com.password926.agijagi.growth.infrastructure.StandardGrowthRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ public class StandardGrowthReader {
 
     private final StandardGrowthRepository standardGrowthRepository;
 
-    public List<StandardGrowth> read(int month) {
-        return standardGrowthRepository.findAllByMonthLessThan(month);
+    public List<StandardGrowth> read(int month, Gender gender) {
+        return standardGrowthRepository.findAllByMonthLessThanEqualAndGender(month, gender);
     }
 }
