@@ -26,12 +26,7 @@ const Item = ({
 }: ItemProps) => {
   return (
     <s.Container onClick={onClick}>
-      {!!title && (
-        <Typhography color="primary" weight="bold" shade="900">
-          {title}
-        </Typhography>
-      )}
-      {images.length && (
+      {!!images.length && (
         <s.ImageList>
           {images.map((image, index) => (
             <ArticleList.Item.Image
@@ -41,6 +36,11 @@ const Item = ({
             />
           ))}
         </s.ImageList>
+      )}
+      {!!title && (
+        <Typhography color="primary" size="xl" weight="extraBold" shade="900">
+          {title}
+        </Typhography>
       )}
       <Typhography>{description}</Typhography>
       <s.Detail>
