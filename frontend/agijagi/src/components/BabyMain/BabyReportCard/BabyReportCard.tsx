@@ -3,6 +3,7 @@ import bathBaby from '../../../assets/images/babyprofile/bathBaby.png';
 import theme from '../../../styles/theme';
 import Button from '../../common/Button';
 import Typhography from '../../common/Typography';
+import { useNavigate } from 'react-router-dom';
 
 export const Container = styled.div`
   display: flex;
@@ -67,6 +68,8 @@ export const Photo = styled.img`
 `;
 
 export const BabyReportCard = () => {
+  const navigator = useNavigate();
+
   return (
     <Container>
       <GridCard>
@@ -106,7 +109,11 @@ export const BabyReportCard = () => {
           </SchedualContainer>
 
           <ButtonContainer>
-            <Button size="sm" fullWidth={true}>
+            <Button
+              size="sm"
+              fullWidth={true}
+              onClick={() => navigator('/milestone')}
+            >
               마일스톤 체크하기
             </Button>
           </ButtonContainer>

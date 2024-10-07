@@ -1,10 +1,10 @@
-
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 import ProfileIcon from '../common/ProfileIcon/ProfileIcon';
 import MileStoneCheckList from './MileStoneCheckList';
 import { HeightWeightInfoProps, MilestoneDetail } from '../../apis/milestone';
 import MileStoneButton from './MileStoneButton';
+import { useState } from 'react';
 
 const Wrapper = styled.div`
   display: flex;
@@ -48,7 +48,7 @@ const calculateAgeInMonths = (birthDate: Date): number => {
 
   let yearsDiff = today.getFullYear() - birthDate.getFullYear();
   let monthsDiff = today.getMonth() - birthDate.getMonth();
-  let daysDiff = today.getDate() - birthDate.getDate();
+  const daysDiff = today.getDate() - birthDate.getDate();
 
   if (monthsDiff < 0) {
     yearsDiff--;

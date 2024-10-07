@@ -40,6 +40,7 @@ export const ProfileImg = styled.img`
 `;
 
 export const ProfileContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;

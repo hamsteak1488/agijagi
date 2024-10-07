@@ -74,8 +74,8 @@ const Report = () => {
     queryFn: () => getChildInfo(childId),
   });
 
-  const name = data?.data.nickname;
-  const birth = data?.data.birthday;
+  const name = data?.data ? data.data.nickname : '';
+  const birth = data?.data ? data.data.birthday : '';
 
   const handleBack = () => {
     navigate(-1);

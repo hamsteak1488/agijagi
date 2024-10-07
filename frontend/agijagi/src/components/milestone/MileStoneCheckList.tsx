@@ -74,10 +74,10 @@ const DevelopmentList = ({
     return <>데이터를 불러오지 못했습니다.</>;
   }
   if (isLoading) {
-    return <>로딩중</>;
+    return <div style={{ height: '800px' }}>로딩중</div>;
   }
 
-   // 체크된 상태인지 확인하는 함수
+  // 체크된 상태인지 확인하는 함수
   const isChecked = (milestone: MilestoneDetail) => {
     return selectedMilestones.some((selected) => selected.id === milestone.id);
   };

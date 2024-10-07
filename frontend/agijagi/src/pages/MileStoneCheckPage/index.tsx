@@ -98,7 +98,7 @@ const calculateAgeInMonths = (birthDate: Date): number => {
 
   let yearsDiff = today.getFullYear() - birthDate.getFullYear();
   let monthsDiff = today.getMonth() - birthDate.getMonth();
-  let daysDiff = today.getDate() - birthDate.getDate();
+  const daysDiff = today.getDate() - birthDate.getDate();
 
   if (monthsDiff < 0) {
     yearsDiff--;
@@ -144,7 +144,7 @@ const MilestoneCheck = () => {
   });
 
   useEffect(() => {
-    if (childQuery.data) {
+    if (childQuery.data?.data) {
       const birthday = childQuery.data?.data.birthday;
       if (birthday) {
         const birthDate = new Date(birthday);
@@ -256,7 +256,6 @@ const MilestoneCheck = () => {
 
       {warning && <WarningMessage>{warning}</WarningMessage>}
       {success && <SuccessMessage>{success}</SuccessMessage>}
-
     </Wrapper>
   );
 };

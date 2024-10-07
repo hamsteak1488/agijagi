@@ -1,4 +1,6 @@
 import styled from '@emotion/styled';
+import moment from 'moment';
+import 'moment/locale/ko';
 import defaultImg from '../../../assets/images/adult.png';
 import theme from '../../../styles/theme';
 import Button from '../../common/Button';
@@ -64,6 +66,8 @@ export const Photo = styled.img`
 `;
 
 export const ScheduleCard = () => {
+  const formattedDate = moment().locale('ko').format('MM월 DD일 (ddd)');
+
   return (
     <Container>
       <GridCard>
@@ -72,15 +76,15 @@ export const ScheduleCard = () => {
         </PhotoSection>
         <ContentSection>
           <DateContainer>
-            <Typhography size="md" color="primary" weight="bold">
-              09월 05일 (목)
-            </Typhography>
-            <Typhography size="md" weight="bold">
+            <Typhography size="sm" weight="bold">
               오늘의 일정
+            </Typhography>
+            <Typhography size="sm" color="primary" weight="bold">
+              {formattedDate}
             </Typhography>
           </DateContainer>
           <SchedualContainer>
-            <Typhography size="md" weight="bold">
+            <Typhography size="sm" weight="bold">
               오후 6시
             </Typhography>
             <Typhography size="md" color="secondary" shade="A700">
