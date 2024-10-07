@@ -50,7 +50,7 @@ const GlobalStyle = () => {
           body,
           #root {
             width: 100vw;
-            height: 100vh;
+            height: calc(var(--vh) * 100);
             margin: 0;
             overflow-x: hidden;
             overflow-y: scroll;

@@ -17,7 +17,7 @@ import { getChildInfo } from '../../apis/milestone';
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: calc(var(--vh) * 100);
 `;
 
 const Title = styled.div`
@@ -62,7 +62,7 @@ const ReportContainer = styled.div`
   padding: 10px;
 `;
 
-const ChartContainer = styled.div<{visible: boolean}>`
+const ChartContainer = styled.div<{ visible: boolean }>`
   width: 100%;
   max-width: 700px;
   margin: 10px auto;
@@ -192,7 +192,8 @@ const Report = () => {
           {reportData?.currWeight ? (
             <Typhography size="md" color="primary" shade="800">
               {name}(이)의 몸무게가 출생 후 {days}일 동안{' '}
-              {reportData && weight ? reportData.currWeight - weight : 0} kg 증가했습니다.
+              {reportData && weight ? reportData.currWeight - weight : 0} kg
+              증가했습니다.
             </Typhography>
           ) : (
             ''
