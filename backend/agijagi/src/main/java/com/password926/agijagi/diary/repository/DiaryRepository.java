@@ -12,5 +12,5 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
     Optional<Diary> findByIdAndIsDeletedFalse(long diaryId);
 
-    List<Diary> findAllByChildIdAndWroteAtBetween(Long childId, LocalDate wroteAt1, LocalDate createAt2);
+    List<Diary> findAllByChildIdAndWroteAtBetween(Long childId, LocalDate startAt, LocalDate endAt);
 }
