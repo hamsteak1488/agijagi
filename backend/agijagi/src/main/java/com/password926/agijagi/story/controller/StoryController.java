@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/stories")
@@ -21,7 +21,7 @@ public class StoryController {
 
     @Authenticate
     @PostMapping
-    public ResponseEntity<Long> createStory(
+    public ResponseEntity<Map<String, Long>> createStory(
             LoginMember member,
             CreateStoryRequest createStoryRequest
     ) {
