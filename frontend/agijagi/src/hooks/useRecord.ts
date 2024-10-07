@@ -74,7 +74,9 @@ const useRecord = () => {
     dayjs.locale('ko');
 
     data.forEach((data) => {
-      const current = dayjs(data.startDateTime).format('M월 D일 (dddd)');
+      const current = dayjs(data.endDateTime ?? data.startDateTime).format(
+        'M월 D일 (dddd)'
+      );
       if (lastGroup !== current) {
         lastGroup = current;
         last = [];
