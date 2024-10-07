@@ -1,3 +1,4 @@
+import useDeleteComment from '../../../../../hooks/api/useDeleteComment';
 import useDialog from '../../../../../hooks/useDialog';
 
 import { getReadableTimeDiff } from '../../../../../utils/getReadableTimeDiff';
@@ -9,16 +10,30 @@ import * as s from './style';
 interface ItemProps {
   writer: string;
   body: string;
-  createdAt: Date;
+  createdAt: string;
+  postId: number;
+  commentId: number;
+  isAuthor: boolean;
 }
 
-const Item = ({ writer, body, createdAt }: ItemProps) => {
+const Item = ({
+  writer,
+  body,
+  createdAt,
+  postId,
+  commentId,
+  isAuthor,
+}: ItemProps) => {
   const { confirm } = useDialog();
 
+  const { mutate } = useDeleteComment(postId);
+
   const handleClick = async () => {
-    if (!(await confirm('댓글을 삭제할까요?'))) {
+    if (!isAuthor || !(await confirm('댓글을 삭제할까요?'))) {
       return;
     }
+
+    mutate(commentId);
   };
 
   return (
@@ -26,7 +41,7 @@ const Item = ({ writer, body, createdAt }: ItemProps) => {
       <s.Detail>
         <Typhography color="primary">{writer}</Typhography>
         <Typhography color="secondary" size="sm">
-          {getReadableTimeDiff(createdAt)}
+          {getReadableTimeDiff(new Date(createdAt))}
         </Typhography>
       </s.Detail>
       {body}

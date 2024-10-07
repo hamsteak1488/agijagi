@@ -1,7 +1,7 @@
 import { axiosInstance } from './axiosInstance';
 
 interface WriteCommentProps {
-  postId: string;
+  postId: number;
   content: string;
 }
 

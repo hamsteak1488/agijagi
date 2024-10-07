@@ -30,3 +30,7 @@ export const Detail = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+export const Description = styled.div`
+  word-break: break-all;
+`;

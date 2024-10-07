@@ -11,6 +11,6 @@ export const Container = styled.div`
 `;
 
 export const CommentList = styled.div`
-  flex: 1 1 auto;
+  flex: 1 1;
   overflow-y: scroll;
 `;
