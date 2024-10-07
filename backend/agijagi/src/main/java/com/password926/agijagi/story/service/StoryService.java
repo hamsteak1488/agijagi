@@ -44,16 +44,16 @@ public class StoryService {
     private final ImageGenerator imageGenerator;
 
     @Transactional
-    public void createStory(long memberId, CreateStoryRequest request) {
+    public Long createStory(long memberId, CreateStoryRequest request) {
         childValidator.validateWriteAuthority(memberId, request.getChildId());
 
         Child child = childRepository.findByIdAndIsDeletedFalse(request.getChildId())
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        List<Diary> diaries = diaryRepository.findAllByChildIdAndCreatedAtBetween(
+        List<Diary> diaries = diaryRepository.findAllByChildIdAndWroteAtBetween(
                 request.getChildId(),
-                request.getStartDate().atStartOfDay(),
-                request.getEndDate().atTime(LocalTime.MAX).withNano(0)
+                request.getStartDate(),
+                request.getEndDate()
         );
 
         Story story = Story.builder()
@@ -102,6 +102,8 @@ public class StoryService {
             storyPageData.get(i).addMedia(images.get(i));
         }
         storyPageRepository.saveAll(storyPageData);
+
+        return story.getId();
     }
 
     @Transactional(readOnly = true)
