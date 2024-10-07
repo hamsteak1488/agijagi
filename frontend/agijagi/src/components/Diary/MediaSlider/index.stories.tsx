@@ -46,6 +46,8 @@ type Story = StoryObj<typeof meta>;
 export const Md: Story = {
   args: {
     fileList: [],
+    urlList: [],
+    urlType: [],
     handleUpload: (e) => {},
     handleDelete: (e) => {},
     isWriteMode: true,
@@ -92,6 +94,8 @@ export const Md: Story = {
     return (
       <MediaSlider
         fileList={fileList}
+        urlList={[]}
+        urlType={[]}
         isInitialRender={isInitialRender}
         isWriteMode={args.isWriteMode}
         handleUpload={handleUpload}

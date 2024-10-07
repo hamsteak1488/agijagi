@@ -19,7 +19,7 @@ public class DiaryMedia {
     @JoinColumn(name = "diary_id", nullable = false)
     private Diary diary;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "media_id", nullable = false)
     private Media media;
 }

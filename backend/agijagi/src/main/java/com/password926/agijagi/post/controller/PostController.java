@@ -6,9 +6,14 @@ import com.password926.agijagi.post.controller.dto.request.UpdatePostRequest;
 import com.password926.agijagi.post.domain.PostDetail;
 import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.post.controller.dto.request.CreatePostRequest;
+import com.password926.agijagi.post.domain.PostPageRequest;
+import com.password926.agijagi.post.domain.PostSearchFilter;
 import com.password926.agijagi.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -47,7 +52,7 @@ public class PostController {
     }
 
     @Authenticate
-    @PatchMapping("/{postId}")
+    @PostMapping("/{postId}")
     public ResponseEntity<Void> updatePost(LoginMember loginMember,
                                            @PathVariable long postId,
                                            @Valid UpdatePostRequest request)
@@ -85,5 +90,16 @@ public class PostController {
         PostDetail postDetail = postService.getPostDetail(postId);
 
         return ResponseEntity.ok(postDetail);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<PostDetail>> getPostPage(PostPageRequest request,
+                                                        @PageableDefault Pageable pageable) {
+        Page<PostDetail> postDetailPage = postService.getPostDetailPage(
+                new PostSearchFilter(request.getTitle(), request.getWriterNickname()),
+                pageable
+        );
+
+        return ResponseEntity.ok(postDetailPage);
     }
 }

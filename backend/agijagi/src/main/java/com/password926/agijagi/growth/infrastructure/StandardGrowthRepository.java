@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface StandardGrowthRepository extends Repository<StandardGrowth, Integer> {
 
-    List<StandardGrowth> findAllByMonthLessThanAndGender(int month, Gender gender);
+    List<StandardGrowth> findAllByMonthLessThanEqualAndGender(int month, Gender gender);
 }

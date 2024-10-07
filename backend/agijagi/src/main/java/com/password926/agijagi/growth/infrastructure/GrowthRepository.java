@@ -10,7 +10,7 @@ public interface GrowthRepository extends Repository<Growth, Long> {
 
     Optional<Growth> findByChildIdAndMonth(long childId, int month);
 
-    List<Growth> findAllByChildIdAndMonthLessThanOrderByMonth(long childId, int month);
+    List<Growth> findAllByChildIdAndMonthLessThanEqualOrderByMonth(long childId, int month);
 
     void save(Growth growth);
 }

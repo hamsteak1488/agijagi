@@ -1,8 +1,5 @@
 import styled from '@emotion/styled';
-import UserIcon from '@heroicons/react/16/solid/UserIcon';
-import defaultImg from '../../../assets/images/adult.png';
-import theme from '../../../styles/theme';
-import Typhography from '../../common/Typography';
+import { BabyResponse } from '../../../types/user';
 import { AddFamily } from '../AddFamily/AddFamily';
 import { FamilyItem } from '../FamilyItem/FamilyItem';
 
@@ -20,13 +17,20 @@ export const FamilyGrid = styled.div`
   row-gap: 2rem;
 `;
 
-export const MyFamily = () => {
+export interface MyFamilyProps {
+  families: BabyResponse[];
+}
+
+export const MyFamily = ({ families }: MyFamilyProps) => {
   return (
     <Container>
       <FamilyGrid>
-        <FamilyItem></FamilyItem>
-        <FamilyItem></FamilyItem>
-        <AddFamily></AddFamily>
+        <>
+          {families.map((item, index) => (
+            <FamilyItem babyInfo={item} key={index} />
+          ))}
+          <AddFamily />
+        </>
       </FamilyGrid>
     </Container>
   );

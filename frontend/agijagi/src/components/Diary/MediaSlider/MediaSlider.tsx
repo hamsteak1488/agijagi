@@ -13,17 +13,24 @@ import {
 
 interface MediaSliderProps {
   fileList?: File[];
+  urlList: string[];
+  urlType: string[];
   isWriteMode: boolean;
   handleUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleDelete?: (index: number) => void;
+  handleUrlDelete?: (index: number) => void;
+  removedList?: string[];
   isInitialRender: boolean;
 }
 
 export const MediaSlider = ({
   fileList = [],
+  urlList = [],
+  urlType = [],
   isWriteMode,
   handleUpload = () => {},
   handleDelete = () => {},
+  handleUrlDelete = () => {},
   isInitialRender = true,
 }: MediaSliderProps) => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -41,7 +48,11 @@ export const MediaSlider = ({
   };
 
   useEffect(() => {
-    if (scrollContainerRef.current && fileList.length > 0 && isWriteMode) {
+    if (
+      scrollContainerRef.current &&
+      (fileList.length > 0 || urlList.length > 0) &&
+      isWriteMode
+    ) {
       if (isInitialRender) {
         scrollContainerRef.current.scrollTo({
           left: 5000,
@@ -61,11 +72,37 @@ export const MediaSlider = ({
   const renderMedia = () => {
     return (
       <>
-        {fileList.map((file, index) => (
-          <MediaBox key={index}>
+        {urlList.map((url, index) => (
+          <MediaBox key={`url-${index}`}>
             <IndexLabel>
               <Typhography size="xs" color="white">
-                {index + 1}/{fileList.length}
+                {index + 1}/{urlList.length + fileList.length}
+              </Typhography>
+            </IndexLabel>
+            {isWriteMode && (
+              <DelIconDiv onClick={() => handleUrlDelete(index)}>
+                {DelIcon}
+              </DelIconDiv>
+            )}
+            {urlType[index] === 'image' ? (
+              <img
+                src={url}
+                alt={`media-url-${index}`}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            ) : (
+              <video controls style={{ width: '100%', height: '100%' }}>
+                <source src={url} />
+              </video>
+            )}
+          </MediaBox>
+        ))}
+
+        {fileList.map((file, index) => (
+          <MediaBox key={`file-${index}`}>
+            <IndexLabel>
+              <Typhography size="xs" color="white">
+                {urlList.length + index + 1}/{urlList.length + fileList.length}
               </Typhography>
             </IndexLabel>
             {isWriteMode && (
@@ -88,6 +125,7 @@ export const MediaSlider = ({
             )}
           </MediaBox>
         ))}
+
         {isWriteMode && (
           <MediaBox>
             <MediaInput handleUpload={handleScroll}></MediaInput>

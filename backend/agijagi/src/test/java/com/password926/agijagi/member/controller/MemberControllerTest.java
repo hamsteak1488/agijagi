@@ -1,8 +1,7 @@
 package com.password926.agijagi.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.password926.agijagi.auth.controller.LoginMemberArgumentResolver;
-import com.password926.agijagi.auth.controller.dto.LoginMember;
+import com.password926.agijagi.config.TestAuthConfig;
 import com.password926.agijagi.config.RestDocsConfig;
 import com.password926.agijagi.media.domain.MediaResource;
 import com.password926.agijagi.member.controller.dto.request.ModifyMemberRequest;
@@ -17,7 +16,6 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
@@ -33,16 +31,16 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.snippet.Attributes.key;
 
-@Import(RestDocsConfig.class)
+@Import({RestDocsConfig.class, TestAuthConfig.class})
 @AutoConfigureRestDocs
 @WebMvcTest(MemberController.class)
 class MemberControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -50,8 +48,6 @@ class MemberControllerTest {
 
     @MockBean
     private MemberService memberService;
-    @MockBean
-    private LoginMemberArgumentResolver loginMemberArgumentResolver;
 
     @DisplayName("회원가입")
     @Test
@@ -62,15 +58,13 @@ class MemberControllerTest {
         List<String> passwordDescription = constraintDescriptions.descriptionsForProperty("password");
         List<String> nicknameDescription = constraintDescriptions.descriptionsForProperty("nickname");
 
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("profileImage", "profile.png", "image/png", InputStream.nullInputStream());
-
         given(memberService.registerMember(anyString(), anyString(), anyString(), any(MediaResource.class)))
                 .willReturn(1L);
 
         MockPart emailPart = new MockPart("email", "test@example.com".getBytes());
         MockPart passwordPart = new MockPart("password", "password".getBytes());
         MockPart nicknamePart = new MockPart("nickname", "test".getBytes());
-
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("profileImage", "profile.png", "image/png", InputStream.nullInputStream());
 
         mockMvc.perform(
                         RestDocumentationRequestBuilders
@@ -92,41 +86,6 @@ class MemberControllerTest {
                 );
     }
 
-    @DisplayName("회원 정보 조회")
-    @Test
-    void getMemberDetail() throws Exception {
-        long memberId = 1L;
-
-        given(memberService.getMemberDetail(memberId))
-                .willReturn(MemberDetail.builder()
-                        .memberId(memberId)
-                        .email("test@example.com")
-                        .nickname("test")
-                        .profileImageUrl("test.image-url.com")
-                        .build());
-
-        mockMvc.perform(
-                RestDocumentationRequestBuilders
-                        .get("/members/{memberId}", 1)
-                        .cookie(new Cookie("SESSION", "Session Value"))
-                        .contentType(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(document(
-                        "member/get-member",
-                                pathParameters(
-                                        parameterWithName("memberId").description("회원 ID")
-                                ),
-                                responseFields(
-                                        fieldWithPath("memberId").description("회원 ID"),
-                                        fieldWithPath("email").description("이메일"),
-                                        fieldWithPath("nickname").description("닉네임"),
-                                        fieldWithPath("profileImageUrl").description("프로필 이미지 URL")
-                                )
-                        )
-                );
-    }
-
     @DisplayName("회원 정보 변경")
     @Test
     void updateMember() throws Exception {
@@ -141,26 +100,17 @@ class MemberControllerTest {
         willDoNothing().given(memberService)
                 .updateMember(anyLong(), anyString(), anyString(), anyString());
 
-        given(loginMemberArgumentResolver.supportsParameter(any(MethodParameter.class)))
-                .willAnswer(invocation -> {
-                    MethodParameter parameter = invocation.getArgument(0);
-                    return parameter.getParameterType().equals(LoginMember.class);
-                });
-
-        given(loginMemberArgumentResolver.resolveArgument(any(), any(), any(), any()))
-                .willReturn(new LoginMember(1L));
-
         mockMvc.perform(
                 RestDocumentationRequestBuilders
                         .patch("/members")
-                        .cookie(new Cookie("SESSION", "Session Value"))
+                        .cookie(new Cookie("SESSION", "AUTH_SESSION"))
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(document(
                         "member/modify-member",
-                                CookieDocumentation.requestCookies(
+                                requestCookies(
                                         CookieDocumentation.cookieWithName("SESSION").description("세션 ID")
                                 ),
                                 requestFields(
@@ -173,10 +123,93 @@ class MemberControllerTest {
     }
 
     @Test
-    void modifyMemberProfileImage() {
+    void updateMemberProfileImage() throws Exception {
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("profileImage", "profile.png", "image/png", InputStream.nullInputStream());
+
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders
+                                .multipart("/members/profile-image/update")
+                                .file(mockMultipartFile)
+                                .cookie(new Cookie("SESSION", "AUTH_SESSION"))
+                                .contentType(MediaType.MULTIPART_FORM_DATA)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document(
+                        "member/modify-member-profile-image",
+                        requestCookies(
+                                CookieDocumentation.cookieWithName("SESSION").description("세션 ID")
+                        ),
+                        requestParts(
+                                partWithName("profileImage").description("새 프로필 이미지").attributes(key("constraints").value("None"))
+                        )
+                ));
     }
 
     @Test
-    void deleteMember() {
+    void deleteMemberProfileImage() throws Exception {
+        mockMvc.perform(
+                RestDocumentationRequestBuilders
+                        .post("/members/profile-image/delete")
+                        .cookie(new Cookie("SESSION", "AUTH_SESSION"))
+                        .contentType(MediaType.ALL))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document(
+                        "member/delete-member-profile-image",
+                        requestCookies(
+                                CookieDocumentation.cookieWithName("SESSION").description("세션 ID")
+                        )
+                ));
+    }
+
+    @Test
+    void deleteMember() throws Exception {
+        mockMvc.perform(
+                RestDocumentationRequestBuilders
+                        .delete("/members")
+                        .cookie(new Cookie("SESSION", "AUTH_SESSION"))
+                        .contentType(MediaType.ALL)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document(
+                        "member/delete-member",
+                        requestCookies(
+                                CookieDocumentation.cookieWithName("SESSION").description("세션 ID")
+                        )
+                ));
+    }
+
+    @DisplayName("회원 정보 조회")
+    @Test
+    void getMemberDetail() throws Exception {
+        long memberId = 1L;
+
+        given(memberService.getMemberDetail(memberId))
+                .willReturn(MemberDetail.builder()
+                        .memberId(memberId)
+                        .email("test@example.com")
+                        .nickname("test")
+                        .profileImageUrl("test.image-url.com")
+                        .build());
+
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders
+                                .get("/members/{memberId}", 1)
+                                .cookie(new Cookie("SESSION", "AUTH_SESSION"))
+                                .contentType(MediaType.ALL)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document(
+                                "member/get-member",
+                                pathParameters(
+                                        parameterWithName("memberId").description("회원 ID")
+                                ),
+                                responseFields(
+                                        fieldWithPath("memberId").description("회원 ID"),
+                                        fieldWithPath("email").description("이메일"),
+                                        fieldWithPath("nickname").description("닉네임"),
+                                        fieldWithPath("profileImageUrl").description("프로필 이미지 URL")
+                                )
+                        )
+                );
     }
 }

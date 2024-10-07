@@ -1,6 +1,7 @@
 package com.password926.agijagi.story.service;
 
-import com.password926.agijagi.media.infrastructure.MediaRepository;
+import com.password926.agijagi.ai.domain.ImageGenerator;
+import com.password926.agijagi.ai.domain.JsonFormatter;
 import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
 import com.password926.agijagi.story.repository.StoryPageRepository;
 import com.password926.agijagi.story.repository.StoryRepository;
@@ -40,19 +41,19 @@ public class StoryService {
     private final StoryGPT storyGPT;
     private final ChildValidator childValidator;
     private final MediaStorage mediaStorage;
-    private final MediaRepository mediaRepository;
+    private final ImageGenerator imageGenerator;
 
     @Transactional
-    public void createStory(long memberId, CreateStoryRequest request) {
+    public Long createStory(long memberId, CreateStoryRequest request) {
         childValidator.validateWriteAuthority(memberId, request.getChildId());
 
         Child child = childRepository.findByIdAndIsDeletedFalse(request.getChildId())
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        List<Diary> diaries = diaryRepository.findAllByChildIdAndCreatedAtBetween(
+        List<Diary> diaries = diaryRepository.findAllByChildIdAndWroteAtBetween(
                 request.getChildId(),
-                request.getStartDate().atStartOfDay(),
-                request.getEndDate().atTime(LocalTime.MAX).withNano(0)
+                request.getStartDate(),
+                request.getEndDate()
         );
 
         Story story = Story.builder()
@@ -74,21 +75,35 @@ public class StoryService {
 
         storyRepository.save(story);
 
+        List<String> contents = new ArrayList<>();
+
+        List<StoryPage> storyPageData = new ArrayList<>();
+
         try {
             ObjectMapper objectMapper = new ObjectMapper();
 
-            List<Map<String, Object>> storyPages = objectMapper.readValue(storyData, new TypeReference<List<Map<String, Object>>>(){});
+            List<Map<String, Object>> storyPages = objectMapper.readValue(JsonFormatter.format(storyData), new TypeReference<List<Map<String, Object>>>(){});
             for (Map<String, Object> page : storyPages) {
-                StoryPage storyPageData = StoryPage.builder()
+                StoryPage pageData = StoryPage.builder()
                         .story(story)
                         .content((String) page.get("content"))
                         .pageNumber((Integer) page.get("pageNumber"))
                         .build();
-                storyPageRepository.save(storyPageData);
+                storyPageData.add(pageData);
+                contents.add((String) page.get("content"));
             }
         } catch (Exception e) {
             throw new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR, e);
         }
+
+        List<Image> images = imageGenerator.generate(contents);
+
+        for (int i = 0; i < images.size(); i++) {
+            storyPageData.get(i).addMedia(images.get(i));
+        }
+        storyPageRepository.saveAll(storyPageData);
+
+        return story.getId();
     }
 
     @Transactional(readOnly = true)
