@@ -31,7 +31,7 @@ const RecentArticleList = () => {
               description={item.content}
               id={item.postId}
               writer={item.writerNickname}
-              image={'http://www.naver.com'}
+              images={item.mediaUrls}
               createdAt={item.createdAt}
               onClick={() =>
                 modal.push({

@@ -14,7 +14,7 @@ interface ArticleHeaderProps {
 const ArticleHeader = ({ title, articleId, isAuthor }: ArticleHeaderProps) => {
   const { confirm } = useDialog();
 
-  const { mutate } = useDeleteArticle();
+  const { mutate, isPending } = useDeleteArticle();
 
   const handleDeleteClick = async () => {
     if (!(await confirm('정말로 삭제할까요?'))) {
@@ -28,7 +28,12 @@ const ArticleHeader = ({ title, articleId, isAuthor }: ArticleHeaderProps) => {
       <s.Title>{title}</s.Title>
       {isAuthor && (
         <s.Menu>
-          <Button color="danger" size="sm" onClick={handleDeleteClick}>
+          <Button
+            color="danger"
+            size="sm"
+            disabled={isPending}
+            onClick={handleDeleteClick}
+          >
             삭제
           </Button>
         </s.Menu>

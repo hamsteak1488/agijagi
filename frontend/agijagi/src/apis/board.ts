@@ -11,7 +11,7 @@ interface ArticleData {
   writerId: number;
   writerNickname: string;
   createdAt: string;
-  medaiUrls: string[];
+  mediaUrls: string[];
 }
 
 interface ArticleList {

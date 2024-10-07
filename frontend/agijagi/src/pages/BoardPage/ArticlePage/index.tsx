@@ -13,7 +13,7 @@ const ArticlePage = ({ articleId }: ArticlePageProps) => {
   return (
     <ErrorBoundary
       fallbackRender={(props) => (
-        <ErrorBoundaryFallback height="20rem" {...props}>
+        <ErrorBoundaryFallback width="100vw" height="20rem" {...props}>
           게시글을 불러오지 못했어요.
         </ErrorBoundaryFallback>
       )}

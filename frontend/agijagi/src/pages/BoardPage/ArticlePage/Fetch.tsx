@@ -17,6 +17,11 @@ interface ArticlePageProps {
 const ArticlePageFetch = ({ articleId }: ArticlePageProps) => {
   const { data } = useGetArticle(articleId);
 
+  /**
+   * @todo
+   * data랑 userStore 비교해서 isAuthor 업데이트 하기
+   */
+
   return (
     <s.Container>
       <ArticleHeader
@@ -26,7 +31,7 @@ const ArticlePageFetch = ({ articleId }: ArticlePageProps) => {
       />
       <ArticleList.Item
         id={data.postId}
-        image="asd"
+        images={data.mediaUrls}
         description={data.content}
         writer={data.writerNickname}
         createdAt={data.createdAt}
@@ -41,28 +46,6 @@ const ArticlePageFetch = ({ articleId }: ArticlePageProps) => {
           <Comment.List commentCount={0}>
             <Comment.Emtpy />
           </Comment.List>
-          {/* <Comment.List commentCount={10}>
-            <Comment.List.Item
-              body="안녕하세요 용진맘"
-              writer="융진맘"
-              createdAt={new Date()}
-            />
-            <Comment.List.Item
-              body="안녕하세요 용진맘"
-              writer="융진맘"
-              createdAt={new Date()}
-            />
-            <Comment.List.Item
-              body="안녕하세요 용진맘"
-              writer="융진맘"
-              createdAt={new Date()}
-            />
-            <Comment.List.Item
-              body="안녕하세요 용진맘"
-              writer="융진맘"
-              createdAt={new Date()}
-            />
-          </Comment.List> */}
         </CustomizedBorderContainer>
       </s.CommentList>
     </s.Container>

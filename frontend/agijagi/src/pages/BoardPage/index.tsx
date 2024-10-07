@@ -39,7 +39,9 @@ const BoardPage = () => {
               </ErrorBoundaryFallback>
             )}
           >
-            <Suspense fallback={<SuspenseFallback height="20rem" />}>
+            <Suspense
+              fallback={<SuspenseFallback height="20rem" padding="1rem" />}
+            >
               <RecentArticleList />
             </Suspense>
           </ErrorBoundary>
