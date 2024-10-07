@@ -4,6 +4,7 @@ import {
   DeleteChildRequest,
   EditChildImageRequest,
   EditChildInfoRequest,
+  GetFollowerRequest,
 } from '../types/child';
 import { BabyResponse } from '../types/user';
 import { axiosInstance } from './axiosInstance';
@@ -70,5 +71,10 @@ export const deleteChildImage = async (request: DeleteChildImageRequest) => {
 
 export const deleteChild = async (request: DeleteChildRequest) => {
   const response = await axiosInstance.delete(`children/${request.childId}`);
+  return response;
+};
+
+export const getAllFollowers = async (childId: number) => {
+  const response = await axiosInstance.get(`children/${childId}/followers`);
   return response;
 };

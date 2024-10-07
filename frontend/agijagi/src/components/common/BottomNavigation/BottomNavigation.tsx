@@ -58,7 +58,7 @@ export const ProfileImg = styled.img`
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 2px solid ${theme.color.greyScale[700]};
+  border: 2px solid ${theme.color.primary[900]};
 `;
 
 export const BottomNavigation = () => {

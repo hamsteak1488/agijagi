@@ -9,6 +9,10 @@ import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import useModal from '../../../hooks/useModal';
 import { FollowerModal } from '../FollowerModal/FollowerModal';
+import useChildStore from '../../../stores/useChlidStore';
+import { getAllFollowers } from '../../../apis/childApi';
+import { FollowerResponse } from '../../../types/child';
+import { useQuery } from '@tanstack/react-query';
 
 export const Container = styled.div`
   display: flex;
@@ -90,9 +94,20 @@ export const BabyProfileCard = ({ child }: BabyProfileCardProps) => {
     'days'
   );
 
+  const { childId } = useChildStore();
+
+  const { data: followers = [] } = useQuery<FollowerResponse[]>({
+    queryKey: ['followers', childId],
+    queryFn: async () => {
+      return await (
+        await getAllFollowers(childId)
+      ).data;
+    },
+  });
+
   const handleFollowerModal = () => {
     modal.push({
-      children: <FollowerModal />,
+      children: <FollowerModal followers={followers} />,
       animation: 'bottom',
     });
   };

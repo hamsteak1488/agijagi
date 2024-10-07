@@ -7,6 +7,7 @@ import { getAllDiaries } from '../../../apis/diaryApi';
 import videoIcon from '../../../assets/images/diary/videoIcon.jpeg';
 import { BabyProfileCard } from '../../../components/BabyMain/BabyProfileCard/BabyProfileCard';
 import { ScheduleCard } from '../../../components/BabyMain/ScheduleCard/ScheduleCard';
+import { Cloud } from '../../../components/common/AppBar/AppBar.style';
 import { BottomNavigation } from '../../../components/common/BottomNavigation/BottomNavigation';
 import FullCalendar from '../../../components/common/FullCalendar';
 import Tab from '../../../components/common/Tab';

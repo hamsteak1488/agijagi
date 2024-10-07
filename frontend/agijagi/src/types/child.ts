@@ -29,3 +29,13 @@ export interface DeleteChildRequest {
 export interface DeleteChildImageRequest {
   childId: number;
 }
+
+export interface GetFollowerRequest {
+  childId: number;
+}
+
+export interface FollowerResponse {
+  id: number;
+  nickname: string;
+  imageUrl: string;
+}

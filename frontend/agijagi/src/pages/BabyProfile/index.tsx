@@ -95,7 +95,7 @@ export const BabyProfile = () => {
         </Typhography>
       </TitleContainer>
       <BabyProfileCard child={child}></BabyProfileCard>
-      <BabyReportCard></BabyReportCard>
+      <BabyReportCard />
       <MenuConatiner>
         <MenuItem onClick={() => navigator('/report')}>
           <IconWrapper>
