@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import * as s from './style';
 
@@ -7,10 +7,16 @@ import Upload from './Uplaod';
 import useDialog from '../../../hooks/useDialog';
 
 interface ImageUploaderProps {
+  name: string;
   maxFileCount?: number;
+  onChange: (fileList: File[]) => void;
 }
 
-const ImageUploader = ({ maxFileCount = 1 }: ImageUploaderProps) => {
+const ImageUploader = ({
+  name,
+  maxFileCount = 1,
+  onChange,
+}: ImageUploaderProps) => {
   const { alert } = useDialog();
 
   const [fileList, setFileList] = useState<File[]>([]);
@@ -34,6 +40,10 @@ const ImageUploader = ({ maxFileCount = 1 }: ImageUploaderProps) => {
     setFileList(fileList.filter((item) => item !== file));
   };
 
+  useEffect(() => {
+    onChange(fileList);
+  }, [fileList]);
+
   return (
     <s.Container>
       <s.Preview>
@@ -45,7 +55,7 @@ const ImageUploader = ({ maxFileCount = 1 }: ImageUploaderProps) => {
           />
         ))}
       </s.Preview>
-      <Upload onChange={handleFileChange} />
+      <Upload name={name} onChange={handleFileChange} />
     </s.Container>
   );
 };

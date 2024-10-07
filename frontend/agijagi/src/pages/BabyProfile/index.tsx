@@ -1,24 +1,23 @@
 import styled from '@emotion/styled';
-import theme from '../../styles/theme';
 import CalendarIcon from '@heroicons/react/24/solid/CalendarIcon';
 import ReportIcon from '@heroicons/react/24/solid/NewspaperIcon';
 import PencilIcon from '@heroicons/react/24/solid/PencilIcon';
 import PhotoIcon from '@heroicons/react/24/solid/PhotoIcon';
-import FamilyIcon from '@heroicons/react/24/solid/UserIcon';
 import InviteCodeIcon from '@heroicons/react/24/solid/UserPlusIcon';
 import DeleteIcon from '@heroicons/react/24/solid/XCircleIcon';
 import { useQuery } from '@tanstack/react-query';
 import { getChild } from '../../apis/childApi';
 import { BabyProfileCard } from '../../components/BabyMain/BabyProfileCard/BabyProfileCard';
 import { BabyReportCard } from '../../components/BabyMain/BabyReportCard/BabyReportCard';
-import Typhography from '../../components/common/Typography';
-import useChildStore from '../../stores/useChlidStore';
-import { BabyResponse } from '../../types/user';
-import useModal from '../../hooks/useModal';
-import { EditBabyImage } from '../../components/BabyMain/EditBabyImage/EditBabyImage';
 import { DeleteBaby } from '../../components/BabyMain/DeleteBaby/DeleteBaby';
-import { useEffect } from 'react';
+import { EditBabyImage } from '../../components/BabyMain/EditBabyImage/EditBabyImage';
 import { EditBabyInfo } from '../../components/BabyMain/EditBabyInfo/EditBabyInfo';
+import Typhography from '../../components/common/Typography';
+import useModal from '../../hooks/useModal';
+import useChildStore from '../../stores/useChlidStore';
+import theme from '../../styles/theme';
+import { BabyResponse } from '../../types/user';
+import SchedulePage from '../SchedulePage';
 import { useNavigate } from 'react-router-dom';
 
 export const Container = styled.div`
@@ -87,6 +86,12 @@ export const BabyProfile = () => {
     });
   };
 
+  const handleSchedule = () => {
+    modal.push({
+      children: <SchedulePage />,
+    });
+  };
+
   return (
     <Container>
       <TitleContainer>
@@ -103,7 +108,7 @@ export const BabyProfile = () => {
           </IconWrapper>
           <Typhography weight="bold">성장 분석 보고서 조회</Typhography>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={handleSchedule}>
           <IconWrapper>
             <CalendarIcon />
           </IconWrapper>

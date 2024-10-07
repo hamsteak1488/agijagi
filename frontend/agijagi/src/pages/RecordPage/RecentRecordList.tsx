@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import Empty from '../../components/Record/Empty';
 
 import RecordList from '../../components/Record/RecordList';
 
@@ -32,31 +33,35 @@ const RecentRecordList = () => {
 
   return (
     <>
-      {groupRecord([...data].reverse()).map((group) => (
-        <RecordList.Group
-          key={Object.keys(group)[0]}
-          title={Object.keys(group)[0]}
-        >
-          {Object.values(group)[0].map((item) => {
-            const menu = findMenuByType(item.type);
-            return (
-              <RecordList.Item
-                key={item.id}
-                icon={menu!.icon}
-                color={menu!.color}
-                title={menu!.type}
-                description=""
-                date={`${dayjs(item.startDateTime).format('HH:mm')}${
-                  item.endDateTime
-                    ? ` ~ ${dayjs(item.endDateTime).format('HH:mm')}`
-                    : ''
-                }`}
-                onClick={() => handleListClick(item.id)}
-              />
-            );
-          })}
-        </RecordList.Group>
-      ))}
+      {data.length === 0 ? (
+        <Empty />
+      ) : (
+        groupRecord([...data].reverse()).map((group) => (
+          <RecordList.Group
+            key={Object.keys(group)[0]}
+            title={Object.keys(group)[0]}
+          >
+            {Object.values(group)[0].map((item) => {
+              const menu = findMenuByType(item.type);
+              return (
+                <RecordList.Item
+                  key={item.id}
+                  icon={menu!.icon}
+                  color={menu!.color}
+                  title={menu!.type}
+                  description=""
+                  date={`${dayjs(item.startDateTime).format('HH:mm')}${
+                    item.endDateTime
+                      ? ` ~ ${dayjs(item.endDateTime).format('HH:mm')}`
+                      : ''
+                  }`}
+                  onClick={() => handleListClick(item.id)}
+                />
+              );
+            })}
+          </RecordList.Group>
+        ))
+      )}
     </>
   );
 };

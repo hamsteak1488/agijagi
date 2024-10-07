@@ -14,14 +14,13 @@ import { BabyResponse } from '../../../types/user';
 import Typhography from '../Typography';
 
 export const Container = styled.nav`
+  flex: 0 0;
   width: 100%;
   height: auto;
-  margin-top: 4rem;
 `;
 
 export const Bar = styled.div`
   padding-top: 4px;
-  position: fixed;
   width: 100%;
   display: flex;
   justify-content: space-around;

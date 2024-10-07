@@ -27,9 +27,9 @@ const Modal = ({
 
     if (state === 'ACTIVE') {
       wrapperRef.current.className = classNames.base;
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      wrapperRef.current.offsetTop;
-      wrapperRef.current.classList.add(classNames.enter);
+      requestAnimationFrame(() => {
+        wrapperRef.current?.classList.add(classNames.enter);
+      });
       return;
     }
 

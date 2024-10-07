@@ -10,7 +10,7 @@ export const Container = styled.div`
   background-color: ${theme.color.primary[100]};
 `;
 
-export const Main = styled.main`
+export const Main = styled.form`
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;

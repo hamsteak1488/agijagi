@@ -17,7 +17,8 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 1rem;
+  overflow-y: scroll;
+  padding: 0 1rem 1rem 1rem;
   transition: all 0.2s ease;
 
   :last-of-type {
