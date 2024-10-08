@@ -167,8 +167,9 @@ const BookCover = React.forwardRef<HTMLDivElement, BookCoverProps>(
 // BookPage.displayName = 'BookPage'; // forwardRef 사용 시 displayName 설정 권장
 
 interface StoryBookProps {
-  book: StoryBookDetail;
-  goBack: () => void;
+  book: StoryBookDetail | null;
+  id: number | undefined;
+  onBookSelect: (book: StoryBookDetail | null) => void;
 }
 
 interface HTMLDivElementWithVendorPrefix extends HTMLDivElement {
@@ -176,18 +177,18 @@ interface HTMLDivElementWithVendorPrefix extends HTMLDivElement {
   webkitRequestFullscreen: () => void;
 }
 
-const StoryBook = () => {
-  const { id } = useParams<{ id: string }>();
-  const storyId = id? parseInt(id, 10) : 0;
+const StoryBook = ({ book, id, onBookSelect }: StoryBookProps) => {
+  const location = useLocation();
+  const storyId = location.state.storyId || id;
   const navigate = useNavigate();
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [warning, setWarning] = useState<string>('');
 
-  const storyBookQuery = useQuery({
-    queryKey: ['storybook', storyId],
-    queryFn: () => getStoryBook(storyId),
-  });
+  // const storyBookQuery = useQuery({
+  //   queryKey: ['storybook', storyId],
+  //   queryFn: () => getStoryBook(storyId),
+  // });
 
   const storyBookPagesQuery = useQuery({
     queryKey: ['storybookpages', storyId],
@@ -211,14 +212,14 @@ const StoryBook = () => {
     };
   }, [setIsFullScreen]);
 
-  const book = storyBookQuery.data?.data;
+  // const book = storyBookQuery.data?.data;
 
   const totalPages = storyBookPagesQuery.data
     ? storyBookPagesQuery.data?.data.length
     : 6;
 
   const goBack = () => {
-    navigate('/book');
+    onBookSelect(null);
   };
 
   const onFlip = useCallback(
@@ -240,12 +241,12 @@ const StoryBook = () => {
   const mybook = useRef<HTMLFlipBook | null>(book);
   const bookContainer = useRef<HTMLDivElement>(null);
 
-  if (storyBookQuery.error) {
-    return <>동화 데이터를 불러오지 못했습니다.</>;
-  }
-  if (storyBookQuery.isLoading) {
-    return <>로딩중</>;
-  }
+  // if (storyBookQuery.error) {
+  //   return <>동화 데이터를 불러오지 못했습니다.</>;
+  // }
+  // if (storyBookQuery.isLoading) {
+  //   return <>로딩중</>;
+  // }
 
   if (storyBookPagesQuery.error) {
     return <>동화 페이지 데이터를 불러오지 못했습니다.</>;
@@ -313,9 +314,7 @@ const StoryBook = () => {
               onFlip={onFlip}
               key={isFullScreen ? 'landscape' : 'portrait'}
             >
-              <BookCover
-                img={BookCoverImg[book.coverImageIndex]}
-              ></BookCover>
+              <BookCover img={BookCoverImg[book.coverImageIndex]}></BookCover>
               {storyBookPagesQuery.data?.data.map((page, index) => (
                 <BookPage
                   key={index}
@@ -325,9 +324,7 @@ const StoryBook = () => {
                   {page.content}
                 </BookPage>
               ))}
-              <BookCover
-                img={BookCoverImg[book.coverImageIndex]}
-              ></BookCover>
+              <BookCover img={BookCoverImg[book.coverImageIndex]}></BookCover>
             </HTMLFlipBook>
           </BookContainer>
 

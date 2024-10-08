@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { postStoryBook, StoryBook } from '../../apis/book';
 import useChildStore from '../../stores/useChlidStore';
+import BookLoading from '../../components/book/BookLoading';
 
 const Wrapper = styled.div`
   display: flex;
@@ -37,6 +38,14 @@ const TitleImg = styled.img`
   width: 40px;
   height: 35px;
   margin-right: 10px;
+`;
+
+const LoadingWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 500px;
+  height: 100vh;
 `;
 
 const InputWrapper = styled.div`
@@ -185,13 +194,14 @@ const BookCreate = () => {
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [coverImageIndex, setCoverImageIndex] = useState<number>(10);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { childId } = useChildStore();
 
   const { mutate, isPending } = useMutation({
     mutationFn: postStoryBook,
     onSuccess: (data) => {
       setTimeout(() => {
-        navigate(`/book/${data.data.id}`);
+        navigate(`/book/${data.data.id}`, {state: {storyId: data.data.id}});
       }, 300);
       console.log('동화생성 성공', data);
     },
@@ -215,15 +225,19 @@ const BookCreate = () => {
   };
 
   const createStoryBook = () => {
-    const storybookData = {
-      childId,
-      title,
-      startDate,
-      endDate,
-      coverImageIndex,
-    };
+    setIsLoading(true);
 
-    mutate(storybookData);
+    setTimeout(() => {
+      const storybookData = {
+        childId,
+        title,
+        startDate,
+        endDate,
+        coverImageIndex,
+      };
+
+      mutate(storybookData);
+    }, 4000);
   };
 
   return (
@@ -240,98 +254,111 @@ const BookCreate = () => {
         </Button>
       </TitleWrapper>
 
-      <InputWrapper>
-        <Typhography size="md" weight="bold" color="greyScale" shade="800">
-          동화 정보
-        </Typhography>
-        <Textfield
-          label="제목"
-          size="md"
-          color="tertiary"
-          isColoredLabel={true}
-          inputValue={title}
-          setInputValue={setTitle}
-          helpText={'*필수사항'}
-        />
-        <PeriodField>
-          <PeriodLabel>
-            <StartLabel>시작일</StartLabel>
+      {isLoading ? (
+        <LoadingWrapper>
+          <BookLoading />
+        </LoadingWrapper>
+      ) : (
+        <>
+          <InputWrapper>
+            <Typhography size="md" weight="bold" color="greyScale" shade="800">
+              동화 정보
+            </Typhography>
             <Textfield
-              label=""
+              label="제목"
               size="md"
-              color="primary"
+              color="tertiary"
               isColoredLabel={true}
-              inputValue={startDate}
-              setInputValue={setStartDate}
-              type={'date'}
+              inputValue={title}
+              setInputValue={setTitle}
               helpText={'*필수사항'}
             />
-          </PeriodLabel>
-          <PeriodLabel>
-            <EndLabel>종료일</EndLabel>
-            <Textfield
-              label=""
-              size="md"
-              color="primary"
-              isColoredLabel={true}
-              inputValue={endDate}
-              setInputValue={setEndDate}
-              type={'date'}
-              helpText={'*필수사항'}
-            />
-          </PeriodLabel>
-        </PeriodField>
-      </InputWrapper>
+            <PeriodField>
+              <PeriodLabel>
+                <StartLabel>시작일</StartLabel>
+                <Textfield
+                  label=""
+                  size="md"
+                  color="primary"
+                  isColoredLabel={true}
+                  inputValue={startDate}
+                  setInputValue={setStartDate}
+                  type={'date'}
+                  helpText={'*필수사항'}
+                />
+              </PeriodLabel>
+              <PeriodLabel>
+                <EndLabel>종료일</EndLabel>
+                <Textfield
+                  label=""
+                  size="md"
+                  color="primary"
+                  isColoredLabel={true}
+                  inputValue={endDate}
+                  setInputValue={setEndDate}
+                  type={'date'}
+                  helpText={'*필수사항'}
+                />
+              </PeriodLabel>
+            </PeriodField>
+          </InputWrapper>
 
-      <CoverWrapper>
-        <SelectContainer>
-          <Typhography size="md" weight="bold" color="greyScale" shade="800">
-            표지 선택
-          </Typhography>
-          <Typhography size="xs" color="greyScale" shade="700">
-            *필수사항
-          </Typhography>
-          {coverImageIndex !== 10 && (
-            <Button size="sm" onClick={handleResetClick}>
-              다시 선택
-            </Button>
-          )}
-        </SelectContainer>
-
-        {selectedCover ? (
-          <Carousel>
-            <CoverContainer hasAnimation={false}>
-              <CoverImg isSelected={true}>
-                <Image src={selectedCover} />
-              </CoverImg>
-            </CoverContainer>
-          </Carousel>
-        ) : (
-          <Carousel>
-            {BookCoverImg.map((cover, index) => (
-              <CoverContainer
-                key={cover}
-                onClick={() => handleImageClick(index)}
-                hasAnimation={true}
+          <CoverWrapper>
+            <SelectContainer>
+              <Typhography
+                size="md"
+                weight="bold"
+                color="greyScale"
+                shade="800"
               >
-                <CoverImg
-                  isSelected={
-                    coverImageIndex === 10 || coverImageIndex === index
-                  }
-                >
-                  <Image src={cover} />
-                </CoverImg>
-              </CoverContainer>
-            ))}
-          </Carousel>
-        )}
-      </CoverWrapper>
+                표지 선택
+              </Typhography>
+              <Typhography size="xs" color="greyScale" shade="700">
+                *필수사항
+              </Typhography>
+              {coverImageIndex !== 10 && (
+                <Button size="sm" onClick={handleResetClick}>
+                  다시 선택
+                </Button>
+              )}
+            </SelectContainer>
 
-      <ButtonWrapper>
-        <Button size="md" onClick={createStoryBook} disabled={isPending}>
-          생성하기
-        </Button>
-      </ButtonWrapper>
+            {selectedCover ? (
+              <Carousel>
+                <CoverContainer hasAnimation={false}>
+                  <CoverImg isSelected={true}>
+                    <Image src={selectedCover} />
+                  </CoverImg>
+                </CoverContainer>
+              </Carousel>
+            ) : (
+              <Carousel>
+                {BookCoverImg.map((cover, index) => (
+                  <CoverContainer
+                    key={cover}
+                    onClick={() => handleImageClick(index)}
+                    hasAnimation={true}
+                  >
+                    <CoverImg
+                      isSelected={
+                        coverImageIndex === 10 || coverImageIndex === index
+                      }
+                    >
+                      <Image src={cover} />
+                    </CoverImg>
+                  </CoverContainer>
+                ))}
+              </Carousel>
+            )}
+          </CoverWrapper>
+
+          <ButtonWrapper>
+            <Button size="md" onClick={createStoryBook} disabled={isPending}>
+              생성하기
+            </Button>
+          </ButtonWrapper>
+        </>
+      )}
     </Wrapper>
   );
 };

@@ -59,7 +59,7 @@ const BookContainer = styled.div`
 `;
 
 const BookImage = styled.img`
-  min-width: 60px;
+  min-width: 64px;
   height: 90px;
   border-radius: 10px;
   box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.2);

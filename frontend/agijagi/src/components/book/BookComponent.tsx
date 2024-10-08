@@ -13,6 +13,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { getStoryBookList } from '../../apis/book';
 import useChildStore from '../../stores/useChlidStore';
 import { BookCoverImg } from '../../components/book/BookCoverImage';
+import theme from '../../styles/theme';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -39,12 +40,28 @@ const TitleWrapper = styled.div`
 const Title = styled.div`
   display: flex;
   align-items: flex-end;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const TitleImg = styled.img`
   width: 40px;
   height: 35px;
   margin-right: 10px;
+`;
+
+const TitleText = styled.div`
+  font-size: ${theme.typography.fontSize.lg};
+  font-weight: ${theme.typography.fontWeight.bold};
+  color: ${theme.color.greyScale[800]};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const ButtonWrapper = styled.div`
+  flex-shrink: 0;
 `;
 
 const CarouselWrapper = styled.div`
@@ -71,13 +88,13 @@ const CarouselWrapper = styled.div`
 const ImageWrapper = styled.div`
   display: flex;
   padding-top: 20px;
-  padding-bottom: 50px;
+  padding-bottom: 40px;
 `;
 
 const ModalWrapper = styled.div`
   display: flex;
   width: 100%;
-  height: 55%;
+  height: 54%;
   box-sizing: border-box;
 
   @media (min-width: 700px) {
@@ -111,7 +128,7 @@ const today = new Date();
 const todayYear = today.getFullYear();
 const todayMonth = today.getMonth() + 1;
 
-const BookDetial = () => {
+const BookComponent = () => {
   const [year, setYear] = useState(todayYear);
   const [month, setMonth] = useState(todayMonth);
   const [selectedBook, setSelectedBook] = useState<StoryBookDetail | null>(
@@ -134,7 +151,7 @@ const BookDetial = () => {
 
   useEffect(() => {
     if (selectedBook) {
-      navigate(`/book/${selectedBook.id}`);
+      navigate(`/book`, { state: { storyId: selectedBook.id } });
     }
   }, [selectedBook, navigate]);
 
@@ -209,24 +226,24 @@ const BookDetial = () => {
         <Title>
           <TitleImg src={Logo7} />
           {selectedBook ? (
-            <Typhography size="lg" weight="bold" color="greyScale" shade="800">
-              {selectedBook.title}
-            </Typhography>
+            <TitleText>{selectedBook.title}</TitleText>
           ) : (
             <Typhography size="lg" weight="bold" color="greyScale" shade="800">
               Story Book
             </Typhography>
           )}
         </Title>
-        {!selectedBook ? (
-          <Button size="sm" onClick={goCreateBook}>
-            동화생성
-          </Button>
-        ) : (
-          <Button size="sm" onClick={deleteBook}>
-            동화삭제
-          </Button>
-        )}
+        <ButtonWrapper>
+          {!selectedBook ? (
+            <Button size="sm" onClick={goCreateBook}>
+              동화생성
+            </Button>
+          ) : (
+            <Button size="sm" color="danger" onClick={deleteBook} disabled={isPending}>
+              동화삭제
+            </Button>
+          )}
+        </ButtonWrapper>
       </TitleWrapper>
 
       {filteredBooks?.length === 0 ? (
@@ -258,7 +275,7 @@ const BookDetial = () => {
 
       {selectedBook ? (
         <StoryBookWrapper>
-          <StoryBook />
+          <StoryBook book={selectedBook} id={selectedBook.id} onBookSelect={handleBookSelect} />
         </StoryBookWrapper>
       ) : (
         <ModalWrapper>
@@ -277,4 +294,4 @@ const BookDetial = () => {
   );
 };
 
-export default BookDetial;
+export default BookComponent;

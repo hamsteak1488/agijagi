@@ -22,7 +22,7 @@ const CardContainer = styled.div`
 
 const BookWrapper = styled.div<{ isFlipped: boolean; isLifted: boolean }>`
   width: 150px;
-  height: 220px;
+  height: 210px;
   background-color: ${theme.color.primary[50]};
   border-radius: 10px;
   overflow: hidden;

@@ -23,6 +23,8 @@ import CreateBook from './components/book/BookCreate';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import BookDetial from './pages/BookDetialPage';
 import BookComponent from './components/book/BookComponent';
+import StoryBook from './components/book/StoryBook';
+import BookLoading from './components/book/BookLoading';
 
 
 function App() {
@@ -45,6 +47,7 @@ function App() {
               <Route path="/record" element={<RecordPage />} />
               <Route path="/baby" element={<BabyMain />} />
               <Route path="/book" element={<BookComponent />} />
+              {/* <Route path="/loading" element={<BookLoading />} /> */}
               <Route path="/book/:id" element={<BookDetial />} />
               <Route path="/book-create" element={<CreateBook />} />
               <Route path="/baby/profile" element={<BabyProfile />} />
