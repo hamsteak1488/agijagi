@@ -3,6 +3,7 @@ import LogoutIcon from '@heroicons/react/24/solid/ArrowRightStartOnRectangleIcon
 import EditIcon from '@heroicons/react/24/solid/PencilIcon';
 import PhotoIcon from '@heroicons/react/24/solid/PhotoIcon';
 import BoardIcon from '@heroicons/react/24/solid/ChatBubbleBottomCenterTextIcon';
+import XIcon from '@heroicons/react/24/solid/XCircleIcon';
 import { render } from '@testing-library/react';
 import { useNavigate } from 'react-router-dom';
 import defaultImg from '../../../assets/images/adult.png';
@@ -13,6 +14,7 @@ import Typhography from '../../common/Typography';
 import { EditMember } from '../EditMember/EditMember';
 import { EditProfileImage } from '../EditProfileImage/EditProfileImage';
 import { LogoutModal } from '../LogoutModal/LogoutModal';
+import { DeleteMemberModal } from '../DeleteModal/DeleteModal';
 
 export const Container = styled.div`
   display: flex;
@@ -103,7 +105,11 @@ export const MyProfile = ({ member, handleRender }: MyProfileProps) => {
       children: <LogoutModal />,
     });
   };
-
+  const handleDeleteModal = () => {
+    modal.push({
+      children: <DeleteMemberModal />,
+    });
+  };
   return (
     <Container>
       <GridCard>
@@ -143,6 +149,14 @@ export const MyProfile = ({ member, handleRender }: MyProfileProps) => {
           </IconWrapper>
           <Typhography color="danger" shade="500" weight="bold">
             로그아웃
+          </Typhography>
+        </MenuItem>
+        <MenuItem onClick={handleDeleteModal}>
+          <IconWrapper>
+            <XIcon color={theme.color.danger[500]} />
+          </IconWrapper>
+          <Typhography color="danger" shade="500" weight="bold">
+            회원 탈퇴
           </Typhography>
         </MenuItem>
       </MenuConatiner>

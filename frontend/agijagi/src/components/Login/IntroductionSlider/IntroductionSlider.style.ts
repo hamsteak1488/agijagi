@@ -27,7 +27,7 @@ export const InnerBox = styled.div<{ loginMode: boolean; height: number }>(
       display: none; /* Chrome, Safari에서 스크롤바 숨김 */
     }
     top: ${props.height < 800 ? 30 + props.height * -0.03 : 25}%;
-    transition: all 0.75s;
+    transition: all 1s;
     transform: translate(0, ${!props.loginMode ? 0 : props.height * -0.5}px);
   `
 );
