@@ -9,10 +9,10 @@ interface ListProps {
 
 const List = ({ children, commentCount }: ListProps) => {
   return (
-    <>
+    <s.Container>
       {!!commentCount && <s.Header>댓글 {commentCount}개</s.Header>}
       {children}
-    </>
+    </s.Container>
   );
 };
 

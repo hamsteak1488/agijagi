@@ -3,7 +3,7 @@ export const getReadableTimeDiff = (date: Date): string => {
     new Date(new Date().getTime() - date.getTime()).getTime() / 1000
   );
 
-  if (timeDiff === 0 || isNaN(timeDiff)) {
+  if (timeDiff <= 0 || isNaN(timeDiff)) {
     return '방금 전';
   }
 

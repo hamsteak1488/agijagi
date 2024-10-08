@@ -42,7 +42,7 @@ const Item = ({
           {title}
         </Typhography>
       )}
-      <Typhography>{description}</Typhography>
+      <s.Description>{description}</s.Description>
       <s.Detail>
         <Typhography size="sm" color="primary">
           {writer}

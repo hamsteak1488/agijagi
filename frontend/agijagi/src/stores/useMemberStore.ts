@@ -9,7 +9,7 @@ interface Action {
 }
 
 const useMemberStore = create<State & Action>((set) => ({
-  memberId: 0,
+  memberId: parseInt(localStorage.getItem('memberId') || ''),
   updateMemberId: (memberId) => set(() => ({ memberId })),
 }));
 
