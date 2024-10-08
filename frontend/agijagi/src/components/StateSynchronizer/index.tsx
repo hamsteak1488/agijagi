@@ -3,6 +3,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getMyInfo } from '../../apis/userApi';
 
+import useChildStore from '../../stores/useChlidStore';
 import useMemberStore from '../../stores/useMemberStore';
 
 interface StateSynchronizerProps {
@@ -13,6 +14,8 @@ const StateSynchronizer = ({ children }: StateSynchronizerProps) => {
   const navigate = useNavigate();
 
   const { pathname } = useLocation();
+
+  const { childId } = useChildStore();
 
   const { updateMemberId } = useMemberStore();
 
@@ -29,6 +32,11 @@ const StateSynchronizer = ({ children }: StateSynchronizerProps) => {
         updateMemberId(result.data.memberId);
 
         if (pathname === MAIN) {
+          setBlock(false);
+          return;
+        }
+
+        if (childId) {
           setBlock(false);
           return;
         }
