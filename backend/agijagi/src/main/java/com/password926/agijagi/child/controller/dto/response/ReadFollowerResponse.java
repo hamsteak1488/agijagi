@@ -12,12 +12,15 @@ public class ReadFollowerResponse {
 
     private String nickname;
 
+    private String authority;
+
     private String imageUrl;
 
     public static ReadFollowerResponse from(Follower follower) {
         return new ReadFollowerResponse(
                 follower.getId(),
                 follower.getNickname(),
+                follower.getAuthority().name(),
                 follower.getImageUrl()
         );
     }
