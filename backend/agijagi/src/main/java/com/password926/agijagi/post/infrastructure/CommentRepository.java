@@ -11,6 +11,6 @@ public interface CommentRepository extends Repository<Comment, Long> {
     Comment save(Comment comment);
     Optional<Comment> findByIdAndIsDeletedIsFalse(long id);
 
-    @Query("SELECT c FROM Comment c join fetch c.writer WHERE c.isDeleted = false")
+    @Query("SELECT c FROM Comment c join fetch c.writer WHERE c.post.id = :postId and c.isDeleted = false")
     List<Comment> findByPostIdMemberFetch(long postId);
 }
