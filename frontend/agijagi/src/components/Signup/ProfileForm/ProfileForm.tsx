@@ -20,6 +20,7 @@ import {
   ProfileImg,
 } from './ProfileForm.styles';
 import { login } from '../../../apis/authApi';
+import useMemberStore from '../../../stores/useMemberStore';
 
 interface ProfileForm {
   email: string;
@@ -48,7 +49,7 @@ export const ProfileForm = ({
 }: ProfileForm) => {
   const width = window.innerWidth;
   const navigator = useNavigate();
-
+  const { memberId, updateMemberId } = useMemberStore();
   const modal = useModal();
 
   const handleSignup = () => {
@@ -68,6 +69,7 @@ export const ProfileForm = ({
       .then((response) => {
         login(loginRequest).then((response) => {
           localStorage.setItem('memberId', response.data.memberId);
+          updateMemberId(Number(response.data.memberId));
           modal.push({
             children: (
               <ModalBackground>
