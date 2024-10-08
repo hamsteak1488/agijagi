@@ -7,10 +7,17 @@ import Button from '../common/Button';
 import { BookCoverImg } from './BookCoverImage';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { postStoryBook, StoryBook } from '../../apis/book';
 import useChildStore from '../../stores/useChlidStore';
 import BookLoading from '../../components/book/BookLoading';
+import { CalendarIcon } from '@heroicons/react/24/outline';
+import useModal from '../../hooks/useModal';
+import FullCalendar from '../common/FullCalendar';
+import moment from 'moment';
+import { DiaryResponse } from '../../types/diary';
+import { getAllDiaries } from '../../apis/diaryApi';
+import videoIcon from '../../assets/images/diary/videoIcon.jpeg';
 
 const Wrapper = styled.div`
   display: flex;
@@ -62,6 +69,9 @@ const InputWrapper = styled.div`
 const PeriodField = styled.div`
   display: flex;
   flex-direction: column;
+  width: 204px;
+  margin-top: 10px;
+  gap: 30px;
 
   @media (min-width: 530px) {
     display: flex;
@@ -73,29 +83,40 @@ const PeriodField = styled.div`
 
 const PeriodLabel = styled.div`
   display: flex;
+  flex-direction: row;
+  gap: 10px;
+  position: relative;
+`;
+
+const PeriodText = styled.label`
+  position: absolute;
+  z-index: 1;
+  font-size: ${theme.typography.fontSize.xs};
+  font-weight: ${theme.typography.fontWeight.bold};
+  color: ${theme.color.primary[800]};
+  left: 5%;
+  top: 10%;
+`;
+
+const Calendar = styled(CalendarIcon)`
+  width: 22px;
+  color: ${theme.color.primary[900]};
+  cursor: pointer;
+  position: absolute;
+  top: 65%;
+  right: 5%;
+  transform: translateY(-50%);
+`;
+
+const ModalBackground = styled.div`
+  position: relative;
+  display: flex;
   flex-direction: column;
-`;
-
-const StartLabel = styled.div`
-  display: flex;
-  margin-left: 5px;
-  margin-top: 5px;
-  font-size: ${theme.typography.fontSize.md};
-  font-weight: ${theme.typography.fontWeight.bold};
-  color: ${theme.color.primary[800]};
-`;
-
-const EndLabel = styled.div`
-  display: flex;
-  margin-left: 5px;
-  margin-top: 25px;
-  font-size: ${theme.typography.fontSize.md};
-  font-weight: ${theme.typography.fontWeight.bold};
-  color: ${theme.color.primary[800]};
-
-  @media (min-width: 530px) {
-    margin-top: 5px;
-  }
+  align-items: flex-end;
+  background-color: ${theme.color.primary[50]};
+  margin: 1rem;
+  padding: 2.5rem 2rem 2rem 2rem;
+  border-radius: 0.5rem;
 `;
 
 const CoverWrapper = styled.div`
@@ -189,6 +210,7 @@ const ButtonWrapper = styled.div`
 
 const BookCreate = () => {
   const navigate = useNavigate();
+  const modal = useModal();
   const [title, setTitle] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
@@ -196,11 +218,18 @@ const BookCreate = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { childId } = useChildStore();
 
+  const { data: diaries = [] } = useQuery<DiaryResponse[]>({
+    queryKey: ['diaries', childId],
+    queryFn: () => {
+      return getAllDiaries(childId);
+    },
+  });
+
   const { mutate, isPending } = useMutation({
     mutationFn: postStoryBook,
     onSuccess: (data) => {
       setTimeout(() => {
-        navigate(`/book/${data.data.id}`, {state: {storyId: data.data.id}});
+        navigate(`/book/${data.data.id}`, { state: { storyId: data.data.id } });
       }, 300);
       console.log('동화생성 성공', data);
     },
@@ -239,6 +268,94 @@ const BookCreate = () => {
     }, 4000);
   };
 
+  const handleStartDate = (value: Date) => {
+    const formattedDate = moment(value).format('YYYY-MM-DD');
+    setStartDate(formattedDate);
+    modal.pop();
+  };
+
+  const handleStartCalendar = () => {
+    modal.push({
+      children: (
+        <ModalBackground>
+          <FullCalendar
+            onClickDay={handleStartDate}
+            maxDate={moment().toDate()}
+            tileContent={({ date, view }: { date: Date; view: string }) => {
+              const formattedDate = moment(date).format('YYYY-MM-DD');
+              const matchedDate = diaries.find(
+                (item) =>
+                  moment(item.wroteAt).format('YYYY-MM-DD') === formattedDate
+              );
+              if (
+                view === 'month' &&
+                matchedDate &&
+                matchedDate.mediaUrls.length > 0
+              ) {
+                return (
+                  <img
+                    src={
+                      matchedDate.mediaTypes[0] === 'image'
+                        ? matchedDate.mediaUrls[0]
+                        : videoIcon
+                    }
+                    alt="day-image"
+                    style={{ width: '100%', height: '100%' }}
+                  />
+                );
+              }
+              return null;
+            }}
+          ></FullCalendar>
+        </ModalBackground>
+      ),
+    });
+  };
+
+  const handleEndDate = (value: Date) => {
+    const formattedDate = moment(value).format('YYYY-MM-DD');
+    setEndDate(formattedDate);
+    modal.pop();
+  };
+
+  const handleEndCalendar = () => {
+    modal.push({
+      children: (
+        <ModalBackground>
+          <FullCalendar
+            onClickDay={handleEndDate}
+            maxDate={moment().toDate()}
+            tileContent={({ date, view }: { date: Date; view: string }) => {
+              const formattedDate = moment(date).format('YYYY-MM-DD');
+              const matchedDate = diaries.find(
+                (item) =>
+                  moment(item.wroteAt).format('YYYY-MM-DD') === formattedDate
+              );
+              if (
+                view === 'month' &&
+                matchedDate &&
+                matchedDate.mediaUrls.length > 0
+              ) {
+                return (
+                  <img
+                    src={
+                      matchedDate.mediaTypes[0] === 'image'
+                        ? matchedDate.mediaUrls[0]
+                        : videoIcon
+                    }
+                    alt="day-image"
+                    style={{ width: '100%', height: '100%' }}
+                  />
+                );
+              }
+              return null;
+            }}
+          ></FullCalendar>
+        </ModalBackground>
+      ),
+    });
+  };
+
   return (
     <Wrapper>
       <TitleWrapper>
@@ -274,7 +391,7 @@ const BookCreate = () => {
             />
             <PeriodField>
               <PeriodLabel>
-                <StartLabel>시작일</StartLabel>
+                <PeriodText>시작일</PeriodText>
                 <Textfield
                   label=""
                   size="md"
@@ -282,12 +399,13 @@ const BookCreate = () => {
                   isColoredLabel={true}
                   inputValue={startDate}
                   setInputValue={setStartDate}
-                  type={'date'}
                   helpText={'*필수사항'}
                 />
+                <Calendar onClick={handleStartCalendar} />
               </PeriodLabel>
+
               <PeriodLabel>
-                <EndLabel>종료일</EndLabel>
+                <PeriodText>종료일</PeriodText>
                 <Textfield
                   label=""
                   size="md"
@@ -295,9 +413,9 @@ const BookCreate = () => {
                   isColoredLabel={true}
                   inputValue={endDate}
                   setInputValue={setEndDate}
-                  type={'date'}
                   helpText={'*필수사항'}
                 />
+                <Calendar onClick={handleEndCalendar} />
               </PeriodLabel>
             </PeriodField>
           </InputWrapper>

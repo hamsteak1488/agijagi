@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from '@emotion/styled';
 import Typhography from '../../components/common/Typography';
 import theme from '../../styles/theme';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../components/common/Button';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import ReportFilter from '../../components/Report/ReportFilter';
 import ReportList from '../../components/Report/ReportList';
-import BoyImg from '../../assets/images/boy.png';
 import useChildStore from '../../stores/useChlidStore';
 import { useQuery } from '@tanstack/react-query';
 import { getChildInfo } from '../../apis/milestone';
@@ -66,8 +64,6 @@ const todayYear = today.getFullYear();
 
 const Report = () => {
   const [year, setYear] = useState<number>(todayYear);
-  const [name, setName] = useState<string>('');
-  const [birth, setBirth] = useState<string>('');
   const { childId } = useChildStore();
 
   const navigate = useNavigate();
@@ -88,9 +84,6 @@ const Report = () => {
   if (reportListQuery.isLoading) {
     return <>로딩중</>;
   }
-
-  // const name = data? data.data.nickname : '';
-  // const birth = data? data.data.birthday : '';
 
   const handleBack = () => {
     navigate(-1);

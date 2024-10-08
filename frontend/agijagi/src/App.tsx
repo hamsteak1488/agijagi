@@ -20,7 +20,7 @@ import CreateBook from './components/book/BookCreate';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import BookDetial from './pages/BookDetialPage';
-import BookComponent from './components/book/BookComponent';
+import BookComponent from './pages/Book';
 import { BottomNavigation } from './components/common/BottomNavigation/BottomNavigation';
 import Layout from './components/common/Layout';
 
@@ -58,6 +58,7 @@ const Router = () => {
     '/milestone-report',
     '/report',
     '/book',
+    '/book-create',
   ].includes(location.pathname);
 
   return (

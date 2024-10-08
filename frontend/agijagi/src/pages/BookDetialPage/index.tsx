@@ -1,16 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import BookItem from '../../components/book/BookItem';
 import StoryBook from '../../components/book/StoryBook';
 import Logo7 from '../../assets/images/logo7.png';
-import {
-  deleteStoryBook,
-  getStoryBook,
-  StoryBookDetail,
-} from '../../apis/book';
+import { getStoryBook, StoryBookDetail } from '../../apis/book';
 import Button from '../../components/common/Button';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import useChildStore from '../../stores/useChlidStore';
 import { BookCoverImg } from '../../components/book/BookCoverImage';
 import theme from '../../styles/theme';
@@ -73,7 +69,6 @@ const CarouselWrapper = styled.div`
   padding-bottom: 50px;
   padding-left: 30px;
   scroll-behavior: smooth;
-  /* overflow-y: hidden; */
 
   &::-webkit-scrollbar {
     display: none;
@@ -82,7 +77,6 @@ const CarouselWrapper = styled.div`
   @media (min-width: 700px) {
     padding-top: 40px;
     margin-top: 80px;
-    /* padding-bottom: 20px; */
     padding-left: 40px;
   }
 `;
@@ -98,7 +92,6 @@ const StoryBookWrapper = styled.div`
     height: 100vh;
     padding-top: 30px;
     padding-left: 30px;
-    /* overflow-y: hidden; */
   }
 `;
 
@@ -110,6 +103,7 @@ const BookComponent = () => {
   const [selectedBook, setSelectedBook] = useState<StoryBookDetail | null>(
     null
   );
+  const [coverImgIndex, setCoverImgIndex] = useState<number>(0);
 
   const { childId } = useChildStore();
 
@@ -122,9 +116,10 @@ const BookComponent = () => {
     if (storyBookQuery.data) {
       setSelectedBook(storyBookQuery.data?.data);
     }
+    if (selectedBook) {
+      setCoverImgIndex(selectedBook?.coverImageIndex);
+    }
   });
-
-  
 
   if (storyBookQuery.error) {
     return <>동화 데이터를 불러오지 못했습니다.</>;
@@ -147,7 +142,13 @@ const BookComponent = () => {
 
   const deleteBook = () => {
     modal.push({
-      children: <BookDeleteModal storyId={storyId} onBookSelect={handleBookSelect} childId={childId}/>,
+      children: (
+        <BookDeleteModal
+          storyId={storyId}
+          onBookSelect={handleBookSelect}
+          childId={childId}
+        />
+      ),
     });
   };
 
@@ -159,11 +160,7 @@ const BookComponent = () => {
           <TitleText>{selectedBook?.title}</TitleText>
         </Title>
         <ButtonWrapper>
-          <Button
-            size="sm"
-            color="danger"
-            onClick={deleteBook}
-          >
+          <Button size="sm" color="danger" onClick={deleteBook}>
             동화삭제
           </Button>
         </ButtonWrapper>
@@ -171,7 +168,7 @@ const BookComponent = () => {
 
       <CarouselWrapper>
         <BookItem
-          image={BookCoverImg[0]}
+          image={BookCoverImg[coverImgIndex]}
           book={selectedBook}
           onBookSelect={handleBookSelect}
           isSelected={true}

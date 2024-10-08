@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import BookItem from '../../components/book/BookItem';
@@ -7,20 +7,20 @@ import StoryBook from '../../components/book/StoryBook';
 import Typhography from '../../components/common/Typography';
 import Logo7 from '../../assets/images/logo7.png';
 import Logo2 from '../../assets/images/logo2.png';
-import { deleteStoryBook, StoryBookDetail } from '../../apis/book';
+import { StoryBookDetail } from '../../apis/book';
 import Button from '../../components/common/Button';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getStoryBookList } from '../../apis/book';
 import useChildStore from '../../stores/useChlidStore';
 import { BookCoverImg } from '../../components/book/BookCoverImage';
 import theme from '../../styles/theme';
-import BookDeleteModal from './BookDeleteModal';
+import BookDeleteModal from '../../components/book/BookDeleteModal';
 import useModal from '../../hooks/useModal';
 
 const Wrapper = styled.div`
-  height: 100vh;
   display: flex;
   flex-direction: column;
+  height: calc(var(--vh) * 100);
 
   @media (min-width: 700px) {
     flex-direction: row; /* 가로 모드일 때 가로 정렬 */
@@ -73,7 +73,6 @@ const CarouselWrapper = styled.div`
   padding-bottom: 50px;
   padding-left: 30px;
   scroll-behavior: smooth;
-  /* overflow-y: hidden; */
 
   &::-webkit-scrollbar {
     display: none;
@@ -82,7 +81,6 @@ const CarouselWrapper = styled.div`
   @media (min-width: 700px) {
     padding-top: 40px;
     margin-top: 80px;
-    /* padding-bottom: 20px; */
     padding-left: 40px;
   }
 `;
@@ -107,14 +105,13 @@ const ModalWrapper = styled.div`
     padding-top: 30px;
     padding-left: 30px;
     margin-left: auto;
-    /* overflow-y: hidden; */
   }
 `;
 
 const StoryBookWrapper = styled.div`
   display: flex;
   width: 100%;
-  height: 52%;
+  height: 50%;
   box-sizing: border-box;
 
   @media (min-width: 700px) {
@@ -122,7 +119,6 @@ const StoryBookWrapper = styled.div`
     height: 100vh;
     padding-top: 30px;
     padding-left: 30px;
-    /* overflow-y: hidden; */
   }
 `;
 
@@ -172,7 +168,13 @@ const BookComponent = () => {
 
   const deleteBook = () => {
     modal.push({
-      children: <BookDeleteModal storyId={storyId} onBookSelect={handleBookSelect} childId={childId}/>,
+      children: (
+        <BookDeleteModal
+          storyId={storyId}
+          onBookSelect={handleBookSelect}
+          childId={childId}
+        />
+      ),
     });
   };
 

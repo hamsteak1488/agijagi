@@ -4,7 +4,6 @@ import theme from '../../styles/theme';
 import Typhography from '../common/Typography';
 import { CalendarIcon } from '@heroicons/react/24/outline';
 import { StoryBookDetail } from '../../apis/book';
-import { BookCoverImg } from './BookCoverImage';
 
 const CardContainer = styled.div`
   perspective: 1000px;
@@ -21,13 +20,13 @@ const CardContainer = styled.div`
 `;
 
 const BookWrapper = styled.div<{ isFlipped: boolean; isLifted: boolean }>`
-  width: 150px;
-  height: 210px;
+  width: 145px;
+  height: 200px;
   background-color: ${theme.color.primary[50]};
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 14px 14px 10px rgba(0, 0, 0, 0.2);
-  margin-right: 40px;
+  margin-right: 35px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -68,7 +67,7 @@ const TitleLabel = styled.div`
 const PageLabel = styled.div`
   font-size: ${theme.typography.fontSize.xs};
   color: ${theme.color.greyScale[700]};
-  margin: 10px 5px;
+  margin: 10px 0;
 `;
 
 const DateLabel = styled.div`
@@ -106,8 +105,8 @@ const BookImage = styled.img`
 
 const BounceImage = styled.img`
   align-self: center;
-  width: 220px;
-  height: 220px;
+  width: 210px;
+  height: 210px;
   animation: bounce 2s infinite;
 
   @media (min-width: 700px) {
@@ -170,7 +169,7 @@ const BookItem = ({ image, book, onBookSelect, isSelected }: BookItemProps) => {
             {isFlipped && isLifted ? (
               <BookBack>
                 <TitleLabel>{book.title}</TitleLabel>
-                <PageLabel>6 pages</PageLabel>
+                <PageLabel>생성일: {book.createdAt.slice(0,10)}</PageLabel>
                 <DateLabel>
                   <CalendarImg />
                   <Typhography

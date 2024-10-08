@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useCallback, useRef, useState, useEffect } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import styled from '@emotion/styled';
@@ -6,12 +5,11 @@ import Button from '../common/Button';
 import theme from '../../styles/theme';
 import { BookCoverImg } from './BookCoverImage';
 import {
-  getStoryBook,
   getStoryBookPages,
   StoryBookDetail,
 } from '../../apis/book';
 import { useQuery } from '@tanstack/react-query';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const BookWrapper = styled.div`
   display: flex;
@@ -73,15 +71,16 @@ const PageImg = styled.img`
   border-radius: 10px;
 `;
 
-const PageText = styled.div`
+const PageText = styled.div<{ isFullScreen: boolean }>`
   position: absolute;
-  top: 10%;
+  top: 5%;
   border-radius: 10px;
   padding: 5px 8px;
   margin: 0 14px;
   color: ${theme.color.greyScale[900]};
   background-color: rgba(255, 255, 255, 0.4); // 동화 text 배경 투명도 조절 가능
-  font-size: ${theme.typography.fontSize.sm};
+  font-size: ${({ isFullScreen }) =>
+    isFullScreen ? theme.typography.fontSize.md : theme.typography.fontSize.sm};
 `;
 
 const PageNumber = styled.div`
@@ -104,14 +103,6 @@ const PageButtonWrapper = styled.div`
   align-items: center;
 `;
 
-const PageInfo = styled.div`
-  background-color: ${theme.color.tertiary[800]};
-  border-radius: 20px;
-  font-size: ${theme.typography.fontSize.sm};
-  color: #ffffff;
-  padding: 7px 10px;
-`;
-
 const WarningMessage = styled.div`
   position: fixed;
   width: 180px;
@@ -130,6 +121,7 @@ interface BookPageProps {
   number: number;
   img: string;
   children: React.ReactNode;
+  isFullScreen: boolean;
 }
 
 interface BookCoverProps {
@@ -142,11 +134,12 @@ interface FlipEvent {
 
 const BookPage = React.forwardRef<HTMLDivElement, BookPageProps>(
   (props, ref) => {
+    const { isFullScreen } = props;
     return (
       <Page ref={ref}>
         {/* ref required */}
         <PageImg src={props.img} style={{ opacity: '0.7' }}></PageImg>
-        <PageText>{props.children}</PageText>
+        <PageText isFullScreen={isFullScreen}>{props.children}</PageText>
         <PageNumber>{props.number}</PageNumber>
       </Page>
     );
@@ -164,8 +157,6 @@ const BookCover = React.forwardRef<HTMLDivElement, BookCoverProps>(
   }
 );
 
-// BookPage.displayName = 'BookPage'; // forwardRef 사용 시 displayName 설정 권장
-
 interface StoryBookProps {
   book: StoryBookDetail | null;
   id: number | undefined;
@@ -180,22 +171,16 @@ interface HTMLDivElementWithVendorPrefix extends HTMLDivElement {
 const StoryBook = ({ book, id, onBookSelect }: StoryBookProps) => {
   const location = useLocation();
   const storyId = id || location.state.storyId;
-  const navigate = useNavigate();
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [warning, setWarning] = useState<string>('');
-
-  // const storyBookQuery = useQuery({
-  //   queryKey: ['storybook', storyId],
-  //   queryFn: () => getStoryBook(storyId),
-  // });
 
   const storyBookPagesQuery = useQuery({
     queryKey: ['storybookpages', storyId],
     queryFn: () => getStoryBookPages(storyId),
   });
 
-  console.log(storyBookPagesQuery.data?.data)
+  console.log(storyBookPagesQuery.data?.data);
 
   useEffect(() => {
     const handleFullScreenChange = () => {
@@ -214,8 +199,6 @@ const StoryBook = ({ book, id, onBookSelect }: StoryBookProps) => {
     };
   }, [setIsFullScreen]);
 
-  // const book = storyBookQuery.data?.data;
-
   const totalPages = storyBookPagesQuery.data
     ? storyBookPagesQuery.data?.data.length
     : 6;
@@ -226,7 +209,6 @@ const StoryBook = ({ book, id, onBookSelect }: StoryBookProps) => {
 
   const onFlip = useCallback(
     (e: FlipEvent) => {
-      // const totalPageCount = mybook.current?.pageFlip().getPageCount() ?? 0;
       setCurrentPage(e.data);
 
       // 책이 마지막 페이지를 넘어가면 전체화면 해제
@@ -243,18 +225,11 @@ const StoryBook = ({ book, id, onBookSelect }: StoryBookProps) => {
   const mybook = useRef<HTMLFlipBook | null>(book);
   const bookContainer = useRef<HTMLDivElement>(null);
 
-  // if (storyBookQuery.error) {
-  //   return <>동화 데이터를 불러오지 못했습니다.</>;
-  // }
-  // if (storyBookQuery.isLoading) {
-  //   return <>로딩중</>;
-  // }
-
   if (storyBookPagesQuery.error) {
     return <>동화 페이지 데이터를 불러오지 못했습니다.</>;
   }
   if (storyBookPagesQuery.isLoading) {
-    return <>로딩중</>;
+    return <>페이지 로딩중</>;
   }
 
   const toggleFullscreen = () => {
@@ -322,6 +297,7 @@ const StoryBook = ({ book, id, onBookSelect }: StoryBookProps) => {
                   key={index}
                   number={page.pageNumber}
                   img={page.storyPageImageUrl}
+                  isFullScreen={isFullScreen}
                 >
                   {page.content}
                 </BookPage>

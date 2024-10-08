@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 import BookFilter from './BookFilter';
@@ -29,6 +29,22 @@ const FilterContainer = styled.div`
   border-width: 1px 60%;
 `;
 
+const NoBookText = styled.div`
+  margin-top: 30px;
+  animation: smoothAppear 0.5s ease-in-out;
+
+  @keyframes smoothAppear {
+    from {
+      opacity: 0;
+      transform: translateY(-5%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
 const BookList = styled.div`
   display: flex;
   flex-direction: column;
@@ -40,10 +56,11 @@ const BookList = styled.div`
 
 const BookContainer = styled.div`
   display: flex;
-  padding-left: 40px;
+  justify-content: center;
+  padding-left: 30px;
   padding-right: 30px;
   padding-top: 15px;
-  padding-bottom: 15px;
+  padding-bottom: 20px;
   animation: smoothAppear 0.6s ease-in-out;
 
   @keyframes smoothAppear {
@@ -59,7 +76,7 @@ const BookContainer = styled.div`
 `;
 
 const BookImage = styled.img`
-  min-width: 64px;
+  min-width: 65px;
   height: 90px;
   border-radius: 10px;
   box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.2);
@@ -79,16 +96,18 @@ const TitleLabel = styled.div`
   font-size: ${theme.typography.fontSize.sm};
   font-weight: ${theme.typography.fontWeight.bold};
   color: ${theme.color.greyScale[700]};
-  margin-top: 5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
 const PageLabel = styled.div`
+  display: flex;
+  justify-content: flex-end;
   font-size: ${theme.typography.fontSize.xs};
   color: ${theme.color.greyScale[700]};
-  margin: 5px;
+  margin-top: 15px;
+  margin-right: 5px;
 `;
 
 const DateLabel = styled.div`
@@ -97,12 +116,12 @@ const DateLabel = styled.div`
   font-weight: ${theme.typography.fontWeight.bold};
   width: 155px;
   display: flex;
-  justify-content: center;
   flex-direction: row;
+  justify-content: center;
   align-items: center;
   border-radius: 10px;
-  padding: 5px 10px;
-  margin-top: 15px;
+  padding: 5px 7px;
+  margin-top: 10px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -171,7 +190,7 @@ const BookListModal = ({
 
       <BookList ref={listRef}>
         {filteredBooks?.length === 0 ? (
-          <div style={{ marginTop: '30px' }}>
+          <NoBookText>
             <Typhography
               size="md"
               weight="regular"
@@ -180,15 +199,18 @@ const BookListModal = ({
             >
               이 달에 생성한 동화가 없습니다.
             </Typhography>
-          </div>
+          </NoBookText>
         ) : (
           filteredBooks?.map((book) => (
             <BookContainer key={book.id} onClick={() => onBookSelect(book)}>
-              <BookImage src={BookCoverImg[book.coverImageIndex]} alt={book.title} />
+              <BookImage
+                src={BookCoverImg[book.coverImageIndex]}
+                alt={book.title}
+              />
 
               <LabelContainer>
                 <TitleLabel>{book.title}</TitleLabel>
-                <PageLabel>6 pages</PageLabel>
+
                 <DateLabel>
                   <CalendarImg />
                   <Typhography
@@ -200,6 +222,7 @@ const BookListModal = ({
                     {book.startDate} ~ {book.endDate}
                   </Typhography>
                 </DateLabel>
+                <PageLabel>생성일 : {book.createdAt.slice(0, 10)}</PageLabel>
               </LabelContainer>
             </BookContainer>
           ))
