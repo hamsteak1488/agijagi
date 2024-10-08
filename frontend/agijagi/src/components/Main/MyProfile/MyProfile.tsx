@@ -15,6 +15,7 @@ import { EditMember } from '../EditMember/EditMember';
 import { EditProfileImage } from '../EditProfileImage/EditProfileImage';
 import { LogoutModal } from '../LogoutModal/LogoutModal';
 import { DeleteMemberModal } from '../DeleteModal/DeleteModal';
+import BoardPage from '../../../pages/BoardPage';
 
 export const Container = styled.div`
   display: flex;
@@ -110,6 +111,13 @@ export const MyProfile = ({ member, handleRender }: MyProfileProps) => {
       children: <DeleteMemberModal />,
     });
   };
+
+  const handleBoard = () => {
+    modal.push({
+      children: <BoardPage />,
+    });
+  };
+
   return (
     <Container>
       <GridCard>
@@ -125,7 +133,7 @@ export const MyProfile = ({ member, handleRender }: MyProfileProps) => {
         </ContentSection>
       </GridCard>
       <MenuConatiner>
-        <MenuItem onClick={() => navigator('/board')}>
+        <MenuItem onClick={handleBoard}>
           <IconWrapper>
             <BoardIcon />
           </IconWrapper>

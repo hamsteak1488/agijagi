@@ -30,6 +30,10 @@ export const getUserInfo = async (
   return response.data;
 };
 
+export const getMyInfo = () => {
+  return axiosInstance.get<MemberResponse>('/members');
+};
+
 export const editUserInfo = async (user: EditUserRequest): Promise<number> => {
   const response = await axiosInstance.patch(`/members`, user);
   return response.status;
