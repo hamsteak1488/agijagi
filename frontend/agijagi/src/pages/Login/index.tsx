@@ -12,6 +12,7 @@ import useModal from '../../hooks/useModal';
 import useMemberStore from '../../stores/useMemberStore';
 import * as s from './style';
 import { ModalBackground } from './style';
+import LogoImg from '../../assets/images/logo.png';
 
 export const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -112,6 +113,7 @@ export const Login = () => {
           <s.Pattern6 ratio={widthRatio} />
         </s.PatternContainer>
       </s.Moon>
+      <s.Logo src={LogoImg} height={height} loginMode={loginMode} />
       <IntroductionSlider
         level={level}
         handleLevel={handleLevel}

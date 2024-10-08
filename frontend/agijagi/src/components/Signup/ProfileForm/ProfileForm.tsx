@@ -67,6 +67,7 @@ export const ProfileForm = ({
     signUp(userInfo)
       .then((response) => {
         login(loginRequest).then((response) => {
+          localStorage.setItem('memberId', response.data.memberId);
           modal.push({
             children: (
               <ModalBackground>

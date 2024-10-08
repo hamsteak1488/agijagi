@@ -29,7 +29,7 @@ export const Moon = styled.div<{
     ${props.loginMode
       ? ''
       : 'box-shadow: rgba(255, 255, 255, 0.75) 0px 12px 42px 0px'};
-    top: ${props.width * -2 + props.height * 0.52}px;
+    top: ${props.width * -2 + props.height * 0.54}px;
     left: ${props.width * -0.5}px;
     transition: all 0.5s;
     transform: translate(0, ${props.loginMode ? props.height * -0.15 : 0}px)
@@ -51,6 +51,20 @@ export const LoginContainer = styled.div<{ width: number; loginMode: boolean }>(
     z-index: 10;
     transition: all 0.75s;
     transform: translate(${props.loginMode ? props.width * -1 : 0}px, 0);
+  `
+);
+
+export const Logo = styled.img<{ height: number; loginMode: boolean }>(
+  (props) => css`
+    position: absolute;
+    height: 32%;
+    aspect-ratio: 1;
+    transition: all 1.25s;
+    transform: translate(
+      0,
+      ${props.loginMode ? props.height * -0.66 : props.height * -1}px
+    );
+    opacity: ${props.loginMode ? 1 : 0};
   `
 );
 
