@@ -11,6 +11,8 @@ public class Follower {
 
     private long childId;
 
+    private Authority authority;
+
     private String email;
 
     private String nickname;
