@@ -5,7 +5,7 @@ export const axiosInstance =
     ? axios.create({
         baseURL: 'https://api.password926.site/',
         headers: {
-          'header-login-member': localStorage.getItem('memberId'),
+          'header-login-member': 1,
         },
         withCredentials: true,
       })
@@ -28,7 +28,10 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response?.status === 401) {
+    if (
+      error.response?.status === 401 &&
+      window.location.pathname !== '/login'
+    ) {
       window.location.href = '/login';
     }
     return Promise.reject(error);

@@ -47,7 +47,6 @@ export const Login = () => {
         const memberId: string = response.data.memberId;
         console.log(memberId);
         updateMemberId(Number(memberId));
-        localStorage.setItem('memberId', memberId);
         navigator('/main');
       });
     } catch (error) {

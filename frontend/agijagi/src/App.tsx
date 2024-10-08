@@ -23,6 +23,7 @@ import BookDetial from './pages/BookDetialPage';
 import BookComponent from './pages/Book';
 import { BottomNavigation } from './components/common/BottomNavigation/BottomNavigation';
 import Layout from './components/common/Layout';
+import StateSynchronizer from './components/StateSynchronizer';
 
 function App() {
   const queryClient = new QueryClient({
@@ -38,9 +39,11 @@ function App() {
       <GlobalStyle />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <ModalProvider>
-            <Router />
-          </ModalProvider>
+          <StateSynchronizer>
+            <ModalProvider>
+              <Router />
+            </ModalProvider>
+          </StateSynchronizer>
         </BrowserRouter>
       </QueryClientProvider>
     </>

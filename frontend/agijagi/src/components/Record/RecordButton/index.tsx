@@ -67,6 +67,7 @@ const RecordButton = ({
       <s.Icon src={icon} alt="Icon" />
       <Typhography color="white" size="sm">
         {type}
+        {isActive() && ' 중'}
       </Typhography>
       <Typhography color="white" size="md">
         {isActive()
