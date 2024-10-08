@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const axiosInstance =
-  process.env.NODE_ENV !== 'development'
+  process.env.NODE_ENV === 'development'
     ? axios.create({
         baseURL: 'https://api.password926.site/',
         headers: {
