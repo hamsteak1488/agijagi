@@ -11,8 +11,10 @@ import useRecord from '../../hooks/useRecord';
 import useChildStore from '../../stores/useChlidStore';
 
 const RecentRecordList = () => {
+  const { childId } = useChildStore();
+
   const { data } = useGetRecords(
-    1,
+    childId,
     dayjs().subtract(1, 'month').format('YYYY-MM-DD'),
     dayjs().format('YYYY-MM-DD')
   );
@@ -21,8 +23,6 @@ const RecentRecordList = () => {
   const { confirm } = useDialog();
 
   const { findMenuByType, groupRecord } = useRecord();
-
-  const { childId } = useChildStore();
 
   const handleListClick = async (id: number) => {
     if (await confirm('선택한 기록을 삭제할까요?')) {
