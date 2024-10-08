@@ -106,7 +106,6 @@ public class DiaryService {
 
     @Transactional(readOnly = true)
     public List<DiaryDetail> getAllDiary(long memberId, long childId) {
-        childValidator.validateWriteAuthority(memberId, childId);
 
         List<Diary> diaries = diaryRepository.findAllByChildIdAndIsDeletedFalseOrderByIdDesc(childId);
 
@@ -134,8 +133,6 @@ public class DiaryService {
     public DiaryDetail getDiary(long memberId, long diaryId) {
         Diary diary = diaryRepository.findByIdAndIsDeletedFalse(diaryId)
                         .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
-
-        childValidator.validateWriteAuthority(memberId, diary.getChild().getId());
 
         DiaryDetail diaryDetail = DiaryDetail.of(diary);
 

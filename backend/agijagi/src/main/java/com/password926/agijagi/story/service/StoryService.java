@@ -13,7 +13,6 @@ import com.password926.agijagi.story.entity.Story;
 import com.password926.agijagi.child.infrastructure.ChildRepository;
 import com.password926.agijagi.child.domain.ChildValidator;
 import com.password926.agijagi.child.domain.Child;
-import com.password926.agijagi.media.domain.MediaStorage;
 import com.password926.agijagi.media.domain.Image;
 import com.password926.agijagi.common.errors.exception.RestApiException;
 import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
@@ -39,7 +38,6 @@ public class StoryService {
     private final DiaryRepository diaryRepository;
     private final StoryGPT storyGPT;
     private final ChildValidator childValidator;
-    private final MediaStorage mediaStorage;
     private final ImageGenerator imageGenerator;
 
     @Transactional
@@ -109,8 +107,6 @@ public class StoryService {
     @Transactional(readOnly = true)
     public List<StoryDetail> getAllStory(long memberId, long childId) {
 
-        childValidator.validateWriteAuthority(memberId, childId);
-
         List<Story> stories = storyRepository.findAllByChildIdAndIsDeletedFalseOrderByIdDesc(childId);
 
         List<StoryDetail> storyDetails = new ArrayList<>();
@@ -129,8 +125,6 @@ public class StoryService {
         Story story = storyRepository.findByIdAndIsDeletedFalse(storyId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        childValidator.validateWriteAuthority(memberId, story.getChild().getId());
-
         return StoryDetail.of(story);
     }
 
@@ -139,8 +133,6 @@ public class StoryService {
 
         Story story = storyRepository.findByIdAndIsDeletedFalse(storyId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
-
-        childValidator.validateWriteAuthority(memberId, story.getChild().getId());
 
         List<StoryPage> storyPages = storyPageRepository.findAllByStoryId(storyId);
 
