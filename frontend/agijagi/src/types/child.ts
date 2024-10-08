@@ -1,5 +1,7 @@
 import { BabyGender } from './user';
 
+export type Authority = 'READ' | 'WRITE';
+
 export interface ChildRequest {
   name: string;
   nickname: string;
@@ -35,7 +37,27 @@ export interface GetFollowerRequest {
 }
 
 export interface FollowerResponse {
-  id: number;
+  followerId: number;
   nickname: string;
+  authority: Authority;
   imageUrl: string;
+}
+
+export interface EditFollowerRequest {
+  childId: number;
+  followerId: number;
+  authority: Authority;
+}
+
+export interface DeleteFollowerRequest {
+  childId: number;
+  followerId: number;
+}
+
+export interface InviteCodeResponse {
+  invitationCode: string;
+}
+
+export interface InviteCodeRequest {
+  invitationCode: string;
 }

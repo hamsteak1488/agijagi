@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
-import theme from '../../../styles/theme';
 import XIcon from '@heroicons/react/24/solid/XMarkIcon';
-import useModal from '../../../hooks/useModal';
-import { MemberResponse } from '../../../types/user';
-import useChildStore from '../../../stores/useChlidStore';
-import { FollowerResponse } from '../../../types/child';
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { getAllFollowers } from '../../../apis/childApi';
+import useModal from '../../../hooks/useModal';
+import useChildStore from '../../../stores/useChlidStore';
+import theme from '../../../styles/theme';
+import { FollowerResponse } from '../../../types/child';
+import Typhography from '../../common/Typography';
 import { FollowerItem } from './FollowerItem/FollowerItem';
 
 export const Container = styled.div`
@@ -15,6 +16,7 @@ export const Container = styled.div`
   height: 60vh;
   background-color: ${theme.color.primary[50]};
   border-radius: 2rem 2rem 0rem 0rem;
+  overflow-x: hidden;
 `;
 
 export const ExitIcon = styled.div`
@@ -25,15 +27,35 @@ export const ExitIcon = styled.div`
   top: 3%;
 `;
 
-export const FollowersContainer = styled.div``;
+export const FollowersContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(3rem);
+`;
 
-export interface FollowerModalProps {
-  followers: FollowerResponse[];
-}
-export const FollowerModal = ({ followers }: FollowerModalProps) => {
+export const TitleContainer = styled.div`
+  margin-bottom: 1.5rem;
+`;
+
+export const FollowerModal = () => {
+  const [renderKey, setRenderKey] = useState<number>(0);
   const modal = useModal();
+  const { childId } = useChildStore();
 
-  console.log(followers);
+  const handleRenderkey = () => {
+    setRenderKey(renderKey + 1);
+  };
+
+  const { data: followers = [] } = useQuery<FollowerResponse[]>({
+    queryKey: ['followers', childId, renderKey],
+    queryFn: async () => {
+      return await (
+        await getAllFollowers(childId)
+      ).data;
+    },
+  });
 
   return (
     <Container>
@@ -41,8 +63,13 @@ export const FollowerModal = ({ followers }: FollowerModalProps) => {
         <XIcon />
       </ExitIcon>
       <FollowersContainer>
+        <TitleContainer>
+          <Typhography size="2xl" weight="bold">
+            패밀리 멤버 조회
+          </Typhography>
+        </TitleContainer>
         {followers.map((item, index) => (
-          <FollowerItem key={index} member={item} />
+          <FollowerItem key={index} member={item} render={handleRenderkey} />
         ))}
       </FollowersContainer>
     </Container>

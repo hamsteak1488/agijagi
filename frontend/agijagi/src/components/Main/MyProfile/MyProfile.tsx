@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import LogoutIcon from '@heroicons/react/24/solid/ArrowRightStartOnRectangleIcon';
 import EditIcon from '@heroicons/react/24/solid/PencilIcon';
 import PhotoIcon from '@heroicons/react/24/solid/PhotoIcon';
+import BoardIcon from '@heroicons/react/24/solid/ChatBubbleBottomCenterTextIcon';
 import { render } from '@testing-library/react';
 import { useNavigate } from 'react-router-dom';
 import defaultImg from '../../../assets/images/adult.png';
@@ -118,6 +119,12 @@ export const MyProfile = ({ member, handleRender }: MyProfileProps) => {
         </ContentSection>
       </GridCard>
       <MenuConatiner>
+        <MenuItem onClick={() => navigator('/board')}>
+          <IconWrapper>
+            <BoardIcon />
+          </IconWrapper>
+          <Typhography weight="bold">아기자기 게시판</Typhography>
+        </MenuItem>
         <MenuItem onClick={handleEditMember}>
           <IconWrapper>
             <EditIcon />

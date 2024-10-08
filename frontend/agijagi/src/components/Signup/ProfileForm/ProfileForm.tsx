@@ -19,6 +19,7 @@ import {
   ProfileContainer,
   ProfileImg,
 } from './ProfileForm.styles';
+import { login } from '../../../apis/authApi';
 
 interface ProfileForm {
   email: string;
@@ -58,16 +59,23 @@ export const ProfileForm = ({
       profileImg: uploadImg,
     };
 
+    const loginRequest = {
+      email: email,
+      password: password,
+    };
+
     signUp(userInfo)
       .then((response) => {
-        modal.push({
-          children: (
-            <ModalBackground>
-              <Typhography>회원가입이 완료되었어요!</Typhography>
-              <Button onClick={modal.pop}>닫기</Button>
-            </ModalBackground>
-          ),
-          onClose: () => navigator('/welcome'),
+        login(loginRequest).then((response) => {
+          modal.push({
+            children: (
+              <ModalBackground>
+                <Typhography>회원가입이 완료되었어요!</Typhography>
+                <Button onClick={modal.pop}>닫기</Button>
+              </ModalBackground>
+            ),
+            onClose: () => navigator('/welcome'),
+          });
         });
       })
       .catch((error) => {

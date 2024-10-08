@@ -1,25 +1,24 @@
 import styled from '@emotion/styled';
-import theme from '../../styles/theme';
 import CalendarIcon from '@heroicons/react/24/solid/CalendarIcon';
 import ReportIcon from '@heroicons/react/24/solid/NewspaperIcon';
 import PencilIcon from '@heroicons/react/24/solid/PencilIcon';
 import PhotoIcon from '@heroicons/react/24/solid/PhotoIcon';
-import FamilyIcon from '@heroicons/react/24/solid/UserIcon';
 import InviteCodeIcon from '@heroicons/react/24/solid/UserPlusIcon';
 import DeleteIcon from '@heroicons/react/24/solid/XCircleIcon';
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { getChild } from '../../apis/childApi';
 import { BabyProfileCard } from '../../components/BabyMain/BabyProfileCard/BabyProfileCard';
 import { BabyReportCard } from '../../components/BabyMain/BabyReportCard/BabyReportCard';
-import Typhography from '../../components/common/Typography';
-import useChildStore from '../../stores/useChlidStore';
-import { BabyResponse } from '../../types/user';
-import useModal from '../../hooks/useModal';
-import { EditBabyImage } from '../../components/BabyMain/EditBabyImage/EditBabyImage';
 import { DeleteBaby } from '../../components/BabyMain/DeleteBaby/DeleteBaby';
-import { useEffect } from 'react';
+import { EditBabyImage } from '../../components/BabyMain/EditBabyImage/EditBabyImage';
 import { EditBabyInfo } from '../../components/BabyMain/EditBabyInfo/EditBabyInfo';
-import { useNavigate } from 'react-router-dom';
+import { GetInviteCodeModal } from '../../components/BabyMain/InviteCodeModal/InviteCodeModal';
+import Typhography from '../../components/common/Typography';
+import useModal from '../../hooks/useModal';
+import useChildStore from '../../stores/useChlidStore';
+import theme from '../../styles/theme';
+import { BabyResponse } from '../../types/user';
 
 export const Container = styled.div`
   display: flex;
@@ -75,6 +74,12 @@ export const BabyProfile = () => {
       children: <EditBabyInfo child={child} />,
     });
   };
+
+  const handleInviteCode = () => {
+    modal.push({
+      children: <GetInviteCodeModal />,
+    });
+  };
   const handleEditFamilyImage = () => {
     modal.push({
       children: <EditBabyImage />,
@@ -103,41 +108,67 @@ export const BabyProfile = () => {
           </IconWrapper>
           <Typhography weight="bold">성장 분석 보고서 조회</Typhography>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={() => navigator('/schedule')}>
           <IconWrapper>
             <CalendarIcon />
           </IconWrapper>
           <Typhography weight="bold">아기 일정 조회</Typhography>
         </MenuItem>
-        <MenuItem onClick={handleEditBabyInfo}>
+        <MenuItem
+          onClick={child?.authority === 'WRITE' ? handleEditBabyInfo : () => {}}
+        >
           <IconWrapper>
             <PencilIcon />
           </IconWrapper>
-          <Typhography weight="bold">아기 정보 수정하기</Typhography>
+          <Typhography
+            color={child?.authority === 'WRITE' ? 'black' : 'greyScale'}
+            shade={child?.authority === 'WRITE' ? '900' : '500'}
+            weight="bold"
+          >
+            아기 정보 수정하기
+          </Typhography>
         </MenuItem>
-        <MenuItem onClick={handleEditFamilyImage}>
+        <MenuItem
+          onClick={
+            child?.authority === 'WRITE' ? handleEditFamilyImage : () => {}
+          }
+        >
           <IconWrapper>
             <PhotoIcon />
           </IconWrapper>
-          <Typhography weight="bold">패밀리 이미지 수정하기</Typhography>
+          <Typhography
+            color={child?.authority === 'WRITE' ? 'black' : 'greyScale'}
+            shade={child?.authority === 'WRITE' ? '900' : '500'}
+            weight="bold"
+          >
+            패밀리 이미지 수정하기
+          </Typhography>
         </MenuItem>
-        {/* <MenuItem>
-          <IconWrapper>
-            <FamilyIcon />
-          </IconWrapper>
-          <Typhography weight="bold">패밀리 관리하기</Typhography>
-        </MenuItem> */}
-        <MenuItem>
+        <MenuItem
+          onClick={child?.authority === 'WRITE' ? handleInviteCode : () => {}}
+        >
           <IconWrapper>
             <InviteCodeIcon />
           </IconWrapper>
-          <Typhography weight="bold">초대코드 생성하기</Typhography>
+          <Typhography
+            color={child?.authority === 'WRITE' ? 'black' : 'greyScale'}
+            shade={child?.authority === 'WRITE' ? '900' : '500'}
+            weight="bold"
+          >
+            초대코드 생성하기
+          </Typhography>
         </MenuItem>
-        <MenuItem onClick={handelDeleteFamily}>
+        <MenuItem
+          onClick={child?.authority === 'WRITE' ? handelDeleteFamily : () => {}}
+        >
           <IconWrapper>
             <DeleteIcon color={theme.color.danger[500]} />
           </IconWrapper>
-          <Typhography color="danger" shade="500" weight="bold">
+          <Typhography
+            color={child?.authority === 'WRITE' ? 'danger' : 'greyScale'}
+            shade={child?.authority === 'WRITE' ? '500' : '500'}
+            weight="bold"
+          >
             패밀리 삭제하기
           </Typhography>
         </MenuItem>

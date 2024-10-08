@@ -54,13 +54,13 @@ const Layout = () => {
     '/milestone',
     '/milestone-report',
     '/report',
-    '/',
+    '/book',
   ].includes(location.pathname);
 
   return (
     <>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/record" element={<RecordPage />} />
         <Route path="/baby" element={<BabyMain />} />

@@ -3,6 +3,7 @@ import HomeIcon from '@heroicons/react/24/outline/HomeIcon';
 import BookIcon from '@heroicons/react/24/outline/BookOpenIcon';
 import MicIcon from '@heroicons/react/24/outline/MicrophoneIcon';
 import RecordIcon from '@heroicons/react/24/outline/DocumentTextIcon';
+import CalendarIcon from '@heroicons/react/24/outline/CalendarIcon';
 import defaultBoy from '../../../assets/images/boy.png';
 import defaultGirl from '../../../assets/images/boy.png';
 import { useQuery } from '@tanstack/react-query';
@@ -83,7 +84,7 @@ export const BottomNavigation = () => {
             메인
           </Typhography>
         </Item>
-        <Item to={'/'}>
+        <Item to={'/book'}>
           <IconWrapper>
             <BookIcon />
           </IconWrapper>
@@ -91,12 +92,12 @@ export const BottomNavigation = () => {
             동화
           </Typhography>
         </Item>
-        <Item to={'/'}>
+        <Item to={'/schedule'}>
           <IconWrapper>
-            <MicIcon />
+            <CalendarIcon />
           </IconWrapper>
           <Typhography size="2xs" weight="bold">
-            음성
+            일정
           </Typhography>
         </Item>
         <Item to={'/record'}>
