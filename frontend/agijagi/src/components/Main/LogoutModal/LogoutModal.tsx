@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../../apis/authApi';
 import useModal from '../../../hooks/useModal';
+import useMemberStore from '../../../stores/useMemberStore';
 import theme from '../../../styles/theme';
 import Button from '../../common/Button';
 import Typhography from '../../common/Typography';
@@ -27,10 +28,12 @@ export const ButtonContainer = styled.div`
 export const LogoutModal = () => {
   const navigator = useNavigate();
   const modal = useModal();
+  const { updateMemberId } = useMemberStore();
 
   const handleLogout = () => {
     logout().then((response) => {
-      localStorage.removeItem('memberId');
+      updateMemberId(0);
+
       modal.pop();
       window.location.href = '/login';
     });
