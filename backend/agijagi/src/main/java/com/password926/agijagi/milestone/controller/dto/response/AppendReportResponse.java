@@ -9,7 +9,7 @@ public class AppendReportResponse {
 
     private long id;
 
-    public static AppendReportResponse from(long id) {
+    public static AppendReportResponse of(long id) {
         return new AppendReportResponse(id);
     }
 }

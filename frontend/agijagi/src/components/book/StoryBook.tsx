@@ -24,8 +24,8 @@ const BookWrapper = styled.div`
 
   @media (min-width: 700px) {
     margin: 0 auto;
-    width: 100vh;
-    height: 100vh;
+    width: calc(var(--vh) * 100);
+    height: calc(var(--vh) * 100);
   }
 `;
 
@@ -179,7 +179,7 @@ interface HTMLDivElementWithVendorPrefix extends HTMLDivElement {
 
 const StoryBook = ({ book, id, onBookSelect }: StoryBookProps) => {
   const location = useLocation();
-  const storyId = location.state.storyId || id;
+  const storyId = id || location.state.storyId;
   const navigate = useNavigate();
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -194,6 +194,8 @@ const StoryBook = ({ book, id, onBookSelect }: StoryBookProps) => {
     queryKey: ['storybookpages', storyId],
     queryFn: () => getStoryBookPages(storyId),
   });
+
+  console.log(storyBookPagesQuery.data?.data)
 
   useEffect(() => {
     const handleFullScreenChange = () => {

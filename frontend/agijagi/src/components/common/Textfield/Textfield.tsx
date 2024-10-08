@@ -46,7 +46,7 @@ const Textfield = ({
   onChange,
 }: TextfieldProps) => {
   const [focused, setFocused] = useState(false);
-  const [isFloating, setIsFloating] = useState<boolean>(false);
+  const [isFloating, setIsFloating] = useState<boolean>(inputValue !== '');
   const [fieldState, setFieldState] = useState<ValidationState>('normal');
   const inputRef = useRef<HTMLInputElement>(null);
 

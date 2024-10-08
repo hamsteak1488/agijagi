@@ -19,9 +19,7 @@ public class PostUpdater {
     public void updatePost(long postId, String title, String content, List<MediaResource> newMediaList, List<UUID> removeMediaList) {
         Post post = postReader.read(postId);
         post.update(title, content);
-        newMediaList.forEach(m -> {
-            post.addMedia(mediaStorage.storeAny(m));
-        });
+        newMediaList.forEach(m -> post.addMedia(mediaStorage.storeAny(m)));
         removeMediaList.forEach(post::removeMedia);
     }
 }

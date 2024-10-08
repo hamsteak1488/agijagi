@@ -27,7 +27,7 @@ export const Signup = () => {
     nickname: false,
   });
   const [isNext, setIsNext] = useState<boolean>(false);
-  const [uploadImg, setUploadImg] = useState<string>('');
+  const [uploadImg, setUploadImg] = useState<File | null>(null);
 
   function validatePassword(input: string): ValidationState {
     if (input.trim() === '') {
@@ -76,7 +76,7 @@ export const Signup = () => {
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setUploadImg(URL.createObjectURL(file));
+      setUploadImg(file);
     }
   };
 

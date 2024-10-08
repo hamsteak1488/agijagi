@@ -1,15 +1,16 @@
+import BackIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
+import axios, { AxiosError } from 'axios';
 import { useState } from 'react';
-import * as s from './style';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../../apis/authApi';
 import Button from '../../components/common/Button';
 import Textfield from '../../components/common/Textfield';
+import { ValidationState } from '../../components/common/Textfield/Textfield.types';
 import Typhography from '../../components/common/Typography';
 import { IntroductionSlider } from '../../components/Login/IntroductionSlider/IntroductionSlider';
-import { ValidationState } from '../../components/common/Textfield/Textfield.types';
-import { useNavigate } from 'react-router-dom';
-import BackIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
-import { axiosInstance } from '../../apis/axiosInstance';
 import useModal from '../../hooks/useModal';
+import useMemberStore from '../../stores/useMemberStore';
+import * as s from './style';
 import { ModalBackground } from './style';
 
 export const Login = () => {
@@ -19,6 +20,7 @@ export const Login = () => {
   const [loginMode, setLoginMode] = useState<boolean>(false);
   const [isValidated, setIsValidated] = useState<boolean[]>([false, false]);
 
+  const { memberId, updateMemberId } = useMemberStore();
   const navigator = useNavigate();
   const modal = useModal();
 
@@ -34,25 +36,34 @@ export const Login = () => {
     setLevel(level);
   };
 
-  const handleLogin = () => {
-    axiosInstance
-      .post('/auth/login', {
-        email: email,
-        password: password,
-      })
-      .then((response) => {
+  const handleLogin = async () => {
+    const loginInfo = {
+      email: email,
+      password: password,
+    };
+
+    try {
+      await login(loginInfo).then((response) => {
+        const memberId: string = response.data.memberId;
+        console.log(memberId);
+        updateMemberId(Number(memberId));
+        localStorage.setItem('memberId', memberId);
         navigator('/main');
-      })
-      .catch((error) => {
+      });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
         modal.push({
           children: (
             <ModalBackground>
-              {error.response.data.message}
+              {error.response?.data?.message || '로그인 실패'}
               <Button onClick={modal.pop}>닫기</Button>
             </ModalBackground>
           ),
         });
-      });
+      } else {
+        console.error('Unknown error:', error);
+      }
+    }
   };
 
   function validatePassword(input: string): ValidationState {
@@ -84,7 +95,6 @@ export const Login = () => {
       return 'danger';
     }
   }
-
   return (
     <s.Container>
       <s.Moon
@@ -152,9 +162,9 @@ export const Login = () => {
         ></Textfield>
         <Button
           size="md"
-          color={isValidated[0] && isValidated[1] ? 'primary' : 'greyScale'}
+          color={isValidated[0] ? 'primary' : 'greyScale'}
           fullWidth={true}
-          disabled={!(isValidated[0] && isValidated[1])}
+          disabled={!isValidated[0]}
           onClick={handleLogin}
         >
           <Typhography color="white">로그인</Typhography>

@@ -1,6 +1,5 @@
 package com.password926.agijagi.post.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.password926.agijagi.config.TestAuthConfig;
 import com.password926.agijagi.config.RestDocsConfig;
 import com.password926.agijagi.post.controller.dto.request.CreatePostRequest;
@@ -18,7 +17,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
@@ -26,10 +24,8 @@ import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.cookies.CookieDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -51,8 +47,6 @@ import static org.springframework.restdocs.snippet.Attributes.key;
 class PostControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @MockBean
     private PostService postService;
@@ -126,8 +120,8 @@ class PostControllerTest {
                                 parameterWithName("postId").description("게시글 ID")
                         ),
                         requestParts(
-                                partWithName("title").description("수정할 제목").attributes(key("constraints").value("None")).optional(),
-                                partWithName("content").description("수정할 내용").attributes(key("constraints").value("None")).optional(),
+                                partWithName("title").description("수정할 제목").attributes(key("constraints").value(titleDescription)).optional(),
+                                partWithName("content").description("수정할 내용").attributes(key("constraints").value(contentDescription)).optional(),
                                 partWithName("newMediaList").description("새로 추가할 미디어 목록").attributes(key("constraints").value("None")).optional(),
                                 partWithName("deleteMediaIdList").description("삭제할 미디어 아이디 목록").attributes(key("constraints").value("None")).optional()
                         )

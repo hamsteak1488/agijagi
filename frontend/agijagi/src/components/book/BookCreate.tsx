@@ -44,8 +44,7 @@ const LoadingWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 500px;
-  height: 100vh;
+  height: 80vh;
 `;
 
 const InputWrapper = styled.div`

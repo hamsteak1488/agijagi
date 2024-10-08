@@ -34,8 +34,8 @@ const IntroText = styled.div`
 `;
 
 interface ReportIntroProps {
-  weight: number;
-  currentWeight: number;
+  weight: number | undefined;
+  currentWeight: number | undefined;
 }
 
 const ReportIntro = ({weight, currentWeight} : ReportIntroProps) => {

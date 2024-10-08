@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import Typhography from '../../components/common/Typography';
 import theme from '../../styles/theme';
@@ -7,19 +7,23 @@ import Button from '../../components/common/Button';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import ReportFilter from '../../components/Report/ReportFilter';
 import ReportList from '../../components/Report/ReportList';
-import axios from 'axios';
 import BoyImg from '../../assets/images/boy.png';
-
+import useChildStore from '../../stores/useChlidStore';
+import { useQuery } from '@tanstack/react-query';
+import { getChildInfo } from '../../apis/milestone';
+import { getReportList } from '../../apis/report';
 
 const Wrapper = styled.div`
-  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+  height: calc(var(--vh) * 100);
 `;
+
 const Title = styled.div`
   display: flex;
   margin: 5px 10px 5px 40px;
   height: 50px;
   align-items: center;
-
 `;
 
 const TitleText = styled.div`
@@ -51,8 +55,8 @@ const FilterContainer = styled.div`
 `;
 
 const ReportContainer = styled.div`
+  flex: 1 1 auto;
   background-color: ${theme.color.tertiary[50]};
-  height: 90vh;
   padding: 10px;
   overflow-y: auto;
 `;
@@ -60,18 +64,33 @@ const ReportContainer = styled.div`
 const today = new Date();
 const todayYear = today.getFullYear();
 
-// 임의로 만든 아기 데이터
-const name = '다운';
-const birth = '2024-06-14';
-const weight = 3.02;
-const currentWeight = 7.2;
-const gender = 'boy';
-const image = BoyImg;
-
 const Report = () => {
   const [year, setYear] = useState<number>(todayYear);
-  
+  const [name, setName] = useState<string>('');
+  const [birth, setBirth] = useState<string>('');
+  const { childId } = useChildStore();
+
   const navigate = useNavigate();
+
+  const childQuery = useQuery({
+    queryKey: ['child-', childId],
+    queryFn: () => getChildInfo(childId),
+  });
+
+  const reportListQuery = useQuery({
+    queryKey: ['reportlist-', childId],
+    queryFn: () => getReportList(childId),
+  });
+
+  if (reportListQuery.error) {
+    return <>데이터를 불러오지 못했습니다.</>;
+  }
+  if (reportListQuery.isLoading) {
+    return <>로딩중</>;
+  }
+
+  // const name = data? data.data.nickname : '';
+  // const birth = data? data.data.birthday : '';
 
   const handleBack = () => {
     navigate(-1);
@@ -91,8 +110,6 @@ const Report = () => {
       return prevYear + 1;
     });
   };
-
-  const handleDelete = () => {};
 
   return (
     <Wrapper>
@@ -115,7 +132,13 @@ const Report = () => {
       </FilterContainer>
 
       <ReportContainer>
-        <ReportList name={name} birth={birth} year={year}/>
+        <ReportList
+          name={childQuery.data?.data.nickname}
+          birth={childQuery.data?.data.birthday}
+          year={year}
+          childId={childId}
+          data={reportListQuery.data?.data}
+        />
       </ReportContainer>
     </Wrapper>
   );

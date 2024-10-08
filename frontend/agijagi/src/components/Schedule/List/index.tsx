@@ -27,16 +27,20 @@ const List = ({ start, end }: ScheduleListProps) => {
 
   return (
     <>
-      {data.map((item) => (
-        <Schedule.Card
-          key={item.id}
-          title={item.title}
-          description={item.description}
-          start={item.startDateTime}
-          end={item.endDateTime}
-          onClick={() => handleScheduleClick(item)}
-        />
-      ))}
+      {data.length === 0 ? (
+        <Schedule.Empty />
+      ) : (
+        data.map((item) => (
+          <Schedule.Card
+            key={item.id}
+            title={item.title}
+            description={item.description}
+            start={item.startDateTime}
+            end={item.endDateTime}
+            onClick={() => handleScheduleClick(item)}
+          />
+        ))
+      )}
     </>
   );
 };

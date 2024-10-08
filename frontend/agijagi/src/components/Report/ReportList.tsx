@@ -5,20 +5,15 @@ import Typhography from '../common/Typography';
 import { useNavigate } from 'react-router-dom';
 import { CalendarIcon } from '@heroicons/react/24/outline';
 import ReportCover from '../../assets/images/report/reportcover.png';
-
-const reportList = [
-  { id: 1, createAt: '2024-06-27' },
-  { id: 2, createAt: '2024-07-26' },
-  { id: 3, createAt: '2024-08-30' },
-  { id: 4, createAt: '2024-09-28' },
-];
+import { useQuery } from '@tanstack/react-query';
+import { getReportList, ReportList } from '../../apis/report';
 
 const ReportListWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
   max-width: 700px;
-  height: 550px;
+  height: 130px;
   margin: 0 auto;
 
   /* 화면 너비가 700px 이상일 때 */
@@ -35,6 +30,7 @@ const ReportListWrapper = styled.div`
 const ReportContainer = styled.div`
   display: flex;
   justify-content: center;
+  height: 100px;
   gap: 20px;
   padding: 15px;
   align-items: center;
@@ -94,7 +90,10 @@ const TitleLabel = styled.div`
 
 const DateLabel = styled.div`
   display: flex;
-  margin-top: 20px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  margin-top: 15px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -119,22 +118,54 @@ const DateIcon = styled(CalendarIcon)`
   color: ${theme.color.primary[800]};
 `;
 
+const CreateText = styled.span`
+  display: flex;
+  font-size: ${theme.typography.fontSize.xs};
+  color: ${theme.color.greyScale[600]};
+  text-decoration: underline;
+  margin-right: 10px;
+`;
+
+const timeSince = (date: string) => {
+  const today = new Date();
+  const createDate = new Date(date);
+  const milliSeconds = today.getTime() - createDate.getTime();
+  const seconds = milliSeconds / 1000;
+  if (seconds < 60) return `방금 전`;
+  const minutes = seconds / 60;
+  if (minutes < 60) return `${Math.floor(minutes)}분 전`;
+  const hours = minutes / 60;
+  if (hours < 24) return `${Math.floor(hours)}시간 전`;
+  const days = hours / 24;
+  if (days < 7) return `${Math.floor(days)}일 전`;
+  const weeks = days / 7;
+  if (weeks < 5) return `${Math.floor(weeks)}주 전`;
+  const months = days / 30;
+  if (months < 12) return `${Math.floor(months)}개월 전`;
+  const years = days / 365;
+  return `${Math.floor(years)}년 전`;
+};
+
 interface ReportListProps {
-  name: string;
-  birth: string;
+  name: string | undefined;
+  birth: string | undefined;
   year: number;
+  childId: number;
+  data: ReportList[] | undefined;
 }
 
-const ReportList = ({ name, birth, year }: ReportListProps) => {
+const ReportListComponet = ({ name, birth, year, childId, data }: ReportListProps) => {
   const navigate = useNavigate();
 
-  const onReportSelect = (id : number) => {
-    navigate('/milestone-report', { state: { reportId: id } })
+  
+
+  const onReportSelect = (id: number) => {
+    navigate('/milestone-report', { state: { reportId: id } });
   };
 
   const calculateDays = (date: string) => {
     const createDate = new Date(date);
-    const birthDate = new Date(birth);
+    const birthDate = new Date(birth ? birth : '');
 
     // 두 날짜 간의 차이를 밀리초로 계산
     const timeDifference: number = createDate.getTime() - birthDate.getTime();
@@ -147,7 +178,12 @@ const ReportList = ({ name, birth, year }: ReportListProps) => {
     return daysDifference;
   };
 
-  const filteredReport = reportList.filter((report) => {
+  const createMonth = (date: string) => {
+    const createDate = new Date(date);
+    return createDate.getMonth() + 1;
+  };
+
+  const filteredReport = data?.filter((report) => {
     const date = new Date(report.createAt);
     const createdDate = date.getFullYear();
     return year === createdDate;
@@ -155,33 +191,42 @@ const ReportList = ({ name, birth, year }: ReportListProps) => {
 
   return (
     <ReportListWrapper>
-      {filteredReport.map((report) => (
-        <ReportContainer key={report.id} onClick={() => onReportSelect(report.id)}>
-          <ImageContainer>
-            <BookImage src={ReportCover} alt="report img" />
-            <DaysText>
-              {' '}
-              {calculateDays(report.createAt)} <br /> days
-            </DaysText>
-          </ImageContainer>
+      {filteredReport?.length === 0 ? (
+        <p>생성된 분석 보고서가 없습니다.</p>
+      ) : (
+        filteredReport?.map((report) => (
+          <ReportContainer
+            key={report.id}
+            onClick={() => onReportSelect(report.id)}
+          >
+            <ImageContainer>
+              <BookImage src={ReportCover} alt="report img" />
+              <DaysText>
+                {' '}
+                {calculateDays(report.createAt)} <br /> days
+              </DaysText>
+            </ImageContainer>
 
-          <LabelContainer>
-            <TitleLabel>
-              {name} 성장 분석 보고서 {report.id}
-            </TitleLabel>
-            <DateLabel>
-              <DateContainer>
-                <DateIcon />
-                <Typhography size="sm" color="greyScale" shade="800">
-                  생성일 : {report.createAt}
-                </Typhography>
-              </DateContainer>
-            </DateLabel>
-          </LabelContainer>
-        </ReportContainer>
-      ))}
+            <LabelContainer>
+              <TitleLabel>
+                {name} {createMonth(report.createAt)}월 성장 분석 보고서
+              </TitleLabel>
+              <DateLabel>
+                <DateContainer>
+                  <DateIcon />
+                  <Typhography size="sm" color="greyScale" shade="800">
+                    생성일 : {report.createAt.slice(0, 10)}
+                  </Typhography>
+                </DateContainer>
+                <CreateText>{timeSince(report.createAt)}</CreateText>
+              </DateLabel>
+            </LabelContainer>
+          </ReportContainer>
+        ))
+      )}
+      <div style={{ height: '80px' }}></div>
     </ReportListWrapper>
   );
 };
 
-export default ReportList;
+export default ReportListComponet;

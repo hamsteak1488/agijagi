@@ -4,6 +4,6 @@ export const Container = styled.div`
   display: flex;
   align-items: flex-end;
   padding: 3rem 0;
-  height: 100vh;
+  height: calc(var(--vh) * 100);
   box-sizing: border-box;
 `;

@@ -19,4 +19,13 @@ public class ChildValidator {
             throw new RestApiException(CommonErrorCode.FORBIDDEN);
         }
     }
+
+    public void validateReadAuthority(long memberId, long childId) {
+        Authority authority = memberChildReader.readByMemberAndChild(memberId, childId)
+                .getAuthority();
+
+        if (authority == null || !authority.isReadAuthority()) {
+            throw new RestApiException(CommonErrorCode.FORBIDDEN);
+        }
+    }
 }

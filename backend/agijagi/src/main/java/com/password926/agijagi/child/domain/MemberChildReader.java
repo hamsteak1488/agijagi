@@ -22,8 +22,4 @@ public class MemberChildReader {
         return memberChildRepository.findByMemberIdAndChildId(memberId, childId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
     }
-
-    public long readFollowerNum(long childId) {
-        return memberChildRepository.countByChildId(childId);
-    }
 }

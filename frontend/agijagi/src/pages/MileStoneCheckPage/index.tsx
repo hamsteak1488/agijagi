@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import Typhography from '../../components/common/Typography';
 import theme from '../../styles/theme';
@@ -6,22 +6,35 @@ import Button from '../../components/common/Button';
 import { useNavigate } from 'react-router-dom';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import MileStoneFilter from '../../components/milestone/MileStoneFilter';
-import MileStoneIntro from '../../components/milestone/MileStoneCheck';
-import axios from 'axios';
+import MileStoneCheck from '../../components/milestone/MileStoneCheck';
+import {
+  getChildInfo,
+  getHeightWeightInfo,
+  MilestoneDetail,
+  patchMilestone,
+} from '../../apis/milestone';
+import useChildStore from '../../stores/useChlidStore';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: calc(var(--vh) * 100);
+`;
 
 const Title = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 5px 15px 5px 20px;
+  margin: 5px 20px;
+  /* max-width: 700px; */
   height: 50px;
   align-items: center;
 `;
 
 const CloseButton = styled(XMarkIcon)`
-  display: flex;
   align-items: center;
-  margin-right: 20px;
+  margin-right: 30px;
   width: 25px;
   height: 25px;
   cursor: pointer;
@@ -43,9 +56,40 @@ const FilterContainer = styled.div`
 `;
 
 const MileStoneContainer = styled.div`
+  flex: 1 1 auto;
   background-color: ${theme.color.tertiary[50]};
   overflow-y: auto;
   padding: 10px;
+`;
+
+const WarningMessage = styled.div`
+  position: fixed;
+  text-align: center;
+  width: 230px;
+  bottom: 220px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: ${theme.color.danger[500]};
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  z-index: 1000;
+  font-size: ${theme.typography.fontSize.md};
+`;
+
+const SuccessMessage = styled.div`
+  position: fixed;
+  text-align: center;
+  width: 230px;
+  bottom: 220px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: ${theme.color.success[500]};
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  z-index: 1000;
+  font-size: ${theme.typography.fontSize.md};
 `;
 
 // 태어난지 몇개월 인지 계산하는 함수
@@ -54,42 +98,78 @@ const calculateAgeInMonths = (birthDate: Date): number => {
 
   let yearsDiff = today.getFullYear() - birthDate.getFullYear();
   let monthsDiff = today.getMonth() - birthDate.getMonth();
+  const daysDiff = today.getDate() - birthDate.getDate();
 
   if (monthsDiff < 0) {
     yearsDiff--;
     monthsDiff += 12;
   }
 
-  return yearsDiff * 12 + monthsDiff;
+  if (daysDiff < 0) {
+    monthsDiff--;
+  }
+  return Math.floor(yearsDiff * 12 + monthsDiff);
 };
 
-// 임시 아이 -> 추후 데이터로 받아야함
-const childId = 1;
-const name = '다운';
-const birth = '2024-06-23';
-const weight = 3.1;
-
-const birthDate = new Date(birth);
-const month = calculateAgeInMonths(birthDate);
-
-interface MilestoneDetail {
-  milestoneId: number;
-  content: string;
-  requiredAmount: number;
-  currentAmount: number;
-  date: null | string;
-}
-
 const MilestoneCheck = () => {
-  const [months, setMonths] = useState<number>(month);
+  const [months, setMonths] = useState<number>(0);
   const [selectedMilestones, setSelectedMilestones] = useState<
     MilestoneDetail[]
   >([]);
+  const [success, setSuccess] = useState<string>('');
+  const [warning, setWarning] = useState<string>('');
   const navigate = useNavigate();
+  const { childId } = useChildStore();
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: patchMilestone,
+    onSuccess: () => {
+      setSuccess('마일스톤을 저장했습니다');
+      setTimeout(() => setSuccess(''), 1000);
+      queryClient.invalidateQueries({
+        queryKey: ['milestone', months],
+        exact: true, // 이 옵션은 해당 쿼리 키와 정확히 일치하는 쿼리를 무효화함
+      });
+    },
+    onError: () => {
+      setWarning('마일스톤을 체크해주세요');
+      setTimeout(() => setWarning(''), 2000);
+    },
+  });
+
+  const childQuery = useQuery({
+    queryKey: ['child-', childId],
+    queryFn: () => getChildInfo(childId),
+  });
+
+  useEffect(() => {
+    if (childQuery.data?.data) {
+      const birthday = childQuery.data?.data.birthday;
+      if (birthday) {
+        const birthDate = new Date(birthday);
+        const month = calculateAgeInMonths(birthDate);
+        setMonths(month);
+      }
+    }
+  }, [childQuery.data]);
+
+  if (childQuery.error) {
+    return <>아이 데이터를 불러오지 못했습니다.</>;
+  }
+  if (childQuery.isLoading) {
+    return <>로딩중</>;
+  }
 
   const handleBack = () => {
     navigate(-1);
   };
+
+  const childData = childQuery.data?.data;
+  const name = childData?.nickname;
+  const weight = childData?.birthWeight;
+  const birthday = childData?.birthday;
+  const birthDate = new Date(birthday ? birthday : '');
 
   // 체크박스 선택 처리
   const handleCheckboxChange = (item: MilestoneDetail, isChecked: boolean) => {
@@ -97,37 +177,31 @@ const MilestoneCheck = () => {
       setSelectedMilestones((prev) => [...prev, item]);
     } else {
       setSelectedMilestones((prev) =>
-        prev.filter((milestone) => milestone.milestoneId !== item.milestoneId)
+        prev.filter((milestone) => milestone.id !== item.id)
       );
     }
   };
 
-  // 마일스톤 저장
-  const handleSave = async () => {
-    const milestones = selectedMilestones.map((item) => ({
-      id: item.milestoneId,
+  const handleMileStoneSave = async () => {
+    const milestoneDatas = selectedMilestones.map((item) => ({
+      id: item.id,
       currentAmount: item.currentAmount + 1,
     }));
 
-    const data = {
-      childId: childId,
-      milestones: milestones,
-    };
-
-    try {
-      const response = await axios.patch(
-        `https://api.password926.site/children/${childId}/milestone`,
-        data
-      );
-      console.log('데이터 저장:', response.data);
-    } catch (error) {
-      console.error('Error saving data:', error);
-    }
+    // 마일스톤 수정 api 호출 (patch)
+    mutate({
+      childId,
+      data: {
+        childId: childId,
+        milestones: milestoneDatas,
+      },
+    });
+    setSelectedMilestones([]);
   };
 
   const handlePrev = () => {
     setMonths((prevMonth) => {
-      if (prevMonth <= 1) {
+      if (prevMonth <= 0) {
         return prevMonth;
       }
       return prevMonth - 1;
@@ -136,7 +210,7 @@ const MilestoneCheck = () => {
 
   const handleNext = () => {
     setMonths((prevMonth) => {
-      if (prevMonth >= 24) {
+      if (prevMonth >= 12) {
         return prevMonth;
       }
       return prevMonth + 1;
@@ -144,13 +218,18 @@ const MilestoneCheck = () => {
   };
 
   return (
-    <>
+    <Wrapper>
       <Title>
         <CloseButton onClick={handleBack} />
         <Typhography size="lg" weight="bold" color="greyScale" shade="800">
           발달 체크
         </Typhography>
-        <Button size="sm" color="primary" onClick={handleSave}>
+        <Button
+          size="sm"
+          color="primary"
+          onClick={handleMileStoneSave}
+          disabled={isPending}
+        >
           저장
         </Button>
       </Title>
@@ -163,18 +242,21 @@ const MilestoneCheck = () => {
         />
       </FilterContainer>
       <MileStoneContainer>
-        <MileStoneIntro
+        <MileStoneCheck
           month={months}
           name={name}
           childId={childId}
           birth={birthDate}
           weight={weight}
           selectedMilestones={selectedMilestones}
-          handleSave={handleSave}
+          handleMileStoneSave={handleMileStoneSave}
           handleCheckboxChange={handleCheckboxChange}
         />
       </MileStoneContainer>
-    </>
+
+      {warning && <WarningMessage>{warning}</WarningMessage>}
+      {success && <SuccessMessage>{success}</SuccessMessage>}
+    </Wrapper>
   );
 };
 

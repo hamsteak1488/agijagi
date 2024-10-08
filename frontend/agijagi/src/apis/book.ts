@@ -19,7 +19,6 @@ export interface StoryBookDetail {
 }
 
 export interface StoryBookPage {
-  img: string | undefined;
   id: number;
   storyId: number;
   pageNumber: number;

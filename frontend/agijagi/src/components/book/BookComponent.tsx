@@ -14,6 +14,8 @@ import { getStoryBookList } from '../../apis/book';
 import useChildStore from '../../stores/useChlidStore';
 import { BookCoverImg } from '../../components/book/BookCoverImage';
 import theme from '../../styles/theme';
+import BookDeleteModal from './BookDeleteModal';
+import useModal from '../../hooks/useModal';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -129,6 +131,7 @@ const todayYear = today.getFullYear();
 const todayMonth = today.getMonth() + 1;
 
 const BookComponent = () => {
+  const modal = useModal();
   const [year, setYear] = useState(todayYear);
   const [month, setMonth] = useState(todayMonth);
   const [selectedBook, setSelectedBook] = useState<StoryBookDetail | null>(
@@ -142,11 +145,6 @@ const BookComponent = () => {
   const { data, error, isLoading } = useQuery({
     queryKey: ['storybooklist', childId],
     queryFn: () => getStoryBookList(childId),
-  });
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: deleteStoryBook,
-    onSuccess: () => navigate('/book'),
   });
 
   useEffect(() => {
@@ -173,8 +171,9 @@ const BookComponent = () => {
   };
 
   const deleteBook = () => {
-    //동화 삭제 api 호출
-    mutate({ storyId });
+    modal.push({
+      children: <BookDeleteModal storyId={storyId} onBookSelect={handleBookSelect} childId={childId}/>,
+    });
   };
 
   const goCreateBook = () => {
@@ -239,7 +238,7 @@ const BookComponent = () => {
               동화생성
             </Button>
           ) : (
-            <Button size="sm" color="danger" onClick={deleteBook} disabled={isPending}>
+            <Button size="sm" color="danger" onClick={deleteBook}>
               동화삭제
             </Button>
           )}
@@ -275,7 +274,11 @@ const BookComponent = () => {
 
       {selectedBook ? (
         <StoryBookWrapper>
-          <StoryBook book={selectedBook} id={selectedBook.id} onBookSelect={handleBookSelect} />
+          <StoryBook
+            book={selectedBook}
+            id={selectedBook.id}
+            onBookSelect={handleBookSelect}
+          />
         </StoryBookWrapper>
       ) : (
         <ModalWrapper>

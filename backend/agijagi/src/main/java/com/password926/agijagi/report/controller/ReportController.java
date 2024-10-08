@@ -45,7 +45,7 @@ public class ReportController {
             LoginMember member,
             @PathVariable long childId
     ) {
-        return ResponseEntity.ok().body(AppendReportResponse.from(reportService.appendReport(member.getId(), childId)));
+        return ResponseEntity.ok().body(AppendReportResponse.of(reportService.appendReport(member.getId(), childId)));
     }
 
     @Authenticate

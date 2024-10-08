@@ -19,12 +19,13 @@ import {
   ProfileContainer,
   ProfileImg,
 } from './ProfileForm.styles';
+import { login } from '../../../apis/authApi';
 
 interface ProfileForm {
   email: string;
   password: string;
   isNext: boolean;
-  uploadImg: string;
+  uploadImg: File | null;
   handleNext: () => void;
   handleUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isValidated: Record<string, boolean>;
@@ -51,21 +52,30 @@ export const ProfileForm = ({
   const modal = useModal();
 
   const handleSignup = () => {
-    signUp({
+    const userInfo = {
       email: email,
       password: password,
       nickname: nickname,
-    })
+      profileImg: uploadImg,
+    };
+
+    const loginRequest = {
+      email: email,
+      password: password,
+    };
+
+    signUp(userInfo)
       .then((response) => {
-        console.log(response);
-        modal.push({
-          children: (
-            <ModalBackground>
-              <Typhography>회원가입이 완료되었어요!</Typhography>
-              <Button onClick={modal.pop}>닫기</Button>
-            </ModalBackground>
-          ),
-          onClose: () => navigator('/welcome'),
+        login(loginRequest).then((response) => {
+          modal.push({
+            children: (
+              <ModalBackground>
+                <Typhography>회원가입이 완료되었어요!</Typhography>
+                <Button onClick={modal.pop}>닫기</Button>
+              </ModalBackground>
+            ),
+            onClose: () => navigator('/welcome'),
+          });
         });
       })
       .catch((error) => {
@@ -94,7 +104,9 @@ export const ProfileForm = ({
             <PlusCircle fill="#fff" />
           </AddIconWrapper>
           <ImgWrapper>
-            <ProfileImg src={uploadImg ? uploadImg : defaultImg} />
+            <ProfileImg
+              src={uploadImg ? URL.createObjectURL(uploadImg) : defaultImg}
+            />
           </ImgWrapper>
           <InvisibleInput
             type="file"

@@ -19,8 +19,12 @@ public class PostMedia {
     @JoinColumn(name = "media_id", nullable = false)
     private Media media;
 
-    public PostMedia(Post post, Media media) {
+    @Column
+    private int mediaOrder;
+
+    public PostMedia(Post post, Media media, int mediaOrder) {
         this.post = post;
         this.media = media;
+        this.mediaOrder = mediaOrder;
     }
 }

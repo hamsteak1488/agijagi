@@ -13,8 +13,6 @@ import com.password926.agijagi.story.entity.Story;
 import com.password926.agijagi.child.infrastructure.ChildRepository;
 import com.password926.agijagi.child.domain.ChildValidator;
 import com.password926.agijagi.child.domain.Child;
-import com.password926.agijagi.media.domain.MediaResource;
-import com.password926.agijagi.media.domain.MediaStorage;
 import com.password926.agijagi.media.domain.Image;
 import com.password926.agijagi.common.errors.exception.RestApiException;
 import com.password926.agijagi.common.errors.errorcode.CommonErrorCode;
@@ -40,20 +38,19 @@ public class StoryService {
     private final DiaryRepository diaryRepository;
     private final StoryGPT storyGPT;
     private final ChildValidator childValidator;
-    private final MediaStorage mediaStorage;
     private final ImageGenerator imageGenerator;
 
     @Transactional
-    public void createStory(long memberId, CreateStoryRequest request) {
+    public Map<String, Long> createStory(long memberId, CreateStoryRequest request) {
         childValidator.validateWriteAuthority(memberId, request.getChildId());
 
         Child child = childRepository.findByIdAndIsDeletedFalse(request.getChildId())
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        List<Diary> diaries = diaryRepository.findAllByChildIdAndCreatedAtBetween(
+        List<Diary> diaries = diaryRepository.findAllByChildIdAndWroteAtBetween(
                 request.getChildId(),
-                request.getStartDate().atStartOfDay(),
-                request.getEndDate().atTime(LocalTime.MAX).withNano(0)
+                request.getStartDate(),
+                request.getEndDate()
         );
 
         Story story = Story.builder()
@@ -70,8 +67,7 @@ public class StoryService {
                 ChronoUnit.DAYS.between(child.getBirthday(), LocalDate.now())
         );
 
-        Image image = mediaStorage.storeImage(MediaResource.from(request.getCoverImage()));
-        story.addMedia(image);
+        story.addCoverImage(request.getCoverImageIndex());
 
         storyRepository.save(story);
 
@@ -90,7 +86,7 @@ public class StoryService {
                         .pageNumber((Integer) page.get("pageNumber"))
                         .build();
                 storyPageData.add(pageData);
-                contents.add((String) page.get("content"));
+                contents.add("동화스럽게 이미지를 생성해. " + (String) page.get("content"));
             }
         } catch (Exception e) {
             throw new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR, e);
@@ -102,12 +98,14 @@ public class StoryService {
             storyPageData.get(i).addMedia(images.get(i));
         }
         storyPageRepository.saveAll(storyPageData);
+
+        Map<String,Long> idMap = new HashMap<String,Long>();
+        idMap.put("id", story.getId());
+        return idMap;
     }
 
     @Transactional(readOnly = true)
     public List<StoryDetail> getAllStory(long memberId, long childId) {
-
-        childValidator.validateWriteAuthority(memberId, childId);
 
         List<Story> stories = storyRepository.findAllByChildIdAndIsDeletedFalseOrderByIdDesc(childId);
 
@@ -127,8 +125,6 @@ public class StoryService {
         Story story = storyRepository.findByIdAndIsDeletedFalse(storyId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
 
-        childValidator.validateWriteAuthority(memberId, story.getChild().getId());
-
         return StoryDetail.of(story);
     }
 
@@ -137,8 +133,6 @@ public class StoryService {
 
         Story story = storyRepository.findByIdAndIsDeletedFalse(storyId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
-
-        childValidator.validateWriteAuthority(memberId, story.getChild().getId());
 
         List<StoryPage> storyPages = storyPageRepository.findAllByStoryId(storyId);
 

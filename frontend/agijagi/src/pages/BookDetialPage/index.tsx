@@ -14,6 +14,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import useChildStore from '../../stores/useChlidStore';
 import { BookCoverImg } from '../../components/book/BookCoverImage';
 import theme from '../../styles/theme';
+import useModal from '../../hooks/useModal';
+import BookDeleteModal from '../../components/book/BookDeleteModal';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -102,6 +104,7 @@ const StoryBookWrapper = styled.div`
 
 const BookComponent = () => {
   const navigate = useNavigate();
+  const modal = useModal();
   const location = useLocation();
   const storyId = location.state.storyId;
   const [selectedBook, setSelectedBook] = useState<StoryBookDetail | null>(
@@ -111,7 +114,7 @@ const BookComponent = () => {
   const { childId } = useChildStore();
 
   const storyBookQuery = useQuery({
-    queryKey: ['storybookpages', storyId],
+    queryKey: ['storybook', storyId],
     queryFn: () => getStoryBook(storyId),
   });
 
@@ -121,10 +124,7 @@ const BookComponent = () => {
     }
   });
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: deleteStoryBook,
-    onSuccess: () => navigate('/book'),
-  });
+  
 
   if (storyBookQuery.error) {
     return <>동화 데이터를 불러오지 못했습니다.</>;
@@ -146,8 +146,9 @@ const BookComponent = () => {
   };
 
   const deleteBook = () => {
-    //동화 삭제 api 호출
-    mutate({ storyId });
+    modal.push({
+      children: <BookDeleteModal storyId={storyId} onBookSelect={handleBookSelect} childId={childId}/>,
+    });
   };
 
   return (
@@ -162,7 +163,6 @@ const BookComponent = () => {
             size="sm"
             color="danger"
             onClick={deleteBook}
-            disabled={isPending}
           >
             동화삭제
           </Button>
@@ -172,14 +172,18 @@ const BookComponent = () => {
       <CarouselWrapper>
         <BookItem
           image={BookCoverImg[0]}
-          book={null}
+          book={selectedBook}
           onBookSelect={handleBookSelect}
           isSelected={true}
         />
       </CarouselWrapper>
 
       <StoryBookWrapper>
-        <StoryBook book={selectedBook} id={storyId} onBookSelect={handleBookSelect} />
+        <StoryBook
+          book={selectedBook}
+          id={storyId}
+          onBookSelect={handleBookSelect}
+        />
       </StoryBookWrapper>
     </Wrapper>
   );

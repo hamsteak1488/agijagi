@@ -8,23 +8,23 @@ export const Container = styled.div`
 
 export const Border = styled.div<{
   image: string;
-  color: string;
+  $color: string;
   height: string;
 }>(
   (props) => css`
     flex-shrink: 0;
     height: ${props.height};
-    background-color: ${props.color};
+    background-color: ${props.$color};
     mask-image: url(${props.image});
   `
 );
 
-export const Body = styled.div<{ color: string }>(
+export const Body = styled.div<{ $color: string }>(
   (props) => css`
     flex: 1 1 auto;
     overflow-y: scroll;
     padding: 0.625rem;
     box-sizing: border-box;
-    background-color: ${props.color};
+    background-color: ${props.$color};
   `
 );

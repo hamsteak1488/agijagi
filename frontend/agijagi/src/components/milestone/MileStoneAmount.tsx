@@ -8,16 +8,23 @@ const GaugeContainer = styled.div`
   width: 100px;
   height: 20px;
   background-color: ${theme.color.tertiary[50]};
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
   border: 1px solid ${theme.color.primary[500]};
+
+  background-image: repeating-linear-gradient(
+    to right,
+    ${theme.color.tertiary[50]}, /* 칸의 배경색 */
+    ${theme.color.tertiary[50]} 9%,
+    ${theme.color.primary[500]} 10%,
+    ${theme.color.primary[500]} 10% /* 칸 사이의 선 색상 */
+  );
 `;
 
 const GaugeFill = styled.div<{ fillPercentage: number }>`
   height: 100%;
-  border-radius: 8px;
   background-color: ${theme.color.primary[500]};
-  width: ${({ fillPercentage }) => `${fillPercentage}%`};
+  width: ${({ fillPercentage }) => `${Math.round(fillPercentage / 10) * 10}%`};
   transition: width 0.8s ease-in-out;
 `;
 
@@ -31,8 +38,8 @@ const MileStoneAmount = ({ requiredAmount, currentAmount }: GaugeProps) => {
 
   useEffect(() => {
     const calculatedPercentage = Math.min(
-      100,
-      (currentAmount / requiredAmount) * 100
+      80,
+      (currentAmount / requiredAmount) * 80
     );
     setTimeout(() => {
       setFillPercentage(calculatedPercentage);

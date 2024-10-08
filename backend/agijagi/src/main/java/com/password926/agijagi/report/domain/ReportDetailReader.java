@@ -26,7 +26,7 @@ public class ReportDetailReader {
 
     @Transactional(readOnly = true)
     public ReportDetail read(long memberId, long childId, long reportId) {
-        childValidator.validateWriteAuthority(memberId, childId);
+        childValidator.validateReadAuthority(memberId, childId);
         Report report = reportReader.read(childId, reportId);
         reportValidator.validateOwner(childId, report);
         List<Growth> growth = growthReader.readAllByMonth(childId, report.getMonth());

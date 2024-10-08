@@ -31,7 +31,7 @@ public class CommentService {
         commentDeleter.delete(commentId);
     }
 
-    public List<CommentDetail> getCommentDetails(long postId) {
+    public List<CommentDetail> getPostCommentDetails(long postId) {
         return commentDetailReader.readByPostId(postId);
     }
 }

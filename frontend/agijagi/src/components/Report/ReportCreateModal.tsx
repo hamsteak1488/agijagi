@@ -6,7 +6,10 @@ import Typhography from '../common/Typography';
 import { useNavigate } from 'react-router-dom';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import Loading from './ReportLoading';
-import axios from 'axios';
+import { MilestoneDetail } from '../../apis/milestone';
+import { useMutation } from '@tanstack/react-query';
+import { postReport } from '../../apis/report';
+import useModal from '../../hooks/useModal';
 
 const ModalContainer = styled.div`
   display: flex;
@@ -16,6 +19,15 @@ const ModalContainer = styled.div`
   height: 200px;
   border-radius: 10px;
   background-color: ${theme.color.tertiary[50]};
+`;
+
+const LoadingWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 300px;
+  height: 500px;
+  border-radius: 10px;
 `;
 
 const HeaderWrapper = styled.div`
@@ -46,20 +58,12 @@ const ButtonWrapper = styled.div`
   justify-content: space-between;
 `;
 
-interface MilestoneDetail {
-  milestoneId: number;
-  content: string;
-  requiredAmount: number;
-  currentAmount: number;
-  date: null | string;
-}
-
 interface ModalProps {
   selectedMilestones: MilestoneDetail[];
   currentWeight: string;
   currentHeight: string;
   handleWeightHeighSave: () => void;
-  handleSave: () => void;
+  handleMileStoneSave: () => void;
   childId: number;
 }
 
@@ -68,48 +72,53 @@ const ReportModal = ({
   currentHeight,
   currentWeight,
   handleWeightHeighSave,
-  handleSave,
+  handleMileStoneSave,
   childId,
 }: ModalProps) => {
+  const { pop } = useModal();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { mutate, isPending } = useMutation({
+    mutationFn: postReport,
+    onSuccess: (data) => {
+      pop();
+      setTimeout(() => {
+        navigate('/milestone-report', { state: { reportId: data.data.id } });
+      }, 300);
+    },
+  });
 
   const handleBack = () => {
     navigate(-1);
   };
 
   const createReport = async () => {
-    // 선택된 마일스톤이 있거나 키몸무게를 입력했다면 저장부터 하기
-    if (selectedMilestones.length) {
-      handleSave();
-    }
-    if (currentHeight && currentWeight) {
-      handleWeightHeighSave();
-    }
-    // 보고서 생성 API 호출 (get)
-    try {
-      const response = await axios.get(
-        `https://api.password926.site/children/${childId}/milestone-analysis`
-      );
-      console.log('보고서 데이터 :', response.data);
-      navigate('/milestone-report', { state: { reportId: response.data } });
-    } catch (error) {
-      console.error('보고서 데이터 받기 실패:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+
+    setTimeout(() => {
+      if (selectedMilestones.length) {
+        handleMileStoneSave();
+      }
+      if (currentHeight && currentWeight) {
+        handleWeightHeighSave();
+      }
+      // 1.8초 후 보고서 생성 API 호출 (post)
+      mutate(childId);
+    }, 1800);
   };
 
   return (
     <ModalContainer>
-      <HeaderWrapper>
-        <CloseButton onClick={handleBack} />
-      </HeaderWrapper>
-
       {isLoading ? (
-        <Loading />
+        <LoadingWrapper>
+          <Loading />
+        </LoadingWrapper>
       ) : (
         <>
+          <HeaderWrapper>
+            <CloseButton onClick={handleBack} />
+          </HeaderWrapper>
+
           <TextWrapper>
             {selectedMilestones.length || (currentHeight && currentWeight) ? (
               <Typhography size="lg" color="greyScale" shade="800">
@@ -124,11 +133,21 @@ const ReportModal = ({
 
           <ButtonWrapper>
             {selectedMilestones.length || (currentHeight && currentWeight) ? (
-              <Button size="md" color="secondary" onClick={createReport}>
+              <Button
+                size="md"
+                color="secondary"
+                onClick={createReport}
+                disabled={isPending}
+              >
                 저장 후 생성
               </Button>
             ) : (
-              <Button size="md" color="secondary" onClick={createReport}>
+              <Button
+                size="md"
+                color="secondary"
+                onClick={createReport}
+                disabled={isPending}
+              >
                 생성
               </Button>
             )}

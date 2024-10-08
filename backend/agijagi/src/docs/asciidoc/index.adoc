@@ -8,3 +8,4 @@
 include::{docdir}/member.adoc[]
 include::{docdir}/auth.adoc[]
 include::{docdir}/post.adoc[]
+include::{docdir}/comment.adoc[]

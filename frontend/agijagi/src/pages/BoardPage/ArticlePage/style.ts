@@ -6,18 +6,11 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100vw;
-  height: 100vh;
+  height: calc(var(--vh) * 100);
   background-color: ${theme.color.primary[300]};
 `;
 
 export const CommentList = styled.div`
-  flex: 1 1 auto;
+  flex: 1 1;
   overflow-y: scroll;
-`;
-
-export const Header = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  padding: 0.75rem 0.75rem 0 0.75rem;
 `;

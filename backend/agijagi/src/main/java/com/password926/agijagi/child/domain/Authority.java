@@ -19,6 +19,10 @@ public enum Authority {
         return this == WRITE;
     }
 
+    public boolean isReadAuthority() {
+        return this == READ || this == WRITE;
+    }
+
     public static Authority of(String authority) {
         return Arrays.stream(Authority.values())
                 .filter(v -> v.name().equals(authority))
