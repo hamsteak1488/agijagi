@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getMyInfo } from '../../apis/userApi';
+import allowedRoute from '../../constants/allowedRoute';
 
 import useChildStore from '../../stores/useChlidStore';
 import useMemberStore from '../../stores/useMemberStore';
@@ -21,8 +22,7 @@ const StateSynchronizer = ({ children }: StateSynchronizerProps) => {
 
   const [block, setBlock] = useState<boolean>(true);
 
-  const MAIN = '/main',
-    LOGIN = '/login';
+  const MAIN = '/main';
 
   useEffect(() => {
     const update = async () => {
@@ -44,7 +44,7 @@ const StateSynchronizer = ({ children }: StateSynchronizerProps) => {
         setBlock(true);
         navigate(MAIN);
       } catch (error) {
-        if (pathname === LOGIN) {
+        if (allowedRoute.includes(pathname)) {
           setBlock(false);
           return;
         }
