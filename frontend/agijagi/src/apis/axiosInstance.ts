@@ -1,5 +1,5 @@
 import axios from 'axios';
-import allowedRoute from '../constants/allowedRoute';
+import guestOnlyRoutes from '../constants/guestOnlyRoutes';
 
 export const axiosInstance =
   process.env.NODE_ENV === 'development'
@@ -31,7 +31,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (
       error.response?.status === 401 &&
-      !allowedRoute.includes(window.location.pathname)
+      !guestOnlyRoutes.includes(window.location.pathname)
     ) {
       window.location.href = '/login';
     }
