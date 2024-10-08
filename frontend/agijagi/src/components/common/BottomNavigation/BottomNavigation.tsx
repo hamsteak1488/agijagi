@@ -6,7 +6,7 @@ import RecordIcon from '@heroicons/react/24/outline/DocumentTextIcon';
 import defaultBoy from '../../../assets/images/boy.png';
 import defaultGirl from '../../../assets/images/boy.png';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { getChild } from '../../../apis/childApi';
 import useChildStore from '../../../stores/useChlidStore';
 import theme from '../../../styles/theme';
@@ -62,6 +62,7 @@ export const ProfileImg = styled.img`
 
 export const BottomNavigation = () => {
   const { childId } = useChildStore();
+  const location = useLocation();
   const { data: child } = useQuery<BabyResponse>({
     queryKey: ['child', childId],
     queryFn: () => {
@@ -78,7 +79,11 @@ export const BottomNavigation = () => {
           <IconWrapper>
             <HomeIcon />
           </IconWrapper>
-          <Typhography size="2xs" weight="bold">
+          <Typhography
+            size="2xs"
+            weight="bold"
+            color={location.pathname === '/family' ? 'primary' : 'black'}
+          >
             메인
           </Typhography>
         </Item>
@@ -90,7 +95,7 @@ export const BottomNavigation = () => {
             동화
           </Typhography>
         </Item>
-        <Item onClick={() => document.body.requestFullscreen()} to={'/'}>
+        <Item to={'/'}>
           <IconWrapper>
             <MicIcon />
           </IconWrapper>
@@ -102,7 +107,11 @@ export const BottomNavigation = () => {
           <IconWrapper>
             <RecordIcon />
           </IconWrapper>
-          <Typhography size="2xs" weight="bold">
+          <Typhography
+            size="2xs"
+            weight="bold"
+            color={location.pathname === '/record' ? 'primary' : 'black'}
+          >
             기록
           </Typhography>
         </Item>
@@ -116,7 +125,13 @@ export const BottomNavigation = () => {
                 : defaultGirl
             }
           />
-          <Typhography size="2xs" weight="bold">
+          <Typhography
+            size="2xs"
+            weight="bold"
+            color={
+              location.pathname === '/family/profile' ? 'primary' : 'black'
+            }
+          >
             {child?.name}
           </Typhography>
         </Item>

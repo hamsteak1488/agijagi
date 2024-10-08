@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
-import HomePage from './pages/HomePage';
 import WritingDiary from './pages/WritingDiary';
 import RecordPage from './pages/RecordPage';
 import SchedulePage from './pages/SchedulePage';
@@ -62,7 +61,7 @@ const Router = () => {
     <Layout>
       <Layout.Inner>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<Main />} />
           <Route path="/record" element={<RecordPage />} />
           <Route path="/book" element={<BookCarousel />} />
           <Route path="/family" element={<BabyMain />} />

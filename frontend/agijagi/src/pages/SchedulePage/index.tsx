@@ -1,11 +1,16 @@
 import { useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import dayjs from 'dayjs';
 
 import AppBar from '../../components/common/AppBar';
 import Button from '../../components/common/Button';
 import Typhography from '../../components/common/Typography';
 import Schedule from '../../components/Schedule';
+import IconButton from '../../components/common/IconButton';
+
+import XMarkIcon from '@heroicons/react/16/solid/XMarkIcon';
 
 import useModal from '../../hooks/useModal';
 
@@ -15,6 +20,8 @@ import * as s from './style';
 
 const SchedulePage = () => {
   const [date, setDate] = useState<Date>(new Date());
+
+  const navigate = useNavigate();
 
   const modal = useModal();
 
@@ -31,6 +38,10 @@ const SchedulePage = () => {
   return (
     <s.Container>
       <AppBar>
+        <div></div>
+        <IconButton onClick={() => navigate(-1)}>
+          <XMarkIcon />
+        </IconButton>
         <AppBar.Title>일정 관리</AppBar.Title>
       </AppBar>
       <s.Main>
