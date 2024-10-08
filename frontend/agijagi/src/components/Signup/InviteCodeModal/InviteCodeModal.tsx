@@ -5,6 +5,9 @@ import Typhography from '../../common/Typography';
 import Textfield from '../../common/Textfield';
 import Button from '../../common/Button';
 import { useState } from 'react';
+import useModal from '../../../hooks/useModal';
+import { addFollower } from '../../../apis/childApi';
+import { useNavigate } from 'react-router-dom';
 
 export const Container = styled.div`
   display: flex;
@@ -30,11 +33,26 @@ export const StyledTextfield = styled(Textfield)`
   width: 10vw !important;
 `;
 
-interface InviteCodeModal {
-  closeModal: () => void;
-}
-export const InviteCodeModal = ({ closeModal }: InviteCodeModal) => {
+export const InviteCodeModal = () => {
   const [code, setCode] = useState<string>('');
+
+  const modal = useModal();
+  const navigator = useNavigate();
+
+  const submitInviteCode = () => {
+    const request = {
+      invitationCode: code,
+    };
+    addFollower(request)
+      .then((response) => {
+        modal.pop();
+        modal.pop();
+        window.location.href = 'main';
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <Container>
@@ -48,11 +66,13 @@ export const InviteCodeModal = ({ closeModal }: InviteCodeModal) => {
         setInputValue={setCode}
       ></StyledTextfield>
       <ModalButtonContainer>
-        <Button color="success">확인</Button>
+        <Button color="primary" onClick={submitInviteCode}>
+          확인
+        </Button>
         <Button
           color="danger"
           onClick={() => {
-            closeModal();
+            modal.pop();
           }}
         >
           취소

@@ -74,7 +74,7 @@ export const Welcome = () => {
 
   const handleModal = () => {
     modal.push({
-      children: <InviteCodeModal closeModal={closeModal} />,
+      children: <InviteCodeModal />,
     });
   };
   return (

@@ -7,7 +7,6 @@ import { getAllDiaries } from '../../../apis/diaryApi';
 import videoIcon from '../../../assets/images/diary/videoIcon.jpeg';
 import { BabyProfileCard } from '../../../components/BabyMain/BabyProfileCard/BabyProfileCard';
 import { ScheduleCard } from '../../../components/BabyMain/ScheduleCard/ScheduleCard';
-import { BottomNavigation } from '../../../components/common/BottomNavigation/BottomNavigation';
 import FullCalendar from '../../../components/common/FullCalendar';
 import Tab from '../../../components/common/Tab';
 import { NoDiary } from '../../../components/Diary/NoDiary/NoDiary';
@@ -90,9 +89,11 @@ export const BabyMain = () => {
     <>
       <BabyProfileCard child={child} />
       <ScheduleCard />
-      <s.WriteIconBox onClick={() => navigator('/family/writing')}>
-        {s.WriteIcon}
-      </s.WriteIconBox>
+      {child?.authority === 'WRITE' && (
+        <s.WriteIconBox onClick={() => navigator('/family/writing')}>
+          {s.WriteIcon}
+        </s.WriteIconBox>
+      )}
       <s.TapWrapper>
         <Tab
           selected="1"
@@ -123,7 +124,7 @@ export const BabyMain = () => {
                     child={child}
                   />
                 ))}
-              </s.PostContainer>{' '}
+              </s.PostContainer>
             </>
           ) : (
             <NoDiary />

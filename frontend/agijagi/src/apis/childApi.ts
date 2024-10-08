@@ -2,8 +2,13 @@ import {
   ChildRequest,
   DeleteChildImageRequest,
   DeleteChildRequest,
+  DeleteFollowerRequest,
   EditChildImageRequest,
   EditChildInfoRequest,
+  EditFollowerRequest,
+  GetFollowerRequest,
+  InviteCodeRequest,
+  InviteCodeResponse,
 } from '../types/child';
 import { BabyResponse } from '../types/user';
 import { axiosInstance } from './axiosInstance';
@@ -70,5 +75,38 @@ export const deleteChildImage = async (request: DeleteChildImageRequest) => {
 
 export const deleteChild = async (request: DeleteChildRequest) => {
   const response = await axiosInstance.delete(`children/${request.childId}`);
+  return response;
+};
+
+export const getAllFollowers = async (childId: number) => {
+  const response = await axiosInstance.get(`children/${childId}/followers`);
+  return response;
+};
+
+export const editFollower = async (request: EditFollowerRequest) => {
+  const response = await axiosInstance.patch(
+    `children/${request.childId}/followers`,
+    request
+  );
+  return response;
+};
+
+export const deleteFollower = async (request: DeleteFollowerRequest) => {
+  const response = await axiosInstance.delete(
+    `children/${request.childId}/followers/${request.followerId}`
+  );
+
+  return response;
+};
+
+export const getInviteCode = async (childId: number) => {
+  const response = await axiosInstance.post(
+    `children/${childId}/invitation-code`
+  );
+  return response;
+};
+
+export const addFollower = async (request: InviteCodeRequest) => {
+  const response = await axiosInstance.post(`children/followers`, request);
   return response;
 };
