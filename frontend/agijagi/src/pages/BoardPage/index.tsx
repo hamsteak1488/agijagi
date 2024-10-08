@@ -1,29 +1,39 @@
+import { Suspense } from 'react';
+
+import { ErrorBoundary } from 'react-error-boundary';
+
+import { useNavigate } from 'react-router-dom';
+
 import * as s from './style';
 
 import AppBar from '../../components/common/AppBar';
 import Button from '../../components/common/Button';
 import RecentArticleList from '../../components/Board/RecentArticleList';
+import ErrorBoundaryFallback from '../../components/common/ErrorBoundaryFallback';
+import IconButton from '../../components/common/IconButton';
+import SuspenseFallback from '../../components/common/SuspenseFallback';
+import WritePage from './WritePage';
 
 import useModal from '../../hooks/useModal';
 
-import WritePage from './WritePage';
-import { Suspense } from 'react';
-import SuspenseFallback from '../../components/common/SuspenseFallback';
-import { ErrorBoundary } from 'react-error-boundary';
-import ErrorBoundaryFallback from '../../components/common/ErrorBoundaryFallback';
+import XMarkIcon from '@heroicons/react/16/solid/XMarkIcon';
 
 const BoardPage = () => {
   const modal = useModal();
+
+  const navigate = useNavigate();
 
   const handleWriteClick = () => {
     modal.push({ children: <WritePage /> });
   };
 
   return (
-    <div>
+    <s.Container>
       <s.AppBar>
         <AppBar>
-          <div></div>
+          <IconButton onClick={() => navigate(-1)}>
+            <XMarkIcon />
+          </IconButton>
           <AppBar.Title>게시판</AppBar.Title>
           <Button color="success" size="sm" onClick={handleWriteClick}>
             글쓰기
@@ -47,7 +57,7 @@ const BoardPage = () => {
           </ErrorBoundary>
         </s.ArticleList>
       </main>
-    </div>
+    </s.Container>
   );
 };
 
