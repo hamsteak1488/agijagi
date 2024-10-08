@@ -16,7 +16,7 @@ public class FollowerReader {
     private final MemberChildRepository memberChildRepository;
 
     public List<Follower> readFollowers(long memberId, long childId) {
-        childValidator.validateWriteAuthority(memberId, childId);
+        childValidator.validateReadAuthority(memberId, childId);
         return memberChildCustomRepository.findFollowers(childId);
     }
 

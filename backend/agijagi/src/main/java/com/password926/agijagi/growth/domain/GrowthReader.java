@@ -19,7 +19,7 @@ public class GrowthReader {
 
     @Transactional(readOnly = true)
     public List<Growth> readAll(long memberId, long childId) {
-        childValidator.validateWriteAuthority(memberId, childId);
+        childValidator.validateReadAuthority(memberId, childId);
         int monthsOld = childReader.readMonthsOld(childId);
         return growthRepository.findAllByChildIdAndMonthLessThanEqualOrderByMonth(childId, monthsOld);
     }
