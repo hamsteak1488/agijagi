@@ -4,6 +4,8 @@ import theme from '../../../styles/theme';
 import Typhography from '../../common/Typography';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { useNavigate } from 'react-router-dom';
+import useModal from '../../../hooks/useModal';
+import { InviteOrAddModal } from '../InviteOrAddModal/InviteOrAddModal';
 
 export const GridItem = styled.div`
   display: flex;
@@ -52,8 +54,15 @@ export const IconWrapper = styled.div`
 
 export const AddFamily = () => {
   const navigator = useNavigate();
+  const modal = useModal();
+
+  const handleModal = () => {
+    modal.push({
+      children: <InviteOrAddModal />,
+    });
+  };
   return (
-    <GridItem onClick={() => navigator('/babyform')}>
+    <GridItem onClick={handleModal}>
       <Photo src={defaultImg} />
       <IconWrapper>
         <PlusIcon strokeWidth={2.5} />

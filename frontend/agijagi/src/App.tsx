@@ -57,7 +57,7 @@ const Router = () => {
     '/milestone',
     '/milestone-report',
     '/report',
-    '/',
+    '/book',
   ].includes(location.pathname);
 
   return (

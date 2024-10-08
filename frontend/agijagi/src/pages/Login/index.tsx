@@ -39,7 +39,7 @@ export const Login = () => {
   const handleLogin = async () => {
     const loginInfo = {
       email: email,
-      password: '1',
+      password: password,
     };
 
     try {
@@ -94,7 +94,6 @@ export const Login = () => {
       return 'danger';
     }
   }
-
   return (
     <s.Container>
       <s.Moon
@@ -162,9 +161,9 @@ export const Login = () => {
         ></Textfield>
         <Button
           size="md"
-          color={isValidated[0] && isValidated[1] ? 'primary' : 'greyScale'}
+          color={isValidated[0] ? 'primary' : 'greyScale'}
           fullWidth={true}
-          disabled={!(isValidated[0] && isValidated[1])}
+          disabled={!isValidated[0]}
           onClick={handleLogin}
         >
           <Typhography color="white">로그인</Typhography>

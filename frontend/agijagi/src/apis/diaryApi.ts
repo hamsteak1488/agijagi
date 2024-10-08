@@ -48,13 +48,12 @@ export const editDiary = async (request: EditDiaryRequest) => {
 };
 
 export const deleteDiary = async (request: DeleteDiaryRequest) => {
-  // Join the media ID list into a space-separated string, or set it to null if the list is empty
   const removeMediaIdList = request.removeMediaIdList
     ? request.removeMediaIdList.join(' ')
     : null;
 
   const response = await axiosInstance.delete(`/diaries/${request.storyId}`, {
-    data: { removeMediaIdList }, // Pass the removeMediaIdList as part of the data payload
+    data: { removeMediaIdList },
   });
 
   return response;

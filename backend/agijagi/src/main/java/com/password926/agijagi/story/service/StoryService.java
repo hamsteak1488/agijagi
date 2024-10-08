@@ -86,7 +86,7 @@ public class StoryService {
                         .pageNumber((Integer) page.get("pageNumber"))
                         .build();
                 storyPageData.add(pageData);
-                contents.add((String) page.get("content"));
+                contents.add("동화스럽게 이미지를 생성해. " + (String) page.get("content"));
             }
         } catch (Exception e) {
             throw new RestApiException(CommonErrorCode.INTERNAL_SERVER_ERROR, e);

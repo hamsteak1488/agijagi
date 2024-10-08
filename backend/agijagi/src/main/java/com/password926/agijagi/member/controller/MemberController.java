@@ -19,7 +19,6 @@ import java.net.URI;
 @RequiredArgsConstructor
 @RequestMapping("/members")
 public class MemberController {
-
     private final MemberService memberService;
 
     @PostMapping
@@ -80,6 +79,14 @@ public class MemberController {
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberDetail> getProfileDetail(@PathVariable Long memberId) {
         MemberDetail memberDetail = memberService.getMemberDetail(memberId);
+
+        return ResponseEntity.ok(memberDetail);
+    }
+
+    @Authenticate
+    @GetMapping
+    public ResponseEntity<MemberDetail> getSessionProfileDetail(LoginMember member) {
+        MemberDetail memberDetail = memberService.getMemberDetail(member.getId());
 
         return ResponseEntity.ok(memberDetail);
     }

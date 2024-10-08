@@ -29,7 +29,7 @@ public class RecordReader {
             LocalDate startDate,
             LocalDate endDate
     ) {
-        childValidator.validateWriteAuthority(memberId, childId);
+        childValidator.validateReadAuthority(memberId, childId);
         return recordCustomRepository.findRecords(
                 childId,
                 type == null ? null : RecordType.of(type),
@@ -39,7 +39,7 @@ public class RecordReader {
     }
 
     public List<Record> readLatest(long memberId, long childId) {
-        childValidator.validateWriteAuthority(memberId, childId);
+        childValidator.validateReadAuthority(memberId, childId);
         return Arrays.stream(RecordType.values())
                 .map(type -> recordCustomRepository.findLatestRecord(childId, type))
                 .filter(Objects::nonNull)

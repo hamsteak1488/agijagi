@@ -4,6 +4,10 @@ import theme from '../../../styles/theme';
 import Button from '../../common/Button';
 import Typhography from '../../common/Typography';
 import { useNavigate } from 'react-router-dom';
+import { getReportList, ReportList } from '../../../apis/report';
+import { useQuery } from '@tanstack/react-query';
+import useChildStore from '../../../stores/useChlidStore';
+import moment from 'moment';
 
 export const Container = styled.div`
   display: flex;
@@ -69,6 +73,25 @@ export const Photo = styled.img`
 
 export const BabyReportCard = () => {
   const navigator = useNavigate();
+  const { childId } = useChildStore();
+
+  const {
+    data: reportData = [],
+    error,
+    isLoading,
+  } = useQuery<ReportList[]>({
+    queryKey: ['reportlist', childId],
+    queryFn: async () => {
+      return await (
+        await getReportList(childId)
+      ).data;
+    },
+  });
+  const today = moment();
+
+  const sortedReportData = reportData.sort((a, b) => {
+    return new Date(a.createAt).getTime() - new Date(b.createAt).getTime();
+  });
 
   return (
     <Container>
@@ -79,32 +102,45 @@ export const BabyReportCard = () => {
         <ContentSection>
           <SchedualContainer>
             <div>
-              <Typhography size="xs" weight="bold">
-                아기의 마일스톤을 체크한지
-              </Typhography>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  textAlign: 'center',
-                }}
-              >
-                <Typhography
-                  size="xs"
-                  color="success"
-                  shade="600"
-                  weight="bold"
-                >
-                  36
-                </Typhography>
+              {reportData && reportData.length > 0 ? (
+                <>
+                  <Typhography size="xs" weight="bold">
+                    아기의 마일스톤을 체크한지
+                  </Typhography>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      textAlign: 'center',
+                    }}
+                  >
+                    <Typhography
+                      size="xs"
+                      color="success"
+                      shade="600"
+                      weight="bold"
+                    >
+                      {sortedReportData && sortedReportData.length > 0
+                        ? today.diff(
+                            moment(sortedReportData[0].createAt, 'YYYY-MM-DD'),
+                            'days'
+                          )
+                        : 0}
+                    </Typhography>
+                    <Typhography size="xs" weight="bold">
+                      일이 지났어요!
+                    </Typhography>
+                  </div>
+                </>
+              ) : (
                 <Typhography size="xs" weight="bold">
-                  일이 지났어요!
+                  아직 성장 분석 보고서를 생성한적이 없어요.
                 </Typhography>
-              </div>
+              )}
             </div>
             <Typhography size="xs" weight="bold">
-              아기의 상태를 체크하여 건강 보고서를 확인해보세요
+              아기의 상태를 체크하여 성장 보고서를 생성해보세요
             </Typhography>
           </SchedualContainer>
 
