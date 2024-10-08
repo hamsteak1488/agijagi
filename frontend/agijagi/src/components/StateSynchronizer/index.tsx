@@ -1,0 +1,55 @@
+import { ReactNode, useEffect, useState } from 'react';
+
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getMyInfo } from '../../apis/userApi';
+
+import useMemberStore from '../../stores/useMemberStore';
+
+interface StateSynchronizerProps {
+  children: ReactNode;
+}
+
+const StateSynchronizer = ({ children }: StateSynchronizerProps) => {
+  const navigate = useNavigate();
+
+  const { pathname } = useLocation();
+
+  const { updateMemberId } = useMemberStore();
+
+  const [block, setBlock] = useState<boolean>(true);
+
+  const MAIN = '/main',
+    LOGIN = '/login';
+
+  useEffect(() => {
+    const update = async () => {
+      try {
+        const result = await getMyInfo();
+
+        updateMemberId(result.data.memberId);
+
+        if (pathname === MAIN) {
+          setBlock(false);
+          return;
+        }
+
+        setBlock(true);
+        navigate(MAIN);
+      } catch (error) {
+        if (pathname === LOGIN) {
+          setBlock(false);
+          return;
+        }
+
+        setBlock(true);
+        return;
+      }
+    };
+
+    update();
+  }, [setBlock, pathname]);
+
+  return <>{!block && children}</>;
+};
+
+export default StateSynchronizer;

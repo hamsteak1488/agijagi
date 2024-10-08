@@ -20,6 +20,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BottomNavigation } from './components/common/BottomNavigation/BottomNavigation';
 import BookCarousel from './components/book/BookCarousel';
 import Layout from './components/common/Layout';
+import StateSynchronizer from './components/StateSynchronizer';
 
 function App() {
   const queryClient = new QueryClient({
@@ -35,9 +36,11 @@ function App() {
       <GlobalStyle />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <ModalProvider>
-            <Router />
-          </ModalProvider>
+          <StateSynchronizer>
+            <ModalProvider>
+              <Router />
+            </ModalProvider>
+          </StateSynchronizer>
         </BrowserRouter>
       </QueryClientProvider>
     </>
