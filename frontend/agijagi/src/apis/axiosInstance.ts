@@ -1,12 +1,18 @@
 import axios from 'axios';
 
-export const axiosInstance = axios.create({
-  baseURL: 'https://api.password926.site/',
-  headers: {
-    'header-login-member': localStorage.getItem('memberId'),
-  },
-  withCredentials: true,
-});
+export const axiosInstance =
+  process.env.NODE_ENV === 'development'
+    ? axios.create({
+        baseURL: 'https://api.password926.site/',
+        headers: {
+          'header-login-member': localStorage.getItem('memberId'),
+        },
+        withCredentials: true,
+      })
+    : axios.create({
+        baseURL: 'https://api.password926.site/',
+        withCredentials: true,
+      });
 
 axiosInstance.interceptors.request.use(
   async (config) => {
@@ -23,7 +29,6 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
-      alert('로그인이 필요합니다.');
       window.location.href = '/login';
     }
     return Promise.reject(error);
