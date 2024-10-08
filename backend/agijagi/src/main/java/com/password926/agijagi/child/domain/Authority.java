@@ -20,7 +20,7 @@ public enum Authority {
     }
 
     public boolean isReadAuthority() {
-        return this == READ;
+        return this == READ || this == WRITE;
     }
 
     public static Authority of(String authority) {
