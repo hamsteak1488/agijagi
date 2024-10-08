@@ -15,7 +15,7 @@ public class MilestoneStateDetailReader {
     private final MilestoneCustomImplRepository milestoneCustomImplRepository;
 
     public List<MilestoneStateDetail> read(long memberId, long childId, int month) {
-        childValidator.validateWriteAuthority(memberId, childId);
+        childValidator.validateReadAuthority(memberId, childId);
         return milestoneCustomImplRepository.findMilestoneDetails(childId, month);
     }
 }

@@ -24,7 +24,7 @@ public class ScheduleReader {
             LocalDate starDate,
             LocalDate endDate
     ) {
-        childValidator.validateWriteAuthority(memberId, childId);
+        childValidator.validateReadAuthority(memberId, childId);
         return scheduleRepository.findAllByChildIdAndStartDateTimeBetween(
                 childId,
                 starDate.atStartOfDay(),
