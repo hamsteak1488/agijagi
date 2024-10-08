@@ -15,18 +15,15 @@ public class ReportReader {
 
     private final ChildValidator childValidator;
     private final ReportRepository reportRepository;
-    private final ReportValidator reportValidator;
 
     public Report read(long childId, long reportId) {
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND));
-        reportValidator.validateOwner(childId, report);
         return report;
     }
 
-    // TODO: 보고서 읽기는 권한 어디까지 허용?
     public List<ReportTarget> readAll(long memberId, long childId) {
-        childValidator.validateWriteAuthority(memberId, childId);
+        childValidator.validateReadAuthority(memberId, childId);
         return reportRepository.findByChildId(childId);
     }
 }

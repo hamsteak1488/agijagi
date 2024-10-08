@@ -55,8 +55,8 @@ const BookWrapper = styled.div`
 
   @media (min-width: 700px) {
     margin: 0 auto;
-    width: 100vh;
-    height: 100vh;
+    width: calc(var(--vh) * 100);
+    height: calc(var(--vh) * 100);
   }
 `;
 

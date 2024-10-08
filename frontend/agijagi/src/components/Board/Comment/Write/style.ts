@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-export const Container = styled.div`
+export const Container = styled.form`
   display: flex;
   align-items: center;
   gap: 1rem;

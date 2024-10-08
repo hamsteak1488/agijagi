@@ -10,14 +10,14 @@ spring:
 
   sql:
     init:
-      mode: always
+      mode: never
       platform: dev
 
   jpa:
     show-sql: true
-    open-in-view: false #default : true이기에 수정해야 함.
+    open-in-view: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
         highlight_sql: true

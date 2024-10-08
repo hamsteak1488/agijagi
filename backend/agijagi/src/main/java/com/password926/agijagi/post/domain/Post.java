@@ -33,6 +33,9 @@ public class Post {
     @Column(nullable = false)
     private boolean isDeleted;
 
+    @Column(nullable = false)
+    private int nextMediaOrderSeq;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostMedia> postMediaList = new ArrayList<>();
 
@@ -45,6 +48,7 @@ public class Post {
         newPost.createdAt = LocalDateTime.now();
         newPost.isDeleted = false;
 
+        newPost.nextMediaOrderSeq = 1;
         mediaList.forEach(newPost::addMedia);
 
         return newPost;
@@ -60,7 +64,7 @@ public class Post {
     }
 
     public void addMedia(Media media) {
-        PostMedia postMedia = new PostMedia(this, media);
+        PostMedia postMedia = new PostMedia(this, media, nextMediaOrderSeq++);
         postMediaList.add(postMedia);
     }
 

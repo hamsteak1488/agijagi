@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -14,7 +15,9 @@ public class ChildService {
     private final ChildDetailReader childDetailReader;
     private final FollowerReader followerReader;
     private final ChildAppender childAppender;
+    private final InvitationCodeReader invitationCodeReader;
     private final FollowerAppender followerAppender;
+    private final InvitationCodeCreator invitationCodeCreator;
     private final ChildRemover childRemover;
     private final ChildUpdater childUpdater;
     private final FollowerUpdater followerUpdater;
@@ -42,8 +45,14 @@ public class ChildService {
         childAppender.append(memberId, childContent, image);
     }
 
-    public void appendFollower(long memberId, long childId) {
+    public void appendFollower(long memberId, UUID invitationCodeId) {
+        long childId = invitationCodeReader.read(invitationCodeId)
+                .getChildId();
         followerAppender.append(memberId, childId, Authority.READ);
+    }
+
+    public UUID createInvitationCode(long memberId, long childId) {
+        return invitationCodeCreator.create(memberId, childId);
     }
 
     public void removeChild(long memberId, long childId) {

@@ -12,12 +12,14 @@ public class ReportRemover {
 
     private final ChildValidator childValidator;
     private final ReportReader reportReader;
+    private final ReportValidator reportValidator;
     private final ReportRepository reportRepository;
 
     @Transactional
     public void remove(long memberId, long childId, long reportId) {
         childValidator.validateWriteAuthority(memberId, childId);
         Report report = reportReader.read(childId, reportId);
+        reportValidator.validateOwner(childId, report);
         reportRepository.removeById(report.getId());
     }
 }

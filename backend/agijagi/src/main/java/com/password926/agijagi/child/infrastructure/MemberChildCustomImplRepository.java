@@ -25,6 +25,7 @@ public class MemberChildCustomImplRepository implements MemberChildCustomReposit
                 .select(Projections.constructor(Follower.class,
                         member.id,
                         memberChild.child.id,
+                        memberChild.authority,
                         member.email,
                         member.nickname,
                         media.url))

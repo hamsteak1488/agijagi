@@ -9,7 +9,7 @@ interface Action {
 }
 
 const useChildStore = create<State & Action>((set) => ({
-  childId: 1,
+  childId: 0,
   updateChildId: (childId) => set(() => ({ childId })),
 }));
 

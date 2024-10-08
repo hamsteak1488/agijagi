@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
-import HomePage from './pages/HomePage';
 import WritingDiary from './pages/WritingDiary';
 import RecordPage from './pages/RecordPage';
 import SchedulePage from './pages/SchedulePage';
@@ -20,6 +19,7 @@ import BabyProfile from './pages/BabyProfile';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BottomNavigation } from './components/common/BottomNavigation/BottomNavigation';
 import BookCarousel from './components/book/BookCarousel';
+import Layout from './components/common/Layout';
 
 function App() {
   const queryClient = new QueryClient({
@@ -36,7 +36,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <ModalProvider>
-            <Layout />
+            <Router />
           </ModalProvider>
         </BrowserRouter>
       </QueryClientProvider>
@@ -44,7 +44,7 @@ function App() {
   );
 }
 
-const Layout = () => {
+const Router = () => {
   const location = useLocation();
   const showBottomNavigation = [
     '/family',
@@ -58,29 +58,30 @@ const Layout = () => {
   ].includes(location.pathname);
 
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/record" element={<RecordPage />} />
-        <Route path="/baby" element={<BabyMain />} />
-        <Route path="/book" element={<BookCarousel />} />
-        <Route path="/family/profile" element={<BabyProfile />} />
-        <Route path="/family/writing" element={<WritingDiary />} />
-        <Route path="/family" element={<BabyMain />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/welcome" element={<Welcome />} />
-        <Route path="/schedule" element={<SchedulePage />} />
-        <Route path="/milestone" element={<MileStone />} />
-        <Route path="/milestone-report" element={<MileStoneReport />} />
-        <Route path="/report" element={<Report />} />
-        <Route path="/babyform" element={<BabyInfoForm />} />
-        <Route path="/board" element={<BoardPage />} />
-        <Route path="/main" element={<Main />} />
-        <Route path="/board/write" element={<WriteArticlePage />} />
-      </Routes>
+    <Layout>
+      <Layout.Inner>
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/record" element={<RecordPage />} />
+          <Route path="/book" element={<BookCarousel />} />
+          <Route path="/family" element={<BabyMain />} />
+          <Route path="/family/profile" element={<BabyProfile />} />
+          <Route path="/family/writing" element={<WritingDiary />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/welcome" element={<Welcome />} />
+          <Route path="/schedule" element={<SchedulePage />} />
+          <Route path="/milestone" element={<MileStone />} />
+          <Route path="/milestone-report" element={<MileStoneReport />} />
+          <Route path="/report" element={<Report />} />
+          <Route path="/babyform" element={<BabyInfoForm />} />
+          <Route path="/board" element={<BoardPage />} />
+          <Route path="/main" element={<Main />} />
+          <Route path="/board/write" element={<WriteArticlePage />} />
+        </Routes>
+      </Layout.Inner>
       {showBottomNavigation && <BottomNavigation />}
-    </>
+    </Layout>
   );
 };
 

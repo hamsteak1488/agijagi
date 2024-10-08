@@ -21,11 +21,11 @@ const CustomizedBorderContainer = ({
   return (
     <s.Container style={{ height }} {...rest}>
       <s.Border
-        color={backgroundColor}
+        $color={backgroundColor}
         image={border}
         height={borderHeight}
       ></s.Border>
-      <s.Body color={backgroundColor}>{children}</s.Body>
+      <s.Body $color={backgroundColor}>{children}</s.Body>
     </s.Container>
   );
 };

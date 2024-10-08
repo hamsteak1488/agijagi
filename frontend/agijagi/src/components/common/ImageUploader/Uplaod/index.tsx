@@ -5,10 +5,11 @@ import Button from '../../Button';
 import * as s from './style';
 
 interface UploadProps {
+  name: string;
   onChange: (fileList: FileList) => void;
 }
 
-const Upload = ({ onChange }: UploadProps) => {
+const Upload = ({ name, onChange }: UploadProps) => {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
@@ -45,6 +46,7 @@ const Upload = ({ onChange }: UploadProps) => {
       <input
         ref={fileRef}
         type="file"
+        name={name}
         accept="image/png, image/jpeg"
         multiple
       />

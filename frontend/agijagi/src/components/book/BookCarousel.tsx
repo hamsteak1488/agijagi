@@ -18,7 +18,7 @@ import CoverImg8 from '../../assets/bookcover/cover11.png';
 
 const Wrapper = styled.div`
   background-color: #ffecb3;
-  height: 100vh;
+  height: calc(var(--vh) * 100);
   display: flex;
   flex-direction: column;
   /* padding-top: 10px; */
@@ -91,7 +91,7 @@ const ModalWrapper = styled.div`
     width: 50%;
     max-width: 380px;
     min-width: 380px;
-    height: 100vh;
+    height: calc(var(--vh) * 100);
     padding-top: 30px;
     padding-left: 30px;
     margin-left: auto;
@@ -107,7 +107,7 @@ const StoryBookWrapper = styled.div`
 
   @media (min-width: 700px) {
     width: 70%;
-    height: 100vh;
+    height: calc(var(--vh) * 100);
     padding-top: 30px;
     padding-left: 30px;
     /* overflow-y: hidden; */

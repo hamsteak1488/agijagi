@@ -19,6 +19,7 @@ import useModal from '../../hooks/useModal';
 import useChildStore from '../../stores/useChlidStore';
 import theme from '../../styles/theme';
 import { BabyResponse } from '../../types/user';
+import SchedulePage from '../SchedulePage';
 
 export const Container = styled.div`
   display: flex;
@@ -92,6 +93,12 @@ export const BabyProfile = () => {
     });
   };
 
+  const handleSchedule = () => {
+    modal.push({
+      children: <SchedulePage />,
+    });
+  };
+
   return (
     <Container>
       <TitleContainer>
@@ -108,7 +115,7 @@ export const BabyProfile = () => {
           </IconWrapper>
           <Typhography weight="bold">성장 분석 보고서 조회</Typhography>
         </MenuItem>
-        <MenuItem onClick={() => navigator('/schedule')}>
+        <MenuItem onClick={handleSchedule}>
           <IconWrapper>
             <CalendarIcon />
           </IconWrapper>
