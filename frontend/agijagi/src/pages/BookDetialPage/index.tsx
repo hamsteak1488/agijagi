@@ -95,7 +95,7 @@ const StoryBookWrapper = styled.div`
   }
 `;
 
-const BookComponent = () => {
+const BookDetail = () => {
   const navigate = useNavigate();
   const modal = useModal();
   const location = useLocation();
@@ -186,4 +186,4 @@ const BookComponent = () => {
   );
 };
 
-export default BookComponent;
+export default BookDetail;

@@ -20,7 +20,8 @@ import useModal from '../../hooks/useModal';
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(var(--vh) * 100);
+  overflow: hidden;
+  height: 100%;
 
   @media (min-width: 700px) {
     flex-direction: row; /* 가로 모드일 때 가로 정렬 */
@@ -73,6 +74,7 @@ const CarouselWrapper = styled.div`
   padding-bottom: 50px;
   padding-left: 30px;
   scroll-behavior: smooth;
+  flex-shrink: 0;
 
   &::-webkit-scrollbar {
     display: none;
@@ -96,6 +98,7 @@ const ModalWrapper = styled.div`
   width: 100%;
   height: 54%;
   box-sizing: border-box;
+  flex: 1 1 auto;
 
   @media (min-width: 700px) {
     width: 50%;
@@ -113,6 +116,7 @@ const StoryBookWrapper = styled.div`
   width: 100%;
   height: 50%;
   box-sizing: border-box;
+  flex: 1 1 auto;
 
   @media (min-width: 700px) {
     width: 70%;
