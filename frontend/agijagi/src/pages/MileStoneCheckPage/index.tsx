@@ -139,7 +139,7 @@ const MilestoneCheck = () => {
   });
 
   const childQuery = useQuery({
-    queryKey: ['child', childId],
+    queryKey: ['child-', childId],
     queryFn: () => getChildInfo(childId),
   });
 

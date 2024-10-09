@@ -3,46 +3,13 @@ import HTMLFlipBook from 'react-pageflip';
 import styled from '@emotion/styled';
 import Button from '../common/Button';
 import theme from '../../styles/theme';
-// 임의로 동화 이미지 import
-import PageImg1 from '../../assets/bookcontent/pageImg1.png';
-import PageImg2 from '../../assets/bookcontent/pageImg2.png';
-import PageImg3 from '../../assets/bookcontent/pageImg3.png';
-import PageImg4 from '../../assets/bookcontent/pageImg4.png';
-import PageImg5 from '../../assets/bookcontent/pageImg5.png';
-import PageImg6 from '../../assets/bookcontent/pageImg6.png';
-import PageImg7 from '../../assets/bookcontent/pageImg7.png';
-import PageImg8 from '../../assets/bookcontent/pageImg8.png';
-import PageImg9 from '../../assets/bookcontent/pageImg9.png';
-import PageImg10 from '../../assets/bookcontent/pageImg10.png';
-
-// 동화 예시 - 추후 데이터로 받아올 예정
-const storyBook = {
-  cover: PageImg1,
-  story: [
-    '옛날 옛적에 다운이라는 아이가 있었어요.',
-    '다운이는 2살 3개월로, 호기심 많은 아이였죠.',
-    '3월 15일, 다운이가 처음 말을 했어요.',
-    '말이 마법처럼 나와서 온 세상이 놀랐답니다.',
-    '그날 이후 다운이는 동물들과 대화를 시작했어요.',
-    '3월 16일, 다운이가 첫 발을 내딛었어요.',
-    '그 발걸음이 마치 구름을 걷는 것 같았죠.',
-    '그 후로 다운이는 숲속 친구들과 모험을 떠났어요.',
-    '나무 요정들과 놀며 세상을 배우기 시작했어요.',
-    '다운이는 계속 자라며 더 큰 모험을 꿈꾸었답니다.',
-  ],
-  image: [
-    PageImg1,
-    PageImg2,
-    PageImg3,
-    PageImg4,
-    PageImg5,
-    PageImg6,
-    PageImg7,
-    PageImg8,
-    PageImg9,
-    PageImg10,
-  ],
-};
+import { BookCoverImg } from './BookCoverImage';
+import {
+  getStoryBookPages,
+  StoryBookDetail,
+} from '../../apis/book';
+import { useQuery } from '@tanstack/react-query';
+import { useLocation } from 'react-router-dom';
 
 const BookWrapper = styled.div`
   display: flex;
@@ -104,15 +71,16 @@ const PageImg = styled.img`
   border-radius: 10px;
 `;
 
-const PageText = styled.div`
+const PageText = styled.div<{ isFullScreen: boolean }>`
   position: absolute;
-  top: 10%;
+  top: 5%;
   border-radius: 10px;
   padding: 5px 8px;
   margin: 0 14px;
   color: ${theme.color.greyScale[900]};
   background-color: rgba(255, 255, 255, 0.4); // 동화 text 배경 투명도 조절 가능
-  font-size: ${theme.typography.fontSize.sm};
+  font-size: ${({ isFullScreen }) =>
+    isFullScreen ? theme.typography.fontSize.md : theme.typography.fontSize.sm};
 `;
 
 const PageNumber = styled.div`
@@ -135,14 +103,6 @@ const PageButtonWrapper = styled.div`
   align-items: center;
 `;
 
-const PageInfo = styled.div`
-  background-color: ${theme.color.tertiary[800]};
-  border-radius: 20px;
-  font-size: ${theme.typography.fontSize.sm};
-  color: #ffffff;
-  padding: 7px 10px;
-`;
-
 const WarningMessage = styled.div`
   position: fixed;
   width: 180px;
@@ -161,6 +121,7 @@ interface BookPageProps {
   number: number;
   img: string;
   children: React.ReactNode;
+  isFullScreen: boolean;
 }
 
 interface BookCoverProps {
@@ -173,11 +134,12 @@ interface FlipEvent {
 
 const BookPage = React.forwardRef<HTMLDivElement, BookPageProps>(
   (props, ref) => {
+    const { isFullScreen } = props;
     return (
       <Page ref={ref}>
         {/* ref required */}
         <PageImg src={props.img} style={{ opacity: '0.7' }}></PageImg>
-        <PageText>{props.children}</PageText>
+        <PageText isFullScreen={isFullScreen}>{props.children}</PageText>
         <PageNumber>{props.number}</PageNumber>
       </Page>
     );
@@ -195,20 +157,10 @@ const BookCover = React.forwardRef<HTMLDivElement, BookCoverProps>(
   }
 );
 
-BookPage.displayName = 'BookPage'; // forwardRef 사용 시 displayName 설정 권장
-
-interface Book {
-  id: number;
-  image: string;
-  title: string;
-  start: string;
-  end: string;
-  page: number;
-}
-
 interface StoryBookProps {
-  book: Book;
-  goBack: () => void;
+  book: StoryBookDetail | null;
+  id: number | undefined;
+  onBookSelect: (book: StoryBookDetail | null) => void;
 }
 
 interface HTMLDivElementWithVendorPrefix extends HTMLDivElement {
@@ -216,19 +168,47 @@ interface HTMLDivElementWithVendorPrefix extends HTMLDivElement {
   webkitRequestFullscreen: () => void;
 }
 
-const BookComponent = ({ book, goBack }: StoryBookProps) => {
+const StoryBook = ({ book, id, onBookSelect }: StoryBookProps) => {
+  const location = useLocation();
+  const storyId = id || location.state.storyId;
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [warning, setWarning] = useState<string>('');
-  const totalPages = book.page;
 
-  // @ts-ignore
-  const mybook = useRef<HTMLFlipBook | null>(book);
-  const bookContainer = useRef<HTMLDivElement>(null);
+  const storyBookPagesQuery = useQuery({
+    queryKey: ['storybookpages', storyId],
+    queryFn: () => getStoryBookPages(storyId),
+  });
+
+  console.log(storyBookPagesQuery.data?.data);
+
+  useEffect(() => {
+    const handleFullScreenChange = () => {
+      if (document.fullscreenElement) {
+        setIsFullScreen(true);
+        return;
+      }
+
+      setIsFullScreen(false);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+    };
+  }, [setIsFullScreen]);
+
+  const totalPages = storyBookPagesQuery.data
+    ? storyBookPagesQuery.data?.data.length
+    : 6;
+
+  const goBack = () => {
+    onBookSelect(null);
+  };
 
   const onFlip = useCallback(
     (e: FlipEvent) => {
-      // const totalPageCount = mybook.current?.pageFlip().getPageCount() ?? 0;
       setCurrentPage(e.data);
 
       // 책이 마지막 페이지를 넘어가면 전체화면 해제
@@ -240,6 +220,17 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
     },
     [totalPages]
   );
+
+  // @ts-ignore
+  const mybook = useRef<HTMLFlipBook | null>(book);
+  const bookContainer = useRef<HTMLDivElement>(null);
+
+  if (storyBookPagesQuery.error) {
+    return <>동화 페이지 데이터를 불러오지 못했습니다.</>;
+  }
+  if (storyBookPagesQuery.isLoading) {
+    return <>페이지 로딩중</>;
+  }
 
   const toggleFullscreen = () => {
     if (!bookContainer.current) {
@@ -274,90 +265,72 @@ const BookComponent = ({ book, goBack }: StoryBookProps) => {
     }
   };
 
-  useEffect(() => {
-    const handleFullScreenChange = () => {
-      if (document.fullscreenElement) {
-        setIsFullScreen(true);
-        return;
-      }
-
-      setIsFullScreen(false);
-    };
-
-    document.addEventListener('fullscreenchange', handleFullScreenChange);
-
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullScreenChange);
-    };
-  }, [setIsFullScreen]);
-
   return (
     <BookWrapper>
-      <BackButtonContainer>
-        <Button color="secondary" size="sm" onClick={goBack}>
-          목록보기
-        </Button>
-        <Button color="secondary" size="sm" onClick={toggleFullscreen}>
-          전체화면
-        </Button>
-      </BackButtonContainer>
+      {book ? (
+        <>
+          <BackButtonContainer>
+            <Button color="secondary" size="sm" onClick={goBack}>
+              목록보기
+            </Button>
+            <Button color="secondary" size="sm" onClick={toggleFullscreen}>
+              전체화면
+            </Button>
+          </BackButtonContainer>
 
-      <BookContainer ref={bookContainer}>
-        {/* @ts-ignore */}
-        <HTMLFlipBook
-          ref={mybook}
-          size={'stretch'}
-          width={isFullScreen ? 740 : 360}
-          height={isFullScreen ? 720 : 500}
-          drawShadow={false}
-          usePortrait={false}
-          showCover={true}
-          onFlip={onFlip}
-          key={isFullScreen ? 'landscape' : 'portrait'}
-        >
-          <BookCover img={book.image}></BookCover>
-          {storyBook.story.map((pageText, index) => (
-            <BookPage
-              key={index}
-              number={index + 1}
-              img={storyBook.image[index]}
+          <BookContainer ref={bookContainer}>
+            {/* @ts-ignore */}
+            <HTMLFlipBook
+              ref={mybook}
+              size={'stretch'}
+              width={isFullScreen ? 740 : 360}
+              height={isFullScreen ? 720 : 500}
+              drawShadow={false}
+              usePortrait={false}
+              showCover={true}
+              onFlip={onFlip}
+              key={isFullScreen ? 'landscape' : 'portrait'}
             >
-              {pageText}
-            </BookPage>
-          ))}
-          <BookCover img={book.image}></BookCover>
-        </HTMLFlipBook>
-      </BookContainer>
+              <BookCover img={BookCoverImg[book.coverImageIndex]}></BookCover>
+              {storyBookPagesQuery.data?.data.map((page, index) => (
+                <BookPage
+                  key={index}
+                  number={page.pageNumber}
+                  img={page.storyPageImageUrl}
+                  isFullScreen={isFullScreen}
+                >
+                  {page.content}
+                </BookPage>
+              ))}
+              <BookCover img={BookCoverImg[book.coverImageIndex]}></BookCover>
+            </HTMLFlipBook>
+          </BookContainer>
 
-      <PageButtonWrapper>
-        <Button
-          size="sm"
-          color="primary"
-          onClick={() => mybook.current?.pageFlip().flipPrev()}
-        >
-          {'<'}
-        </Button>
+          <PageButtonWrapper>
+            <Button
+              size="sm"
+              color="primary"
+              onClick={() => mybook.current?.pageFlip().flipPrev()}
+            >
+              {'<'}
+            </Button>
 
-        {/* {currentPage === 0 && <PageInfo>{totalPages} pages</PageInfo>}
-        {currentPage !== 0 && currentPage - 1 != totalPages && (
-          <PageInfo>
-            {currentPage} - {currentPage + 1}
-          </PageInfo>
-        )}
-        {currentPage - 1 == totalPages && <PageInfo>End</PageInfo>} */}
+            <Button
+              size="sm"
+              color="primary"
+              onClick={() => mybook.current?.pageFlip().flipNext()}
+            >
+              {'>'}
+            </Button>
+          </PageButtonWrapper>
 
-        <Button
-          size="sm"
-          color="primary"
-          onClick={() => mybook.current?.pageFlip().flipNext()}
-        >
-          {'>'}
-        </Button>
-      </PageButtonWrapper>
-
-      {warning && <WarningMessage>{warning}</WarningMessage>}
+          {warning && <WarningMessage>{warning}</WarningMessage>}
+        </>
+      ) : (
+        ''
+      )}
     </BookWrapper>
   );
 };
 
-export default BookComponent;
+export default StoryBook;

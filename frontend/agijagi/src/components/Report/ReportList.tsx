@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { CalendarIcon } from '@heroicons/react/24/outline';
 import ReportCover from '../../assets/images/report/reportcover.png';
 import { useQuery } from '@tanstack/react-query';
-import { getReportList } from '../../apis/report';
+import { getReportList, ReportList } from '../../apis/report';
 
 const ReportListWrapper = styled.div`
   display: grid;
@@ -151,22 +151,13 @@ interface ReportListProps {
   birth: string | undefined;
   year: number;
   childId: number;
+  data: ReportList[] | undefined;
 }
 
-const ReportList = ({ name, birth, year, childId }: ReportListProps) => {
+const ReportListComponet = ({ name, birth, year, childId, data }: ReportListProps) => {
   const navigate = useNavigate();
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ['reportlist', childId],
-    queryFn: () => getReportList(childId),
-  });
-
-  if (error) {
-    return <>데이터를 불러오지 못했습니다.</>;
-  }
-  if (isLoading) {
-    return <>로딩중</>;
-  }
+  
 
   const onReportSelect = (id: number) => {
     navigate('/milestone-report', { state: { reportId: id } });
@@ -192,7 +183,7 @@ const ReportList = ({ name, birth, year, childId }: ReportListProps) => {
     return createDate.getMonth() + 1;
   };
 
-  const filteredReport = data?.data.filter((report) => {
+  const filteredReport = data?.filter((report) => {
     const date = new Date(report.createAt);
     const createdDate = date.getFullYear();
     return year === createdDate;
@@ -238,4 +229,4 @@ const ReportList = ({ name, birth, year, childId }: ReportListProps) => {
   );
 };
 
-export default ReportList;
+export default ReportListComponet;

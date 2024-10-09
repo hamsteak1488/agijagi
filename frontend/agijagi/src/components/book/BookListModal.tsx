@@ -1,16 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 import BookFilter from './BookFilter';
 import Typhography from '../../components/common/Typography';
 import { CalendarIcon } from '@heroicons/react/24/outline';
+import { StoryBookDetail } from '../../apis/book';
+import { BookCoverImg } from './BookCoverImage';
 
 const ModalBox = styled.div`
   background-color: #fff;
   width: 100%;
   height: 100%;
   padding: 10px 0;
-  /* padding: 10px 0px; */
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.2);
@@ -28,6 +29,22 @@ const FilterContainer = styled.div`
   border-width: 1px 60%;
 `;
 
+const NoBookText = styled.div`
+  margin-top: 30px;
+  animation: smoothAppear 0.5s ease-in-out;
+
+  @keyframes smoothAppear {
+    from {
+      opacity: 0;
+      transform: translateY(-5%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
 const BookList = styled.div`
   display: flex;
   flex-direction: column;
@@ -39,10 +56,11 @@ const BookList = styled.div`
 
 const BookContainer = styled.div`
   display: flex;
-  padding-left: 40px;
+  justify-content: center;
+  padding-left: 30px;
   padding-right: 30px;
   padding-top: 15px;
-  padding-bottom: 15px;
+  padding-bottom: 20px;
   animation: smoothAppear 0.6s ease-in-out;
 
   @keyframes smoothAppear {
@@ -58,7 +76,7 @@ const BookContainer = styled.div`
 `;
 
 const BookImage = styled.img`
-  min-width: 60px;
+  min-width: 65px;
   height: 90px;
   border-radius: 10px;
   box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.2);
@@ -78,16 +96,18 @@ const TitleLabel = styled.div`
   font-size: ${theme.typography.fontSize.sm};
   font-weight: ${theme.typography.fontWeight.bold};
   color: ${theme.color.greyScale[700]};
-  margin-top: 5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
 const PageLabel = styled.div`
+  display: flex;
+  justify-content: flex-end;
   font-size: ${theme.typography.fontSize.xs};
   color: ${theme.color.greyScale[700]};
-  margin: 5px;
+  margin-top: 15px;
+  margin-right: 5px;
 `;
 
 const DateLabel = styled.div`
@@ -96,12 +116,12 @@ const DateLabel = styled.div`
   font-weight: ${theme.typography.fontWeight.bold};
   width: 155px;
   display: flex;
-  justify-content: center;
   flex-direction: row;
+  justify-content: center;
   align-items: center;
   border-radius: 10px;
-  padding: 5px 10px;
-  margin-top: 15px;
+  padding: 5px 7px;
+  margin-top: 10px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -119,18 +139,9 @@ interface DateNavigationProps {
   handleNext: () => void;
 }
 
-interface BookProps {
-  id: number;
-  image: string;
-  title: string;
-  start: string;
-  end: string;
-  page: number;
-}
-
 interface BookListModalProps {
-  onBookSelect: (book: BookProps | null) => void;
-  filteredBooks: BookProps[];
+  onBookSelect: (book: StoryBookDetail | null) => void;
+  filteredBooks: StoryBookDetail[] | undefined;
   onScroll: (scrollPos: number) => void; // 스크롤 위치 전달하는 콜백 함수
 }
 
@@ -178,8 +189,8 @@ const BookListModal = ({
       </FilterContainer>
 
       <BookList ref={listRef}>
-        {filteredBooks.length === 0 ? (
-          <div style={{ marginTop: '30px' }}>
+        {filteredBooks?.length === 0 ? (
+          <NoBookText>
             <Typhography
               size="md"
               weight="regular"
@@ -188,15 +199,18 @@ const BookListModal = ({
             >
               이 달에 생성한 동화가 없습니다.
             </Typhography>
-          </div>
+          </NoBookText>
         ) : (
-          filteredBooks.map((book) => (
+          filteredBooks?.map((book) => (
             <BookContainer key={book.id} onClick={() => onBookSelect(book)}>
-              <BookImage src={book.image} alt={book.title} />
+              <BookImage
+                src={BookCoverImg[book.coverImageIndex]}
+                alt={book.title}
+              />
 
               <LabelContainer>
                 <TitleLabel>{book.title}</TitleLabel>
-                <PageLabel>{book.page} pages</PageLabel>
+
                 <DateLabel>
                   <CalendarImg />
                   <Typhography
@@ -205,9 +219,10 @@ const BookListModal = ({
                     shade="700"
                     weight="bold"
                   >
-                    {book.start} ~ {book.end}
+                    {book.startDate} ~ {book.endDate}
                   </Typhography>
                 </DateLabel>
+                <PageLabel>생성일 : {book.createdAt.slice(0, 10)}</PageLabel>
               </LabelContainer>
             </BookContainer>
           ))

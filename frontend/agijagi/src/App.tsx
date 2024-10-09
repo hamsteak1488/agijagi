@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import Authentication from './components/Authentication';
-import BookCarousel from './components/book/BookCarousel';
 import { BottomNavigation } from './components/common/BottomNavigation/BottomNavigation';
 import Layout from './components/common/Layout';
 import { ModalProvider } from './hooks/useModal';
@@ -19,7 +18,11 @@ import Report from './pages/ReportPage';
 import SchedulePage from './pages/SchedulePage';
 import Signup from './pages/Signup';
 import { Welcome } from './pages/Signup/Welcome';
+import BookComponent from './pages/Book';
 import WritingDiary from './pages/WritingDiary';
+
+import BookCreate from './components/book/BookCreate';
+import BookDetail from './pages/BookDetialPage';
 import GlobalStyle from './styles/GlobalStyle';
 
 function App() {
@@ -56,6 +59,7 @@ const Router = () => {
     '/milestone-report',
     '/report',
     '/book',
+    '/book-create',
   ].includes(location.pathname);
 
   return (
@@ -91,7 +95,9 @@ const Router = () => {
             <Route path="/family/writing" element={<WritingDiary />} />
             <Route path="/report" element={<Report />} />
             <Route path="/record" element={<RecordPage />} />
-            <Route path="/book" element={<BookCarousel />} />
+            <Route path="/book" element={<BookComponent />} />
+            <Route path="/book/:id" element={<BookDetail />} />
+            <Route path="/book-create" element={<BookCreate />} />
           </Route>
         </Routes>
       </Layout.Inner>

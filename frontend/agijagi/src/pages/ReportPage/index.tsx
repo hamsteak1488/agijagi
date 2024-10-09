@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from '@emotion/styled';
 import Typhography from '../../components/common/Typography';
 import theme from '../../styles/theme';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../components/common/Button';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import ReportFilter from '../../components/Report/ReportFilter';
 import ReportList from '../../components/Report/ReportList';
-import BoyImg from '../../assets/images/boy.png';
 import useChildStore from '../../stores/useChlidStore';
 import { useQuery } from '@tanstack/react-query';
 import { getChildInfo } from '../../apis/milestone';
+import { getReportList } from '../../apis/report';
 
 const Wrapper = styled.div`
   display: flex;
@@ -69,13 +68,22 @@ const Report = () => {
 
   const navigate = useNavigate();
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ['child', childId],
+  const childQuery = useQuery({
+    queryKey: ['child-', childId],
     queryFn: () => getChildInfo(childId),
   });
 
-  const name = data?.data ? data.data.nickname : '';
-  const birth = data?.data ? data.data.birthday : '';
+  const reportListQuery = useQuery({
+    queryKey: ['reportlist-', childId],
+    queryFn: () => getReportList(childId),
+  });
+
+  if (reportListQuery.error) {
+    return <>데이터를 불러오지 못했습니다.</>;
+  }
+  if (reportListQuery.isLoading) {
+    return <>로딩중</>;
+  }
 
   const handleBack = () => {
     navigate(-1);
@@ -117,7 +125,13 @@ const Report = () => {
       </FilterContainer>
 
       <ReportContainer>
-        <ReportList name={name} birth={birth} year={year} childId={childId} />
+        <ReportList
+          name={childQuery.data?.data.nickname}
+          birth={childQuery.data?.data.birthday}
+          year={year}
+          childId={childId}
+          data={reportListQuery.data?.data}
+        />
       </ReportContainer>
     </Wrapper>
   );
