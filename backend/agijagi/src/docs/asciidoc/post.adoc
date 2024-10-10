@@ -1,7 +1,7 @@
 :source-highlighter: highlightjs
 
 [[Post-API]]
-= *게시판 API*
+= *게시글 API*
 
 == 게시글 등록
 operation::post/create-post[snippets='request-cookies,request-parts,http-request,http-response']

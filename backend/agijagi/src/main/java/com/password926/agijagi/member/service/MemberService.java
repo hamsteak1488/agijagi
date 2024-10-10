@@ -25,6 +25,10 @@ public class MemberService {
         memberUpdater.updateProfileImage(memberId, profileImage);
     }
 
+    public void deleteMemberProfileImage(long memberId) {
+        memberUpdater.deleteProfileImage(memberId);
+    }
+
     public void removeMember(long memberId) {
         memberRemover.remove(memberId);
     }
