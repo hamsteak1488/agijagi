@@ -80,7 +80,7 @@ const Router = () => {
             <Route path="/main" element={<Main />} />
             <Route path="/board" element={<BoardPage />} />
             <Route path="/board/write" element={<WriteArticlePage />} />
-            <Route path="/babyform" element={<BabyInfoForm />} />
+            <Route path="/familyform" element={<BabyInfoForm />} />
           </Route>
 
           {/* 아이를 선택하고 로그인 한 사용자만 접근 가능한 라우터 (아이 선택 안 하면 /main 으로 라우팅) */}

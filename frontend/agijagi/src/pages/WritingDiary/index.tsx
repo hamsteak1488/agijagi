@@ -44,6 +44,7 @@ export const WritingDiary = () => {
   const [selectedDiary, setSelectedDiary] = useState<DiaryResponse | null>(
     null
   );
+  const [isPanding, setIsPanding] = useState<boolean>(false);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const navigator = useNavigate();
@@ -112,6 +113,7 @@ export const WritingDiary = () => {
       children: <DeleteDiary handleDeleteDiary={handleDeleteDiary} />,
     });
   };
+
   const handleDate = (value: Date) => {
     setSelectedDate(value);
     const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
@@ -162,6 +164,20 @@ export const WritingDiary = () => {
     });
   };
 
+  const handleDeleteMessageModal = () => {
+    modal.push({
+      children: (
+        <ModalBackground>
+          <Typhography weight="bold">삭제되었습니다</Typhography>
+          <Button onClick={modal.pop}>닫기</Button>
+        </ModalBackground>
+      ),
+      onClose: () => {
+        navigator('/family');
+      },
+    });
+  };
+
   const handleEdit = () => {
     if (selectedDiary) {
       const request = {
@@ -197,14 +213,14 @@ export const WritingDiary = () => {
         };
 
         deleteDiary(request).then((response) => {
-          alert('삭제되었습니다');
-          navigator('/family');
+          handleDeleteMessageModal();
         });
       }
     }
   };
 
   const handleSubmit = () => {
+    setIsPanding(true);
     const diary = {
       childId: childId,
       content: textAreaRef.current ? textAreaRef.current.value : '',
@@ -218,6 +234,7 @@ export const WritingDiary = () => {
       .catch((error) => {
         if (axios.isAxiosError(error)) {
           alert(error.response?.data.message);
+          setIsPanding(false);
         }
       });
   };
@@ -266,6 +283,7 @@ export const WritingDiary = () => {
             color="secondary"
             size="md"
             onClick={selectedDiary ? handleEdit : handleSubmit}
+            disabled={isPanding}
           >
             <Typhography>{selectedDiary ? '수정' : '쓰기'}</Typhography>
           </Button>

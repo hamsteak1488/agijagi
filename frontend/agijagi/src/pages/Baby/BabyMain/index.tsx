@@ -30,23 +30,17 @@ export const BabyMain = () => {
     setTabMenu(menu);
   };
 
-  // useEffect(() => {
-  //   const handlePopState = (event: PopStateEvent) => {
-  //     navigator('/main', { replace: true });
-  //   };
-
-  //   window.addEventListener('popstate', handlePopState);
-
-  //   return () => {
-  //     window.removeEventListener('popstate', handlePopState);
-  //   };
-  // }, [navigator]);
-
   const { data: diaries = [] } = useQuery<DiaryResponse[]>({
     queryKey: ['diaries', childId],
     queryFn: () => {
       return getAllDiaries(childId);
     },
+  });
+
+  const sortedDiaries = diaries.sort((a, b) => {
+    const dateA = new Date(a.wroteAt).getTime();
+    const dateB = new Date(b.wroteAt).getTime();
+    return dateB - dateA;
   });
 
   const { data: child } = useQuery<BabyResponse>({
@@ -109,12 +103,12 @@ export const BabyMain = () => {
       </s.TapWrapper>
 
       {tabMenu === '1' ? (
-        <s.TimelineContainer noDiary={diaries.length < 1}>
-          {diaries.length > 0 ? (
+        <s.TimelineContainer noDiary={sortedDiaries.length < 1}>
+          {sortedDiaries.length > 0 ? (
             <>
-              <s.Circle noDiary={diaries.length < 1} />
+              <s.Circle noDiary={sortedDiaries.length < 1} />
               <s.PostContainer>
-                {diaries.map((item, index) => (
+                {sortedDiaries.map((item, index) => (
                   <TimelineDiary
                     key={index}
                     date={moment(item.wroteAt).format('YYYY-MM-DD')}

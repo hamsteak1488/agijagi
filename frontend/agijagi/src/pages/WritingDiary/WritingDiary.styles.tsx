@@ -15,8 +15,10 @@ export const ModalBackground = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: center;
   background-color: ${theme.color.primary[50]};
+  gap: 1rem;
   margin: 1rem;
   padding: 2.5rem 2rem 2rem 2rem;
   border-radius: 0.5rem;
