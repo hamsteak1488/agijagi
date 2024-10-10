@@ -22,6 +22,7 @@ const Wrapper = styled.div`
 
 const Title = styled.div`
   display: flex;
+  justify-content: space-between;
   margin: 5px 15px;
   height: 50px;
   align-items: center;
@@ -29,7 +30,16 @@ const Title = styled.div`
 
 const TitleText = styled.div`
   display: flex;
-  margin: 0 auto;
+  margin-right: 20px;
+`;
+
+const CloseButton = styled(XMarkIcon)`
+  display: flex;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  color: ${theme.color.greyScale[800]};
 `;
 
 const Line = styled.hr`
@@ -128,6 +138,10 @@ const Report = () => {
     navigate('/report');
   };
 
+  const handleBack = () => {
+    navigate('/family/profile');
+  };
+
   return (
     <Wrapper>
       <Title>
@@ -139,7 +153,8 @@ const Report = () => {
             성장 분석 보고서
           </Typhography>
         </TitleText>
-        <div style={{width: "50px", height: "40px"}}></div>
+        {/* <div style={{width: "50px", height: "40px"}}></div> */}
+        <CloseButton onClick={handleBack} />
       </Title>
       <Line></Line>
 
