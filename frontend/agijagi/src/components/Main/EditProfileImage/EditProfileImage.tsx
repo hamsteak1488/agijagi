@@ -102,6 +102,7 @@ export const EditProfileImage = ({ handleRender }: EditProfileImageProps) => {
   const submitDeleteImage = () => {
     deleteUserImage()
       .then((response) => {
+        handleRender();
         modal.pop();
       })
       .catch((error) => {
