@@ -12,7 +12,7 @@ public class RestDocsConfig {
     public RestDocsMockMvcConfigurationCustomizer mockMvcConfigurationCustomizer() {
         return configurer -> configurer
                 .operationPreprocessors()
-                .withRequestDefaults(prettyPrint(), modifyUris().scheme("https").host("api.password926.com").removePort())
+                .withRequestDefaults(prettyPrint(), modifyUris().scheme("https").host("api.password926.site").removePort())
                 .withResponseDefaults(prettyPrint(), modifyHeaders().remove("Vary"))
                 ;
     }

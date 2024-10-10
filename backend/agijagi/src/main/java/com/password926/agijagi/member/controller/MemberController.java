@@ -63,7 +63,7 @@ public class MemberController {
     public ResponseEntity<Void> deleteMemberProfileImage(
             LoginMember member
     ) {
-        memberService.updateMemberProfileImage(member.getId(), null);
+        memberService.deleteMemberProfileImage(member.getId());
 
         return ResponseEntity.ok().build();
     }

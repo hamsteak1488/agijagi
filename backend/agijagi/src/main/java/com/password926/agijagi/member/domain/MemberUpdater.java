@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @RequiredArgsConstructor
 public class MemberUpdater {
-    private final MemberRepository memberRepository;
     private final MemberReader memberReader;
     private final MediaStorage mediaStorage;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -30,5 +29,11 @@ public class MemberUpdater {
         Member member = memberReader.read(memberId);
         Image storedImage = mediaStorage.storeImage(mediaResource);
         member.updateProfileImage(storedImage);
+    }
+
+    @Transactional
+    public void deleteProfileImage(long memberId) {
+        Member member = memberReader.read(memberId);
+        member.updateProfileImage(null);
     }
 }
