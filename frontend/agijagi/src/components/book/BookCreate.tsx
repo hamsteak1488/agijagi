@@ -233,7 +233,6 @@ const BookCreate = () => {
       setTimeout(() => {
         navigate(`/book/${data.data.id}`, { state: { storyId: data.data.id } });
       }, 300);
-      console.log('동화생성 성공', data);
     },
     onError: (error) => {
       console.error('동화생성 실패', error);

@@ -1,12 +1,11 @@
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import theme from '../../../styles/theme';
 import Typhography from '../../../components/common/Typography';
 import WelcomeImg from '../../../assets/images/adult.png';
 import Button from '../../../components/common/Button';
-import { useEffect, useState } from 'react';
 import useModal from '../../../hooks/useModal';
-import Textfield from '../../../components/common/Textfield';
 import { InviteCodeModal } from '../../../components/Signup/InviteCodeModal/InviteCodeModal';
 import { useNavigate } from 'react-router-dom';
 
@@ -36,8 +35,8 @@ export const Introduction = styled.div<{ animationKey: boolean }>(
     align-items: center;
     text-align: center;
     gap: 3vh;
-    transition: all 1.5s;
-    transform: translate(${props.animationKey ? 0 : 100}vw, 0);
+    transition: transform 1.5s ease-out;
+    transform: translateX(${props.animationKey ? '0' : '100vw'});
   `
 );
 
@@ -48,8 +47,8 @@ export const ButtonContainer = styled.div<{ animationKey: boolean }>(
     width: 80%;
     gap: 3vh;
     text-align: center;
-    transition: all 2s;
-    transform: translate(0, ${props.animationKey ? 0 : 100}vh);
+    transition: transform 2s ease-out;
+    transform: translateY(${props.animationKey ? '0' : '100vh'});
   `
 );
 
@@ -59,13 +58,13 @@ export const SkipButton = styled.div`
 `;
 
 export const Welcome = () => {
-  const [initialRender, setInitialRender] = useState<boolean>(false);
-
+  const [initialRender, setInitialRender] = useState(false);
   const modal = useModal();
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setInitialRender(true);
+    const timer = setTimeout(() => setInitialRender(true), 100);
+    return () => clearTimeout(timer);
   }, []);
 
   const closeModal = () => {
@@ -77,6 +76,7 @@ export const Welcome = () => {
       children: <InviteCodeModal />,
     });
   };
+
   return (
     <Container>
       <Introduction animationKey={initialRender}>
@@ -99,11 +99,11 @@ export const Welcome = () => {
           size="md"
           color="secondary"
           fullWidth={true}
-          onClick={() => navigator('/familyform')}
+          onClick={() => navigate('/familyform')}
         >
           <Typhography color="white">아니오 (패밀리 등록)</Typhography>
         </Button>
-        <SkipButton onClick={() => navigator('/main')}>
+        <SkipButton onClick={() => navigate('/main')}>
           <Typhography color="greyScale" shade="500">
             건너뛰기
           </Typhography>
