@@ -51,9 +51,9 @@ export const editUserImage = async (
   return response.status;
 };
 
-export const deleteUserImage = async (): Promise<number> => {
-  const response = await axiosInstance.post(`/members/profile-image/remove`);
-  return response.status;
+export const deleteUserImage = async () => {
+  const response = await axiosInstance.post(`/members/profile-image/delete`);
+  return response;
 };
 
 export const deleteUser = async () => {
