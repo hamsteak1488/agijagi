@@ -281,7 +281,7 @@ const StoryBook = ({ book, id, onBookSelect }: StoryBookProps) => {
               width={isFullScreen ? 740 : 360}
               height={isFullScreen ? 720 : 500}
               drawShadow={false}
-              usePortrait={false}
+              usePortrait={true}
               showCover={true}
               onFlip={onFlip}
               key={isFullScreen ? 'landscape' : 'portrait'}
