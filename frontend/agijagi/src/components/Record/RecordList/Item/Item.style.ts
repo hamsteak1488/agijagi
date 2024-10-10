@@ -1,5 +1,17 @@
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
+
+const fadeIn = keyframes`
+  0% {
+    transform: translateX(-1rem);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
 
 export const Item = styled.div`
   display: flex;
@@ -8,6 +20,7 @@ export const Item = styled.div`
   padding: 0.5rem;
   border-radius: 0.5rem;
   background-color: inherit;
+  animation: ${fadeIn} 0.2s ease;
   transition: all 0.2s ease;
   user-select: none;
 
