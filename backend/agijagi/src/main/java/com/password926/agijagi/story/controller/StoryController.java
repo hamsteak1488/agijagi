@@ -6,6 +6,7 @@ import com.password926.agijagi.story.controller.dto.CreateStoryRequest;
 import com.password926.agijagi.story.entity.StoryPageDetail;
 import com.password926.agijagi.story.service.StoryService;
 import com.password926.agijagi.story.entity.StoryDetail;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,9 @@ public class StoryController {
             LoginMember member,
             CreateStoryRequest createStoryRequest
     ) {
+        if (member.getId() != 1) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         return ResponseEntity.ok().body(storyService.createStory(member.getId(), createStoryRequest));
     }
 
