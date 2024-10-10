@@ -92,7 +92,6 @@ export const BabyInfoForm = () => {
       birthHeight: height,
       birthWeight: weight,
     };
-    console.log(newChild);
     addChild(newChild)
       .then((response) => {
         navigator('/main');
