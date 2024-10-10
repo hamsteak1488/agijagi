@@ -37,10 +37,10 @@ export const TimelineDiary = ({
       <DayContainer>
         <DateContainer>
           <Typhography size="xl" weight="bold">
-            Day +
+            Day {differenceIndays > 0 ? '+' : '-'}
           </Typhography>
           <Typhography size="xl" weight="bold" color="primary">
-            {differenceIndays ? differenceIndays : '0'}
+            {differenceIndays ? Math.abs(differenceIndays) : '0'}
           </Typhography>
         </DateContainer>
         <DateDiv>
