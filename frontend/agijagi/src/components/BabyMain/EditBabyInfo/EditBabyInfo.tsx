@@ -96,7 +96,6 @@ export const EditBabyInfo = ({ child }: EditBabyProps) => {
 
       editChildInfo(request)
         .then((response) => {
-          console.log(response);
           modal.pop();
         })
         .catch((error) => {

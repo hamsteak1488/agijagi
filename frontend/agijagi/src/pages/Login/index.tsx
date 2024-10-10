@@ -46,7 +46,6 @@ export const Login = () => {
     try {
       await login(loginInfo).then((response) => {
         const memberId: string = response.data.memberId;
-        console.log(memberId);
         updateMemberId(Number(memberId));
         navigator('/main');
       });

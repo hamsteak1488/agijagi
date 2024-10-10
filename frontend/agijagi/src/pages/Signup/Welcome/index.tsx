@@ -99,9 +99,9 @@ export const Welcome = () => {
           size="md"
           color="secondary"
           fullWidth={true}
-          onClick={() => navigator('/babyform')}
+          onClick={() => navigator('/familyform')}
         >
-          <Typhography color="white">아니오 (아기 등록)</Typhography>
+          <Typhography color="white">아니오 (패밀리 등록)</Typhography>
         </Button>
         <SkipButton onClick={() => navigator('/main')}>
           <Typhography color="greyScale" shade="500">

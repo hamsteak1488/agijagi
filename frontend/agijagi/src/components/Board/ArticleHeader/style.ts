@@ -25,3 +25,7 @@ export const Menu = styled.div`
   flex-shrink: 0;
   gap: 0.5rem;
 `;
+
+export const Icon = styled.div`
+  flex-shrink: 0;
+`;

@@ -71,7 +71,7 @@ export const DelIconDiv = styled.div(
     height: 30px;
     right: 3%;
     top: 3%;
-    z-index: 10;
+    z-index: 5;
     cursor: pointer;
     color: #000;
     border-radius: 0.5rem;

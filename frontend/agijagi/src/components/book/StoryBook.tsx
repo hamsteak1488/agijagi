@@ -4,10 +4,7 @@ import styled from '@emotion/styled';
 import Button from '../common/Button';
 import theme from '../../styles/theme';
 import { BookCoverImg } from './BookCoverImage';
-import {
-  getStoryBookPages,
-  StoryBookDetail,
-} from '../../apis/book';
+import { getStoryBookPages, StoryBookDetail } from '../../apis/book';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from 'react-router-dom';
 
@@ -179,8 +176,6 @@ const StoryBook = ({ book, id, onBookSelect }: StoryBookProps) => {
     queryKey: ['storybookpages', storyId],
     queryFn: () => getStoryBookPages(storyId),
   });
-
-  console.log(storyBookPagesQuery.data?.data);
 
   useEffect(() => {
     const handleFullScreenChange = () => {
