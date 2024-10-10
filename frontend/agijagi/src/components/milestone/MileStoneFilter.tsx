@@ -9,7 +9,7 @@ const Container = styled.div`
   align-items: center;
   max-width: 650px;
   width: 100%;
-  color: ${theme.color.greyScale[700]};
+  color: ${theme.color.greyScale[800]};
 `;
 
 const ArrowButton = styled.div`

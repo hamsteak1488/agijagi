@@ -25,7 +25,7 @@ const BookWrapper = styled.div<{ isFlipped: boolean; isLifted: boolean }>`
   background-color: ${theme.color.primary[50]};
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 14px 14px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 14px 14px 10px rgba(0, 0, 0, 0.25);
   margin-right: 35px;
   cursor: pointer;
   display: flex;
@@ -72,7 +72,7 @@ const PageLabel = styled.div`
 
 const DateLabel = styled.div`
   background-color: #ffecb3;
-  color: ${theme.color.greyScale[700]};
+  color: ${theme.color.greyScale[800]};
   font-weight: ${theme.typography.fontWeight.bold};
   max-width: 155px;
   display: flex;
@@ -175,7 +175,7 @@ const BookItem = ({ image, book, onBookSelect, isSelected }: BookItemProps) => {
                   <Typhography
                     size="2xs"
                     color="greyScale"
-                    shade="700"
+                    shade="800"
                     weight="bold"
                   >
                     {book.startDate} ~ <br />

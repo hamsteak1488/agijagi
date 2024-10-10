@@ -189,12 +189,39 @@ const ReportListComponet = ({ name, birth, year, childId, data }: ReportListProp
     return year === createdDate;
   });
 
+  const getLatestReportByMonth = (reports: ReportList[] | undefined) => {
+    if (!reports) return [];
+
+    const groupedReports = reports.reduce((acc: Record<string, ReportList>, report) => {
+      const date = new Date(report.createAt);
+      const reportYear = date.getFullYear();
+      const reportMonth = date.getMonth() + 1;
+
+      // 주어진 년도에 맞는 보고서만 필터링
+      if (reportYear === year) {
+        const key = `${reportYear}-${reportMonth}`;
+
+        // 각 월별로 가장 최근의 보고서만 저장
+        if (!acc[key] || new Date(acc[key].createAt) < new Date(report.createAt)) {
+          acc[key] = report;
+        }
+      }
+      return acc;
+    }, {});
+
+    return Object.values(groupedReports);
+  };
+
+  // const filteredReport = getLatestReportByMonth(data);
+  const monthReport = getLatestReportByMonth(data);
+  console.log(monthReport)
+
   return (
     <ReportListWrapper>
       {filteredReport?.length === 0 ? (
         <p>생성된 분석 보고서가 없습니다.</p>
       ) : (
-        filteredReport?.map((report) => (
+        monthReport?.map((report) => (
           <ReportContainer
             key={report.id}
             onClick={() => onReportSelect(report.id)}

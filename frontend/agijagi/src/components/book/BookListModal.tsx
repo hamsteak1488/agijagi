@@ -79,7 +79,7 @@ const BookImage = styled.img`
   min-width: 65px;
   height: 90px;
   border-radius: 10px;
-  box-shadow: 5px 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 7px 7px 15px rgba(0, 0, 0, 0.3);
 `;
 
 const LabelContainer = styled.div`
@@ -95,7 +95,7 @@ const LabelContainer = styled.div`
 const TitleLabel = styled.div`
   font-size: ${theme.typography.fontSize.sm};
   font-weight: ${theme.typography.fontWeight.bold};
-  color: ${theme.color.greyScale[700]};
+  color: ${theme.color.greyScale[800]};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -111,8 +111,8 @@ const PageLabel = styled.div`
 `;
 
 const DateLabel = styled.div`
-  background-color: #ffecb3;
-  color: ${theme.color.greyScale[700]};
+  background-color: ${theme.color.primary[100]};
+  color: ${theme.color.greyScale[800]};
   font-weight: ${theme.typography.fontWeight.bold};
   width: 155px;
   display: flex;
@@ -195,7 +195,7 @@ const BookListModal = ({
               size="md"
               weight="regular"
               color="greyScale"
-              shade="700"
+              shade="800"
             >
               이 달에 생성한 동화가 없습니다.
             </Typhography>
