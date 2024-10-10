@@ -30,8 +30,8 @@ export const InviteOrAddModal = () => {
   const modal = useModal();
 
   const handleNavigate = () => {
-    navigator('/babyform');
-    navigator('/babyform');
+    navigator('/familyform');
+    navigator('/familyform');
     modal.pop();
   };
   const handleInviteCodeModal = () => {

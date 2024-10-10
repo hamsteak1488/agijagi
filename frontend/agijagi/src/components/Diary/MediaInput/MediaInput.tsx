@@ -84,7 +84,7 @@ export const MediaInput = ({ handleUpload, children }: MediaInputProps) => {
       <Label onClick={handlePopup}>
         {isClicked && (
           <Popup ref={popupRef} xPos={mousePosition.x} yPos={mousePosition.y}>
-            <PopupItem>카메라</PopupItem>
+            <PopupItem htmlFor="cameraInput">카메라</PopupItem>
             <PopupItem
               htmlFor="file"
               onClick={(e) => {
@@ -102,6 +102,13 @@ export const MediaInput = ({ handleUpload, children }: MediaInputProps) => {
         type="file"
         multiple
         id="file"
+        onChange={handleUploaded}
+      />
+      <InvisibleInput
+        type="file"
+        multiple
+        capture="environment"
+        id="cameraInput"
         onChange={handleUploaded}
       />
     </InputBox>

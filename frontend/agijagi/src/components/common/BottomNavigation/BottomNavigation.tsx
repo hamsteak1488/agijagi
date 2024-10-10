@@ -92,7 +92,11 @@ export const BottomNavigation = () => {
           <IconWrapper>
             <BookIcon />
           </IconWrapper>
-          <Typhography size="2xs" weight="bold">
+          <Typhography
+            size="2xs"
+            weight="bold"
+            color={location.pathname === '/book' ? 'primary' : 'black'}
+          >
             동화
           </Typhography>
         </Item>
@@ -100,7 +104,11 @@ export const BottomNavigation = () => {
           <IconWrapper>
             <CalendarIcon />
           </IconWrapper>
-          <Typhography size="2xs" weight="bold">
+          <Typhography
+            size="2xs"
+            weight="bold"
+            color={location.pathname === '/schedule' ? 'primary' : 'black'}
+          >
             일정
           </Typhography>
         </Item>

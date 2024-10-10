@@ -7,6 +7,8 @@ import theme from '../../../../styles/theme';
 import defaultImg from '../../../../assets/images/baby.png';
 import { css } from '@emotion/react';
 import { ValidationState } from '../../../common/Textfield/Textfield.types';
+import BackIcon from '@heroicons/react/24/outline/ChevronLeftIcon';
+import { useNavigate } from 'react-router-dom';
 
 export const ProfileCircleWrapper = styled.label`
   display: flex;
@@ -31,6 +33,7 @@ export const ProfileImg = styled.img`
 `;
 
 export const ProfileContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -82,6 +85,23 @@ export const Container = styled.div<{ width: number; isNext: boolean }>(
   `
 );
 
+export const BackButton = styled.div(
+  () => css`
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    padding: 0.2rem;
+    color: #fff;
+    background-color: ${theme.color.primary[400]};
+    border-radius: 50%;
+    transition: all 0.75s;
+    left: -40%;
+    top: 2%;
+    z-index: 1;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  `
+);
+
 export interface FirstBabyFormProps {
   isNext: boolean;
   uploadImg: File | null;
@@ -112,11 +132,15 @@ export const FirstBabyForm = ({
   setBirthday,
   setIsNext,
 }: FirstBabyFormProps) => {
+  const navigator = useNavigate();
   return (
     <Container width={window.innerWidth} isNext={isNext}>
       <ProfileContainer>
+        <BackButton onClick={() => navigator('/main')}>
+          <BackIcon />
+        </BackButton>
         <Typhography size="6xl" weight="bold">
-          아기 등록
+          패밀리 등록
         </Typhography>
         <ProfileCircleWrapper htmlFor="file">
           <AddIconWrapper>

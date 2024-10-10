@@ -28,10 +28,10 @@ export const Container = styled.div`
 
 export const ProfileContainer = styled.div`
   position: relative;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  width: 90%;
+  text-align: center;
 `;
 
 export const ProfileImg = styled.img`
@@ -41,15 +41,8 @@ export const ProfileImg = styled.img`
   border-radius: 50%;
 `;
 
-export const StyledButton = styled.button`
-  width: 32px;
-  height: 32px;
-  text-align: center;
-  vertical-align: top;
-  background-color: ${theme.color.primary[500]};
-  border: 0;
-  color: white;
-  border-radius: 50%;
+export const ButtonContainer = styled.div`
+  width: auto;
 `;
 
 export const Popup = styled.div<{ isVisible: boolean }>`
@@ -147,16 +140,17 @@ export const FollowerItem = ({ member, render }: FollowerItemProps) => {
         <Typhography size="xl" weight="bold">
           {member.nickname}
         </Typhography>
-        <Button
-          size="sm"
-          disabled={
-            child?.authority === 'READ' ||
-            member.followerId === Number(localStorage.getItem('memberId'))
-          }
-          onClick={handlePopup}
-        >
-          관리
-        </Button>
+        <ButtonContainer>
+          <Button
+            size="sm"
+            disabled={
+              child?.authority === 'READ' || member.followerId === memberId
+            }
+            onClick={handlePopup}
+          >
+            관리
+          </Button>
+        </ButtonContainer>
       </ProfileContainer>
       <Popup isVisible={isClicked}>
         <MenuConatiner>
