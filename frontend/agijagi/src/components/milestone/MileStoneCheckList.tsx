@@ -41,7 +41,7 @@ const StyledInput = styled.input`
 const StyledP = styled.p`
   margin: 10px 10px 12px;
   font-size: ${theme.typography.fontSize.md};
-  color: ${theme.color.greyScale[700]};
+  color: ${theme.color.greyScale[800]};
 `;
 
 const Line = styled.hr`

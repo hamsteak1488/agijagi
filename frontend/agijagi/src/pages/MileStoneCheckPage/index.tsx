@@ -27,7 +27,6 @@ const Title = styled.div`
   flex-direction: row;
   justify-content: space-between;
   margin: 5px 20px;
-  /* max-width: 700px; */
   height: 50px;
   align-items: center;
 `;
@@ -162,7 +161,7 @@ const MilestoneCheck = () => {
   }
 
   const handleBack = () => {
-    navigate(-1);
+    navigate('/family/profile');
   };
 
   const childData = childQuery.data?.data;
