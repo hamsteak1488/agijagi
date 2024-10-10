@@ -233,7 +233,7 @@ const BookComponent = () => {
           {selectedBook ? (
             <TitleText>{selectedBook.title}</TitleText>
           ) : (
-            <Typhography size="lg" weight="bold" color="greyScale" shade="800">
+            <Typhography size="lg" weight="bold" color="greyScale" shade="900">
               Story Book
             </Typhography>
           )}

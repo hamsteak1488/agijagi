@@ -56,7 +56,7 @@ const Page = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 10px;
-  box-shadow: 10px 15px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 12px 15px 10px rgba(0, 0, 0, 0.3);
   background-color: ${theme.color.primary[100]};
   display: flex;
   justify-content: center;

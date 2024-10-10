@@ -33,7 +33,7 @@ const TitleWrapper = styled.div`
   width: 100%;
   max-width: 500px;
   align-items: center;
-  padding: 30px 10px 10px;
+  padding: 80px 10px 10px;
   margin: 0 auto;
 `;
 
@@ -207,6 +207,7 @@ const ButtonWrapper = styled.div`
   max-width: 500px;
   width: 100%;
   margin: 10px auto;
+  padding-bottom: 20px;
 `;
 
 const BookCreate = () => {
@@ -362,7 +363,7 @@ const BookCreate = () => {
       <TitleWrapper>
         <Title>
           <TitleImg src={Logo7} />
-          <Typhography size="lg" weight="bold" color="greyScale" shade="800">
+          <Typhography size="lg" weight="bold" color="greyScale" shade="900">
             동화 생성
           </Typhography>
         </Title>

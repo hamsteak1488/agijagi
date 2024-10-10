@@ -32,15 +32,6 @@ const TitleText = styled.div`
   margin: 0 auto;
 `;
 
-const CloseButton = styled(XMarkIcon)`
-  display: flex;
-  align-items: center;
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-  color: ${theme.color.greyScale[800]};
-`;
-
 const Line = styled.hr`
   border: none;
   background-color: ${theme.color.greyScale[400]};
@@ -101,18 +92,13 @@ const Report = () => {
   const { childId } = useChildStore();
 
   const childQuery = useQuery({
-    queryKey: ['child', childId],
+    queryKey: ['child-', childId],
     queryFn: () => getChildInfo(childId),
   });
 
   const reportQuery = useQuery({
-    queryKey: ['report', reportId],
+    queryKey: ['report-', reportId],
     queryFn: () => getReport(childId, reportId),
-  });
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: deleteReport,
-    onSuccess: () => navigate('/report'),
   });
 
   const reportData = reportQuery.data?.data;
@@ -142,10 +128,6 @@ const Report = () => {
     navigate('/report');
   };
 
-  const handleDelete = () => {
-    mutate({ childId, reportId });
-  };
-
   return (
     <Wrapper>
       <Title>
@@ -157,14 +139,7 @@ const Report = () => {
             성장 분석 보고서
           </Typhography>
         </TitleText>
-        <Button
-          size="sm"
-          color="danger"
-          onClick={handleDelete}
-          disabled={isPending}
-        >
-          삭제
-        </Button>
+        <div style={{width: "50px", height: "40px"}}></div>
       </Title>
       <Line></Line>
 

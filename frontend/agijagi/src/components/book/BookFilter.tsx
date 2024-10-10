@@ -36,7 +36,7 @@ const BookFilter = ({
       <ArrowButton onClick={handlePrev}>
         <ChevronLeftIcon />
       </ArrowButton>
-      <Typhography size="md" weight="bold" shade="700" color="greyScale">
+      <Typhography size="md" weight="bold" shade="800" color="greyScale">
         {`${year}년 ${month}월`}
       </Typhography>
       <ArrowButton onClick={handleNext}>
