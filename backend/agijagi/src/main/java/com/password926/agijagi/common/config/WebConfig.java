@@ -18,16 +18,9 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
     private final AuthenticateInterceptor authenticateInterceptor;
     private final LoginMemberArgumentResolver loginMemberArgumentResolver;
-    private final HeaderAuthenticateInterceptor headerAuthenticateInterceptor;
-
-    @Value("${enable-header-auth:false}")
-    private boolean enableHeaderAuth;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        if (enableHeaderAuth) {
-            registry.addInterceptor(headerAuthenticateInterceptor);
-        }
         registry.addInterceptor(authenticateInterceptor);
     }
 
