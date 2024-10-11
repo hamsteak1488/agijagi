@@ -26,9 +26,6 @@ public class StoryController {
             LoginMember member,
             CreateStoryRequest createStoryRequest
     ) {
-        if (member.getId() != 1) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
         return ResponseEntity.ok().body(storyService.createStory(member.getId(), createStoryRequest));
     }
 
