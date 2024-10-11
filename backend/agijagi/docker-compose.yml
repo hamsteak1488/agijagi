@@ -1,0 +1,19 @@
+services:
+  my-spring-app-{COLOR}:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "{PORT}:8080"
+    environment:
+      - TZ=Asia/Seoul
+    networks:
+      - spring_network
+
+networks:
+  spring_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.24.0.0/16
+          gateway: 172.24.0.1

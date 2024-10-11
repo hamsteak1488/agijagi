@@ -1,0 +1,36 @@
+spring:
+  config:
+    import: application-secret.yml
+
+  application:
+    name: "agijagi"
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  sql:
+    init:
+      mode: never
+      platform: dev
+
+  jpa:
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        highlight_sql: true
+        format_sql: true
+        default_batch_fetch_size: 100
+    defer-datasource-initialization: true
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB

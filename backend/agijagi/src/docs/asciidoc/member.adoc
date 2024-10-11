@@ -1,0 +1,22 @@
+:source-highlighter: highlightjs
+
+[[Member-API]]
+= *회원 API*
+
+== 회원 조회
+operation::member/get-member[snippets='path-parameters,http-request,response-fields,http-response']
+
+== 회원 가입
+operation::member/register-member[snippets='request-parts,http-request,http-response']
+
+== 회원 수정
+operation::member/modify-member[snippets='request-cookies,request-fields,http-request,http-response']
+
+== 회원 프로필 이미지 수정
+operation::member/modify-member-profile-image[snippets='request-cookies,request-parts,http-request,http-response']
+
+== 회원 프로필 이미지 삭제
+operation::member/delete-member-profile-image[snippets='request-cookies,http-request,http-response']
+
+== 회원 삭제
+operation::member/delete-member[snippets='request-cookies,http-request,http-response']
