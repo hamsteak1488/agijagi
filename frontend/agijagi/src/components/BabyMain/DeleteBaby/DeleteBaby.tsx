@@ -49,7 +49,7 @@ export const DeleteBaby = () => {
         정말로 패밀리를 삭제하시겠어요?
       </Typhography>
       <ButtonContainer>
-        <Button color="danger" onClick={handleLogout} disabled={true}>
+        <Button color="danger" onClick={handleLogout}>
           삭제
         </Button>
         <Button
