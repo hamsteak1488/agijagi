@@ -18,10 +18,10 @@ public class SpeechToTextConverter {
     private final OpenAiAudioTranscriptionModel openAiAudioTranscriptionModel;
     private final OpenAiAudioTranscriptionOptions transcriptionOptions =
             OpenAiAudioTranscriptionOptions.builder()
-                    .withLanguage("ko")
-                    .withPrompt("Ask not this, but ask that")
-                    .withTemperature(0f)
-                    .withResponseFormat(OpenAiAudioApi.TranscriptResponseFormat.JSON)
+                    .language("ko")
+                    .prompt("Ask not this, but ask that")
+                    .temperature(0f)
+                    .responseFormat(OpenAiAudioApi.TranscriptResponseFormat.JSON)
                     .build();
 
     public String convert(Base64Content base64Content) {
